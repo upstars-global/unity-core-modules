@@ -1,0 +1,12 @@
+{
+    "name": "unity-core-modules",
+    "version": "1.0.0",
+    "description": "",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/upstars-global/unity-core-modules.git"
+    },
+    "private": true,
+    "dependencies": {
+    }
+}
