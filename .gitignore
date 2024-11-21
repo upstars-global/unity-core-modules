@@ -1,0 +1,12 @@
+node_modules/
+.history/
+dist/
+coverage/
+.idea
+cli/.env.cli
+.env
+.direnv
+.envrc
+.DS_Store
+*.tmp
+.vscode
