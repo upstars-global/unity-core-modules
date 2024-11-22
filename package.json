@@ -8,5 +8,9 @@
     },
     "private": true,
     "dependencies": {
+        "@vespaiach/axios-fetch-adapter": "^0.3.1",
+        "axios": "^0.26.0",
+        "axios-retry": "^3.2.4",
+        "tiny-emitter": "^2.1.0"
     }
 }
