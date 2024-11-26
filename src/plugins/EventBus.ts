@@ -2,6 +2,8 @@
 import { TinyEmitter } from "tiny-emitter";
 
 class EventBusWrapper {
+    private emitter: TinyEmitter;
+    
     constructor() {
         this.emitter = new TinyEmitter();
     }
