@@ -31,7 +31,7 @@ export const useFreshchatStore = defineStore("freshchatStore", () => {
         newMessagesCount.value = count;
     }
 
-    const { getUserInfo: userInfo, getFreshChatRestoreId } = storeToRefs(useUserInfo());
+    const { getUserInfo: userInfo } = storeToRefs(useUserInfo());
 
     const userData = computed<ISanitizedUserData | null>(() => {
         const { id, mobile_phone, email, first_name, last_name } = userInfo.value;
@@ -60,12 +60,12 @@ export const useFreshchatStore = defineStore("freshchatStore", () => {
             token: config.freshChat.token,
             widgetUuid: config.freshChat.widgetUuid,
             // restore have no impact without externalId
-            restoreId: externalId ? restoreId : undefined,
+            restoreId: externalId ? restoreId.value : undefined,
             // externalId cause generating new restoreId, so we need wait initializing
             // our saved restoreId to prevent overriding
-            externalId: restoreIdLoaded ? externalId : undefined,
+            externalId: restoreIdLoaded.value? externalId : undefined,
             ...(userData.value || {}),
-            pending: isLoaded && !restoreIdLoaded,
+            pending: isLoaded.value && !restoreIdLoaded.value,
         };
     });
 
