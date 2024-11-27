@@ -1,5 +1,4 @@
 import { useUserInfo } from "@store/user/userInfo";
-import { useStore } from "@store/useStore";
 import config from "@theme/configs/config";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
@@ -32,7 +31,7 @@ export const useFreshchatStore = defineStore("freshchatStore", () => {
         newMessagesCount.value = count;
     }
 
-    const { getUserInfo: userInfo } = storeToRefs(useUserInfo());
+    const { getUserInfo: userInfo, getFreshChatRestoreId } = storeToRefs(useUserInfo());
 
     const userData = computed<ISanitizedUserData | null>(() => {
         const { id, mobile_phone, email, first_name, last_name } = userInfo.value;
@@ -49,12 +48,13 @@ export const useFreshchatStore = defineStore("freshchatStore", () => {
     });
 
     const freshChatData = computed<IFreshChatData>(() => {
-        const $storeVuex = useStore();
+        const {
+            getFreshChatRestoreId: restoreId,
+            getFreshChatRestoreIdLoaded: restoreIdLoaded,
+            getDataIsLoaded: isLoaded
+        } = storeToRefs(useUserInfo());
 
         const externalId = userInfo.value.id;
-        const restoreId = $storeVuex.getters["user/GET_FRESHCHAT_RESTORE_ID"] || undefined;
-        const restoreIdLoaded = $storeVuex.getters["user/FRESHCHAT_RESTORE_ID_IS_LOADED"];
-        const isLoaded = $storeVuex.getters["user/IS_LOADED"];
 
         return {
             token: config.freshChat.token,
