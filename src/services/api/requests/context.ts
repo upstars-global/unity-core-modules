@@ -1,6 +1,6 @@
-import type { IClientContext } from "../../../models/clientContext";
-import { http } from "../http";
 import log from "../../../controllers/Logger";
+import type { IClientContext } from "../../../types/clientContext";
+import { http } from "../http";
 
 export async function getClientContext() {
         try {
