@@ -12,20 +12,22 @@
     "prepare": "husky"
   },
   "lint-staged": {
-      "**/*": "eslint --fix"
+    "**/*": "eslint --fix"
   },
   "private": true,
   "dependencies": {
     "@vespaiach/axios-fetch-adapter": "^0.3.1",
     "axios": "^0.26.0",
     "axios-retry": "^3.2.4",
-    "eslint": "^9.15.0",
-    "eslint-config-frontera": "upstars-global/eslint-config-frontera#v2.0.1",
-    "husky": "^9.1.7",
-    "lint-staged": "^15.2.10",
     "pinia": "^2.2.4",
     "tiny-emitter": "^2.1.0",
     "typescript": "^5.6.3",
     "vue": "^3.5.12"
+  },
+  "devDependencies": {
+    "eslint": "^9.15.0",
+    "eslint-config-frontera": "upstars-global/eslint-config-frontera#v2.0.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.2.10"
   }
 }
