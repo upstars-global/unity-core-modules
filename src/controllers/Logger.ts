@@ -2,6 +2,18 @@
 /* eslint-disable no-console */
 
 /* eslint-disable no-new */
+interface ILoggerConfig {
+    isServer: any;
+    context: any;
+}
+
+interface ILogger {
+    info(...args: any[]): void;
+    warn(...args: any[]): void;
+    error(...args: any[]): void;
+    init(config: ILoggerConfig, callback: any): void;
+}
+
 class Logger {
     private $isServer: any;
     private $context: {};
@@ -94,4 +106,4 @@ export default {
     init(config, callback) {
         new Logger(config.isServer, config.context, callback, this);
     },
-};
+} as ILogger;
