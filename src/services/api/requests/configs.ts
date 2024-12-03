@@ -1,4 +1,4 @@
-import type { IStagByReferName, ISurveyConfig } from "@src/types/configs"; // TODO: refactor
+import type { IStagByReferName, ISurveyConfig } from "../../../models/configs";
 import log from "../../../controllers/Logger";
 import {IVipAdventuresConfig} from "../DTO/vipAdventuresDTO";
 import {http} from "../http";
