@@ -1,6 +1,5 @@
-import type {
-    IPlayer, IPlayerConfirmation, IPlayersList, ITournament, ITournamentsList,
-} from "../DTO";
+
+import {IPlayer, IPlayerConfirmation, IPlayersList, ITournament, ITournamentsList} from "../DTO/tournamentsDTO";
 import { http } from "../http";
 import log from "../../../controllers/Logger";
 

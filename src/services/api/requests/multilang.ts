@@ -1,4 +1,4 @@
-import type { LocaleName, Locales } from "../DTO";
+import {LocaleName, Locales} from "../DTO/multilang";
 import { http } from "../http";
 import log from "../../../controllers/Logger";
 

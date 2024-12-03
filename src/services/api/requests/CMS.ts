@@ -1,4 +1,4 @@
-import type { IFileCMS, IPageItemCMS, IPageItemConfig, ISnippetItemCMS } from "../DTO";
+import type { IFileCMS, IPageItemCMS, IPageItemConfig, ISnippetItemCMS } from "../DTO/CMS";
 import log from "../../../controllers/Logger";
 import {http} from "../http";
 

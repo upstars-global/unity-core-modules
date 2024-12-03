@@ -1,4 +1,4 @@
-import type { IVipProgress } from "../DTO";
+import {IVipProgress} from "../DTO/vipAdventuresDTO";
 import { loadVipAdventuresConfigReq } from "./configs";
 import log from "../../../controllers/Logger";
 import { http } from "../http";

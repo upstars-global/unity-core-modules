@@ -1,6 +1,6 @@
 import log from "../../../controllers/Logger";
+import {IGameCollection, IGameFilterResponse, IJackpots, IPlayedGame} from "../DTO/gamesDTO";
 import { http } from "../http";
-import type { IGameCollection, IGameFilterResponse, IJackpots, IPlayedGame } from "../DTO";
 import type { IGame } from "../../../models/game";
 
 export async function loadGamesJackpots(): Promise<IJackpots> {

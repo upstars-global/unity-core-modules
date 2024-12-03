@@ -1,5 +1,5 @@
-import type { ICountries, ICryptoExchangeRates, ICurrencies, IProjectInfo } from "@api/DTO/info";
 import log from "../../../controllers/Logger";
+import {ICountries, ICryptoExchangeRates, ICurrencies, IProjectInfo} from "../DTO/info";
 import { http } from "../http";
 
 export async function loadCountriesReq(): Promise<ICountries[] | undefined> {

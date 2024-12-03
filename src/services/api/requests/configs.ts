@@ -1,6 +1,6 @@
-import type { IVipAdventuresConfig } from "../DTO";
 import type { IStagByReferName, ISurveyConfig } from "@src/types/configs"; // TODO: refactor
 import log from "../../../controllers/Logger";
+import {IVipAdventuresConfig} from "../DTO/vipAdventuresDTO";
 import {http} from "../http";
 
 const loadConfig = async <type>(endpoint: string, logError: string) => {

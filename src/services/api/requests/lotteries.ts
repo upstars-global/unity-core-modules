@@ -1,4 +1,4 @@
-import type { ILotteriesItem, ILotteriesList, ILotteriesStatusesItem, ILotteriesStatusesList } from "../DTO";
+import {ILotteriesItem, ILotteriesList, ILotteriesStatusesItem, ILotteriesStatusesList} from "../DTO/lotteriesDTO";
 import { http } from "../http";
 import log from "../../../controllers/Logger";
 

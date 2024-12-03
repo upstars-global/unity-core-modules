@@ -1,4 +1,4 @@
-import type { ILogoConfig } from "../DTO";
+import {ILogoConfig} from "../DTO/logo";
 import { http } from "../http";
 import log from "../../../controllers/Logger";
 

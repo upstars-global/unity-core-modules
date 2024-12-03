@@ -1,5 +1,5 @@
 import {defineStore, storeToRefs} from "pinia";
-import { useRootStore } from "../store/root";
+import { useRootStore } from "./root";
 import { useUserInfo } from "@store/user/userInfo"; // TODO: replace import after move userInfo store to core
 import type { Pinia } from "pinia";
 import { computed, ref } from "vue";

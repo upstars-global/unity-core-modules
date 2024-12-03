@@ -1,9 +1,9 @@
-import type {
+import {
     IErrorsValidationForm,
     IFormErrorsCollection,
     IFormErrorsCollectionMetric,
-    IMetricsErrorsValidationForm,
-} from "../DTO";
+    IMetricsErrorsValidationForm
+} from "../DTO/metrics";
 import { http } from "../http";
 import log from "../../../controllers/Logger";
 import { getUtmParamsFromCookies } from "@front/core/controllers/utmParams"; // TODO: change import
@@ -81,4 +81,4 @@ export function getUtmMetricsLogAction(actionType) {
     if (utmValString) {
         actionsMap[actionType](utmParams);
     }
-};
+}
