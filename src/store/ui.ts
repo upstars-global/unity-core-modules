@@ -1,9 +1,9 @@
-import { ref } from "vue";
 import { defineStore } from "pinia";
+import { ref } from "vue";
 
-import { EventBus as bus } from "../plugins/EventBus";
 import bodyDisableScroll from "../helpers/bodyDisableScroll";
 import type { IModalOptions } from "../models/modalOptions";
+import { EventBus as bus } from "../plugins/EventBus";
 
 type IFormInputsData = Record<string, string>;
 

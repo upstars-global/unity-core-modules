@@ -1,10 +1,11 @@
-import {defineStore, storeToRefs} from "pinia";
-import { useRootStore } from "./root";
 import { useUserInfo } from "@store/user/userInfo"; // TODO: replace import after move userInfo store to core
 import type { Pinia } from "pinia";
+import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
-import {ILogoConfig} from "../services/api/DTO/logo";
-import {loadLogoConfigReq} from "../services/api/requests/logo";
+
+import { ILogoConfig } from "../services/api/DTO/logo";
+import { loadLogoConfigReq } from "../services/api/requests/logo";
+import { useRootStore } from "./root";
 
 export interface ILogoStoreConfig {
     logo: string,
@@ -22,8 +23,7 @@ export function createLogoStore(config: ILogoStoreConfig) {
         const getFullLogoSrc = computed(() => {
             return logoConfig.value?.logoUrl.full || config.logo;
         });
-        const getLogoSrc = computed( () => {
-
+        const getLogoSrc = computed(() => {
             return getIsLogged.value && isMobile.value ? getMobileLogoSrc.value : getFullLogoSrc.value;
         });
         async function loadLogoConfig() {
@@ -50,6 +50,6 @@ export function useLogoStoreFetchService(config: ILogoStoreConfig, pinia?: Pinia
     } = logoStore(pinia);
 
     return {
-        loadLogoConfig
+        loadLogoConfig,
     };
 }

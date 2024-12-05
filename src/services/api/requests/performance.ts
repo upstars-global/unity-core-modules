@@ -1,6 +1,6 @@
-import {IGameObserveDTO} from "../DTO/performanceDTO";
-import { http } from "../http";
 import log from "../../../controllers/Logger";
+import { IGameObserveDTO } from "../DTO/performanceDTO";
+import { http } from "../http";
 
 export async function gameStartObserve(data: IGameObserveDTO) {
     try {
