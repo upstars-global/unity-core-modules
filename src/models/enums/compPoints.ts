@@ -1,18 +1,18 @@
-const allType = "All";
-enum CompPointsTypes {
+export const allType = "All";
+export enum CompPointsTypes {
     FREE_SPINS = "FREE_SPINS",
     MONEY_REWARD = "MONEY_REWARD",
     SPECIAL_REWARDS = "SPECIAL_REWARDS",
 }
 
-enum CompPointRatesTypes {
+export enum CompPointRatesTypes {
     MONEY = "money",
     LOOTBOXES = "lootboxes",
     FREESPINS = "freespins",
     LOTTERIES = "lotteries",
 }
 
-enum CompPointTypes {
+export enum CompPointTypes {
     popular= "POPULAR",
     new= "NEW"
 }
