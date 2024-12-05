@@ -1,8 +1,9 @@
 
+import { type AxiosError } from "axios";
+
+import log from "../../../controllers/Logger";
 import { IPlayer, IPlayerConfirmation, IPlayersList, ITournament, ITournamentsList } from "../DTO/tournamentsDTO";
 import { http } from "../http";
-import log from "../../../controllers/Logger";
-import { type AxiosError } from "axios";
 
 export async function loadTournamentsListReq(): Promise<ITournamentsList> {
     try {

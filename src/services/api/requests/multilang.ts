@@ -1,6 +1,6 @@
+import log from "../../../controllers/Logger";
 import { LocaleName, Locales } from "../DTO/multilang";
 import { http } from "../http";
-import log from "../../../controllers/Logger";
 
 export async function loadLocalesReq(query?: string): Promise<Locales> {
     try {

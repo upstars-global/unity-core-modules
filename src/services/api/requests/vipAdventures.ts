@@ -1,7 +1,7 @@
-import type { IVipProgress } from "../DTO/vipAdventuresDTO";
-import { loadVipAdventuresConfigReq } from "./configs";
 import log from "../../../controllers/Logger";
+import { IVipProgress } from "../DTO/vipAdventuresDTO";
 import { http } from "../http";
+import { loadVipAdventuresConfigReq } from "./configs";
 
 export async function loadVipAdventuresConfigFile() {
     try {
