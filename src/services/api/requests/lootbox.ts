@@ -1,8 +1,8 @@
 import log from "../../../controllers/Logger";
 import type { ILootbox } from "../../../models/lootboxes";
 import type { UserGroup } from "../../../models/user";
-import {IPageItemCMS} from "../DTO/CMS";
-import {ILootboxesFileConfig} from "../DTO/lootboxes";
+import { IPageItemCMS } from "../DTO/CMS";
+import { ILootboxesFileConfig } from "../DTO/lootboxes";
 import { http } from "../http";
 
 export async function loadMockLootboxWheelConfigs():

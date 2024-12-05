@@ -1,4 +1,4 @@
-import {IVipProgress} from "../DTO/vipAdventuresDTO";
+import { IVipProgress } from "../DTO/vipAdventuresDTO";
 import { loadVipAdventuresConfigReq } from "./configs";
 import log from "../../../controllers/Logger";
 import { http } from "../http";
@@ -15,7 +15,7 @@ export async function loadVipAdventuresConfigFile() {
 export async function loadVipStatusProgress(): Promise<IVipProgress> {
     try {
         const { data } = await http().get(
-            `/jam/vip_status_progress`,
+            "/jam/vip_status_progress",
             {
                 withCredentials: true,
             },

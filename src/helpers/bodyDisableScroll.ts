@@ -4,7 +4,7 @@ export default (visible: boolean) => {
     }
 
     const body = document.body;
-    
+
     if (visible) {
         body.style.top = `-${window.scrollY}px`;
         body.classList.add("block-scroll");

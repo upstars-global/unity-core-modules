@@ -1,4 +1,4 @@
-import type {Currencies} from "../../../models/enums/currencies";
+import type { Currencies } from "../../../models/enums/currencies";
 
 interface ILotteriesPrizeItem {
     id: number;

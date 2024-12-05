@@ -1,8 +1,8 @@
 import log from "../../../controllers/Logger";
 import type { IUserInfo } from "../../../models/user";
 import { v4 as uuid } from "uuid";
-import {IPlayerPayment} from "../DTO/cashbox";
-import {IPlayerStats, ISubscriptions, IUserAccount, IUserSettings} from "../DTO/playerDTO";
+import { IPlayerPayment } from "../DTO/cashbox";
+import { IPlayerStats, ISubscriptions, IUserAccount, IUserSettings } from "../DTO/playerDTO";
 import { http } from "../http";
 
 export async function addPlayerToGroup(groupForAdding: string | number) {
@@ -193,7 +193,7 @@ export async function loadUserSubscriptionsReq() {
         const { data } = await http().get<ISubscriptions>("/api/subscriptions");
         return data;
     } catch (err) {
-        log.error(`LOAD_USER_SUBSCRIPTIONS_ERROR`, err);
+        log.error("LOAD_USER_SUBSCRIPTIONS_ERROR", err);
     }
 }
 

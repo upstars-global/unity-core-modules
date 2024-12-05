@@ -1,4 +1,4 @@
-import {IGameObserveDTO} from "../DTO/performanceDTO";
+import { IGameObserveDTO } from "../DTO/performanceDTO";
 import { http } from "../http";
 import log from "../../../controllers/Logger";
 

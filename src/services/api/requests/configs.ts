@@ -1,7 +1,7 @@
 import type { IStagByReferName, ISurveyConfig } from "../../../models/configs";
 import log from "../../../controllers/Logger";
-import {IVipAdventuresConfig} from "../DTO/vipAdventuresDTO";
-import {http} from "../http";
+import { IVipAdventuresConfig } from "../DTO/vipAdventuresDTO";
+import { http } from "../http";
 
 const loadConfig = async <type>(endpoint: string, logError: string) => {
     try {
@@ -23,5 +23,5 @@ export {
     loadSurveyConfigReq,
     loadBettingConfigReq,
     loadVipAdventuresConfigReq,
-    loadDisabledBonusesConfigReq
+    loadDisabledBonusesConfigReq,
 };

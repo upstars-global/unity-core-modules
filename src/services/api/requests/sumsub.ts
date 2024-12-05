@@ -8,7 +8,5 @@ export async function getSumsubTokenReq() {
     } catch (err) {
         log.error("GET_SUMSUB_TOKEN_REQ_ERROR", err);
         throw err;
-
     }
-
 }

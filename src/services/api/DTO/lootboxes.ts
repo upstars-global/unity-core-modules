@@ -1,4 +1,4 @@
-import type {Currencies} from "../../../models/enums/currencies";
+import type { Currencies } from "../../../models/enums/currencies";
 
 enum LootboxUserGroups {
     _635 = 635,
