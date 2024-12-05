@@ -1,5 +1,5 @@
-import type { IActiveCouponResp } from "../DTO/couponePromoCodes";
 import log from "../../../controllers/Logger";
+import type { IActiveCouponResp } from "../DTO/couponePromoCodes";
 import { http } from "../http";
 
 export async function activeCouponReq(code: string): Promise<IActiveCouponResp> {

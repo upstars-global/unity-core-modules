@@ -1,5 +1,5 @@
 import { computed, ref } from "vue";
-import { type Pinia, defineStore} from "pinia";
+import { type Pinia, defineStore } from "pinia";
 
 import type { IJackpotItem } from "../services/api/DTO/jackpot";
 import { loadJackpotsList } from "../services/api/requests/jackpots";
@@ -26,7 +26,6 @@ export const useJackpots = defineStore("jackpots", () => {
             return item.id === jackpotItem.id;
         });
         try {
-
             jackpotsList.value.splice(indexJackpotInList, 1, jackpotItem);
         } catch (error) {
             console.log(error);
@@ -39,7 +38,6 @@ export const useJackpots = defineStore("jackpots", () => {
         loadJackpots,
         updateJackpotItemInList,
     };
-
 });
 
 export function useJackpotsFetchService(pinia?: Pinia) {

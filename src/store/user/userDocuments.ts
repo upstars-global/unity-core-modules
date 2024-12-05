@@ -65,7 +65,6 @@ export const useUserDocuments = defineStore("userDocuments", () => {
         } catch (err) {
             log.error("UPLOAD_USER_DOC", err);
         }
-
     }
 
     async function deleteUserDoc(id) {
@@ -82,6 +81,6 @@ export const useUserDocuments = defineStore("userDocuments", () => {
         loadUserDocs,
         uploadUserDoc,
         deleteUserDoc,
-        getHasNotApprovedDoc
+        getHasNotApprovedDoc,
     };
 });
