@@ -1,6 +1,7 @@
-import { getSumsubTokenReq } from "../../services/api/requests/sumsub";
 import { defineStore } from "pinia";
 import { ref } from "vue";
+
+import { getSumsubTokenReq } from "../../services/api/requests/sumsub";
 
 export const useUserVerificationSumsub = defineStore("UserVerificationSumsub", () => {
     const accessToken = ref<string>("");

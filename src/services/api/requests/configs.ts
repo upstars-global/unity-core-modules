@@ -1,5 +1,5 @@
-import type { IStagByReferName, ISurveyConfig } from "../../../models/configs";
 import log from "../../../controllers/Logger";
+import type { IStagByReferName, ISurveyConfig } from "../../../models/configs";
 import { IVipAdventuresConfig } from "../DTO/vipAdventuresDTO";
 import { http } from "../http";
 
@@ -22,9 +22,9 @@ const loadDisabledBonusesConfigReq = () =>
     loadConfig<{group_keys: string[]}>("/api/fe/config/disabled-bonuses", "LOAD_DISABLED_BONUSES_CONFIG_ERROR");
 
 export {
+    loadBettingConfigReq,
+    loadDisabledBonusesConfigReq,
     loadStagByReferNameReq,
     loadSurveyConfigReq,
-    loadBettingConfigReq,
     loadVipAdventuresConfigReq,
-    loadDisabledBonusesConfigReq,
 };
