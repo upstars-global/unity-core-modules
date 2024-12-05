@@ -1,6 +1,6 @@
-import type { IPageItemConfig } from "../services/api/DTO/CMS";
 import { BOTTOM_MENU, CUSTOM_PAGE_TYPE, PAGE, TOP_MENU_TYPE } from "../consts/staticPages";
 import type { IPageCMSPrepare } from "../models/CMS";
+import type { IPageItemConfig } from "../services/api/DTO/CMS";
 
 function getPage(page: IPageItemConfig): IPageCMSPrepare {
     return {

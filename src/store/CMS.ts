@@ -1,16 +1,15 @@
+import { useMultilang } from "@store/multilang";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
+import { enableCategoriesPage } from "../consts/cms";
 import log from "../controllers/Logger";
-import type { ISnippetItemCMS } from "../services/api/DTO/CMS";
 import type { TemplateType } from "../helpers/replaceStringHelper";
 import replaceStringHelper from "../helpers/replaceStringHelper";
 import { prepareMapStaticPages } from "../helpers/staticPages";
-import { enableCategoriesPage } from "../consts/cms";
-import { CurrentPage, type IPageCMSPrepare, type ICurrentPage } from "../models/CMS";
+import { CurrentPage, type ICurrentPage, type IPageCMSPrepare } from "../models/CMS";
+import type { ISnippetItemCMS } from "../services/api/DTO/CMS";
 import { loadCMSPagesReq, loadCMSSnippetsReq, loadMetaSEOReq, loadPageContentFromCmsReq } from "../services/api/requests/CMS";
-
-import { useMultilang } from "@store/multilang";
 
 interface ISeoMeta {
     json: string;

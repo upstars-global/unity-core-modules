@@ -1,4 +1,4 @@
-import type { IPageItemConfig, IPageItemCMS } from "../services/api/DTO/CMS";
+import type { IPageItemCMS, IPageItemConfig } from "../services/api/DTO/CMS";
 
 export interface IPageCMSPrepare extends IPageItemConfig {
     slug: string;
