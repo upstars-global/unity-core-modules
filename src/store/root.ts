@@ -33,7 +33,7 @@ export const useRootStore = defineStore("rootStore", () => {
         getPlatform,
 
         setGamePage,
-        setPlatform
+        setPlatform,
     };
 });
 

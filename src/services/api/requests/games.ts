@@ -1,5 +1,5 @@
 import log from "../../../controllers/Logger";
-import {IGameCollection, IGameFilterResponse, IJackpots, IPlayedGame} from "../DTO/gamesDTO";
+import { IGameCollection, IGameFilterResponse, IJackpots, IPlayedGame } from "../DTO/gamesDTO";
 import { http } from "../http";
 import type { IGame } from "../../../models/game";
 
@@ -33,7 +33,7 @@ export async function loadGamesCategories(): Promise<IGameCollection[]> {
     }
 }
 
-export async function loadFilteredGames(config: Record<string, any>): Promise<IGame[]> {
+export async function loadFilteredGames(config: Record<string, unknown>): Promise<IGame[]> {
     try {
         const { data } = await http().post<IGame[]>("/api/games_filter/select", config);
         return data;
@@ -43,9 +43,9 @@ export async function loadFilteredGames(config: Record<string, any>): Promise<IG
     }
 }
 
-export async function loadGamesCategory(config: Record<string, any>): Promise<IGameFilterResponse> {
+export async function loadGamesCategory(config: Record<string, unknown>): Promise<IGameFilterResponse> {
     try {
-        const { data } = await http().post<IGameFilterResponse>(`/api/games_filter`, config);
+        const { data } = await http().post<IGameFilterResponse>("/api/games_filter", config);
         return data;
     } catch (error) {
         log.error("LOAD_GAMES_CATEGORY_ERROR", error);

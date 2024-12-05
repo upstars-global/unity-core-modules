@@ -47,7 +47,7 @@ export interface IGameFilter {
     sort: ISort;
 }
 
-export type IGameFilterResponse = IGameFilter | {};
+export type IGameFilterResponse = IGameFilter | object;
 
 export interface ICollectionRecord {
     [slug: string]: ICollectionItem;
