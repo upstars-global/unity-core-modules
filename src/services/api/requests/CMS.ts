@@ -1,5 +1,5 @@
-import type { IFileCMS, IPageItemCMS, IPageItemConfig, ISnippetItemCMS } from "../DTO/CMS";
 import log from "../../../controllers/Logger";
+import type { IFileCMS, IPageItemCMS, IPageItemConfig, ISnippetItemCMS } from "../DTO/CMS";
 import { http } from "../http";
 
 export async function loadCMSPagesReq(locale: string): Promise<IPageItemConfig[] | undefined> {

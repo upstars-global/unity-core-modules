@@ -1,10 +1,11 @@
-import { defineStore, storeToRefs } from "pinia";
-import { useRootStore } from "./root";
 import { useUserInfo } from "@store/user/userInfo"; // TODO: replace import after move userInfo store to core
 import type { Pinia } from "pinia";
+import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
+
 import { ILogoConfig } from "../services/api/DTO/logo";
 import { loadLogoConfigReq } from "../services/api/requests/logo";
+import { useRootStore } from "./root";
 
 export interface ILogoStoreConfig {
     logo: string,

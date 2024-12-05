@@ -1,5 +1,5 @@
-import { defineStore } from "pinia";
 import type { Pinia } from "pinia";
+import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
 export const useRootStore = defineStore("rootStore", () => {

@@ -1,9 +1,9 @@
-import { computed, ref } from "vue";
 import { defineStore } from "pinia";
+import { computed, ref } from "vue";
 
-import { getClientContext } from "../services/api/requests/context";
 import { promiseMemoizer } from "../helpers/promiseHelpers";
 import type { IClientContext } from "../models/clientContext";
+import { getClientContext } from "../services/api/requests/context";
 
 export const useContextStore = defineStore("context", () => {
     const context = ref<IClientContext>();

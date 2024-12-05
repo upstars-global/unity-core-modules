@@ -1,5 +1,5 @@
+import { defineStore, type Pinia } from "pinia";
 import { computed, ref } from "vue";
-import { type Pinia, defineStore } from "pinia";
 
 import type { IJackpotItem } from "../services/api/DTO/jackpot";
 import { loadJackpotsList } from "../services/api/requests/jackpots";

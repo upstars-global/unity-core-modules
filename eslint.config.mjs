@@ -1,4 +1,5 @@
 import eslintFrontera from "eslint-config-frontera";
+import simpleImportSort from "eslint-plugin-simple-import-sort";
 
 const commonConfig = {
     files: [ "**/*.{js,cjs,mjs,jsx,ts,mts,tsx}" ],
@@ -15,6 +16,9 @@ export default [
     {
         ...commonConfig,
         name: "unity-core-modules",
+        plugins: {
+            "simple-import-sort": simpleImportSort,
+        },
         rules: {
             "@typescript-eslint/no-explicit-any": "error",
             "@typescript-eslint/ban-ts-comment": "error",
@@ -26,6 +30,8 @@ export default [
                     ignores: [ "localStorage" ],
                 },
             ],
+            "simple-import-sort/imports": "error",
+            "simple-import-sort/exports": "error",
         },
     },
 ];

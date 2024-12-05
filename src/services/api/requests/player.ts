@@ -1,6 +1,7 @@
+import { v4 as uuid } from "uuid";
+
 import log from "../../../controllers/Logger";
 import type { IUserInfo } from "../../../models/user";
-import { v4 as uuid } from "uuid";
 import { IPlayerPayment } from "../DTO/cashbox";
 import { IPlayerStats, ISubscriptions, IUserAccount, IUserSettings } from "../DTO/playerDTO";
 import { http } from "../http";
