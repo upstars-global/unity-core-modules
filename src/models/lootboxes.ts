@@ -1,4 +1,4 @@
-import type { Currencies } from "./enums/currencies"
+import type { Currencies } from "./enums/currencies";
 
 export enum EnumLootboxState {
     issued = "issued",
@@ -34,3 +34,5 @@ export interface ILootbox {
     title: string;
     group_key: string;
 }
+
+export default {};

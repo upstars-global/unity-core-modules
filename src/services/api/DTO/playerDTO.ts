@@ -1,4 +1,4 @@
-import type {Currencies} from "../../../models/enums/currencies";
+import type { Currencies } from "../../../models/enums/currencies";
 
 export interface IUserAccountCompatibility {
     currency: Currencies;
@@ -55,3 +55,4 @@ export interface IPlayerStats {
     bets_sum: IDepositsSum;
     messages: IMessages;
 }
+export default {};

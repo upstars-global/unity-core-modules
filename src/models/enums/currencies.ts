@@ -20,3 +20,5 @@ export enum Currencies {
     ADA = "ADA",
     TRX = "TRX",
 }
+
+export default {};

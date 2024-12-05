@@ -9,3 +9,4 @@ export enum UserCouponStatuses {
     failedActivate = "failed_to_activate",
     successfullyActivated = "successfully_activated",
 }
+export default {};
