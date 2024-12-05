@@ -1,10 +1,9 @@
-import { ref } from "vue";
-import { defineStore } from "pinia";
-
 import { useUserInfo } from "@store/user/userInfo";
+import { defineStore } from "pinia";
+import { ref } from "vue";
 
-import { http } from "../../services/api/http";
 import log from "../../controllers/Logger";
+import { http } from "../../services/api/http";
 
 interface IUserSession {
     "id": number;
