@@ -1,8 +1,8 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
-import { http } from "../../services/api/http";
 import log from "../../controllers/Logger";
+import { http } from "../../services/api/http";
 
 export const userGamesHistory = defineStore(
     "userGamesHistory",

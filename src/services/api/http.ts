@@ -1,12 +1,12 @@
 import fetchAdapter from "@vespaiach/axios-fetch-adapter";
-import axios from "axios";
 import type { AxiosInstance, AxiosRequestConfig } from "axios";
+import axios from "axios";
 import axiosRetry from "axios-retry";
 
+import { COOKIE_BY_LOCALE } from "../../consts/cookies_by_locales";
 import log from "../../controllers/Logger";
 import { isServer } from "../../helpers/ssrHelpers";
-import { COOKIE_BY_LOCALE } from "../../consts/cookies_by_locales";
-import { EventBus, BUS_EVENTS } from "../../plugins/EventBus";
+import { BUS_EVENTS, EventBus } from "../../plugins/EventBus";
 
 const SERVER_TIMEOUT = 8000;
 const CLIENT_TIMEOUT = 30000;

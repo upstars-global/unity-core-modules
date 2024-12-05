@@ -1,7 +1,8 @@
+import type { AxiosError } from "axios";
+
+import log from "../../../controllers/Logger";
 import { ILotteriesItem, ILotteriesList, ILotteriesStatusesItem, ILotteriesStatusesList } from "../DTO/lotteriesDTO";
 import { http } from "../http";
-import log from "../../../controllers/Logger";
-import type { AxiosError } from "axios";
 
 export async function loadLotteriesListReq() {
     try {
