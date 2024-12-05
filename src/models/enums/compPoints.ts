@@ -16,3 +16,5 @@ export enum CompPointTypes {
     popular= "POPULAR",
     new= "NEW"
 }
+
+export default {};

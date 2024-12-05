@@ -32,3 +32,4 @@ export interface IMetricsErrorsValidationForm {
     component: string;
     errors: IFormErrorsCollectionMetric[];
 }
+export default {};
