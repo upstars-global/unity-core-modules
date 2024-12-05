@@ -1,9 +1,9 @@
-import { computed, ref } from "vue";
 import { defineStore } from "pinia";
+import { computed, ref } from "vue";
 
-import { http } from "../services/api/http";
 import log from "../controllers/Logger";
 import type { IJackpotWinner } from "../models/winner";
+import { http } from "../services/api/http";
 
 export const useJackpotWinners = defineStore("winnersJackpot", () => {
     const winnersData = ref<IJackpotWinner[]>([]);
