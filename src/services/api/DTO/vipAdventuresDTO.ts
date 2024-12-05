@@ -1,4 +1,4 @@
-import type { Currencies } from "../../../models/enums/currencies";
+import { Currencies } from "./cashbox";
 
 export interface IPrizeConfigItem {
     title: string;

@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 
 import { getClientContext } from "../services/api/requests/context";
 import { promiseMemoizer } from "../helpers/promiseHelpers";
-import type { IClientContext } from "../models/clientContext";
+import type { IClientContext } from "../types/clientContext";
 
 export const useContextStore = defineStore("context", () => {
     const context = ref<IClientContext>();

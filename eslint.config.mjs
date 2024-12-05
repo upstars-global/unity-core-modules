@@ -2,7 +2,7 @@ import eslintFrontera from "eslint-config-frontera";
 
 const commonConfig = {
     files: [ "**/*.{js,cjs,mjs,jsx,ts,mts,tsx}" ],
-    ignores: [ "/node_modules/", "yarn.lock" ],
+    ignores: [ "/node_modules/" ],
 };
 
 export default [

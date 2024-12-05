@@ -6,7 +6,7 @@ export interface IModalOptions {
     showFirst?: boolean;
     alwaysBottom?: boolean;
     name: string;
-    component: unknown;
+    component: any;
     props?: Record<string, unknown>;
     callback?(): void;
 }

@@ -1,4 +1,4 @@
-import type { Currencies } from "../../../models/enums/currencies";
+import type { Currencies } from "./cashbox";
 
 export interface IJackpotLevel {
     amount_cents: number;

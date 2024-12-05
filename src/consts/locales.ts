@@ -13,4 +13,3 @@ export enum LOCALES {
     ITALIAN = "it",
     ESTONIAN = "et",
 };
-export default {};

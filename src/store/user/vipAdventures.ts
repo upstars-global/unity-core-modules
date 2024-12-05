@@ -8,8 +8,8 @@ import { formatDateVipAdv, VIP_ADV_GROUP } from "@modules/VipAdventures/consts";
 
 import { loadVipAdventuresConfigFile, loadVipStatusProgress } from "../../services/api/requests/vipAdventures";
 import type { IPrizeConfigItem, IVipProgress } from "../../services/api/DTO/vipAdventuresDTO";
-import type { IVipAdventuresDayConfig } from "../../models/vipAdventures";
-import type { UserGroup } from "../../models/user";
+import type { IVipAdventuresDayConfig } from "../../types/vipAdventures";
+import type { UserGroup } from "../../types/user";
 
 const USER_INCLUDES_ADVENTURES = {
     [VIP_ADV_GROUP]: "vip_adv",
