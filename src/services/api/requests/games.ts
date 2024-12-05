@@ -33,7 +33,7 @@ export async function loadGamesCategories(): Promise<IGameCollection[]> {
     }
 }
 
-export async function loadFilteredGames(config: Record<string, any>): Promise<IGame[]> {
+export async function loadFilteredGames(config: Record<string, unknown>): Promise<IGame[]> {
     try {
         const { data } = await http().post<IGame[]>("/api/games_filter/select", config);
         return data;
@@ -43,7 +43,7 @@ export async function loadFilteredGames(config: Record<string, any>): Promise<IG
     }
 }
 
-export async function loadGamesCategory(config: Record<string, any>): Promise<IGameFilterResponse> {
+export async function loadGamesCategory(config: Record<string, unknown>): Promise<IGameFilterResponse> {
     try {
         const { data } = await http().post<IGameFilterResponse>("/api/games_filter", config);
         return data;

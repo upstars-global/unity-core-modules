@@ -47,7 +47,7 @@ export async function loadCompPointRateBySlug(slug: string) {
     }
 }
 
-export async function exchangeCompPointRateBySlug(slug: string, payload: any) {
+export async function exchangeCompPointRateBySlug(slug: string, payload: unknown) {
     try {
         const { data } = await http().post(`/api/comp_points/exchange/${slug}`, payload);
         return data;

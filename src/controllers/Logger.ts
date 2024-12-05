@@ -3,21 +3,21 @@
 
 /* eslint-disable no-new */
 interface ILoggerConfig {
-    isServer: any;
-    context: any;
+    isServer: unknown;
+    context: unknown;
 }
 
 interface ILogger {
-    info(...args: any[]): void;
-    warn(...args: any[]): void;
-    error(...args: any[]): void;
-    init(config: ILoggerConfig, callback: any): void;
+    info(...args: unknown[]): void;
+    warn(...args: unknown[]): void;
+    error(...args: unknown[]): void;
+    init(config: ILoggerConfig, callback: unknown): void;
 }
 
 class Logger {
-    private $isServer: any;
-    private $context: {};
-    private callback: any;
+    private $isServer: unknown;
+    private $context: object;
+    private callback: unknown;
 
     constructor(isServer, context, callback, scope) {
         this.$isServer = isServer;
