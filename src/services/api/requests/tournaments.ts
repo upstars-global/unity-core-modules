@@ -4,7 +4,6 @@ import { http } from "../http";
 import log from "../../../controllers/Logger";
 import { type AxiosError } from "axios";
 
-
 export async function loadTournamentsListReq(): Promise<ITournamentsList> {
     try {
         const { data } = await http().get<ITournamentsList>("/api/tournaments");

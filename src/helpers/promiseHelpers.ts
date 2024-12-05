@@ -18,7 +18,7 @@ export function promiseMemoizer<R, T extends PromisedFunc<R> = PromisedFunc<R>>(
         cacheResult = false,
     } = params;
 
-    let promise: Promise<R> | undefined;
+    let promise: Promise<R> | undefined = undefined;
 
     const wrapped = () => {
         if (!promise) {

@@ -7,7 +7,7 @@ import log from "../../controllers/Logger";
 export const userGamesHistory = defineStore(
     "userGamesHistory",
     () => {
-        let gamesHistory = ref([]);
+        const gamesHistory = ref([]);
 
         async function loadUserGameHistory() {
             try {
