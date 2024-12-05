@@ -1,4 +1,4 @@
-export enum FormFields {
+enum FormFields {
     first_name = "first_name",
     last_name = "last_name",
     nickname = "nickname",
@@ -13,3 +13,5 @@ export enum FormFields {
     mobile_phone = "mobile_phone",
     state = "state",
 }
+
+export default {};

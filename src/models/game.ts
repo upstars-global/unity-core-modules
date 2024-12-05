@@ -60,3 +60,5 @@ export enum ProvidersNames {
 }
 
 export type ICollections = Record<string, ICollectionItem>;
+
+export default {};

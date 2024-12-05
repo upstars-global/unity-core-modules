@@ -1,4 +1,4 @@
-import {Currencies} from "../../../models/enums/currencies";
+import { Currencies } from "../../../models/enums/currencies";
 
 export enum ActionsTransaction {
     DEPOSIT = "deposit",
@@ -37,3 +37,4 @@ export interface IPlayerPayment {
     cancellation_reason?: string;
 
 }
+export default {};

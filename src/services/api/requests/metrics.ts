@@ -2,7 +2,7 @@ import {
     IErrorsValidationForm,
     IFormErrorsCollection,
     IFormErrorsCollectionMetric,
-    IMetricsErrorsValidationForm
+    IMetricsErrorsValidationForm,
 } from "../DTO/metrics";
 import { http } from "../http";
 import log from "../../../controllers/Logger";
@@ -82,3 +82,4 @@ export function getUtmMetricsLogAction(actionType) {
         actionsMap[actionType](utmParams);
     }
 }
+export default {};

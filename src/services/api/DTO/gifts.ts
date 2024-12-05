@@ -62,3 +62,4 @@ export interface IGiftFreeSpins {
 }
 
 export type GiftAllItem = IGift | IGiftDeposit | IGiftFreeSpins;
+export default {};
