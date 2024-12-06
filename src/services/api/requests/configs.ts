@@ -29,4 +29,5 @@ export {
     loadManagersConfigReq,
     loadStagByReferNameReq,
     loadSurveyConfigReq,
-    loadVipAdventuresConfigReq };
+    loadVipAdventuresConfigReq,
+};
