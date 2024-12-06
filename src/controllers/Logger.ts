@@ -3,8 +3,8 @@
 
 /* eslint-disable no-new */
 interface ILoggerConfig {
-    isServer: unknown;
-    context: unknown;
+    isServer: boolean;
+    context: Record<string, unknown>;
 }
 
 interface ILogger {
@@ -15,8 +15,8 @@ interface ILogger {
 }
 
 class Logger {
-    private $isServer: unknown;
-    private $context: object;
+    private $isServer: boolean;
+    private $context: Record<string, unknown>;
     private callback: unknown;
 
     constructor(isServer, context, callback, scope) {
