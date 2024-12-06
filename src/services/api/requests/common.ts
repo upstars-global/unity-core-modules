@@ -1,5 +1,5 @@
 import log from "../../../controllers/Logger";
-import {http} from "../http";
+import { http } from "../http";
 
 interface IContactMessage {
     contact: {

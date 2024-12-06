@@ -13,7 +13,6 @@ export const useSettings = defineStore("settings", () => {
         valdemoroSrc,
         isCryptoDomain,
     };
-
 });
 
 export function useSettingsFetchService(pinia?: Pinia) {

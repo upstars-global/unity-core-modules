@@ -9,7 +9,7 @@ export const getAllPaths = (() => {
         if (typeof value === "object" && value !== null) {
             return [
                 ...current,
-                // eslint-disable-next-line no-use-before-define
+
                 ...iterateObject(value, currentPath),
             ];
         }

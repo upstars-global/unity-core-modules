@@ -40,7 +40,7 @@ export interface IRedeemableCards {
     type: CompPointRatesTypes;
     rate: {
         points: number;
-        freespins_count?: any;
+        freespins_count?: number;
     };
     rates: IMoneyRate[];
     games: string[];

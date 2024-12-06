@@ -1,6 +1,6 @@
-import {ILogoConfig} from "../DTO/logo";
-import { http } from "../http";
 import log from "../../../controllers/Logger";
+import { ILogoConfig } from "../DTO/logo";
+import { http } from "../http";
 
 export async function loadLogoConfigReq(): Promise<ILogoConfig | undefined> {
     try {

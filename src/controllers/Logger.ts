@@ -1,30 +1,30 @@
 /* eslint camelcase: ["error", {allow: ["level_name", "remote_addr"]}] */
-/* eslint-disable no-console */
+
 
 /* eslint-disable no-new */
 interface ILoggerConfig {
-    isServer: any;
-    context: any;
+    isServer: boolean;
+    context: Record<string, unknown>;
 }
 
 interface ILogger {
-    info(...args: any[]): void;
-    warn(...args: any[]): void;
-    error(...args: any[]): void;
-    init(config: ILoggerConfig, callback: any): void;
+    info(...args: unknown[]): void;
+    warn(...args: unknown[]): void;
+    error(...args: unknown[]): void;
+    init(config: ILoggerConfig, callback: unknown): void;
 }
 
 class Logger {
-    private $isServer: any;
-    private $context: {};
-    private callback: any;
+    private $isServer: boolean;
+    private $context: Record<string, unknown>;
+    private callback: unknown;
 
     constructor(isServer, context, callback, scope) {
         this.$isServer = isServer;
         this.$context = Object.assign({}, context);
         this.callback = callback;
 
-        let methods = Logger.getMethods();
+        const methods = Logger.getMethods();
 
         methods.map((method) => {
             scope[method] = (...args) => {
@@ -42,16 +42,16 @@ class Logger {
     }
 
     processValue(obj) {
-        let result = {};
+        const result = {};
 
         if (typeof obj === "object") {
-            for (let name in obj) {
+            for (const name in obj) {
                 if (Object.prototype.hasOwnProperty.call(obj, name) && name !== "state") {
                     if (name[0] === "_") {
                         continue;
                     }
 
-                    let value = obj[name];
+                    const value = obj[name];
 
                     if (typeof value === "string") {
                         result[name] = value;
@@ -74,7 +74,7 @@ class Logger {
             label = "";
         }
 
-        let obj = {
+        const obj = {
             label: label,
             level_name: method.toUpperCase(),
             remote_addr: this.$context.userIp,

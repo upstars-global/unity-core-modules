@@ -1,3 +1,9 @@
+import { getUtmParamsFromCookies } from "@front/core/controllers/utmParams"; // TODO: change import
+
+import log from "../../../controllers/Logger";
+import { getErrorMessage } from "../../../helpers/formErrorMessageHelper";
+import { concatValues } from "../../../helpers/objectsHelpers";
+import type { IUtmMetrics } from "../../../models/utmMetrics";
 import {
     IErrorsValidationForm,
     IFormErrorsCollection,
@@ -5,11 +11,6 @@ import {
     IMetricsErrorsValidationForm,
 } from "../DTO/metrics";
 import { http } from "../http";
-import log from "../../../controllers/Logger";
-import { getUtmParamsFromCookies } from "@front/core/controllers/utmParams"; // TODO: change import
-import { concatValues } from "../../../helpers/objectsHelpers";
-import { getErrorMessage } from "../../../helpers/formErrorMessageHelper";
-import type { IUtmMetrics } from "../../../models/utmMetrics";
 
 function prepareErrorsForMetric(errorsCollection: IFormErrorsCollection): IFormErrorsCollectionMetric[] {
     const collectErrors: IFormErrorsCollectionMetric[] = [];
