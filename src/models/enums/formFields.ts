@@ -13,3 +13,5 @@ export enum FormFields {
     mobile_phone = "mobile_phone",
     state = "state",
 }
+
+export default {};
