@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { ref, computed } from "vue";
+import { computed, ref } from "vue";
 
 export const useLivechatStore = defineStore("livechatStore", () => {
     const openChat = ref(false);
@@ -48,5 +48,4 @@ export const useLivechatStore = defineStore("livechatStore", () => {
         setChatOpen,
         resetOpenChat,
     };
-
 });

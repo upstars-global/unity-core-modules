@@ -11,8 +11,8 @@ interface ISanitizedUserData {
 }
 
 interface IFreshChatData {
-    pending: any;
-    restoreId: any;
+    pending: unknown;
+    restoreId: unknown;
     externalId?: string;
     widgetUuid: string;
     token: string;
@@ -20,7 +20,6 @@ interface IFreshChatData {
 
 export function createFreshChatStore(config: Record<string, unknown>) {
     return defineStore("freshchatStore", () => {
-
         const newMessagesCount = ref(0);
 
         const getMessagesCount = computed(() => {
@@ -51,7 +50,7 @@ export function createFreshChatStore(config: Record<string, unknown>) {
             const {
                 getFreshChatRestoreId: restoreId,
                 getFreshChatRestoreIdLoaded: restoreIdLoaded,
-                getDataIsLoaded: isLoaded
+                getDataIsLoaded: isLoaded,
             } = storeToRefs(useUserInfo());
 
             const externalId = userInfo.value.id;
@@ -63,7 +62,7 @@ export function createFreshChatStore(config: Record<string, unknown>) {
                 restoreId: externalId ? restoreId.value : undefined,
                 // externalId cause generating new restoreId, so we need wait initializing
                 // our saved restoreId to prevent overriding
-                externalId: restoreIdLoaded.value? externalId : undefined,
+                externalId: restoreIdLoaded.value ? externalId : undefined,
                 ...(userData.value || {}),
                 pending: isLoaded.value && !restoreIdLoaded.value,
             };

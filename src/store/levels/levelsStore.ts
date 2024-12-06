@@ -1,9 +1,10 @@
-import { http } from "../../services/api/http";
+import type { Pinia } from "pinia";
+import { defineStore } from "pinia";
+import { computed, ref } from "vue";
+
 import log from "../../controllers/Logger";
 import type { IGroup, ILevels, IUserLevelInfo } from "../../models/levels";
-import { defineStore } from "pinia";
-import type { Pinia } from "pinia";
-import { computed, ref } from "vue";
+import { http } from "../../services/api/http";
 
 const getIndex = (id: string | undefined): number | undefined => {
     if (!id) {
