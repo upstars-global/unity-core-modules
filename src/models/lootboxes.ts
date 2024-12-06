@@ -1,3 +1,4 @@
+import type { ILootboxItemConfig } from "../services/api/DTO/lootboxes";
 import type { Currencies } from "./enums/currencies";
 
 export enum EnumLootboxState {
@@ -34,5 +35,36 @@ export interface ILootbox {
     title: string;
     group_key: string;
 }
+
+export enum Mode {
+    Lite = "rocket_lite",
+    Pro = "rocket_pro",
+    Max = "rocket_max"
+}
+
+export enum GiftLevelTypes {
+    Currency = "bonus",
+    Freespins = "freespins",
+}
+
+export const promocodes: Record<Mode, string> = {
+    [Mode.Lite]: "LITE",
+    [Mode.Pro]: "PRO",
+    [Mode.Max]: "MAX",
+};
+
+export interface ModeLootbox {
+    id: number;
+    type: Mode;
+    available: boolean;
+    used: boolean;
+    validUntil: string;
+    label: string;
+    createdAt: string;
+    prize: ILootboxItemConfig;
+    items: [];
+}
+
+export type LootboxMap = Record<Mode, ModeLootbox>;
 
 export default {};
