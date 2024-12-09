@@ -1,8 +1,6 @@
-import { useCMS } from "@store/CMS";
 import { useLotteriesStore } from "@store/lotteries";
 import { useUserInfo } from "@store/user/userInfo";
-import type { Pinia } from "pinia";
-import { defineStore, storeToRefs } from "pinia";
+import { defineStore, StoreDefinition, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
 import { CompPointRatesTypes, CompPointsTypes } from "../../models/enums/compPoints";
@@ -11,6 +9,11 @@ import type { IRedeemableCards } from "../../services/api/DTO/compPoints";
 import { exchangeCompPointRateBySlug, loadCompPointRateBySlug } from "../../services/api/requests/compPoints";
 import { loadFilteredGames } from "../../services/api/requests/games";
 import { useStatusCompPointsStore } from "./statusCompPointsStore";
+
+export interface ICompPointsStoreConfig {
+    routeNames: Record<string, string>,
+    useCMS: StoreDefinition
+}
 
 function checkHasAvailableCards(list: IRedeemableCards[], isLogged: boolean, balance: number, currency: string) {
     if (!isLogged || !balance || !list) {
@@ -25,7 +28,8 @@ function checkHasAvailableCards(list: IRedeemableCards[], isLogged: boolean, bal
         return balance >= points;
     });
 }
-export function createRedeemableCompPointsStore(routeNames: Record<string, string>) {
+export function createRedeemableCompPointsStore(config: ICompPointsStoreConfig) {
+    const { routeNames, useCMS } = config;
     return defineStore("redeemableCompPointsStore", () => {
         const { getIsLogged, getUserCurrency } = storeToRefs(useUserInfo());
         const rates = ref<Record<string, unknown>>({});
@@ -153,17 +157,4 @@ export function createRedeemableCompPointsStore(routeNames: Record<string, strin
             getGameInfo,
         };
     });
-}
-
-export function useRedeemableCompPointsFetchService(routeNames: Record<string, string>, pinia?: Pinia) {
-    const useRedeemableCompPointsStore = createRedeemableCompPointsStore(routeNames);
-    useRedeemableCompPointsStore(pinia);
-
-    function loadRedeemableCompPoints() {
-        return Promise.resolve();
-    }
-
-    return {
-        loadRedeemableCompPoints,
-    };
 }
