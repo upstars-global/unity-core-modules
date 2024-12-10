@@ -32,6 +32,7 @@ export interface ICurrentPage {
     slug: string;
     title: string;
     meta: ICurrentPageMeta;
+    json: Record<string, unknown>
 }
 
 export interface IStaticPage {
