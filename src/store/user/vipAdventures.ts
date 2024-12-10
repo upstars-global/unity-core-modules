@@ -1,14 +1,14 @@
 import { formatDateVipAdv, VIP_ADV_GROUP } from "@modules/VipAdventures/consts";
-import { useEnvironments } from "@store/environments";
 import { useUserStatuses } from "@store/user/userStatuses";
 import dayjs from "dayjs";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
+import type { UserGroup } from "../../models/user";
+import type { IVipAdventuresDayConfig } from "../../models/vipAdventures";
 import type { IPrizeConfigItem, IVipProgress } from "../../services/api/DTO/vipAdventuresDTO";
 import { loadVipAdventuresConfigFile, loadVipStatusProgress } from "../../services/api/requests/vipAdventures";
-import type { UserGroup } from "../../types/user";
-import type { IVipAdventuresDayConfig } from "../../types/vipAdventures";
+import { useEnvironments } from "../../store/environments";
 
 const USER_INCLUDES_ADVENTURES = {
     [VIP_ADV_GROUP]: "vip_adv",
