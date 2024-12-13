@@ -1,4 +1,3 @@
-import { useMultilang } from "@store/multilang";
 import { useUserInfo } from "@store/user/userInfo";
 import { DEFAULT_PAGE_LIMIT } from "@theme/configs/games";
 import { type Pinia, storeToRefs } from "pinia";
@@ -10,6 +9,7 @@ import { getRandomGame, processGameForNewAPI } from "../../helpers/gameHelpers";
 import type { ICollectionItem, IGame } from "../../models/game";
 import type { ICollectionRecord, IGameFilter } from "../../services/api/DTO/gamesDTO";
 import { loadGamesCategory as loadGamesCategoryReq } from "../../services/api/requests/games";
+import { useMultilangStore } from "../multilang";
 import { useRootStore } from "../root";
 import { useGamesCommon } from "./gamesStore";
 import { defaultCollection } from "./helpers/games";
@@ -18,7 +18,7 @@ const DEFAULT_COLLECTION_NAME = "default";
 
 export const useGamesCategory = defineStore("gamesCategory", () => {
     const collections = ref<ICollectionRecord>({});
-    const { getUserGeo } = toRefs(useMultilang());
+    const { getUserGeo } = toRefs(useMultilangStore());
     const { getIsLogged, getUserCurrency } = storeToRefs(useUserInfo());
 
     const categoryGeo = (slug: string): string => {

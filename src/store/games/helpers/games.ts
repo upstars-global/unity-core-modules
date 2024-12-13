@@ -1,8 +1,8 @@
-import { useMultilang } from "@store/multilang";
 import { COUNTRIES } from "@theme/configs/constsLocales";
 import { storeToRefs } from "pinia";
 
 import type { ICollectionItem, IGame } from "../../../models/game";
+import { useMultilangStore } from "../../multilang";
 
 // tslint:disable-next-line:max-line-length
 function findGameBySeoTittleAndProducerWithDuplicate(gamesCollection: IGame[], { producer, seoTitle }): IGame | undefined {
@@ -12,7 +12,7 @@ function findGameBySeoTittleAndProducerWithDuplicate(gamesCollection: IGame[], {
 }
 
 function findGameOfPlaysonBySeoTitle(gamesCollection: IGame[], { producer, seoTitle }): IGame | undefined {
-    const { getUserGeo: userGeo } = storeToRefs(useMultilang());
+    const { getUserGeo: userGeo } = storeToRefs(useMultilangStore());
     const targetProducerByGeo = userGeo.value === COUNTRIES.AUSTRALIA ? "redgenn" : "infin";
     return gamesCollection.find(({ seo_title: seoTitleItem, identifier: identifierItem }) => {
         const [ producerItem ] = identifierItem.split("/");
