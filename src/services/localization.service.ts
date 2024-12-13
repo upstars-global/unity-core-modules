@@ -8,7 +8,7 @@ import type { Composer, VueI18n } from "vue-i18n";
 import type { LocationQuery } from "vue-router";
 
 import { redirectToLang } from "../helpers/redirectToLang";
-import { useMultilangStore } from "../store/multilang.store";
+import { useMultilangStore } from "../store/multilang";
 import type { LocaleName, Locales } from "./api/DTO/multilang";
 import { loadLocalesReq, updateLocalesReq } from "./api/requests/multilang";
 
