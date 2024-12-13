@@ -1,4 +1,3 @@
-import { useMultilang } from "@store/multilang";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
@@ -10,6 +9,7 @@ import { prepareMapStaticPages } from "../helpers/staticPages";
 import { CurrentPage, type ICurrentPage, type IPageCMSPrepare } from "../models/CMS";
 import type { ISnippetItemCMS } from "../services/api/DTO/CMS";
 import { loadCMSPagesReq, loadCMSSnippetsReq, loadMetaSEOReq, loadPageContentFromCmsReq } from "../services/api/requests/CMS";
+import { useMultilangStore } from "../store/multilang";
 
 interface ISeoMeta {
     json: string;
@@ -31,7 +31,7 @@ export function createCMSStore({ routeNames, metaDataSSR }) {
     return defineStore("CMS", () => {
         const staticPages = ref<IPageCMSPrepare[]>([]);
         const snippets = ref<ISnippetItemCMS[]>([]);
-        const { getUserLocale } = storeToRefs(useMultilang());
+        const { getUserLocale } = storeToRefs(useMultilangStore());
 
         async function loadStaticPages({ reload } = { reload: false }) {
             if (staticPages.value.length && !reload) {
