@@ -37,11 +37,6 @@ export async function loadLocales(queryParams: LocationQuery = {}) {
     });
 }
 
-
-/**
- * Update locale for player
- * @param lang
- */
 export async function updateLocale({ lang }: { lang: LocaleName }) {
     const { getDefaultLang, locales } = useMultilangStore();
 
@@ -50,9 +45,6 @@ export async function updateLocale({ lang }: { lang: LocaleName }) {
     });
 }
 
-/**
- * Change locale in application
- */
 export function changeLocale(i18nInstance: VueI18n | Composer, locale: LocaleName) {
     const multilangStore = useMultilangStore();
     i18nInstance.locale = locale;
