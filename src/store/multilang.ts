@@ -1,3 +1,4 @@
+import { DEFAULT_COUNTRY, DEFAULT_LOCALE_BY_COUNTRY } from "@theme/configs/constsLocales";
 import { defineStore, type Pinia } from "pinia";
 import { computed, ref } from "vue";
 
@@ -19,8 +20,8 @@ export const useMultilangStore = defineStore("multilang", () => {
     const locale = ref<LocaleName>("");
     const geo = ref("");
     const country = ref("");
-    const defaultCountry = ref("");
-    const defaultLocaleByCountry = ref({ default: "en" } as IDefaultLocaleByCountry);
+    const defaultCountry = ref(DEFAULT_COUNTRY);
+    const defaultLocaleByCountry = ref(DEFAULT_LOCALE_BY_COUNTRY as IDefaultLocaleByCountry);
 
     const getDefaultLang = computed(() => {
         const {
@@ -67,9 +68,8 @@ export const useMultilangStore = defineStore("multilang", () => {
     };
 });
 
-export function useMultilangFetchService({ defaultCountry, defaultLocaleByCountry }: IMultilangDefaultParams, pinia?: Pinia) {
+export function useMultilangFetchService(pinia?: Pinia) {
     const multilangStore = useMultilangStore(pinia);
-    multilangStore.setDefaultParams({ defaultCountry, defaultLocaleByCountry });
 
     function loadMultilang() {
         return Promise.resolve();
