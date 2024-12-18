@@ -1,16 +1,13 @@
 import { useUserInfo } from "@store/user/userInfo";
 import { useUserStatuses } from "@store/user/userStatuses";
+import { WELCOME_PACK_STAG_ID } from "@theme/configs/stagConsts";
 import { storeToRefs } from "pinia";
 import { computed, watchEffect } from "vue";
 
 import stagController from "../controllers/StagController";
 import { wait } from "../helpers/functionsHelper";
 
-const stagIdForWelcomePack: Record<string, boolean> = {
-    131811: true,
-} as const;
-
-type StagIdWelcomePack = keyof typeof stagIdForWelcomePack;
+type StagIdWelcomePack = keyof typeof WELCOME_PACK_STAG_ID;
 
 export type IWaitingShowWelcomePack = Promise<StagIdWelcomePack | null>;
 
@@ -20,14 +17,14 @@ export const useWelcomePack = () => {
     const nameForWelcomePackByUserStatus = computed<StagIdWelcomePack | null>(() => {
         const { getUserStatuses } = useUserStatuses();
         return getUserStatuses.find(({ name }) => {
-            return stagIdForWelcomePack[name];
+            return WELCOME_PACK_STAG_ID[name];
         })?.name || null;
     });
 
     const nameForWelcomePackByStagId = computed<StagIdWelcomePack | null>(() => {
         const stagInfo = stagController.getStagInfo();
 
-        return (stagInfo?.stagId && stagIdForWelcomePack[stagInfo.stagId]) ? stagInfo?.stagId : null;
+        return (stagInfo?.stagId && WELCOME_PACK_STAG_ID[stagInfo.stagId]) ? stagInfo?.stagId : null;
     });
 
     const showWelcomePack = computed<StagIdWelcomePack | null>(() => {
