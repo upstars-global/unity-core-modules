@@ -7,7 +7,7 @@ import dayjs from "dayjs";
 import { defineStore } from "pinia";
 import { computed } from "vue";
 
-import { betSunCompletedInTour, containAchievIdInUserStatuses } from "../helpers/achievmenthrlpers";
+import { betSunCompletedInTour, containAchievIdInUserStatuses } from "../helpers/achievementHelpers";
 import { STATUS_PROMO } from "../models/enums/tournaments";
 import type { IGroup } from "../models/levels";
 import { useCashboxStore } from "./cashboxStore";
