@@ -102,7 +102,7 @@ class Logger {
     }
 }
 
-export default {
+export const log = {
     init(config, callback) {
         new Logger(config.isServer, config.context, callback, this);
     },

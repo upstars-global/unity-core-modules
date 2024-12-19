@@ -1,4 +1,4 @@
-import log from "../../../controllers/Logger";
+import { log } from "../../../controllers/Logger";
 import { LocaleName, Locales } from "../DTO/multilang";
 import { http } from "../http";
 

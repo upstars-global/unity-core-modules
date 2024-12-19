@@ -1,4 +1,4 @@
-export default (visible: boolean) => {
+export const bodyDisableScroll = (visible: boolean) => {
     if (typeof document === "undefined") {
         return;
     }

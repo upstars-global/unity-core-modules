@@ -2,7 +2,7 @@ import type { Pinia } from "pinia";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
-import log from "../../controllers/Logger";
+import { log } from "../../controllers/Logger";
 import type { IGroup, ILevels, IUserLevelInfo } from "../../models/levels";
 import { http } from "../../services/api/http";
 
@@ -16,7 +16,7 @@ const getIndex = (id: string | undefined): number | undefined => {
     return Number(stringIndex);
 };
 
-export function createLevelsStore(LEVELS: Record<string, unknown>) {
+export function createLevelsStore(LEVELS?: Record<string, unknown>) {
     return defineStore("levelsStore", () => {
         const levels = ref<IUserLevelInfo[]>([]);
         const groups = ref<IGroup[]>([]);

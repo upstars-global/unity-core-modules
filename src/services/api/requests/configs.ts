@@ -1,4 +1,5 @@
-import log from "../../../controllers/Logger";
+import { log } from "../../../controllers/Logger";
+import type { UserGroup } from "../../../models";
 import type { IStagByReferName, ISurveyConfig } from "../../../models/configs";
 import { IVipAdventuresConfig } from "../DTO/vipAdventuresDTO";
 import { http } from "../http";
@@ -22,7 +23,8 @@ const loadVipAdventuresConfigReq = () =>
 const loadDisabledBonusesConfigReq = () =>
     loadConfig<{ group_keys: string[] }>("/api/fe/config/disabled-bonuses", "LOAD_DISABLED_BONUSES_CONFIG_ERROR");
 
-const loadManagersConfigReq = (userGroups) => loadConfig("/api/fe/config/managers", "LOAD_MANAGERS_CONFIG_ERROR", { userGroups });
+const loadManagersConfigReq = (userGroups: UserGroup[]) =>
+    loadConfig("/api/fe/config/managers", "LOAD_MANAGERS_CONFIG_ERROR", { userGroups });
 
 export {
     loadBettingConfigReq,

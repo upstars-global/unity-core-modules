@@ -1,4 +1,4 @@
-export default [
+export const lootbox = [
     {
         weight: 4000,
         prize: false,

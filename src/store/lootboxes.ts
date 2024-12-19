@@ -1,8 +1,8 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
-import log from "../controllers/Logger";
-import { EnumLootboxState, type ILootbox } from "../models/lootboxes";
+import { log } from "../controllers/Logger";
+import { EnumLootboxState, type ILootboxModel } from "../models/lootboxes";
 import type { UserGroup } from "../models/user";
 import type { IPageItemCMS } from "../services/api/DTO/CMS";
 import type { ILootboxesFileConfig } from "../services/api/DTO/lootboxes";
@@ -12,21 +12,21 @@ import { loadMockLootboxWheelConfigs, loadPageContentFromWheelCmsReq } from "../
 const WHEEL_LOOTBOX_GROUP_KEY = "manual_wheel";
 
 export const useLootboxesStore = defineStore("lootboxes", () => {
-    const lootboxesList = ref<ILootbox[]>([]);
+    const lootboxesList = ref<ILootboxModel[]>([]);
     const fakeIdPrizeWin = ref<number>();
     const mockSectionsRocketWheelConfig = ref<ILootboxesFileConfig>([]);
     const userGroupForWheel = ref<UserGroup>();
     const pageContentByGroup = ref<IPageItemCMS>();
 
-    const lootboxListIssued = computed<ILootbox[]>(() => {
-        return [ ...lootboxesList.value.filter(({ stage, group_key }: ILootbox) => {
+    const lootboxListIssued = computed<ILootboxModel[]>(() => {
+        return [ ...lootboxesList.value.filter(({ stage, group_key }: ILootboxModel) => {
             return stage === EnumLootboxState.issued && group_key.includes(WHEEL_LOOTBOX_GROUP_KEY);
         }) ];
     });
 
     const countActiveLootbox = computed(() => lootboxListIssued.value.length);
 
-    async function loadLootboxesList({ reload }: { reload?: boolean } = {}): Promise<ILootbox[]> {
+    async function loadLootboxesList({ reload }: { reload?: boolean } = {}): Promise<ILootboxModel[]> {
         if (!reload && lootboxesList.value.length) {
             return lootboxesList.value;
         }
@@ -49,9 +49,9 @@ export const useLootboxesStore = defineStore("lootboxes", () => {
         }
     }
 
-    function updateLootboxList({ data: newData }: { data: ILootbox }): void {
+    function updateLootboxList({ data: newData }: { data: ILootboxModel }): void {
         lootboxesList.value = [
-            ...lootboxesList.value.filter(({ id }: { id: ILootbox["id"] }) => {
+            ...lootboxesList.value.filter(({ id }: { id: ILootboxModel["id"] }) => {
                 return newData.id !== id;
             }),
             newData,

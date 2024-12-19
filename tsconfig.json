@@ -10,9 +10,9 @@
             "esnext.asynciterable"
         ],
         "allowJs": true,
-        "strict": true,
-        "baseUrl": ".",
-        "outDir": "js",
+        "strict": false,
+        "rootDir": "./src",
+        "baseUrl": "./src",
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
         "experimentalDecorators": true,

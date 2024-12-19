@@ -1,4 +1,4 @@
-import log from "../../../controllers/Logger";
+import { log } from "../../../controllers/Logger";
 import type { IGame } from "../../../models/game";
 import { IGameCollection, IGameFilterResponse, IJackpots, IPlayedGame } from "../DTO/gamesDTO";
 import { http } from "../http";

@@ -2,17 +2,68 @@
   "name": "unity-core-modules",
   "version": "0.0.16",
   "description": "",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/upstars-global/unity-core-modules.git"
   },
   "scripts": {
+    "build": "vite build",
     "lint": "eslint --max-warnings=8",
+    "lint:fix": "eslint --max-warnings=8 --fix",
     "lint:tsc": "tsc --noEmit",
     "prepare": "husky"
   },
   "lint-staged": {
     "**/*": "eslint --fix"
+  },
+  "main": "./dist/main.cjs.js",
+  "module": "./dist/main.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/main.es.js",
+      "require": "./dist/main.cjs.js"
+    },
+    "./consts": {
+      "import": "./dist/consts/index.es.js",
+      "require": "./dist/consts/index.cjs.js",
+      "types": "./dist/consts/index.d.ts"
+    },
+    "./controllers": {
+      "import": "./dist/controllers/index.es.js",
+      "require": "./dist/controllers/index.cjs.js",
+      "types": "./dist/controllers/index.d.ts"
+    },
+    "./helpers": {
+      "import": "./dist/helpers/index.es.js",
+      "require": "./dist/helpers/index.cjs.js",
+      "types": "./dist/helpers./indexd.ts"
+    },
+    "./models": {
+      "import": "./dist/models/index.es.js",
+      "require": "./dist/models/index.cjs.js",
+      "types": "./dist/models/index.d.ts"
+    },
+    "./plugins": {
+      "import": "./dist/plugins/index.es.js",
+      "require": "./dist/plugins/index.cjs.js",
+      "types": "./dist/plugins/index.d.ts"
+    },
+    "./services": {
+      "import": "./dist/services/index.es.js",
+      "require": "./dist/services/index.cjs.js",
+      "types": "./dist/services/index.d.ts"
+    },
+    "./store": {
+      "import": "./dist/store/index.es.js",
+      "require": "./dist/store/index.cjs.js",
+      "types": "./dist/store/index.d.ts"
+    },
+    "./types": {
+      "import": "./dist/types/index.es.js",
+      "require": "./dist/types/index.cjs.js",
+      "types": "./dist/types/index.d.ts"
+    }
   },
   "private": true,
   "dependencies": {
@@ -36,6 +87,10 @@
     "eslint-config-frontera": "upstars-global/eslint-config-frontera#v2.0.1",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "husky": "^9.1.7",
-    "lint-staged": "^15.2.10"
-  }
+    "lint-staged": "^15.2.10",
+    "vite": "^6.0.3",
+    "vite-plugin-dts": "^4.3.0",
+    "vite-plugin-node-polyfills": "^0.22.0"
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

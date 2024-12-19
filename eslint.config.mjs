@@ -2,7 +2,7 @@ import eslintFrontera from "eslint-config-frontera";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 
 const commonConfig = {
-    files: [ "**/*.{js,cjs,mjs,jsx,ts,mts,tsx}" ],
+    files: [ "src/**/*.{js,cjs,mjs,jsx,ts,mts,tsx}", "./vite.config.ts" ],
     ignores: [ "/node_modules/", "yarn.lock" ],
 };
 

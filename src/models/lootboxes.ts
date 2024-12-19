@@ -22,7 +22,7 @@ export interface ILootboxLevel {
     working_days: [];
 }
 
-export interface ILootbox {
+export interface ILootboxModel {
     allowed_currencies: Currencies[];
     currency: Currencies;
     external_id: string;

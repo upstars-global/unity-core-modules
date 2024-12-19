@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
-import bodyDisableScroll from "../helpers/bodyDisableScroll";
+import { bodyDisableScroll } from "../helpers/bodyDisableScroll";
 import type { IModalOptions } from "../models/modalOptions";
 import { EventBus as bus } from "../plugins/EventBus";
 

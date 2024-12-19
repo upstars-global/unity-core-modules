@@ -1,5 +1,5 @@
-import log from "../../../controllers/Logger";
-import type { ILootbox } from "../../../models/lootboxes";
+import { log } from "../../../controllers/Logger";
+import type { ILootboxModel } from "../../../models/lootboxes";
 import type { UserGroup } from "../../../models/user";
 import { IPageItemCMS } from "../DTO/CMS";
 import { ILootboxesFileConfig } from "../DTO/lootboxes";
@@ -19,7 +19,7 @@ export async function loadMockLootboxWheelConfigs():
 
 export async function getLootboxes() {
     try {
-        const { data } = await http().get<ILootbox[]>("/api/player/lootboxes");
+        const { data } = await http().get<ILootboxModel[]>("/api/player/lootboxes");
 
         return data;
     } catch (err) {
@@ -35,15 +35,6 @@ export async function activateLootbox(id: number) {
         return data;
     } catch (err) {
         log.error("LOAD_PRIZE_OF_LOOTBOX_ERROR", err);
-    }
-}
-
-export async function loadPageContentFromCmsReq(slugPage: UserGroup): Promise<IPageItemCMS | void> { // TODO: rename
-    try {
-        const { data } = await http().get<IPageItemCMS>(`/api/cms/pages/${ slugPage }`);
-        return data;
-    } catch (err) {
-        log.error("LOAD_PAGE_CONTENT_FORM_CMS_REQ_ERROR", err);
     }
 }
 

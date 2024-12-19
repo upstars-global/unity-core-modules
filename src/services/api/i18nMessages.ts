@@ -1,6 +1,6 @@
 import { http } from "./http";
 
-export default {
+export const i18nMessages = {
     async loadMessages(locale: string): Promise<unknown> {
         const timeStamp = Math.round(Date.now() / (1000 * 300));
         try {

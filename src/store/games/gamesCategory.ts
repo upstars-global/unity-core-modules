@@ -1,16 +1,15 @@
-import { useUserInfo } from "@store/user/userInfo";
 import { DEFAULT_PAGE_LIMIT } from "@theme/configs/games";
-import { type Pinia, storeToRefs } from "pinia";
-import { defineStore } from "pinia";
+import { defineStore, type Pinia, storeToRefs } from "pinia";
 import { ref, toRefs } from "vue";
 
-import log from "../../controllers/Logger";
+import { log } from "../../controllers/Logger";
 import { getRandomGame, processGameForNewAPI } from "../../helpers/gameHelpers";
 import type { ICollectionItem, IGame } from "../../models/game";
 import type { ICollectionRecord, IGameFilter } from "../../services/api/DTO/gamesDTO";
 import { loadGamesCategory as loadGamesCategoryReq } from "../../services/api/requests/games";
 import { useMultilangStore } from "../multilang";
 import { useRootStore } from "../root";
+import { useUserInfo } from "../user/userInfo";
 import { useGamesCommon } from "./gamesStore";
 import { defaultCollection } from "./helpers/games";
 

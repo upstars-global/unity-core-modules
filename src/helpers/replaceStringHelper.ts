@@ -6,7 +6,7 @@ export interface IParams {
     replaceValue: string;
 }
 
-export default ({ template, replaceString, replaceValue }: IParams): TemplateType => {
+export const replaceStringHelper = ({ template, replaceString, replaceValue }: IParams): TemplateType => {
     const regExp = new RegExp(replaceString, "g");
 
     if (typeof template === "object") {
