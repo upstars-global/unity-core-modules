@@ -1,4 +1,3 @@
-import { useLotteriesStore } from "@store/lotteries";
 import { useUserInfo } from "@store/user/userInfo";
 import { defineStore, StoreDefinition, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
@@ -8,6 +7,7 @@ import { GameMode } from "../../models/enums/gamesConsts";
 import type { IRedeemableCards } from "../../services/api/DTO/compPoints";
 import { exchangeCompPointRateBySlug, loadCompPointRateBySlug } from "../../services/api/requests/compPoints";
 import { loadFilteredGames } from "../../services/api/requests/games";
+import { useLotteriesStore } from "../lotteries";
 import { useStatusCompPointsStore } from "./statusCompPointsStore";
 
 export interface ICompPointsStoreConfig {
