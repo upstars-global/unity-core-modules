@@ -1,10 +1,10 @@
 import { useGiftsStore } from "@store/gifts";
-import { useUserInfo } from "@store/user/userInfo";
 import { defineStore } from "pinia";
 
 import log from "../../controllers/Logger";
 import { http } from "../../services/api/http";
 import { activeCouponReq } from "../../services/api/requests/couponePromoCodes";
+import { useUserInfo } from "./userInfo";
 
 export const useUserBonusesAndCoupon = defineStore("userBonusesAndCoupon", () => {
     const userStore = useUserInfo();
