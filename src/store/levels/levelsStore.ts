@@ -1,5 +1,4 @@
-import type { Pinia } from "pinia";
-import { defineStore } from "pinia";
+import { defineStore, type Pinia } from "pinia";
 import { computed, ref } from "vue";
 
 import log from "../../controllers/Logger";
@@ -16,7 +15,7 @@ const getIndex = (id: string | undefined): number | undefined => {
     return Number(stringIndex);
 };
 
-export function createLevelsStore(LEVELS: Record<string, unknown>) {
+export function createLevelsStore(LEVELS: Record<string, unknown> = {}) {
     return defineStore("levelsStore", () => {
         const levels = ref<IUserLevelInfo[]>([]);
         const groups = ref<IGroup[]>([]);
