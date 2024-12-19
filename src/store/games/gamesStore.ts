@@ -1,3 +1,4 @@
+import { CONFIG_DEFAULT_COLLECTIONS_MENU_SLUGS } from "@theme/configs/categoryesGames";
 import { defineStore, type Pinia, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
@@ -15,6 +16,7 @@ import {
 import { useRootStore } from "../root";
 import { useUserInfo } from "../user/userInfo";
 import { findGameBySeoTittleAndProducer } from "./helpers/games";
+
 
 interface ISearchCachedGameKey {
     seoTitle?: string;
@@ -204,7 +206,7 @@ export const useGamesCommon = defineStore("gamesCommon", () => {
 
 export function useGamesCommonFetchService(pinia?: Pinia) {
     const { setDefaultOptions, loadGamesCategories } = useGamesCommon(pinia);
-    setDefaultOptions(defaultOptions);
+    setDefaultOptions({ defaultMenuGameCategories: CONFIG_DEFAULT_COLLECTIONS_MENU_SLUGS });
 
 
     return {
