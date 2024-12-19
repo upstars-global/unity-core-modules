@@ -1,3 +1,5 @@
+import config from "@theme/configs/config";
+import { ENABLE_CURRENCIES } from "@theme/configs/currencies";
 import { defineStore, type Pinia, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
@@ -25,9 +27,9 @@ export interface ICommonStoreDefaultOptions {
 
 export const useCommon = defineStore("common", () => {
     const platform = ref<IPlatformState>();
-    const defaultCurrency = ref("EUR");
+    const defaultCurrency = ref(config.currencyDefault);
     const currencies = ref<ICurrencies[]>([]);
-    const enableCurrencies = ref<Set<string>>(new Set());
+    const enableCurrencies = ref<Set<string>>(new Set(ENABLE_CURRENCIES));
 
     if (typeof window !== "undefined") {
         getUserAgentPlatform().then((platformData) => {
@@ -195,7 +197,7 @@ export const useCommon = defineStore("common", () => {
     };
 });
 
-export function useCommonFetchService(defaultOptions: ICommonStoreDefaultOptions, pinia?: Pinia) {
+export function useCommonFetchService(pinia?: Pinia) {
     const {
         setDefaultOptions,
         loadCountries,
@@ -203,8 +205,6 @@ export function useCommonFetchService(defaultOptions: ICommonStoreDefaultOptions
         loadProjectInfo,
         loadCryptoExchangeRates,
     } = useCommon(pinia);
-
-    setDefaultOptions(defaultOptions);
 
     return {
         loadCountries,
