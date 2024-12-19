@@ -1,4 +1,3 @@
-import { useGiftsStore } from "@store/gifts";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref, toRefs } from "vue";
 
@@ -9,6 +8,7 @@ import type { IGift } from "../../services/api/DTO/gifts";
 import type { IUserAccount } from "../../services/api/DTO/playerDTO";
 import { loadUserBalanceReq, selectUserWalletReq } from "../../services/api/requests/player";
 import { useCommon } from "../common";
+import { useGiftsStore } from "../gifts";
 import { useSettings } from "../settings";
 import { useUserInfo } from "./userInfo";
 import { useUserLimits } from "./userLimits";

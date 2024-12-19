@@ -3,7 +3,7 @@ import { ref } from "vue";
 
 import log from "../../controllers/Logger";
 import { http } from "../../services/api/http";
-import { useUserInfo } from "./user/userInfo";
+import { useUserInfo } from "./userInfo";
 
 interface IUserSession {
     "id": number;

@@ -1,7 +1,3 @@
-import { useCommon } from "@store/common";
-import { useUserBalance } from "@store/user/userBalance";
-import { useUserInfo } from "@store/user/userInfo";
-import { useUserStatuses } from "@store/user/userStatuses";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
@@ -14,6 +10,10 @@ import { EventBus } from "../plugins/EventBus";
 import type { IPlayerPayment } from "../services/api/DTO/cashbox";
 import { ActionsTransaction, TypeSystemPayment } from "../services/api/DTO/cashbox";
 import { cancelWithdrawRequestByID, loadPlayerPayments } from "../services/api/requests/player";
+import { useCommon } from "./common";
+import { useUserBalance } from "./user/userBalance";
+import { useUserInfo } from "./user/userInfo";
+import { useUserStatuses } from "./user/userStatuses";
 
 const CURRENCY_FOR_MERCURYO: Currencies[] = [
     Currencies.BTC,

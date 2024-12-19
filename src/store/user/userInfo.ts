@@ -403,7 +403,6 @@ export const useUserInfo = defineStore("userInfo", () => {
         loadUserBonuses,
         loadUserStats,
         loadUserSubscriptions,
-        userSetToGroupForAbTest,
     };
 });
 
