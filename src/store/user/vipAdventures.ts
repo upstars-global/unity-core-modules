@@ -1,4 +1,4 @@
-import { formatDateVipAdv, VIP_ADV_GROUP } from "@modules/VipAdventures/consts";
+import { formatDateVipAdv, VIP_ADV_GROUP } from "@config/vip-adventures";
 import dayjs from "dayjs";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";

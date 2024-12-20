@@ -1,5 +1,5 @@
-import { VIP_CLUB_STATUSES } from "@components/VipClub/consts";
-import { STATUSES } from "@components/VipClub/constsNew";
+import { TEST_GROUP_ID, VIP_STATUSES } from "@config/user-statuses";
+import { STATUSES, VIP_CLUB_STATUSES } from "@config/vip-clubs";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
@@ -7,8 +7,7 @@ import type { IUserLevelInfo } from "../../models/levels";
 import type { IUserStatus, UserGroup } from "../../models/user";
 import { loadManagersConfigReq } from "../../services/api/requests/configs";
 import { addPlayerToGroup } from "../../services/api/requests/player";
-import { createLevelsStore } from "../levels/levelsStore";
-import { TEST_GROUP_ID, VIP_STATUSES } from "./consts";
+import { useLevelsStore } from "../levels/levelsStore";
 import { useUserInfo } from "./userInfo";
 
 const ID_GROUP_FOR_MULTI_ACC = 100;
@@ -20,7 +19,7 @@ export const useUserStatuses = defineStore("userStatuses", () => {
     const userManager = ref<Record<string, unknown>>({});
 
     const getUserLevelInfo = computed<IUserLevelInfo | Record<string, unknown>>(() => {
-        const levelsStore = createLevelsStore()();
+        const levelsStore = useLevelsStore();
         const { id } = getUserInfo.value?.statuses?.find((group) => {
             return !Number(group.id);
         }) || {} as IUserLevelInfo;
