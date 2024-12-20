@@ -1,16 +1,4 @@
-export const currencyCodesOfCountry = {
-    AU: "AUD",
-    CA: "CAD",
-    NZ: "NZD",
-    US: "USD",
-    IE: "EUR",
-    DE: "EUR",
-    JP: "JPY",
-    NO: "NOK",
-    BR: "BRL",
-    AT: "EUR",
-    CH: "EUR",
-};
+import { currencyCodesOfCountry } from "../models/enums/currencies";
 
 export const currencyOfCountry = (country: string) => {
     return currencyCodesOfCountry[country as keyof typeof currencyCodesOfCountry];

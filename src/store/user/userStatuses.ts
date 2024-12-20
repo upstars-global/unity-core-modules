@@ -3,10 +3,10 @@ import { STATUSES } from "@components/VipClub/constsNew";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
+import type { IUserLevelInfo } from "../../models/levels";
 import type { IUserStatus, UserGroup } from "../../models/user";
 import { loadManagersConfigReq } from "../../services/api/requests/configs";
 import { addPlayerToGroup } from "../../services/api/requests/player";
-import type { IUserLevelInfo } from "../../types/levels";
 import { createLevelsStore } from "../levels/levelsStore";
 import { TEST_GROUP_ID, VIP_STATUSES } from "./consts";
 import { useUserInfo } from "./userInfo";

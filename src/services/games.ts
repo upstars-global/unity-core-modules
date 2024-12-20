@@ -1,4 +1,5 @@
-import { SlugCategoriesGames } from "../consts/games";
+import { SlugCategoriesGames } from "@theme/configs/categoryesGames";
+
 import log from "../controllers/Logger";
 import { useGamesCommon } from "../store/games/gamesStore";
 import { useJackpots } from "../store/jackpots";

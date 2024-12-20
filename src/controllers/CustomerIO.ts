@@ -1,5 +1,4 @@
-const YOUR_SITE_ID = "fe1bbf5480bb59194b4c";
-const ORGANIZATION_ID = "03958dcb-a8b4-4ea4-a916-91a6c169141d";
+import { ORGANIZATION_ID, YOUR_SITE_ID } from "@config/customerIO";
 
 declare global {
   interface Window {

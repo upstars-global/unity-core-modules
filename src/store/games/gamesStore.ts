@@ -1,8 +1,8 @@
 import { CONFIG_DEFAULT_COLLECTIONS_MENU_SLUGS } from "@theme/configs/categoryesGames";
+import { SlugCategoriesGames } from "@theme/configs/categoryesGames";
 import { defineStore, type Pinia, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
-import { SlugCategoriesGames } from "../../consts/games";
 import log from "../../controllers/Logger";
 import { currencyView } from "../../helpers/currencyHelper";
 import { processGame } from "../../helpers/gameHelpers";
@@ -32,7 +32,7 @@ interface IJackpots {
     [currency: string]: number;
 }
 
-export interface IGamesCommonStoreDefaultOptions {
+interface IGamesCommonStoreDefaultOptions {
   defaultMenuGameCategories: Record<string, SlugCategoriesGames[]>;
 }
 

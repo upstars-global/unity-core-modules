@@ -6,6 +6,7 @@ import { computed, ref } from "vue";
 import log from "../controllers/Logger";
 import { currencyOfCountry } from "../helpers/currencyOfCountry";
 import { getUserAgentPlatform, type IPlatformState } from "../helpers/userAgentPlatform";
+import type { IPlayerFieldsInfo } from "../models/common";
 import type { IStagByReferName, ISurveyConfig } from "../models/configs";
 import { Currencies } from "../models/enums/currencies";
 import type { ICountries, ICryptoExchangeRates, ICurrencies, IProjectInfo } from "../services/api/DTO/info";
@@ -17,7 +18,6 @@ import {
     loadCurrenciesReq,
     loadProjectInfoReq,
 } from "../services/api/requests/info";
-import type { IPlayerFieldsInfo } from "../types/common";
 import { useMultilangStore } from "./multilang";
 
 export interface ICommonStoreDefaultOptions {

@@ -5,6 +5,7 @@ import { defineStore, type Pinia, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
 import { cioIdentifyUser } from "../../controllers/CustomerIO";
+import { EnumContextFields, EnumFormFields } from "../../models/common";
 import { Currencies } from "../../models/enums/currencies";
 import type { IUserData } from "../../models/user";
 import { EventBus as bus } from "../../plugins/EventBus";
@@ -17,7 +18,6 @@ import {
     sendUserDataReq, updateAuthDetailsProvidersReq,
 } from "../../services/api/requests/player";
 import { updateLocale } from "../../services/localization";
-import { EnumContextFields, EnumFormFields } from "../../types/common";
 import { useCommon } from "../common";
 import { useMultilangStore } from "../multilang";
 

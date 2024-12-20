@@ -1,7 +1,7 @@
+import { SlugCategoriesGames } from "@theme/configs/categoryesGames";
 import { defineStore, type Pinia } from "pinia";
 import { computed, ref } from "vue";
 
-import { SlugCategoriesGames } from "../consts/games";
 import type { IJackpotItem } from "../services/api/DTO/jackpot";
 import { loadJackpotsList } from "../services/api/requests/jackpots";
 
