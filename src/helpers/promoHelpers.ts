@@ -1,9 +1,9 @@
 import { typePromotionsFiles } from "@config/tournaments";
-import { useBannerStore } from "@store/banners";
 import { toRefs } from "vue";
 
 import { PromoType, STATUS_PROMO } from "../models/enums/tournaments";
 import type { ITournament } from "../services/api/DTO/tournamentsDTO";
+import { useBannerStore } from "../store/banners";
 import { useUserStatuses } from "../store/user/userStatuses";
 
 export const labelToString = (labels: [ { title: string } ]) => labels?.map(({ title }) => title).join(" | ");
