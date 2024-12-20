@@ -16,7 +16,7 @@ import {
     putUserSubscriptionReq, restorePasswordRequestReq, restorePasswordRestoreReq, sendFreshChatRestoreIdReq,
     sendUserDataReq, updateAuthDetailsProvidersReq,
 } from "../../services/api/requests/player";
-import { updateLocale } from "../../services/localization.service";
+import { updateLocale } from "../../services/localization";
 import { EnumContextFields, EnumFormFields } from "../../types/common";
 import { useCommon } from "../common";
 import { useMultilangStore } from "../multilang";
