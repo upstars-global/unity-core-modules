@@ -10,8 +10,6 @@ import {
     BANNERS_CATEGORIES_ENABLE,
 } from "@config/banners";
 import { typePromotionsFiles } from "@config/tournaments";
-import { useUserInfo } from "@store/user/userInfo";
-import { useUserStatuses } from "@store/user/userStatuses";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import type{ Pinia } from "pinia";
@@ -25,6 +23,8 @@ import type { IFileCMS } from "../services/api/DTO/CMS";
 import { loadAllFilesFromCMSReq } from "../services/api/requests/CMS";
 import { useMultilangStore } from "./multilang";
 import { useSettings } from "./settings";
+import { useUserInfo } from "./user/userInfo";
+import { useUserStatuses } from "./user/userStatuses";
 
 export const useBannerStore = defineStore("bannerStore", () => {
     const { getIsLogged, isCryptoUserCurrency } = storeToRefs(useUserInfo());

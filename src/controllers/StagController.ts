@@ -1,10 +1,10 @@
-import { useCommon } from "@store/common";
 import { DEFAULT_STAGS_COUNTRY_REFER, REFERRER, STAG_PARTNER_KEY } from "@theme/configs/stagConsts";
 import { storeToRefs } from "pinia";
 
 import { referrerHelper } from "../helpers/referrerHelper";
 import { isServer } from "../helpers/ssrHelpers";
 import type { IStagByReferName } from "../models/configs";
+import { useCommon } from "../store/common";
 import { useMultilangStore } from "../store/multilang";
 import { CookieController } from "./CookieController";
 import log from "./Logger";
