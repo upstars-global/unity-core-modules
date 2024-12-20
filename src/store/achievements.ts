@@ -1,5 +1,4 @@
 import { ACHIEV_ID, defaultDepCount, TOURNAMENT_IDS_FOR_ACHIEV } from "@config/achievements";
-import { useLevelsStore } from "@store/levels/levelsStore";
 import { useTournamentsStore } from "@store/tournaments/tournamentsStore";
 import { useUserStatuses } from "@store/user/userStatuses";
 import featureFlags from "@theme/configs/featureFlags";
@@ -11,6 +10,7 @@ import { betSunCompletedInTour, containAchievIdInUserStatuses } from "../helpers
 import { STATUS_PROMO } from "../models/enums/tournaments";
 import type { IGroup } from "../models/levels";
 import { useCashboxStore } from "./cashboxStore";
+import { useLevelsStore } from "./levels/levelsStore";
 
 const defaultDepDateStartCount = "2022-03-29T00:00:00Z";
 
