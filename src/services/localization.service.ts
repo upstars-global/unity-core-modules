@@ -1,5 +1,3 @@
-// TODO: remove magic imports
-import stagController from "@controllers/StagController";
 import {
     AFFB_ID_DEFAULT,
     AFFB_ID_KEY,
@@ -7,6 +5,7 @@ import {
 import type { Composer, VueI18n } from "vue-i18n";
 import type { LocationQuery } from "vue-router";
 
+import stagController from "../controllers/StagController";
 import { redirectToLang } from "../helpers/redirectToLang";
 import { useMultilangStore } from "../store/multilang";
 import type { LocaleName, Locales } from "./api/DTO/multilang";
