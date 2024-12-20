@@ -29,7 +29,7 @@ export const useCommon = defineStore("common", () => {
     const platform = ref<IPlatformState>();
     const defaultCurrency = ref(config.currencyDefault);
     const currencies = ref<ICurrencies[]>([]);
-    const enableCurrencies = ref<Set<string>>(new Set(ENABLE_CURRENCIES));
+    const enableCurrencies = ref<string[]>(ENABLE_CURRENCIES);
 
     if (typeof window !== "undefined") {
         getUserAgentPlatform().then((platformData) => {
@@ -123,13 +123,13 @@ export const useCommon = defineStore("common", () => {
 
     function setDefaultOptions(defaultOptions: ICommonStoreDefaultOptions) {
         defaultCurrency.value = defaultOptions.defaultCurrency;
-        enableCurrencies.value = new Set(defaultOptions.enableCurrencies);
+        enableCurrencies.value = [ ...defaultOptions.enableCurrencies ];
     }
 
     async function loadCurrencies() {
         const data = await loadCurrenciesReq();
         if (data) {
-            currencies.value = data.filter(({ code }) => enableCurrencies.value.has(code));
+            currencies.value = data.filter(({ code }) => enableCurrencies.value.includes(code));
         }
     }
 
