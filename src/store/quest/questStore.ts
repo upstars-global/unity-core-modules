@@ -1,5 +1,4 @@
 import getQuestConfig, { DEFAULT_QUEST_SIZE } from "@config/quest";
-import { useUserInfo } from "@store/user/userInfo";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
@@ -10,6 +9,7 @@ import { PromoType } from "../../models/enums/tournaments";
 import type { ICurrentUserQuestsStatus, IQuestData, IQuestItem, IUserStatusQuest } from "../../models/quest";
 import type { ITournamentsList } from "../../services/api/DTO/tournamentsDTO";
 import { loadQuestDataReq } from "../../services/api/requests/tournaments";
+import { useUserInfo } from "../user/userInfo";
 
 function promoFilterAndSettingsOneItem(item, type) {
     const [ result ] = promoFilterAndSettings([ item ], type);
