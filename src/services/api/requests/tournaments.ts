@@ -57,6 +57,22 @@ export async function loadUserStatusesReq(id: number): Promise<IPlayer> {
     }
 }
 
+export async function loadQuestDataReq(questList: ITournament[]) {
+    try {
+        const statuses = await Promise.all(
+            questList.map((questItem) => {
+                return http().get(`/api/tournaments/${ questItem.id }/status`);
+            }),
+        );
+
+        return statuses.map(({ data }) => {
+            return data;
+        });
+    } catch (err) {
+        log.error("LOAD_QUESTS_DATA_ERROR", err);
+    }
+}
+
 export async function updateUserStatusesReq(id: number): Promise<IPlayersList> {
     try {
         const { data } = await http().get<IPlayersList>(`/api/tournaments/${ id }/status`);

@@ -3,14 +3,13 @@ import { useUserInfo } from "@store/user/userInfo";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
-import log from "../../controllers/Logger";
 import { wait } from "../../helpers/functionsHelper";
 import { promoFilterAndSettings } from "../../helpers/promoHelpers";
 import { findNextLevelData, getCurrentLevelData, isQuest, questSizeById, questSlugById } from "../../helpers/questHelpers";
 import { PromoType } from "../../models/enums/tournaments";
 import type { ICurrentUserQuestsStatus, IQuestData, IQuestItem, IUserStatusQuest } from "../../models/quest";
 import type { ITournamentsList } from "../../services/api/DTO/tournamentsDTO";
-import { http } from "../../services/api/http";
+import { loadQuestDataReq } from "../../services/api/requests/tournaments";
 
 function promoFilterAndSettingsOneItem(item, type) {
     const [ result ] = promoFilterAndSettings([ item ], type);
@@ -202,18 +201,8 @@ export const useQuestStore = defineStore("questStore", () => {
         // @ts-expect-error missing properties
         setQuestsList(filteredQuestsList);
         if (getIsLogged.value) {
-            try {
-                const statuses = await Promise.all(
-                    filteredQuestsList.map((questItem) => {
-                        return http().get(`/api/tournaments/${ questItem.id }/status`);
-                    }),
-                );
-                setNewStatusesUserQuest(statuses.map(({ data }) => {
-                    return data;
-                }));
-            } catch (err) {
-                log.error("LOAD_QUESTS_DATA_ERROR", err);
-            }
+            const statuses = await loadQuestDataReq(filteredQuestsList) || [];
+            setNewStatusesUserQuest(statuses);
         }
     }
 
