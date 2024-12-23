@@ -137,7 +137,7 @@ export const useQuestStore = defineStore("questStore", () => {
             return Object.entries(getQuestConfig(quest?.questSize).mockLevels);
         }
 
-        return {};
+        return [];
     }
 
     function clearQuestUserData() {
