@@ -4,6 +4,7 @@ import { computed, ref } from "vue";
 
 import log from "../../controllers/Logger";
 import { isAchievement } from "../../helpers/achievementHelpers";
+import { parseJson } from "../../helpers/parseJson";
 import { parseImageDescription, promoFilterAndSettings, statusForTournament } from "../../helpers/promoHelpers";
 import { isQuest } from "../../helpers/questHelpers";
 import { PromoType } from "../../models/enums/tournaments";
@@ -47,7 +48,7 @@ export const useTournamentsStore = defineStore("tournamentsStore", () => {
                     return snippet.categories.includes("tournament");
                 })
                 .map(({ content }) => {
-                    return JSON.parse(content);
+                    return parseJson(content, "PARSE_TOURNAMENT_ITEM_ERROR");
                 });
 
             return tournaments.map((tour: ITournament) => {
@@ -65,7 +66,7 @@ export const useTournamentsStore = defineStore("tournamentsStore", () => {
     });
 
     const getActiveTournamentsList = computed(() => {
-        return [ ...getTournamentsList.value ].filter((item: ITournament) => {
+        return getTournamentsList.value.filter((item: ITournament) => {
             return item.in_progress;
         });
     });
@@ -102,15 +103,14 @@ export const useTournamentsStore = defineStore("tournamentsStore", () => {
     }
 
     const getTournamentById = (id: number) => {
-        const list = getTournamentsList.value;
-        return [ ...list ].find((item: ITournament) => {
+        return getTournamentsList.value.find((item: ITournament) => {
             return item.id === id;
         });
     };
 
     const getUserTournamentById = computed(() => {
         return (idTour: number) => {
-            return [ ...getTournamentsList.value ].find(({ id }) => {
+            return getTournamentsList.value.find(({ id }) => {
                 return id === idTour;
             });
         };
