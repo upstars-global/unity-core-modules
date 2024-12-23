@@ -1,5 +1,4 @@
 import { ACHIEV_ID, defaultDepCount, TOURNAMENT_IDS_FOR_ACHIEV } from "@config/achievements";
-import { useTournamentsStore } from "@store/tournaments/tournamentsStore";
 import featureFlags from "@theme/configs/featureFlags";
 import dayjs from "dayjs";
 import { defineStore } from "pinia";
@@ -10,6 +9,7 @@ import { STATUS_PROMO } from "../models/enums/tournaments";
 import type { IGroup } from "../models/levels";
 import { useCashboxStore } from "./cashboxStore";
 import { useLevelsStore } from "./levels/levelsStore";
+import { useTournamentsStore } from "./tournaments/tournamentsStore";
 import { useUserStatuses } from "./user/userStatuses";
 
 const defaultDepDateStartCount = "2022-03-29T00:00:00Z";
