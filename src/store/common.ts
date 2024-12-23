@@ -30,6 +30,7 @@ export const useCommon = defineStore("common", () => {
     const defaultCurrency = ref(config.currencyDefault);
     const currencies = ref<ICurrencies[]>([]);
     const enableCurrencies = ref<string[]>(ENABLE_CURRENCIES);
+    const playerFieldsInfo = ref<IPlayerFieldsInfo>();
 
     if (typeof window !== "undefined") {
         getUserAgentPlatform().then((platformData) => {
@@ -41,21 +42,8 @@ export const useCommon = defineStore("common", () => {
         return platform.value && platform.value.isMobile;
     });
 
-    const playerFieldsInfo = ref<IPlayerFieldsInfo>();
-
-    async function loadPlayerFieldsInfo({ reload } = { reload: false }): Promise<IPlayerFieldsInfo> {
-        if (playerFieldsInfo.value && !reload) {
-            return playerFieldsInfo.value;
-        }
-        try {
-            const { data } = await http().get("/api/info/player_fields");
-            playerFieldsInfo.value = data;
-
-            return data;
-        } catch (err) {
-            log.error("LOAD_PLAYER_FIELDS_INFO", err);
-            throw err;
-        }
+    function setPlayerFieldsInfo(data: IPlayerFieldsInfo) {
+        playerFieldsInfo.value = data;
     }
 
     // @ts-expect-error Parameters implicitly have an 'any' type.
@@ -165,8 +153,8 @@ export const useCommon = defineStore("common", () => {
         isMobile,
 
         setDefaultOptions,
-        loadPlayerFieldsInfo,
         playerFieldsInfo,
+        setPlayerFieldsInfo,
 
         hasFieldsInContext,
         getFieldsType,

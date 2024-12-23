@@ -1,9 +1,8 @@
 import { SlugCategoriesGames } from "@theme/configs/categoryesGames";
 
-import log from "../controllers/Logger";
 import { useGamesCommon } from "../store/games/gamesStore";
 import { useJackpots } from "../store/jackpots";
-import { http } from "./api/http";
+import { loadCategoriesFileConfigRequest } from "./api/requests/games";
 
 export function getMenuCategoriesBySlug(slug: string): SlugCategoriesGames[] {
     const jackpotsStore = useJackpots();
@@ -11,7 +10,7 @@ export function getMenuCategoriesBySlug(slug: string): SlugCategoriesGames[] {
 
     return (
         gamesStore.menuGameCategories[slug] ||
-        gamesStore.defaultMenuGameCategories[slug]
+    gamesStore.defaultMenuGameCategories[slug]
     ).filter((menuSlug: string) =>
         (menuSlug === SlugCategoriesGames.SLUG_CATEGORY_MYSTIC_JACKPOTS ? jackpotsStore.isTurnOnJPMystic : true));
 }
@@ -23,13 +22,9 @@ export async function loadCategoriesFileConfig() {
         return gamesStore.menuGameCategories;
     }
 
-    try {
-        const { data } = await http().get<Record<string, SlugCategoriesGames[]>>("/api/fe/config/menu-categories-games");
-        gamesStore.setMenuGameCategories(data);
+    const data = await loadCategoriesFileConfigRequest();
 
-        return data;
-    } catch (err) {
-        log.error("LOAD_CATEGORIES_PAGE_FILE_CONFIG_ERROR", err);
-        throw err;
+    if (data) {
+        gamesStore.setMenuGameCategories(data);
     }
 }

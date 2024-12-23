@@ -18,6 +18,7 @@ import {
     sendUserDataReq, updateAuthDetailsProvidersReq,
 } from "../../services/api/requests/player";
 import { updateLocale } from "../../services/localization";
+import { loadPlayerFieldsInfo } from "../../services/user";
 import { useCommon } from "../common";
 import { useMultilangStore } from "../multilang";
 
@@ -232,7 +233,7 @@ export const useUserInfo = defineStore("userInfo", () => {
 
                 loadFreshChatRestoreId();
 
-                useCommon().loadPlayerFieldsInfo({ reload: true })
+                loadPlayerFieldsInfo({ reload: true })
                     .then(checkUserState);
             }
 
