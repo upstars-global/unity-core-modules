@@ -1,11 +1,11 @@
-export function wait(duration) {
+export function wait(duration: number) {
     return new Promise((resolve) => {
         return setTimeout(resolve, duration);
     });
 }
 
 
-export function addScript(src, { defer = true, async = true } = {}, callback = () => {}) {
+export function addScript(src: string, { defer = true, async = true } = {}, callback = () => {}) {
     if (typeof document !== "undefined") {
         const script = document.createElement("script");
         script.async = async;
