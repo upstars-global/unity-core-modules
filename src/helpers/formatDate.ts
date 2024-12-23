@@ -1,11 +1,10 @@
+import { STATUS_PROMO } from "@store/tournaments/constants";
 import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import quarterOfYear from "dayjs/plugin/quarterOfYear";
 import relativeTime from "dayjs/plugin/relativeTime";
 import utcPlugin from "dayjs/plugin/utc";
 import weekday from "dayjs/plugin/weekday";
-
-import { STATUS_PROMO } from "../models/enums/tournaments";
 
 dayjs.extend(utcPlugin);
 dayjs.extend(weekday);
