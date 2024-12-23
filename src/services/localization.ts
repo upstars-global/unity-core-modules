@@ -14,8 +14,8 @@ import { loadLocalesReq, updateLocalesReq } from "./api/requests/multilang";
 export async function loadLocales(queryParams: LocationQuery = {}) {
     const { getUserLocale, getDefaultLang, setLocales, setLocale } = useMultilangStore();
 
-    if (getUserLocale.value) {
-        setLocale(getUserLocale.value);
+    if (getUserLocale) {
+        setLocale(getUserLocale);
     }
 
     const query = new URLSearchParams();
@@ -30,7 +30,7 @@ export async function loadLocales(queryParams: LocationQuery = {}) {
 
     return loadLocalesReq(query.toString()).then((data: Locales) => {
         setLocales(data);
-        if (!getUserLocale.value) {
+        if (!getUserLocale) {
             setLocale(getDefaultLang);
         }
     });

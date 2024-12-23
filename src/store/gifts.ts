@@ -6,8 +6,6 @@ import {
     TYPE_GIFT_DEPOSIT,
     TYPE_GIFT_FS,
     TYPE_GIFT_REGISTRATION } from "@src/config/gift";
-import { useUserInfo } from "@store/user/userInfo";
-import { useUserStatuses } from "@store/user/userStatuses";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
@@ -15,6 +13,8 @@ import log from "../controllers/Logger";
 import type { GiftAllItem, IGift, IGiftDeposit, IGiftFreeSpins } from "../services/api/DTO/gifts";
 import { http } from "../services/api/http";
 import { loadDisabledBonusesConfigReq } from "../services/api/requests/configs";
+import { useUserInfo } from "./user/userInfo";
+import { useUserStatuses } from "./user/userStatuses";
 
 function preparingGiftData<T extends IGift | IGiftFreeSpins>(
     giftsCollection: T[],

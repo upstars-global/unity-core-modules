@@ -1,13 +1,12 @@
-import { useUserInfo } from "@store/user/userInfo"; // TODO: replace import after move userInfo store to core
 import logo from "@theme/images/BrandImages/logo.svg";
 import logoMob from "@theme/images/BrandImages/logo-mob.svg";
-import type { Pinia } from "pinia";
-import { defineStore, storeToRefs } from "pinia";
+import { defineStore, type Pinia, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
 import { ILogoConfig } from "../services/api/DTO/logo";
 import { loadLogoConfigReq } from "../services/api/requests/logo";
 import { useRootStore } from "./root";
+import { useUserInfo } from "./user/userInfo";
 
 export const useLogoStore = defineStore("logoStore", () => {
     const logoConfig = ref<ILogoConfig>();
