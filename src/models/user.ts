@@ -64,3 +64,11 @@ export interface IUserData extends IUserInfo {
 }
 
 export type UserGroup = string | number;
+
+export interface IUserFormData {
+    email?: string;
+    password?: string;
+    dfpc?: string;
+    captcha?: string;
+    otp?: string;
+}

@@ -3,6 +3,7 @@ import { useTournamentsStore } from "@store/tournaments/tournamentsStore";
 import config from "@theme/configs/config";
 import featureFlags from "@theme/configs/featureFlags";
 import { defineStore } from "pinia";
+import { checkEmail, registerUser, signIn, signOut } from "src/services/api/requests/auth";
 
 import ABTestController from "../../controllers/ABTest/ABTestController";
 import authController from "../../controllers/authController";
@@ -14,7 +15,6 @@ import { promiseAll } from "../../helpers/promiseHelpers";
 import { UsePing } from "../../helpers/usePinger";
 import vipStatusHelper from "../../helpers/vipStatusHelper";
 import { EventBus as bus } from "../../plugins/EventBus";
-import { http } from "../../services/api/http";
 import { addPlayerToGroup } from "../../services/api/requests/player";
 import { userSetToGroupForAbTest } from "../../services/user";
 import { useStatusCompPointsStore } from "../compPoints/statusCompPointsStore";
@@ -60,24 +60,16 @@ export const useAuth = defineStore("auth", () => {
         clearUserData,
     } = useUserInfo();
     async function checkEmailVerify(email: string): Promise<IRespIbizaService> {
-        try {
-            const { data } = await http().post("/check-email", { email });
-            return data;
-        } catch (response) {
-            log.error("CHECK_EMAIL_VERIFY_ERROR", response);
-            throw response;
-        }
+        return checkEmail(email);
     }
 
     async function loginTwoFactor(otp: string) {
         try {
-            const { data } = await http().post("/api/users/sign_in", {
-                user: {
-                    otp_attempt: otp,
-                },
-            });
+            const data = await signIn({ otp });
+
             toggleUserIsLogged(true);
             await loadUserProfile({});
+
             return data;
             // @ts-expect-error Property 'response' does not exist on type 'unknown'
         } catch ({ response }) {
@@ -88,13 +80,11 @@ export const useAuth = defineStore("auth", () => {
 
     async function login({ email, password, captcha, route }: { email: string; password: string; captcha: string; route: string }) {
         try {
-            const { data } = await http().post("/api/users/sign_in", {
-                user: {
-                    email,
-                    password,
-                    dfpc: CoveryController.deviceFingerprint(),
-                    captcha,
-                },
+            const data = await signIn({
+                email,
+                password,
+                dfpc: CoveryController.deviceFingerprint(),
+                captcha,
             });
 
             toggleUserIsLogged(true);
@@ -111,9 +101,10 @@ export const useAuth = defineStore("auth", () => {
 
     async function logout(redirect: string) {
         try {
-            await http().delete("/api/users/sign_out");
+            await signOut();
+
             authController.resetAuthData(redirect);
-            // @ts-expect-error Property 'response' does not exist on type 'unknown'
+        // @ts-expect-error Property 'response' does not exist on type 'unknown'
         } catch ({ response }) {
             log.error("LOGOUT_ERROR", response);
         }
@@ -124,7 +115,8 @@ export const useAuth = defineStore("auth", () => {
             registrationData.user.dfpc = CoveryController.deviceFingerprint();
         }
         try {
-            const { data } = await http().post("/api/users", registrationData);
+            const data = await registerUser(registrationData);
+
             setUserData(data);
             if (featureFlags.enableABReg) {
                 addUserGroup({ id: ABTestController.groupById });

@@ -1,12 +1,7 @@
+import { USER_STATUSES } from "@config/user-statuses";
+
+// TODO: move to config store when it is ready 
 const linkProfile = "https://rocketplay.casino-backend.com/backend/players/";
-const mapGroupName = {
-    255: "PLATINUM",
-    256: "STAR",
-    257: "BRONZE",
-    258: "SILVER",
-    259: "GOLD",
-    21: "TEST",
-};
 
 export default (userInfo) => {
     let userName = " Visitor ";
@@ -15,13 +10,13 @@ export default (userInfo) => {
     } else if (userInfo.email) {
         userName = userInfo.email.split("@")[0];
     }
-    const groupIds = Object.keys(mapGroupName);
+    const groupIds = Object.keys(USER_STATUSES);
     const userHasVipStatus = userInfo.statuses?.find(({ id }) => {
         return groupIds.includes(id);
     });
 
     if (userHasVipStatus) {
-        userName = `[${mapGroupName[userHasVipStatus.id]}] ${userName}`;
+        userName = `[${USER_STATUSES[userHasVipStatus.id]}] ${userName}`;
     }
 
     return {
