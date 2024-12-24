@@ -3,7 +3,6 @@ import { useTournamentsStore } from "@store/tournaments/tournamentsStore";
 import config from "@theme/configs/config";
 import featureFlags from "@theme/configs/featureFlags";
 import { defineStore } from "pinia";
-import { checkEmail, registerUser, signIn, signOut } from "src/services/api/requests/auth";
 
 import ABTestController from "../../controllers/ABTest/ABTestController";
 import authController from "../../controllers/authController";
@@ -15,6 +14,7 @@ import { promiseAll } from "../../helpers/promiseHelpers";
 import { UsePing } from "../../helpers/usePinger";
 import vipStatusHelper from "../../helpers/vipStatusHelper";
 import { EventBus as bus } from "../../plugins/EventBus";
+import { checkEmail, registerUser, signIn, signOut } from "../../services/api/requests/auth";
 import { addPlayerToGroup } from "../../services/api/requests/player";
 import { userSetToGroupForAbTest } from "../../services/user";
 import { useStatusCompPointsStore } from "../compPoints/statusCompPointsStore";

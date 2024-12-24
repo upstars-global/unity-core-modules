@@ -7,9 +7,9 @@ export async function checkEmail(email: string) {
         const { data } = await http().post("/check-email", { email });
 
         return data;
-    } catch (response) {
-        log.error("CHECK_EMAIL_VERIFY_ERROR", response);
-        throw response;
+    } catch (error) {
+        log.error("CHECK_EMAIL_VERIFY_ERROR", error);
+        throw error;
     }
 }
 
