@@ -1,6 +1,6 @@
 // TODO: remove magic imports
 import stagController from "@controllers/StagController";
-import { AFFB_ID_KEY, STAG_KEY } from "@theme/configs/stagConsts";
+import { AFFB_ID_KEY, STAG_PARTNER_KEY } from "@theme/configs/stagConsts";
 import type { Composer, VueI18n } from "vue-i18n";
 
 import { redirectToLang } from "../helpers/redirectToLang";
@@ -24,7 +24,7 @@ export async function loadLocales() {
 
     const stag = stagController.getStag();
     if (stag) {
-        query.set(STAG_KEY, stag);
+        query.set(STAG_PARTNER_KEY, stag);
     }
 
     return loadLocalesReq(query.toString()).then((data: Locales) => {
