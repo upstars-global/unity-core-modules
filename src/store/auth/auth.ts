@@ -1,5 +1,4 @@
 import * as Sentry from "@sentry/vue";
-import { useTournamentsStore } from "@store/tournaments/tournamentsStore";
 import config from "@theme/configs/config";
 import featureFlags from "@theme/configs/featureFlags";
 import { defineStore } from "pinia";
@@ -25,6 +24,7 @@ import { useLootboxesStore } from "../lootboxes";
 import { useLotteriesStore } from "../lotteries";
 import { useNoticesStore } from "../notices";
 import { useQuestStore } from "../quest/questStore";
+import { useTournamentsStore } from "../tournaments/tournamentsStore";
 import { useUserBalance } from "../user/userBalance";
 import { useUserInfo } from "../user/userInfo";
 import { useUserLimits } from "../user/userLimits";
