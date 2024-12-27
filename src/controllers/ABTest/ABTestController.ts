@@ -75,3 +75,4 @@ export class ABTestController {
     }
 }
 
+export default new ABTestController();
