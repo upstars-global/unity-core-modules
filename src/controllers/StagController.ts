@@ -111,7 +111,7 @@ async function init(): Promise<void> {
     }
 }
 
-export default {
+export const StagController = {
     init,
     getStag,
     getStagInfo,
