@@ -1,4 +1,4 @@
-import log from "../../../controllers/Logger";
+import { log } from "../../../controllers/Logger";
 import { IVipProgress } from "../DTO/vipAdventuresDTO";
 import { http } from "../http";
 import { loadVipAdventuresConfigReq } from "./configs";

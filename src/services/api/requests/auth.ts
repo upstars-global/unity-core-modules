@@ -1,4 +1,4 @@
-import log from "../../../controllers/Logger";
+import { log } from "../../../controllers/Logger";
 import { IUserFormData } from "../../../models/user";
 import { http } from "../http";
 

@@ -1,6 +1,6 @@
 import { defineStore, storeToRefs } from "pinia";
 
-import log from "../../controllers/Logger";
+import { log } from "../../controllers/Logger";
 import { processGameForNewAPI } from "../../helpers/gameHelpers";
 import { http } from "../../services/api/http";
 import { useRootStore } from "../root";

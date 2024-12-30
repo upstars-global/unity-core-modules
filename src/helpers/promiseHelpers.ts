@@ -1,4 +1,4 @@
-import log from "../controllers/Logger";
+import { log } from "../controllers/Logger";
 
 interface IPromiseMemoizerParams {
     // save callback result after promise resolving, false by default

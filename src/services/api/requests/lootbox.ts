@@ -1,4 +1,4 @@
-import log from "../../../controllers/Logger";
+import { log } from "../../../controllers/Logger";
 import type { ILootbox } from "../../../models/lootboxes";
 import type { UserGroup } from "../../../models/user";
 import { IPageItemCMS } from "../DTO/CMS";
