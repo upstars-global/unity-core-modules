@@ -1,7 +1,6 @@
 import { rocketChanceGiftTitle, rocketWheelGiftTitle } from "@config/gift";
+import { ENABLED_NOTICES_USER_GROUP_IDS } from "@config/user-statuses";
 import { eventsHandlers } from "@helpers/generateNotifications";
-import { ENABLED_NOTICES_USER_GROUP_IDS } from "@store/user/consts";
-import { useUserStatuses } from "@store/user/userStatuses";
 import { defineStore, storeToRefs } from "pinia";
 import { v4 as uuid } from "uuid";
 import { computed, ref } from "vue";
@@ -18,6 +17,7 @@ import {
     WSNotificationName,
 } from "../models/WSnotices";
 import { GiftState } from "../services/api/DTO/gifts";
+import { useUserStatuses } from "./user/userStatuses";
 
 const { notificationDB } = useNotificationDB();
 

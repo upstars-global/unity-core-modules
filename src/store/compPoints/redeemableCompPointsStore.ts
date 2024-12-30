@@ -1,6 +1,5 @@
 import { routeNames } from "@router/routeNames";
-import { useUserInfo } from "@store/user/userInfo";
-import { defineStore, type Pinia, StoreDefinition, storeToRefs } from "pinia";
+import { defineStore, type Pinia, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
 import { CompPointRatesTypes, CompPointsTypes } from "../../models/enums/compPoints";
@@ -10,6 +9,7 @@ import { exchangeCompPointRateBySlug, loadCompPointRateBySlug } from "../../serv
 import { loadFilteredGames } from "../../services/api/requests/games";
 import { useCMS } from "../CMS";
 import { useLotteriesStore } from "../lotteries";
+import { useUserInfo } from "../user/userInfo";
 import { useStatusCompPointsStore } from "./statusCompPointsStore";
 
 function checkHasAvailableCards(list: IRedeemableCards[], isLogged: boolean, balance: number, currency: string) {

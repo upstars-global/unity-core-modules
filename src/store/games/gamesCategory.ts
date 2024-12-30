@@ -1,4 +1,3 @@
-import { useUserInfo } from "@store/user/userInfo";
 import { DEFAULT_PAGE_LIMIT } from "@theme/configs/games";
 import { type Pinia, storeToRefs } from "pinia";
 import { defineStore } from "pinia";
@@ -11,6 +10,7 @@ import type { ICollectionRecord, IGameFilter } from "../../services/api/DTO/game
 import { loadGamesCategory as loadGamesCategoryReq } from "../../services/api/requests/games";
 import { useMultilangStore } from "../multilang";
 import { useRootStore } from "../root";
+import { useUserInfo } from "../user/userInfo";
 import { useGamesCommon } from "./gamesStore";
 import { defaultCollection } from "./helpers/games";
 

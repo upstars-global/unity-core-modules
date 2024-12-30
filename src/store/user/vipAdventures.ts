@@ -1,5 +1,4 @@
-import { formatDateVipAdv, VIP_ADV_GROUP } from "@modules/VipAdventures/consts";
-import { useUserStatuses } from "@store/user/userStatuses";
+import { formatDateVipAdv, VIP_ADV_GROUP } from "@config/vip-adventures";
 import dayjs from "dayjs";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
@@ -9,6 +8,7 @@ import type { IVipAdventuresDayConfig } from "../../models/vipAdventures";
 import type { IPrizeConfigItem, IVipProgress } from "../../services/api/DTO/vipAdventuresDTO";
 import { loadVipAdventuresConfigFile, loadVipStatusProgress } from "../../services/api/requests/vipAdventures";
 import { useEnvironments } from "../../store/environments";
+import { useUserStatuses } from "./userStatuses";
 
 const USER_INCLUDES_ADVENTURES = {
     [VIP_ADV_GROUP]: "vip_adv",

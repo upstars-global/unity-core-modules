@@ -1,4 +1,4 @@
-import { Locales } from "../services/api/DTO/multilang";
+import { type Locales } from "../services/api/DTO/multilang";
 
 export function redirectToLang(lang: string, defaultLang: string, enableLocales: Locales) {
     if (typeof window === "undefined") {
