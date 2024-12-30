@@ -2,7 +2,7 @@ import { LEVELS } from "@config/levels";
 import { defineStore, type Pinia } from "pinia";
 import { computed, ref } from "vue";
 
-import log from "../../controllers/Logger";
+import { log } from "../../controllers/Logger";
 import type { IGroup, ILevels, IUserLevelInfo } from "../../models/levels";
 import { http } from "../../services/api/http";
 

@@ -4,7 +4,7 @@ import axios from "axios";
 import axiosRetry from "axios-retry";
 
 import { COOKIE_BY_LOCALE } from "../../consts/cookies_by_locales";
-import log from "../../controllers/Logger";
+import { log } from "../../controllers/Logger";
 import { isServer } from "../../helpers/ssrHelpers";
 import { BUS_EVENTS, EventBus } from "../../plugins/EventBus";
 

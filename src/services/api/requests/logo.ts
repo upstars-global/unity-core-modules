@@ -1,4 +1,4 @@
-import log from "../../../controllers/Logger";
+import { log } from "../../../controllers/Logger";
 import { ILogoConfig } from "../DTO/logo";
 import { http } from "../http";
 

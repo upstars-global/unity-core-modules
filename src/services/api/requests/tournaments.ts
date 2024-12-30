@@ -1,7 +1,7 @@
 
 import { type AxiosError } from "axios";
 
-import log from "../../../controllers/Logger";
+import { log } from "../../../controllers/Logger";
 import { IPlayer, IPlayerConfirmation, IPlayersList, ITournament, ITournamentsList } from "../DTO/tournamentsDTO";
 import { http } from "../http";
 

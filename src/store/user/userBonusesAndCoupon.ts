@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 
-import log from "../../controllers/Logger";
+import { log } from "../../controllers/Logger";
 import { http } from "../../services/api/http";
 import { activeCouponReq } from "../../services/api/requests/couponePromoCodes";
 import { useGiftsStore } from "../gifts";

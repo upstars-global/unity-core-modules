@@ -2,7 +2,7 @@ import { LIMIT_TYPE_COOLING_OFF, LIMIT_TYPE_DEPOSIT } from "@modules/Limits/limi
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
-import log from "../../controllers/Logger";
+import { log } from "../../controllers/Logger";
 import { http } from "../../services/api/http";
 import { useUserInfo } from "./userInfo";
 

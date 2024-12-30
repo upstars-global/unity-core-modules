@@ -1,4 +1,4 @@
-import log from "../../../controllers/Logger";
+import { log } from "../../../controllers/Logger";
 import type { IActiveCouponResp } from "../DTO/couponePromoCodes";
 import { http } from "../http";
 

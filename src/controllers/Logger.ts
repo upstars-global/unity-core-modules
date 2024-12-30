@@ -102,8 +102,10 @@ class Logger {
     }
 }
 
-export default {
+export const log = {
     init(config, callback) {
         new Logger(config.isServer, config.context, callback, this);
     },
 } as ILogger;
+
+export default log; // TODO: remove this export after migration to named exports

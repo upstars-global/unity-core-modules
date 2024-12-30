@@ -3,7 +3,7 @@ import { SlugCategoriesGames } from "@theme/configs/categoryesGames";
 import { defineStore, type Pinia, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
-import log from "../../controllers/Logger";
+import { log } from "../../controllers/Logger";
 import { currencyView } from "../../helpers/currencyHelper";
 import { processGame } from "../../helpers/gameHelpers";
 import type { IGame, IGamesProvider } from "../../models/game";

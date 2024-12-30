@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
-import log from "../controllers/Logger";
+import { log } from "../controllers/Logger";
 import type { IJackpotWinner } from "../models/winner";
 import { http } from "../services/api/http";
 

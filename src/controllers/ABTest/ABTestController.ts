@@ -2,7 +2,7 @@ import featureFlags from "@theme/configs/featureFlags";
 
 import { useUserInfo } from "../../store/user/userInfo";
 import { useUserStatuses } from "../../store/user/userStatuses";
-import stagController from "../StagController";
+import { StagController } from "../StagController";
 
 type variantAType = 0;
 type variantBType = 1;
@@ -27,9 +27,9 @@ enum ABResultType { variantAType, variantBType}
 
 enum ABGroupsType { variantAType, variantBType}
 
-class ABTestController {
-    get variantByStag(): ABResultType | null {
-        const stagInfo = stagController.getStagInfo();
+export class ABTestController {
+    static get variantByStag(): ABResultType | null {
+        const stagInfo = StagController.getStagInfo();
 
         if (stagInfo?.stagId || stagInfo?.stagVisit) {
             return parseInt((stagInfo.stagVisit || stagInfo.stagId)?.slice(-1), 16) % 2;
@@ -38,20 +38,20 @@ class ABTestController {
         return null;
     }
 
-    get variantByUserId(): ABResultType {
+    static get variantByUserId(): ABResultType {
         const { getUserInfo: { id } } = useUserInfo();
         return id % 2;
     }
 
-    get groupByStag(): ABGroupsType {
-        return this.variantByStag ? mapGroupByVariant[this.variantByStag] : groupForVariantA;
+    static get groupByStag(): ABGroupsType {
+        return ABTestController.variantByStag ? mapGroupByVariant[ABTestController.variantByStag] : groupForVariantA;
     }
 
-    get groupById(): ABGroupsType {
-        return mapGroupByVariant[this.variantByUserId];
+    static get groupById(): ABGroupsType {
+        return mapGroupByVariant[ABTestController.variantByUserId];
     }
 
-    get variantByUserGroup(): ABResultType | null {
+    static get variantByUserGroup(): ABResultType | null {
         const userStatuses = useUserStatuses();
         const userIncludeInABTest = [ groupForVariantA, groupForVariantB ].find((abID) => {
             return userStatuses.getUserGroups.includes(abID);
@@ -59,19 +59,19 @@ class ABTestController {
         return userIncludeInABTest ? mapVariantToGroup[userIncludeInABTest] : null;
     }
 
-    get variant(): ABResultType | null {
+    static get variant(): ABResultType | null {
         if (featureFlags.enableABReg) {
-            return this.variantByUserGroup;
+            return ABTestController.variantByUserGroup;
         }
         return null;
     }
 
-    get isVariantA(): boolean {
-        return this.variant === variantA;
+    static get isVariantA(): boolean {
+        return ABTestController.variant === variantA;
     }
 
-    get isVariantB(): boolean {
-        return this.variant === variantB;
+    static get isVariantB(): boolean {
+        return ABTestController.variant === variantB;
     }
 }
 

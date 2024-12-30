@@ -2,7 +2,7 @@ import type { AxiosResponse } from "axios";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
-import log from "../../controllers/Logger";
+import { log } from "../../controllers/Logger";
 import { type IGameItem, processGame } from "../../helpers/gameHelpers";
 import type { GameFavoriteIds, IGame } from "../../models/game";
 import { http } from "../../services/api/http";

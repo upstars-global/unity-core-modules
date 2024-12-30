@@ -1,6 +1,6 @@
 import type { AxiosError } from "axios";
 
-import log from "../../../controllers/Logger";
+import { log } from "../../../controllers/Logger";
 import { ILotteriesItem, ILotteriesList, ILotteriesStatusesItem, ILotteriesStatusesList } from "../DTO/lotteriesDTO";
 import { http } from "../http";
 

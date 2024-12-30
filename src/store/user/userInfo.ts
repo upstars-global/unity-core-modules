@@ -1,10 +1,10 @@
-import { useUserTermsAcceptingPopup } from "@controllers/userTermsAcceptingPopup";
 import { usePopupNewProvider } from "@modules/Popups/PopupProviderNew/usePopupNewProviderController";
 import { getStateByCounty } from "@theme/configs/stateFieldConfig";
 import { defineStore, type Pinia, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
 import { cioIdentifyUser } from "../../controllers/CustomerIO";
+import { useUserTermsAcceptingPopup } from "../../controllers/userTermsAcceptingPopup";
 import { EnumContextFields, EnumFormFields } from "../../models/common";
 import { Currencies } from "../../models/enums/currencies";
 import type { IUserData } from "../../models/user";

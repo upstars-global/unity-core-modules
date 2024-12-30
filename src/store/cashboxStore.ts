@@ -1,7 +1,7 @@
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
-import log from "../controllers/Logger";
+import { log } from "../controllers/Logger";
 import type { ICoinspaidAddresses } from "../models/cashbox";
 import { Currencies } from "../models/enums/currencies";
 import type { IPaymentsMethod } from "../models/PaymentsLib";

@@ -1,9 +1,10 @@
-import type { Pinia } from "pinia";
-import { defineStore } from "pinia";
+import { defineStore, type Pinia } from "pinia";
 import { computed, ref } from "vue";
 
+import type { IPlatformState } from "../helpers/userAgentPlatform";
+
 export const useRootStore = defineStore("rootStore", () => {
-    const platform = ref(null);
+    const platform = ref<IPlatformState | null>(null);
     const gamePage = ref(false);
     const guest = ref(false);
 
@@ -13,11 +14,11 @@ export const useRootStore = defineStore("rootStore", () => {
     const transitionName = computed(() => platform.value && platform.value.transitionName);
     const getPlatform = computed(() => platform.value);
 
-    const setGamePage = (data) => {
+    const setGamePage = (data: boolean) => {
         gamePage.value = data;
     };
 
-    const setPlatform = (data) => {
+    const setPlatform = (data: IPlatformState) => {
         platform.value = data;
     };
 

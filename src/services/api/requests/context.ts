@@ -1,4 +1,4 @@
-import log from "../../../controllers/Logger";
+import { log } from "../../../controllers/Logger";
 import type { IClientContext } from "../../../models/clientContext";
 import { http } from "../http";
 

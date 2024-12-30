@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
-import log from "../controllers/Logger";
+import { log } from "../controllers/Logger";
 import { EnumLootboxState, type ILootbox } from "../models/lootboxes";
 import type { UserGroup } from "../models/user";
 import type { IPageItemCMS } from "../services/api/DTO/CMS";

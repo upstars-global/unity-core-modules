@@ -1,4 +1,4 @@
-import log from "../controllers/Logger";
+import { log } from "../controllers/Logger";
 
 export function parseJson(json, errorMessage = "PARSE_JSON_ERROR") {
     try {

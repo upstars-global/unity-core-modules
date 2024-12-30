@@ -2,7 +2,7 @@ import type { Pinia } from "pinia";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
-import log from "../../controllers/Logger";
+import { log } from "../../controllers/Logger";
 import { isAchievement } from "../../helpers/achievementHelpers";
 import { parseJson } from "../../helpers/parseJson";
 import { parseImageDescription, promoFilterAndSettings, statusForTournament } from "../../helpers/promoHelpers";
