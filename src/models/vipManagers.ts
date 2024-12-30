@@ -5,5 +5,6 @@ export interface IVipManager {
     whatsAppLink: string,
     email: string,
     phone: string,
-    time: string
+    time: string,
+    avatar: string,
 }
