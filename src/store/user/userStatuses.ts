@@ -5,6 +5,7 @@ import { computed, ref } from "vue";
 
 import type { IUserLevelInfo } from "../../models/levels";
 import type { IUserStatus, UserGroup } from "../../models/user";
+import { IVipManager } from "../../models/vipManagers";
 import { loadManagersConfigReq } from "../../services/api/requests/configs";
 import { addPlayerToGroup } from "../../services/api/requests/player";
 import { useLevelsStore } from "../levels/levelsStore";
@@ -16,7 +17,7 @@ export const useUserStatuses = defineStore("userStatuses", () => {
     const userStore = useUserInfo();
     const { getUserInfo } = storeToRefs(userStore);
 
-    const userManager = ref<Record<string, unknown>>({});
+    const userManager = ref<IVipManager>();
 
     const getUserLevelInfo = computed<IUserLevelInfo | Record<string, unknown>>(() => {
         const levelsStore = useLevelsStore();
@@ -80,7 +81,11 @@ export const useUserStatuses = defineStore("userStatuses", () => {
     }
 
     async function loadUserManager() {
-        return await loadManagersConfigReq(getUserGroups.value);
+        if (userManager.value) {
+            return getUserManager.value;
+        }
+        userManager.value = await loadManagersConfigReq(getUserGroups.value);
+        return userManager.value;
     }
 
     return {
