@@ -7,7 +7,7 @@ import type { IStagByReferName } from "../models/configs";
 import { useCommon } from "../store/common";
 import { useMultilangStore } from "../store/multilang";
 import { CookieController } from "./CookieController";
-import log from "./Logger";
+import { log } from "./Logger";
 
 interface IGetStagParams {
     referrer?: string;
@@ -111,7 +111,7 @@ async function init(): Promise<void> {
     }
 }
 
-export default {
+export const StagController = {
     init,
     getStag,
     getStagInfo,

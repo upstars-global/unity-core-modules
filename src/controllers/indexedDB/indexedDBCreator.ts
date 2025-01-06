@@ -1,4 +1,4 @@
-import log from "../Logger";
+import { log } from "../Logger";
 import { IndexedDBEvents } from "./consts";
 
 type keyType = string | number;

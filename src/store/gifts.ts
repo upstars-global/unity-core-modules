@@ -9,7 +9,7 @@ import {
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
-import log from "../controllers/Logger";
+import { log } from "../controllers/Logger";
 import type { GiftAllItem, IGift, IGiftDeposit, IGiftFreeSpins } from "../services/api/DTO/gifts";
 import { http } from "../services/api/http";
 import { loadDisabledBonusesConfigReq } from "../services/api/requests/configs";

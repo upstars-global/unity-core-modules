@@ -2,7 +2,7 @@ import { DEFAULT_PAGE_LIMIT } from "@theme/configs/games";
 import { defineStore, type Pinia, storeToRefs } from "pinia";
 import { ref, type UnwrapRef } from "vue";
 
-import log from "../../controllers/Logger";
+import { log } from "../../controllers/Logger";
 import { processGameForNewAPI } from "../../helpers/gameHelpers";
 import type { ICollectionItem, ICollections, IGamesProvider, IGamesProviderCollection } from "../../models/game";
 import { http } from "../../services/api/http";

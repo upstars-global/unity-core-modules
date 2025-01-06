@@ -1,6 +1,6 @@
 import type { SlugCategoriesGames } from "@theme/configs/categoryesGames";
 
-import log from "../../../controllers/Logger";
+import { log } from "../../../controllers/Logger";
 import type { IGame } from "../../../models/game";
 import { useGamesCommon } from "../../../store/games/gamesStore";
 import { IGameCollection, IGameFilterResponse, IJackpots, IPlayedGame } from "../DTO/gamesDTO";

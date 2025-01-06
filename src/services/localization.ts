@@ -5,7 +5,7 @@ import {
 import type { Composer, VueI18n } from "vue-i18n";
 import type { LocationQuery } from "vue-router";
 
-import stagController from "../controllers/StagController";
+import { StagController } from "../controllers/StagController";
 import { redirectToLang } from "../helpers/redirectToLang";
 import { useMultilangStore } from "../store/multilang";
 import type { LocaleName, Locales } from "./api/DTO/multilang";
@@ -23,7 +23,7 @@ export async function loadLocales(queryParams: LocationQuery = {}) {
     const { affb_id } = queryParams;
     query.set(AFFB_ID_KEY, String(affb_id || AFFB_ID_DEFAULT));
 
-    const stag = stagController.getStag();
+    const stag = StagController.getStag();
     if (stag) {
         query.set(STAG_KEY, String(stag));
     }
