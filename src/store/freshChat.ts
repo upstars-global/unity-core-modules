@@ -1,7 +1,8 @@
-import { useUserInfo } from "@store/user/userInfo";
 import config from "@theme/configs/config";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
+
+import { useUserInfo } from "./user/userInfo";
 
 interface ISanitizedUserData {
     externalId: string;

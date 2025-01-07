@@ -1,11 +1,11 @@
-import { useUserInfo } from "@store/user/userInfo";
-import { useUserStatuses } from "@store/user/userStatuses";
 import { WELCOME_PACK_STAG_ID } from "@theme/configs/stagConsts";
 import { storeToRefs } from "pinia";
 import { computed, watchEffect } from "vue";
 
 import stagController from "../controllers/StagController";
 import { wait } from "../helpers/functionsHelper";
+import { useUserInfo } from "../store/user/userInfo";
+import { useUserStatuses } from "../store/user/userStatuses";
 
 type StagIdWelcomePack = keyof typeof WELCOME_PACK_STAG_ID;
 

@@ -1,8 +1,8 @@
 import i18nInit from "@i18n";
-import { useUserInfo } from "@store/user/userInfo";
 
 import type { IBannerConfig } from "../models/banners";
 import { useJackpots } from "../store/jackpots";
+import { useUserInfo } from "../store/user/userInfo";
 import { currencyView } from "./currencyHelper";
 
 export function prepareJackpotsBanners(bannerConfig: IBannerConfig): IBannerConfig {
