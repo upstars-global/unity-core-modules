@@ -56,19 +56,3 @@ export function getEventStatus(startAt, endAt) {
     }
     return STATUS_PROMO.ACTIVE;
 }
-
-
-export function formatExpiryDateCard(date) {
-    if (!date || typeof date !== "string") {
-        return date;
-    }
-    const [ mm, yy ] = date.split("/");
-    const year = `20${ yy }`;
-
-    return dayjs()
-        .set("year", parseInt(year, 10))
-        .set("month", parseInt(mm, 10) - 1)
-        .set("date", 1)
-        .startOf("day")
-        .format("YYYY-MM-DDTHH:mm:ss.SSSZ");
-}
