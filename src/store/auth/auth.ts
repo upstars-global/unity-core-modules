@@ -65,7 +65,7 @@ export const useAuth = defineStore("auth", () => {
 
     async function loginTwoFactor(otp: string) {
         try {
-            const data = await signIn({ otp });
+            const data = await signIn({ otp_attempt: otp });
 
             toggleUserIsLogged(true);
             await loadUserProfile({});
