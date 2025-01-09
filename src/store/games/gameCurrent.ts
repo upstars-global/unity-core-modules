@@ -1,8 +1,8 @@
+import { getGameImagePath } from "@helpers/gameImage";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
 import { log } from "../../controllers/Logger";
-import { getGameImagePath } from "../../helpers/gameImage";
 import type { IGame } from "../../models/game";
 import { http } from "../../services/api/http";
 import { useGamesCommon } from "./gamesStore";

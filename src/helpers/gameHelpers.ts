@@ -1,8 +1,8 @@
+import { getGameImagePath } from "@helpers/gameImage";
 import { SlugCategoriesGames } from "@theme/configs/categoryesGames";
 import featureFlags from "@theme/configs/featureFlags";
 
 import type { IGame } from "../models/game";
-import { getGameImagePath } from "./gameImage";
 import { random } from "./random";
 
 interface IGameBadge {
