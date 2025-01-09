@@ -54,7 +54,11 @@ export const useLotteriesStore = defineStore("lotteriesStore", () => {
 
     async function loadLotteryStatuses(): Promise<ILotteriesStatusesList> {
         const resp = await loadLotteriesStatusesReq();
-        lotteriesStatuses.value = resp;
+
+        lotteriesStatuses.value = [
+            ...lotteriesStatuses.value,
+            ...resp,
+        ];
 
         return resp;
     }
