@@ -47,7 +47,7 @@ export const useGamesCommon = defineStore("gamesCommon", () => {
     const { getUserCurrency } = storeToRefs(useUserInfo());
     const getGamesCategories = computed(() => gamesCategories.value);
     const menuGameCategories = ref<Record<string, SlugCategoriesGames[]>>({});
-    const defaultMenuGameCategories = ref<Record<string, SlugCategoriesGames[]>>({});
+    const defaultMenuGameCategories = ref<Record<string, SlugCategoriesGames[]>>(CONFIG_DEFAULT_COLLECTIONS_MENU_SLUGS);
 
     const getRecentGames = computed(() => {
         const tempGames: IGame[] = [];
@@ -206,7 +206,6 @@ export const useGamesCommon = defineStore("gamesCommon", () => {
 
 export function useGamesCommonFetchService(pinia?: Pinia) {
     const { setDefaultOptions, loadGamesCategories } = useGamesCommon(pinia);
-    setDefaultOptions({ defaultMenuGameCategories: CONFIG_DEFAULT_COLLECTIONS_MENU_SLUGS });
 
 
     return {

@@ -18,7 +18,7 @@ export function getMenuCategoriesBySlug(slug: string): SlugCategoriesGames[] {
 export async function loadCategoriesFileConfig() {
     const gamesStore = useGamesCommon();
 
-    if (gamesStore.menuGameCategories) {
+    if (Object.keys(gamesStore.menuGameCategories).length > 0) {
         return gamesStore.menuGameCategories;
     }
 
