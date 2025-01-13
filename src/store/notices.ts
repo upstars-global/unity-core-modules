@@ -63,7 +63,8 @@ export const useNoticesStore = defineStore("notices", () => {
 
     function addRealTimeNotification({ data }, type: WSNotificationName): void {
         if (eventsHandlers[type]) {
-            if (excludeNotificationTitles.length && excludeNotificationTitles.some((title: string) => data.title.includes(title))) {
+            const hasExcludedTitle = excludeNotificationTitles.some((title: string) => data.title.includes(title));
+            if (hasExcludedTitle) {
                 return;
             }
 
