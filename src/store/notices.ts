@@ -1,4 +1,4 @@
-import { rocketChanceGiftTitle, rocketWheelGiftTitle } from "@config/gift";
+import { excludeNotificationTitles } from "@config/gift";
 import { ENABLED_NOTICES_USER_GROUP_IDS } from "@config/user-statuses";
 import { eventsHandlers } from "@helpers/generateNotifications";
 import { defineStore, storeToRefs } from "pinia";
@@ -63,12 +63,11 @@ export const useNoticesStore = defineStore("notices", () => {
 
     function addRealTimeNotification({ data }, type: WSNotificationName): void {
         if (eventsHandlers[type]) {
-            const isRocketWheelNotification = data.title.includes(rocketWheelGiftTitle);
-            const isRocketChanceNotification = data.title.includes(rocketChanceGiftTitle);
-
-            if (isRocketWheelNotification || isRocketChanceNotification) {
+            const hasExcludedTitle = excludeNotificationTitles.some((title: string) => data.title.includes(title));
+            if (hasExcludedTitle) {
                 return;
             }
+
             if (
                 data.stage !== GiftState.issued &&
                 [ WSNotificationName.BONUSES_CHANGES, WSNotificationName.FREESPINS_CHANGES ].includes(type)
