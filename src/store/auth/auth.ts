@@ -6,7 +6,7 @@ import { defineStore } from "pinia";
 import ABTestController from "../../controllers/ABTest/ABTestController";
 import authController from "../../controllers/authController";
 import CoveryController from "../../controllers/CoveryController";
-import log from "../../controllers/Logger";
+import { log } from "../../controllers/Logger";
 import { FullStory } from "../../controllers/MetriksController/FullStory";
 import WS from "../../controllers/WebsocketController";
 import { promiseAll } from "../../helpers/promiseHelpers";

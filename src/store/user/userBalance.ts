@@ -1,7 +1,7 @@
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref, toRefs } from "vue";
 
-import log from "../../controllers/Logger";
+import { log } from "../../controllers/Logger";
 import { currencyView } from "../../helpers/currencyHelper";
 import { Currencies } from "../../models/enums/currencies";
 import type { IGift } from "../../services/api/DTO/gifts";

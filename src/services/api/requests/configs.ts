@@ -1,4 +1,4 @@
-import log from "../../../controllers/Logger";
+import { log } from "../../../controllers/Logger";
 import type { IStagByReferName, ISurveyConfig } from "../../../models/configs";
 import { IVipAdventuresConfig } from "../DTO/vipAdventuresDTO";
 import { http } from "../http";

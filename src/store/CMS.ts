@@ -4,7 +4,7 @@ import { defineStore, type Pinia, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
 import { enableCategoriesPage } from "../consts/cms";
-import log from "../controllers/Logger";
+import { log } from "../controllers/Logger";
 import type { TemplateType } from "../helpers/replaceStringHelper";
 import replaceStringHelper from "../helpers/replaceStringHelper";
 import { prepareMapStaticPages } from "../helpers/staticPages";

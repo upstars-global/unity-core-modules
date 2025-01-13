@@ -3,7 +3,6 @@ import { ENABLE_CURRENCIES } from "@theme/configs/currencies";
 import { defineStore, type Pinia, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
-import log from "../controllers/Logger";
 import { currencyOfCountry } from "../helpers/currencyOfCountry";
 import { getUserAgentPlatform, type IPlatformState } from "../helpers/userAgentPlatform";
 import type { IPlayerFieldsInfo } from "../models/common";
@@ -187,7 +186,6 @@ export const useCommon = defineStore("common", () => {
 
 export function useCommonFetchService(pinia?: Pinia) {
     const {
-        setDefaultOptions,
         loadCountries,
         loadCurrencies,
         loadProjectInfo,
