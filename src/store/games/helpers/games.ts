@@ -13,7 +13,11 @@ function findGameBySeoTittleAndProducerWithDuplicate(gamesCollection: IGame[], {
 
 function findGameOfPlaysonBySeoTitle(gamesCollection: IGame[], { producer, seoTitle }): IGame | undefined {
     const { getUserGeo: userGeo } = storeToRefs(useMultilangStore());
-    const targetProducerByGeo = userGeo.value === COUNTRIES.AUSTRALIA ? "redgenn" : "infin";
+    const producersByGeo = {
+        [COUNTRIES.AUSTRALIA]: "redgenn",
+        [COUNTRIES.ITALY]: "redgenn",
+    };
+    const targetProducerByGeo = producersByGeo[userGeo.value] || "infin";
     return gamesCollection.find(({ seo_title: seoTitleItem, identifier: identifierItem }) => {
         const [ producerItem ] = identifierItem.split("/");
         return targetProducerByGeo === producerItem && seoTitleItem === seoTitle;
