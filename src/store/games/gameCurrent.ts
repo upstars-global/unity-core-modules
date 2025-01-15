@@ -24,7 +24,7 @@ export const useGameCurrent = defineStore("gameCurrent", () => {
         return gameData;
     }
 
-    async function loadGameBySeoTitle(seoTitle: string, producer: string): Promise<IGame> {
+    async function loadGameBySeoTitle(seoTitle: string, producer: string, restrict: boolean = false): Promise<IGame> {
         const gameFromCache = getGameFromCache({ seoTitle, producer });
         if (gameFromCache) {
             return setToCurrentGame(gameFromCache);
@@ -32,7 +32,7 @@ export const useGameCurrent = defineStore("gameCurrent", () => {
 
         try {
             const { data }: Record<string, IGame[]> = await http().post("/api/games_filter/select_by_seo_titles", {
-                without_territorial_restrictions: true,
+                without_territorial_restrictions: restrict,
                 game_seo_titles: [ seoTitle ],
             });
             const dataToArray = Object.values(data);
