@@ -1,9 +1,14 @@
+import {
+    getTargetWallets,
+    GROUP_HIDE_SOFORT,
+    PAYMENT_HIDE_SOFORT,
+    srcPaymentImage,
+} from "@config/cashbox";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
 import { log } from "../controllers/Logger";
 import type { ICoinspaidAddresses } from "../models/cashbox";
-import { Currencies } from "../models/enums/currencies";
 import type { IPaymentsMethod } from "../models/PaymentsLib";
 import type { UserGroup } from "../models/user";
 import { EventBus } from "../plugins/EventBus";
@@ -14,27 +19,6 @@ import { useCommon } from "./common";
 import { useUserBalance } from "./user/userBalance";
 import { useUserInfo } from "./user/userInfo";
 import { useUserStatuses } from "./user/userStatuses";
-
-const CURRENCY_FOR_MERCURYO: Currencies[] = [
-    Currencies.BTC,
-    Currencies.BCH,
-    Currencies.ETH,
-    Currencies.LTC,
-    Currencies.DOG,
-    Currencies.USDT,
-];
-
-export function srcPaymentImage(item: { currency: string, type: string, brand: string, provider: string }) {
-    return {
-        ...item,
-        image: item.type === "crypto"
-            ? `https://cdn2.softswiss.net/logos/payments/color/${item.currency}_${item.brand}.svg`
-            : `https://cdn2.softswiss.net/logos/payments/color/${item.provider}-${item.brand}.svg`,
-    };
-}
-
-const GROUP_HIDE_SOFORT = 631;
-const PAYMENT_HIDE_SOFORT = "sofort";
 
 function filterPaymentsByGroup(
     paymentArray: IPaymentsMethod[],
@@ -99,13 +83,7 @@ export const useCashboxStore = defineStore("cashboxStore", () => {
         }
         try {
             const { userWallets } = storeToRefs(useUserBalance());
-            const targetWallets = userWallets.value
-                .filter(({ currency }) => {
-                    return CURRENCY_FOR_MERCURYO.includes(currency);
-                })
-                .map(({ currency }) => {
-                    return currency;
-                });
+            const targetWallets = getTargetWallets(userWallets.value);
             const arrayPaymentMethods = await Promise.all(
                 targetWallets.map((currency) => {
                     return window.PaymentsAPI.getMethods({ currency, paymentAction: ActionsTransaction.DEPOSIT });
