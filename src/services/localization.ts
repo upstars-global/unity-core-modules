@@ -16,7 +16,7 @@ export async function loadLocales() {
 
     const query = new URLSearchParams();
 
-    const affb_id = stagController.getAffbId();
+    const affb_id = StagController.getAffbId();
     if (affb_id) {
         query.set(AFFB_ID_KEY, affb_id);
     }
