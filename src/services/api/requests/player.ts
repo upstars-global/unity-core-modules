@@ -1,6 +1,6 @@
 import { v4 as uuid } from "uuid";
 
-import log from "../../../controllers/Logger";
+import { log } from "../../../controllers/Logger";
 import type { IUserInfo } from "../../../models/user";
 import { IPlayerPayment } from "../DTO/cashbox";
 import { IPlayerStats, ISubscriptions, IUserAccount, IUserSettings } from "../DTO/playerDTO";
@@ -213,5 +213,16 @@ export async function loadUserBettingBonuses() {
         return data;
     } catch (err) {
         log.error("LOAD_USER_BETTING_BONUSES_ERROR", err);
+    }
+}
+
+export async function loadPlayerFieldsInfoRequest() {
+    try {
+        const { data } = await http().get("/api/info/player_fields");
+
+        return data;
+    } catch (err) {
+        log.error("LOAD_PLAYER_FIELDS_INFO", err);
+        throw err;
     }
 }

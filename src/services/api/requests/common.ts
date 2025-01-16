@@ -1,4 +1,4 @@
-import log from "../../../controllers/Logger";
+import { log } from "../../../controllers/Logger";
 import { http } from "../http";
 
 interface IContactMessage {

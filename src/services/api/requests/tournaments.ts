@@ -1,7 +1,7 @@
 
 import { type AxiosError } from "axios";
 
-import log from "../../../controllers/Logger";
+import { log } from "../../../controllers/Logger";
 import { IPlayer, IPlayerConfirmation, IPlayersList, ITournament, ITournamentsList } from "../DTO/tournamentsDTO";
 import { http } from "../http";
 
@@ -54,6 +54,22 @@ export async function loadUserStatusesReq(id: number): Promise<IPlayer> {
     } catch (err: unknown) {
         log.error("LOAD_CURRENT_USER_TOUR_STATUSES_ERROR", err);
         throw (err as AxiosError).response;
+    }
+}
+
+export async function loadQuestDataReq(questList: ITournament[]) {
+    try {
+        const statuses = await Promise.all(
+            questList.map((questItem) => {
+                return http().get(`/api/tournaments/${ questItem.id }/status`);
+            }),
+        );
+
+        return statuses.map(({ data }) => {
+            return data;
+        });
+    } catch (err) {
+        log.error("LOAD_QUESTS_DATA_ERROR", err);
     }
 }
 

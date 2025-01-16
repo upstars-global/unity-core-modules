@@ -1,5 +1,3 @@
-import { useCommon } from "@store/common";
-import { useUserInfo } from "@store/user/userInfo";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
@@ -15,6 +13,8 @@ import {
     loadRatesMoney as loadRatesMoneyReq,
     loadUserCompPoints as loadUserCompPointsReq,
 } from "../../services/api/requests/compPoints";
+import { useCommon } from "../common";
+import { useUserInfo } from "../user/userInfo";
 
 export const useStatusCompPointsStore = defineStore("statusCompPointsStore", () => {
     const { getUserCurrency } = storeToRefs(useUserInfo());

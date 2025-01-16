@@ -1,3 +1,4 @@
+import { SlugCategoriesGames } from "@theme/configs/categoryesGames";
 import { defineStore, type Pinia } from "pinia";
 import { computed, ref } from "vue";
 
@@ -11,6 +12,9 @@ export const useJackpots = defineStore("jackpots", () => {
             return jackpotItem.state === "active";
         });
     });
+
+    const isTurnOnJPMystic = jackpotsActiveList.value.some(({ identifier }) =>
+        identifier === SlugCategoriesGames.SLUG_CATEGORY_MYSTIC_JACKPOTS);
 
     async function loadJackpots(): Promise<IJackpotItem[] | void> {
         const data = await loadJackpotsList();
@@ -35,6 +39,7 @@ export const useJackpots = defineStore("jackpots", () => {
     return {
         jackpotsList,
         jackpotsActiveList,
+        isTurnOnJPMystic,
         loadJackpots,
         updateJackpotItemInList,
     };
