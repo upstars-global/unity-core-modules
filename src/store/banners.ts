@@ -1,13 +1,10 @@
 import {
     BANNER_CATEGORY_131811__HIDE,
     BANNER_CATEGORY_131811_SHOW,
-    BANNER_CATEGORY_CRYPTO_REG,
-    BANNER_CATEGORY_CRYPTO_REG_NO,
-    BANNER_CATEGORY_FIAT_REG,
-    BANNER_CATEGORY_FIAT_REG_NO,
     BANNER_CATEGORY_JACKPOTS,
     BANNER_CATEGORY_TERMS_CONDITIONS,
     BANNERS_CATEGORIES_ENABLE,
+    shouldDisplayRegistrationBanner,
 } from "@config/banners";
 import { typePromotionsFiles } from "@config/tournaments";
 import dayjs from "dayjs";
@@ -67,19 +64,13 @@ export const useBannerStore = defineStore("bannerStore", () => {
         });
 
         const { isCryptoDomain } = storeToRefs(useSettings());
-        const userIsLogged = getIsLogged.value;
 
-        bannersFilteredByConfigsFile = bannersFilteredByConfigsFile.filter(({ categories }) => {
-            if (userIsLogged) {
-                return isCryptoUserCurrency.value ?
-                    categories.includes(BANNER_CATEGORY_CRYPTO_REG) :
-                    categories.includes(BANNER_CATEGORY_FIAT_REG);
-            }
-
-            return isCryptoDomain.value ?
-                categories.includes(BANNER_CATEGORY_CRYPTO_REG_NO) :
-                categories.includes(BANNER_CATEGORY_FIAT_REG_NO);
-        });
+        bannersFilteredByConfigsFile = bannersFilteredByConfigsFile
+            .filter(shouldDisplayRegistrationBanner({
+                userIsLogged: getIsLogged.value,
+                isCryptoDomain: isCryptoDomain.value,
+                isCryptoUserCurrency: isCryptoUserCurrency.value,
+            }));
 
         return bannersFilteredByConfigsFile.map((banner) => {
             if (banner.categories.includes(BANNER_CATEGORY_JACKPOTS)) {
