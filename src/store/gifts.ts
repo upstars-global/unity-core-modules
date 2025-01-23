@@ -192,6 +192,21 @@ export const useGiftsStore = defineStore("giftsStore", () => {
         ];
     });
 
+    const giftsNew = computed<GiftAllItem[]>(() => {
+        return giftsAll.value.filter((gift) => {
+            return "activatable" in gift && gift.activatable_until && gift.activatable || !("amount_wager_cents" in gift);
+        });
+    });
+
+    const giftsActive = computed<GiftAllItem[]>(() => {
+        return giftsAll.value
+            .filter((gift) => {
+                return !giftsNew.value.some((giftNew) => {
+                    return giftNew.id === gift.id;
+                });
+            });
+    });
+
     const giftsCounter = computed<number>(() => {
         return giftsAll.value.length;
     });
@@ -247,6 +262,8 @@ export const useGiftsStore = defineStore("giftsStore", () => {
         gifts,
         giftsActual,
         giftsLost,
+        giftsNew,
+        giftsActive,
         loadGiftsData,
 
         depositGiftsAll,

@@ -1,29 +1,30 @@
 {
-    "compilerOptions": {
-        "module": "ESNext",
-        "target": "esnext",
-        "moduleResolution": "Bundler",
-        "lib": [
-            "dom",
-            "es6",
-            "esnext",
-            "esnext.asynciterable"
-        ],
-        "allowJs": true,
-        "strict": true,
-        "baseUrl": ".",
-        "outDir": "js",
-        "allowSyntheticDefaultImports": true,
-        "esModuleInterop": true,
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true,
-        "resolveJsonModule": true,
-        "skipLibCheck": true,
-        "noImplicitAny": true,
-        "types": []
-    },
-    "include": [
-        "**/*"
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": [
+      "ESNext"
     ],
-    "exclude" : ["node_modules"]
+    "allowJs": true,
+    "strict": true,
+    "baseUrl": ".",
+    "outDir": "dist",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "noImplicitAny": true,
+    "types": []
+  },
+  "include": [
+    "**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.test.ts"
+  ]
 }
