@@ -1,9 +1,5 @@
-import {
-    AFFB_ID_DEFAULT,
-    AFFB_ID_KEY,
-    STAG_KEY } from "@theme/configs/stagConsts";
+import { AFFB_ID_KEY, STAG_PARTNER_KEY } from "@theme/configs/stagConsts";
 import type { Composer, VueI18n } from "vue-i18n";
-import type { LocationQuery } from "vue-router";
 
 import { StagController } from "../controllers/StagController";
 import { redirectToLang } from "../helpers/redirectToLang";
@@ -11,7 +7,7 @@ import { useMultilangStore } from "../store/multilang";
 import type { LocaleName, Locales } from "./api/DTO/multilang";
 import { loadLocalesReq, updateLocalesReq } from "./api/requests/multilang";
 
-export async function loadLocales(queryParams: LocationQuery = {}) {
+export async function loadLocales() {
     const { getUserLocale, getDefaultLang, setLocales, setLocale } = useMultilangStore();
 
     if (getUserLocale) {
@@ -20,12 +16,14 @@ export async function loadLocales(queryParams: LocationQuery = {}) {
 
     const query = new URLSearchParams();
 
-    const { affb_id } = queryParams;
-    query.set(AFFB_ID_KEY, String(affb_id || AFFB_ID_DEFAULT));
+    const affb_id = StagController.getAffbId();
+    if (affb_id) {
+        query.set(AFFB_ID_KEY, affb_id);
+    }
 
     const stag = StagController.getStag();
     if (stag) {
-        query.set(STAG_KEY, String(stag));
+        query.set(STAG_PARTNER_KEY, stag);
     }
 
     return loadLocalesReq(query.toString()).then((data: Locales) => {
