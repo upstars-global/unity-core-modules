@@ -1,15 +1,15 @@
+import { filterIssuedLootBoxes } from "@helpers/lootBoxes";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
 import { log } from "../controllers/Logger";
-import { EnumLootboxState, type ILootbox } from "../models/lootboxes";
+import { type ILootbox } from "../models/lootboxes";
 import type { UserGroup } from "../models/user";
 import type { IPageItemCMS } from "../services/api/DTO/CMS";
 import type { ILootboxesFileConfig } from "../services/api/DTO/lootboxes";
 import { http } from "../services/api/http";
 import { loadMockLootboxWheelConfigs, loadPageContentFromWheelCmsReq } from "../services/api/requests/lootbox";
 
-const WHEEL_LOOTBOX_GROUP_KEY = "manual_wheel";
 
 export const useLootboxesStore = defineStore("lootboxes", () => {
     const lootboxesList = ref<ILootbox[]>([]);
@@ -19,9 +19,7 @@ export const useLootboxesStore = defineStore("lootboxes", () => {
     const pageContentByGroup = ref<IPageItemCMS>();
 
     const lootboxListIssued = computed<ILootbox[]>(() => {
-        return [ ...lootboxesList.value.filter(({ stage, group_key }: ILootbox) => {
-            return stage === EnumLootboxState.issued && group_key.includes(WHEEL_LOOTBOX_GROUP_KEY);
-        }) ];
+        return filterIssuedLootBoxes(lootboxesList.value);
     });
 
     const countActiveLootbox = computed(() => lootboxListIssued.value.length);
