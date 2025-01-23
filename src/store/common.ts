@@ -1,10 +1,9 @@
 import config from "@theme/configs/config";
 import { ENABLE_CURRENCIES } from "@theme/configs/currencies";
-import featureFlags from "@theme/configs/featureFlags";
 import { defineStore, type Pinia, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
-import { currencyOfCountry, isValidCurrency } from "../helpers/currencyOfCountry";
+import { isValidCurrency } from "../helpers/currencyOfCountry";
 import { getUserAgentPlatform, type IPlatformState } from "../helpers/userAgentPlatform";
 import type { IPlayerFieldsInfo } from "../models/common";
 import type { IStagByReferName, ISurveyConfig } from "../models/configs";
@@ -105,15 +104,9 @@ export const useCommon = defineStore("common", () => {
     });
 
     const getDefaultCurrency = computed(() => {
-        if (featureFlags.enableNewDefaultCurrency) {
-            const ipCurrency = currentIpInfo.value?.default_currency;
+        const ipCurrency = currentIpInfo.value?.default_currency;
 
-            return isValidCurrency(ipCurrency) ? ipCurrency : defaultCurrency.value;
-        }
-
-        const { getUserGeo: codeByGeoIp } = storeToRefs(useMultilangStore());
-        const defaultCurrencyOfCountry = currencyOfCountry(codeByGeoIp.value) as string;
-        return defaultCurrencyOfCountry || defaultCurrency.value;
+        return isValidCurrency(ipCurrency) ? ipCurrency : defaultCurrency.value;
     });
 
     function setCurrentIpInfo(currency: ICurrentIP) {
