@@ -31,6 +31,7 @@ export const useCommon = defineStore("common", () => {
     const currencies = ref<ICurrencies[]>([]);
     const enableCurrencies = ref<string[]>(ENABLE_CURRENCIES);
     const playerFieldsInfo = ref<IPlayerFieldsInfo>();
+    const excludedPromoStags = ref<string[]>([]);
 
     if (typeof window !== "undefined") {
         getUserAgentPlatform().then((platformData) => {
@@ -44,6 +45,10 @@ export const useCommon = defineStore("common", () => {
 
     function setPlayerFieldsInfo(data: IPlayerFieldsInfo) {
         playerFieldsInfo.value = data;
+    }
+
+    function setExcludedPromoStags(data: string[]) {
+        excludedPromoStags.value = data;
     }
 
     // @ts-expect-error Parameters implicitly have an 'any' type.
@@ -188,6 +193,9 @@ export const useCommon = defineStore("common", () => {
 
         cryptoExchangeRates,
         loadCryptoExchangeRates,
+
+        excludedPromoStags,
+        setExcludedPromoStags,
     };
 });
 
