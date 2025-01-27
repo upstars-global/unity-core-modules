@@ -299,9 +299,9 @@ export const useUserInfo = defineStore("userInfo", () => {
         return await updateAuthDetailsProvidersReq(data);
     }
 
-    async function loadFreshChatRestoreId(project: string) {
+    async function loadFreshChatRestoreId() {
         setFreshChatRestoreIdLoaded(false);
-        const data = await loadFreshChatRestoreIdReq(info.value.user_id, project);
+        const data = await loadFreshChatRestoreIdReq(info.value.user_id);
 
         const restoreId = data?.restoreId;
 
@@ -311,7 +311,7 @@ export const useUserInfo = defineStore("userInfo", () => {
         setFreshChatRestoreIdLoaded();
     }
 
-    async function sendFreshChatRestoreId(restoreId: string, project: string) {
+    async function sendFreshChatRestoreId(restoreId: string) {
         // to prevent override restore id when it is not initialized yet
         if (freshchatRestoreIdLoaded.value || restoreId === freshchatRestoreId.value) {
             return;
@@ -319,7 +319,7 @@ export const useUserInfo = defineStore("userInfo", () => {
 
         freshchatRestoreId.value = restoreId;
         setFreshChatRestoreIdLoaded();
-        await sendFreshChatRestoreIdReq(info.value.user_id, restoreId, project);
+        await sendFreshChatRestoreIdReq(info.value.user_id, restoreId);
     }
 
     async function loadUserSubscriptions({ reload = false }) {
