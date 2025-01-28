@@ -156,12 +156,12 @@ export async function updateAuthDetailsProvidersReq(data) {
     }
 }
 
-export async function loadFreshChatRestoreIdReq(id: string) {
+export async function loadFreshChatRestoreIdReq(id: string, project: string) {
     try {
         const { data } = await http().post("/restore-id/get", {
             data: {
                 internalId: String(id),
-                project: "alpa",
+                project,
             },
             requestId: uuid(),
             type: "Api.V1.RestoreId.Get",
@@ -173,13 +173,13 @@ export async function loadFreshChatRestoreIdReq(id: string) {
     }
 }
 
-export async function sendFreshChatRestoreIdReq(userId: string, restoreId: string) {
+export async function sendFreshChatRestoreIdReq(userId: string, restoreId: string, project: string) {
     try {
         await http().post("/restore-id/set", {
             data: {
                 restoreId,
                 internalId: String(userId),
-                project: "alpa",
+                project,
             },
             requestId: uuid(),
             type: "Api.V1.RestoreId.Set",
