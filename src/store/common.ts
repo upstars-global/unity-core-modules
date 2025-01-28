@@ -3,13 +3,13 @@ import { ENABLE_CURRENCIES } from "@theme/configs/currencies";
 import { defineStore, type Pinia, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
-import { isValidCurrency } from "../helpers/currencyOfCountry";
+import { currencyOfCountry } from "../helpers/currencyOfCountry";
 import { getUserAgentPlatform, type IPlatformState } from "../helpers/userAgentPlatform";
 import type { IPlayerFieldsInfo } from "../models/common";
 import type { IStagByReferName, ISurveyConfig } from "../models/configs";
 import { Currencies } from "../models/enums/currencies";
-import type { ICurrentIP } from "../services/api/DTO/current-ip";
 import type { ICountries, ICryptoExchangeRates, ICurrencies, IProjectInfo } from "../services/api/DTO/info";
+import { http } from "../services/api/http";
 import { loadStagByReferNameReq, loadSurveyConfigReq } from "../services/api/requests/configs";
 import {
     loadCountriesReq,
@@ -20,17 +20,17 @@ import {
 import { useMultilangStore } from "./multilang";
 
 export interface ICommonStoreDefaultOptions {
-  defaultCurrency: string;
-  enableCurrencies: string[];
+    defaultCurrency: string;
+    enableCurrencies: string[];
 }
 
 export const useCommon = defineStore("common", () => {
     const platform = ref<IPlatformState>();
     const defaultCurrency = ref(config.currencyDefault);
-    const currentIpInfo = ref<ICurrentIP>();
     const currencies = ref<ICurrencies[]>([]);
     const enableCurrencies = ref<string[]>(ENABLE_CURRENCIES);
     const playerFieldsInfo = ref<IPlayerFieldsInfo>();
+    const excludedPromoStags = ref<string[]>([]);
 
     if (typeof window !== "undefined") {
         getUserAgentPlatform().then((platformData) => {
@@ -44,6 +44,10 @@ export const useCommon = defineStore("common", () => {
 
     function setPlayerFieldsInfo(data: IPlayerFieldsInfo) {
         playerFieldsInfo.value = data;
+    }
+
+    function setExcludedPromoStags(data: string[]) {
+        excludedPromoStags.value = data;
     }
 
     // @ts-expect-error Parameters implicitly have an 'any' type.
@@ -104,14 +108,10 @@ export const useCommon = defineStore("common", () => {
     });
 
     const getDefaultCurrency = computed(() => {
-        const ipCurrency = currentIpInfo.value?.default_currency;
-
-        return isValidCurrency(ipCurrency) ? ipCurrency : defaultCurrency.value;
+        const { getUserGeo: codeByGeoIp } = storeToRefs(useMultilangStore());
+        const defaultCurrencyOfCountry = currencyOfCountry(codeByGeoIp.value) as string;
+        return defaultCurrencyOfCountry || defaultCurrency.value;
     });
-
-    function setCurrentIpInfo(currency: ICurrentIP) {
-        currentIpInfo.value = currency;
-    }
 
     function setDefaultOptions(defaultOptions: ICommonStoreDefaultOptions) {
         defaultCurrency.value = defaultOptions.defaultCurrency;
@@ -168,12 +168,10 @@ export const useCommon = defineStore("common", () => {
 
         surveyConfig,
         loadSurveyConfig,
-        currentIpInfo,
 
         loadCountries,
         getCountries,
 
-        setCurrentIpInfo,
         loadCurrencies,
         currencies,
         enableCurrencies,
@@ -188,6 +186,9 @@ export const useCommon = defineStore("common", () => {
 
         cryptoExchangeRates,
         loadCryptoExchangeRates,
+
+        excludedPromoStags,
+        setExcludedPromoStags,
     };
 });
 
