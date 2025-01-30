@@ -33,7 +33,10 @@ export const currencyCodesOfCountry = {
     BR: "BRL",
     AT: "EUR",
     CH: "EUR",
-};
+} as const;
 
+export const currencyCodes = Object.values(currencyCodesOfCountry);
+
+export type ICurrencyCode = typeof currencyCodes[number];
 
 export default {};
