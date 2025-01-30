@@ -18,6 +18,7 @@ export enum EnumFormFields {
     receive_promos = "receive_promos",
     receive_sms_promos = "receive_sms_promos",
     mobile_phone = "mobile_phone",
+    mobile_phone_without_dial_code = "mobile_phone_without_dial_code",
     state = "state",
 }
 
