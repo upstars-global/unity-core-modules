@@ -6,8 +6,6 @@ import type { ITournament } from "../services/api/DTO/tournamentsDTO";
 import { useBannerStore } from "../store/banners";
 import { useUserStatuses } from "../store/user/userStatuses";
 
-export const labelToString = (labels: [ { title: string } ]) => labels?.map(({ title }) => title).join(" | ");
-
 export function parseImageDescription(file) {
     try {
         return JSON.parse(file.description);
