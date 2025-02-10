@@ -14,21 +14,23 @@ function getPage(page: IPageItemConfig): IPageCMSPrepare {
 
 export function prepareMapStaticPages(pages: IPageItemConfig[]): IPageCMSPrepare[] {
     const filteredPages: IPageCMSPrepare[] = [];
-    pages.forEach((page) => {
-        const result = getPage(page);
-        if (result) {
-            filteredPages.push(result);
-        }
 
-        if (page.children) {
-            page.children.forEach((childPage) => {
-                const resultChildPage = getPage(childPage);
-                if (resultChildPage) {
-                    filteredPages.push(resultChildPage);
-                }
-            });
-        }
-    });
+    function recursivePreparePages(childPages: IPageItemConfig[]) {
+        childPages.forEach((childPage) => {
+            const result = getPage(childPage);
+
+            if (result) {
+                filteredPages.push(result);
+            }
+
+            if (childPage.children) {
+                recursivePreparePages(childPage.children);
+            }
+        });
+    }
+
+    recursivePreparePages(pages);
+
     return filteredPages;
 }
 

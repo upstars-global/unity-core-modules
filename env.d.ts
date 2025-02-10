@@ -6,4 +6,4 @@ interface ImportMeta {
 
 declare const DEV: boolean;
 declare const FORCE_RUN_ANALYTICS: boolean;
-declare const log: { error: ()=> void };
+declare const log: { error: (message:string, errorMessage: unknown)=> void };
