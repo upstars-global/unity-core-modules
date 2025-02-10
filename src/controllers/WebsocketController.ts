@@ -1,4 +1,3 @@
-import { getCentrifugeUrl } from "@config/centrifuge";
 import Centrifuge from "centrifuge/centrifuge";
 import { storeToRefs } from "pinia";
 
@@ -80,7 +79,7 @@ async function start() {
 
     sock = new Centrifuge({
         ...settings.cent,
-        url: getCentrifugeUrl(settings.cent.url),
+        url: settings.cent.url.indexOf("wlabel.site") === -1 ? settings.cent.url : "wss://ss.rocketplay.com/cent",
     });
     subscribe(CHANNELS_TYPE_PUBLIC);
 

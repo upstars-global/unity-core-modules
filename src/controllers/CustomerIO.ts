@@ -1,4 +1,4 @@
-import { ORGANIZATION_ID, PRODUCT_ID, YOUR_SITE_ID } from "@config/customerIO";
+import { ORGANIZATION_ID, YOUR_SITE_ID } from "@config/customerIO";
 
 declare global {
   interface Window {
@@ -44,7 +44,7 @@ function cioIdentify({ id: idUser, email, created_at: createdProfile, ...data })
     const created_at = new Date(createdProfile).getTime() / 1000;
 
     _cio.identify({
-        id: `${ PRODUCT_ID }:${ idUser }`,
+        id: `rocketplay:${ idUser }`,
         email,
         created_at,
         ...data,
