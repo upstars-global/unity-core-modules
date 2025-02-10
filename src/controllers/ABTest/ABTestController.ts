@@ -1,4 +1,3 @@
-import { ID_GROUP_FOR_PAIRED_ID, ID_GROUP_FOR_UNPAIRED_ID } from "@config/groupAB";
 import featureFlags from "@theme/configs/featureFlags";
 
 import { useUserInfo } from "../../store/user/userInfo";
@@ -11,8 +10,8 @@ type variantBType = 1;
 const variantA: variantAType = 0;
 const variantB: variantBType = 1;
 
-export const groupForVariantA = ID_GROUP_FOR_PAIRED_ID;
-export const groupForVariantB = ID_GROUP_FOR_UNPAIRED_ID;
+export const groupForVariantA = 543;
+export const groupForVariantB = 544;
 
 const mapVariantToGroup: { [index: number]: number } = {
     [groupForVariantA]: variantA,

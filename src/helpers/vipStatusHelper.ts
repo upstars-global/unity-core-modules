@@ -1,5 +1,7 @@
-import { linkProfile } from "@config/profile";
 import { USER_STATUSES } from "@config/user-statuses";
+
+// TODO: move to config store when it is ready 
+const linkProfile = "https://rocketplay.casino-backend.com/backend/players/";
 
 export default (userInfo) => {
     let userName = " Visitor ";

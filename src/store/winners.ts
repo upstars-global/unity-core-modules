@@ -1,4 +1,3 @@
-import { gamePath } from "@config/games";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
@@ -56,7 +55,7 @@ export const useWinners = defineStore("winners", () => {
                     has_demo_mode: false,
                     image: winner.game_table_image_path.replace(
                         "https://cdn.softswiss.net/i/s1/",
-                        gamePath,
+                        "/rocketplay/i/s3/",
                     ),
                     link: `play/${ slug }`,
                     slug,

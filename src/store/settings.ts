@@ -6,14 +6,12 @@ export const useSettings = defineStore("settings", () => {
     const websocketUrl = ref<string>("/sock");
     const valdemoroSrc = ref<string>("");
     const isCryptoDomain = ref<boolean>(false);
-    const sentryDsn = ref<string>("");
 
     return {
         apiUrl,
         websocketUrl,
         valdemoroSrc,
         isCryptoDomain,
-        sentryDsn,
     };
 });
 
