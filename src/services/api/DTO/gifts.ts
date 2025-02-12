@@ -61,5 +61,11 @@ export interface IGiftFreeSpins {
     type: string;
 }
 
+export interface IGiftModifyConfig {
+    group_keys: string,
+    logo: string,
+    url: string
+}
+
 export type GiftAllItem = IGift | IGiftDeposit | IGiftFreeSpins;
 export default {};
