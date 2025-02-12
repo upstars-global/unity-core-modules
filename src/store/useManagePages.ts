@@ -25,6 +25,7 @@ export const useManagePages = defineStore("managePages", () => {
     }
 
     return {
+        pageConfiguration,
         loadPagesConfig,
         isEnablePageBySlug,
     };
