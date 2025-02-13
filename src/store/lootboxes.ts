@@ -6,15 +6,16 @@ import { log } from "../controllers/Logger";
 import { type ILootbox } from "../models/lootboxes";
 import type { UserGroup } from "../models/user";
 import type { IPageItemCMS } from "../services/api/DTO/CMS";
-import type { ILootboxesFileConfig } from "../services/api/DTO/lootboxes";
+import type { ILootboxesFileConfig, ILootboxItemConfig } from "../services/api/DTO/lootboxes";
 import { http } from "../services/api/http";
 import { loadMockLootboxWheelConfigs, loadPageContentFromWheelCmsReq } from "../services/api/requests/lootbox";
+import { useUserStatuses } from "./user/userStatuses";
 
 
 export const useLootboxesStore = defineStore("lootboxes", () => {
     const lootboxesList = ref<ILootbox[]>([]);
     const fakeIdPrizeWin = ref<number>();
-    const mockSectionsRocketWheelConfig = ref<ILootboxesFileConfig>([]);
+    const mockSectionsWheelConfigs = ref<ILootboxesFileConfig>([]);
     const userGroupForWheel = ref<UserGroup>();
     const pageContentByGroup = ref<IPageItemCMS>();
 
@@ -56,10 +57,29 @@ export const useLootboxesStore = defineStore("lootboxes", () => {
         ];
     }
 
-    async function loadMockSectionsRocketWheel() {
-        const fileMockSectionsRocketWheel = await loadMockLootboxWheelConfigs();
-        if (fileMockSectionsRocketWheel) {
-            mockSectionsRocketWheelConfig.value = fileMockSectionsRocketWheel as ILootboxesFileConfig;
+    const getMockWheelUser = computed<ILootboxItemConfig[]>(() => {
+        const userStatuses = useUserStatuses();
+        const userGroups: UserGroup[] = userStatuses.getUserGroups;
+
+        const mockSectionsWheelConfig = Object.entries(mockSectionsWheelConfigs.value)
+            .find(([ key ]) => userGroups.includes(Number(key)));
+
+        const [ groupNumberFinedInConfig, mockSections ] = mockSectionsWheelConfig || [];
+        userGroupForWheel.value = groupNumberFinedInConfig;
+        if (groupNumberFinedInConfig) {
+            loadPageContentFormCMS();
+        }
+
+        return mockSections || [];
+    });
+    const isUserIncludeInLootbox = computed<boolean>(() => {
+        return Boolean(getMockWheelUser.value.length);
+    });
+
+    async function loadMockSectionsWheel() {
+        const fileMockSectionsWheel = await loadMockLootboxWheelConfigs();
+        if (fileMockSectionsWheel) {
+            mockSectionsWheelConfigs.value = fileMockSectionsWheel as ILootboxesFileConfig;
         }
     }
 
@@ -80,14 +100,16 @@ export const useLootboxesStore = defineStore("lootboxes", () => {
 
         lootboxListIssued,
         countActiveLootbox,
+        isUserIncludeInLootbox,
 
         loadLootboxesList,
         loadPrizeOfLootbox,
 
         userGroupForWheel,
-        mockSectionsRocketWheelConfig,
+        getMockWheelUser,
+        mockSectionsWheelConfigs,
         pageContentByGroup,
-        loadMockSectionsRocketWheel,
+        loadMockSectionsWheel,
 
         updateLootboxList,
         clearLootboxesUserData,
