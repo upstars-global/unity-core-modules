@@ -190,12 +190,22 @@ export const useGiftsStore = defineStore("giftsStore", () => {
     }
 
     const giftsAll = computed<GiftAllItem[]>(() => {
-        return [
+        const allData = [
             ...depositGifts.value,
             ...fsGifts.value,
             ...giftsActual.value,
             ...registrationGiftsAll.value,
         ];
+
+        modifyGiftsConfig.value.forEach((modifyGift) => {
+            allData.forEach((item, index) => {
+                if (String(modifyGift.group_keys) === String(item.id)) {
+                    allData[index].cmsData = modifyGift;
+                }
+            });
+        });
+
+        return allData;
     });
 
     const giftsNew = computed<GiftAllItem[]>(() => {
@@ -290,6 +300,8 @@ export const useGiftsStore = defineStore("giftsStore", () => {
         cancelsBonus,
         activationBonus,
         loadDisabledBonuses,
+
+        modifyGiftsConfig,
         loadModifyGiftsConfig,
     };
 });
