@@ -92,7 +92,7 @@ export const useGiftsStore = defineStore("giftsStore", () => {
 
     async function loadModifyGiftsConfig(): Promise<void> {
         const data = await loadModifyGiftsConfigReq();
-        modifyGiftsConfig.value = data?.[0]?.group_keys ? data : [];
+        modifyGiftsConfig.value = [ ...data ];
     }
 
     const depositGiftsAll = ref<IGiftDeposit[]>([]);
@@ -199,7 +199,7 @@ export const useGiftsStore = defineStore("giftsStore", () => {
 
         modifyGiftsConfig.value.forEach((modifyGift) => {
             allData.forEach((item, index) => {
-                if (String(modifyGift.group_keys) === String(item.id)) {
+                if (modifyGift?.group_keys?.includes(String(item.group_key))) {
                     allData[index].cmsData = modifyGift;
                 }
             });

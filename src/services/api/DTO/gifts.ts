@@ -9,7 +9,7 @@ export enum GiftState {
 }
 
 export interface IGiftModifyConfig {
-    group_keys: string,
+    group_keys: string[],
     logo: string,
     url: string
 }
@@ -29,6 +29,7 @@ export interface IGift {
     activatable: boolean;
     cancelable: boolean;
     type: string;
+    group_key?: string;
     cmsData?: IGiftModifyConfig
 }
 
@@ -44,6 +45,7 @@ export interface IGiftDeposit {
             result_bonus: [];
         }
     ];
+    group_key?: string;
     cmsData?: IGiftModifyConfig
 }
 
@@ -65,7 +67,7 @@ export interface IGiftFreeSpins {
     activatable: boolean;
     activation_condition: null;
     cancelable: boolean;
-    group_key: boolean;
+    group_key: boolean | string;
     type: string;
     cmsData?: IGiftModifyConfig
 }
