@@ -12,7 +12,7 @@ export const useEnabledChatStore = defineStore("enabledChatStore", () => {
     const enabledChat = computed(() => {
         const levelsStore = useLevelsStore();
 
-        if (levelsStore.groups) {
+        if (levelsStore.groups.length) {
             const isEnableReserveChat = levelsStore.groups.find(({ id }) => {
                 return Number(id) === CHAT_ID;
             });
