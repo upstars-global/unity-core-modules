@@ -199,7 +199,10 @@ export const useGiftsStore = defineStore("giftsStore", () => {
 
         modifyGiftsConfig.value.forEach((modifyGift) => {
             allData.forEach((item, index) => {
-                if (modifyGift?.group_keys?.includes(String(item.group_key))) {
+                if (
+                    modifyGift?.group_keys?.includes(String(item.id)) ||
+                    modifyGift?.group_keys?.includes(String(item.group_key))
+                ) {
                     allData[index].cmsData = modifyGift;
                 }
             });
