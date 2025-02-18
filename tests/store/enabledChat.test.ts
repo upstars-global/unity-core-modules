@@ -26,7 +26,7 @@ describe("store/enabledChat", () => {
             groups: [ { id: 2, writable: false } ],
         });
 
-        expect(useEnabledChatStore().enabledChat).toBe("freshChat");
+        expect(useEnabledChatStore().enabledChat).toBe(DEFAULT_CHAT);
     });
 
     it(`should return default '${DEFAULT_CHAT}' if levels store has specific group but it is not writable`, () => {
@@ -34,7 +34,7 @@ describe("store/enabledChat", () => {
             groups: [ { id: 1, writable: false } ],
         });
 
-        expect(useEnabledChatStore().enabledChat).toBe("freshChat");
+        expect(useEnabledChatStore().enabledChat).toBe(DEFAULT_CHAT);
     });
 
     it(`should return '${CHAT_LIVECHAT}' if levels store has specific group and it is writable`, () => {
