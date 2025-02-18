@@ -8,6 +8,12 @@ export enum GiftState {
     wager_done = "wager_done"
 }
 
+export interface IGiftModifyConfig {
+    group_keys: string[],
+    logo: string,
+    url: string
+}
+
 export interface IGift {
     id: number;
     title: string;
@@ -23,6 +29,8 @@ export interface IGift {
     activatable: boolean;
     cancelable: boolean;
     type: string;
+    group_key?: string;
+    cmsData?: IGiftModifyConfig
 }
 
 export interface IGiftDeposit {
@@ -37,6 +45,8 @@ export interface IGiftDeposit {
             result_bonus: [];
         }
     ];
+    group_key?: string;
+    cmsData?: IGiftModifyConfig
 }
 
 export interface IGiftFreeSpins {
@@ -57,8 +67,9 @@ export interface IGiftFreeSpins {
     activatable: boolean;
     activation_condition: null;
     cancelable: boolean;
-    group_key: boolean;
+    group_key: boolean | string;
     type: string;
+    cmsData?: IGiftModifyConfig
 }
 
 export type GiftAllItem = IGift | IGiftDeposit | IGiftFreeSpins;
