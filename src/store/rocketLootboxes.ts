@@ -2,15 +2,17 @@ import dayjs from "dayjs";
 import { defineStore, storeToRefs } from "pinia";
 import { computed } from "vue";
 
-import { type LootboxMap, Mode, type ModeLootbox } from "../models/lootboxes";
+import { type LootboxMap, Mode, type ModeLootbox, RocketLootboxSkin } from "../models/lootboxes";
 import { EnumLootboxState } from "../models/lootboxes";
 import type { ILootbox, ILootboxItemConfig } from "../services/api/DTO/lootboxes";
+import { useCMS } from "./CMS";
 import { useLootboxesStore } from "./lootboxes";
 
 export const useRocketLootboxesStore = defineStore("rocketLootboxes", () => {
     const lootboxesStore = useLootboxesStore();
     const { lootboxesList } = storeToRefs(lootboxesStore);
     const { loadLootboxesList, loadPrizeOfLootbox } = lootboxesStore;
+    const { currentStaticPage } = storeToRefs(useCMS());
 
     function isLootboxValid({ created_at, stage }: ILootbox) {
         const used = stage === EnumLootboxState.activated;
@@ -45,6 +47,9 @@ export const useRocketLootboxesStore = defineStore("rocketLootboxes", () => {
 
     const lootboxes = computed<LootboxMap>(() => Object.values(Mode).reduce(createModeLootbox, {} as LootboxMap));
     const notUsedLootboxes = computed<ModeLootbox[]>(() => Object.values(lootboxes.value).filter(({ used }) => !used));
+    const skin = computed<RocketLootboxSkin>(() => {
+        return currentStaticPage.value?.meta.json.skin || {} as RocketLootboxSkin;
+    });
 
     function loadLootboxes() {
         return loadLootboxesList();
@@ -58,5 +63,6 @@ export const useRocketLootboxesStore = defineStore("rocketLootboxes", () => {
         notUsedLootboxes,
         loadLootboxes,
         activateLootbox,
+        skin,
     };
 });
