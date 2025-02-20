@@ -190,7 +190,7 @@ export const useUserInfo = defineStore("userInfo", () => {
     // @ts-expect-error Parameter 'data' implicitly has an 'any' type.
     async function putUserSubscription(data) {
         await putUserSubscriptionReq(data);
-        return loadUserSubscriptions({ reload: false });
+        return loadUserSubscriptions({ reload: true });
     }
 
     async function loadUserProfile({ reload = false, route }: { reload?: boolean; route?: string } = {}) {
