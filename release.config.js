@@ -1,5 +1,19 @@
-module.exports = {
-    branches: [ "main" ], // Релизные ветки
+import { readFileSync } from "node:fs";
+// eslint-disable-next-line n/no-sync
+const commitPartial = readFileSync("./changelog-template-commit.hbs", { encoding: "utf-8" });
+
+function finalizeContext (context) {
+    for (const commitGroup of context.commitGroups) {
+        for (const commit of commitGroup.commits) {
+            commit.bodyLines = commit.body?.split("\n").filter((line) => line !== "") ?? [];
+        }
+    }
+
+    return context;
+}
+
+export default {
+    branches: [ "main" ],
     preset: "conventionalcommits",
     plugins: [
         [ "@semantic-release/commit-analyzer", {
@@ -14,33 +28,17 @@ module.exports = {
                 { type: "test", release: "minor" },
                 { type: "chore", release: "minor" },
                 { breaking: true, release: "major" },
-                { release: "patch" },
+                { type: "BREAKING CHANGE", release: "major" },
             ],
         } ],
         [ "@semantic-release/release-notes-generator", {
             preset: "conventionalcommits",
+            parserOpts: {
+                noteKeywords: [ "BREAKING CHANGE", "BREAKING CHANGES" ],
+            },
             writerOpts: {
-                transform: (commit, context) => {
-                    const newCommit = { ...commit };
-                    const typeMap = {
-                        fix: "🐛 Bug Fixes",
-                        feat: "🚀 Features",
-                        chore: "🔧 Maintenance",
-                        docs: "📖 Documentation",
-                        style: "💅 Code Style",
-                        refactor: "🔨 Refactoring",
-                        perf: "⚡ Performance",
-                        test: "🧪 Testing",
-                        other: "📌 Other Changes",
-                    };
-
-                    newCommit.type = typeMap[newCommit.type] || "📌 Other Changes";
-                    if (newCommit.scope) {
-                        newCommit.subject = `**${ newCommit.scope }:** ${ newCommit.subject }`;
-                    }
-
-                    return newCommit;
-                },
+                commitPartial,
+                finalizeContext,
             },
             presetConfig: {
                 types: [
@@ -52,6 +50,7 @@ module.exports = {
                     { type: "refactor", section: "🔨 Refactoring", hidden: false },
                     { type: "perf", section: "⚡ Performance", hidden: false },
                     { type: "test", section: "🧪 Testing", hidden: false },
+                    { type: "breaking", section: "⚠ Breaking Changes", hidden: false },
                     { type: "other", section: "📌 Other Changes", hidden: false },
                 ],
             },
