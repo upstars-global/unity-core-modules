@@ -37,16 +37,21 @@
     "vue-router": "^4.4.5"
   },
   "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/exec": "^7.0.3",
+    "@semantic-release/git": "^10.0.1",
     "@types/node": "20.14.8",
     "@types/uuid": "^9.0.1",
     "@vitest/coverage-v8": "^3.0.2",
+    "conventional-changelog-conventionalcommits": "^8.0.0",
     "eslint": "^9.15.0",
     "eslint-config-frontera": "upstars-global/eslint-config-frontera#v2.0.1",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "husky": "^9.1.7",
     "lint-staged": "^15.2.10",
-    "vite-plugin-node-polyfills": "^0.22.0",
+    "semantic-release": "^24.2.3",
     "vite": "^6.0.7",
+    "vite-plugin-node-polyfills": "^0.22.0",
     "vitest": "^3.0.2"
   }
 }
