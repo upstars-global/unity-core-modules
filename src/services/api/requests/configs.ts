@@ -1,5 +1,6 @@
 import { log } from "../../../controllers/Logger";
 import type { IStagByReferName, ISurveyConfig } from "../../../models/configs";
+import type { IGiftModifyConfig } from "../DTO/gifts";
 import { IVipAdventuresConfig } from "../DTO/vipAdventuresDTO";
 import { http } from "../http";
 
@@ -21,6 +22,8 @@ const loadVipAdventuresConfigReq = () =>
     loadConfig<IVipAdventuresConfig>("/api/fe/config/vip-adventures", "LOAD_VIP_ADVENTURES_CONFIG_ERROR");
 const loadDisabledBonusesConfigReq = () =>
     loadConfig<{ group_keys: string[] }>("/api/fe/config/disabled-bonuses", "LOAD_DISABLED_BONUSES_CONFIG_ERROR");
+const loadModifyGiftsConfigReq = () =>
+    loadConfig<IGiftModifyConfig[]>("/api/fe/config/modify-gifts-config", "LOAD_MODIFY_GIFTS_CONFIG_ERROR");
 const loadManagersConfigReq = (userGroups) => loadConfig("/api/fe/config/managers", "LOAD_MANAGERS_CONFIG_ERROR", { userGroups });
 const loadExcludedPromoStagsReq = () =>
     loadConfig<string[]>("/api/fe/config/excluded-promo-stags", "LOAD_EXCLUDED_PROMO_STAGS_CONFIG_ERROR");
@@ -30,6 +33,7 @@ export {
     loadDisabledBonusesConfigReq,
     loadExcludedPromoStagsReq,
     loadManagersConfigReq,
+    loadModifyGiftsConfigReq,
     loadStagByReferNameReq,
     loadSurveyConfigReq,
     loadVipAdventuresConfigReq,
