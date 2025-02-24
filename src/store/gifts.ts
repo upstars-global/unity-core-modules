@@ -10,9 +10,9 @@ import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
 import { log } from "../controllers/Logger";
-import type { GiftAllItem, IGift, IGiftDeposit, IGiftFreeSpins } from "../services/api/DTO/gifts";
+import type { GiftAllItem, IGift, IGiftDeposit, IGiftFreeSpins, IGiftModifyConfig } from "../services/api/DTO/gifts";
 import { http } from "../services/api/http";
-import { loadDisabledBonusesConfigReq } from "../services/api/requests/configs";
+import { loadDisabledBonusesConfigReq, loadModifyGiftsConfigReq } from "../services/api/requests/configs";
 import { useUserInfo } from "./user/userInfo";
 import { useUserStatuses } from "./user/userStatuses";
 
@@ -49,6 +49,7 @@ export const useGiftsStore = defineStore("giftsStore", () => {
 
     const gifts = ref<IGift[]>([]);
     const disabledBonuses = ref<string[]>([]);
+    const modifyGiftsConfig = ref<IGiftModifyConfig[]>([]);
     const giftsActual = computed<IGift[]>(() => {
         return gifts.value.filter((gift: IGift) => {
             return !STATUSES_LOST_GIFT.includes(gift.stage);
@@ -84,9 +85,14 @@ export const useGiftsStore = defineStore("giftsStore", () => {
         }
     }
 
-    async function loadDisabledBonuses() {
+    async function loadDisabledBonuses(): Promise<void> {
         const data = await loadDisabledBonusesConfigReq();
         disabledBonuses.value = data?.group_keys || [];
+    }
+
+    async function loadModifyGiftsConfig(): Promise<void> {
+        const data = await loadModifyGiftsConfigReq();
+        modifyGiftsConfig.value = [ ...data ];
     }
 
     const depositGiftsAll = ref<IGiftDeposit[]>([]);
@@ -184,12 +190,25 @@ export const useGiftsStore = defineStore("giftsStore", () => {
     }
 
     const giftsAll = computed<GiftAllItem[]>(() => {
-        return [
+        const allData = [
             ...depositGifts.value,
             ...fsGifts.value,
             ...giftsActual.value,
             ...registrationGiftsAll.value,
         ];
+
+        modifyGiftsConfig.value.forEach((modifyGift) => {
+            allData.forEach((item, index) => {
+                if (
+                    modifyGift?.group_keys?.includes(String(item.id)) ||
+                    modifyGift?.group_keys?.includes(String(item.group_key))
+                ) {
+                    allData[index].cmsData = modifyGift;
+                }
+            });
+        });
+
+        return allData;
     });
 
     const giftsNew = computed<GiftAllItem[]>(() => {
@@ -284,5 +303,8 @@ export const useGiftsStore = defineStore("giftsStore", () => {
         cancelsBonus,
         activationBonus,
         loadDisabledBonuses,
+
+        modifyGiftsConfig,
+        loadModifyGiftsConfig,
     };
 });
