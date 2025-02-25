@@ -18,6 +18,7 @@ export default {
     plugins: [
         [ "@semantic-release/commit-analyzer", {
             releaseRules: [
+                { type: "revert", release: "patch" },
                 { type: "fix", release: "patch" },
                 { type: "perf", release: "patch" },
                 { type: "feat", release: "minor" },
@@ -42,6 +43,7 @@ export default {
             },
             presetConfig: {
                 types: [
+                    { type: "revert", section: "⏪ Reverts", hidden: false },
                     { type: "fix", section: "🐛 Bug Fixes", hidden: false },
                     { type: "feat", section: "🚀 Features", hidden: false },
                     { type: "chore", section: "🔧 Maintenance", hidden: false },
