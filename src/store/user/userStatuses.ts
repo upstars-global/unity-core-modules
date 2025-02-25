@@ -1,4 +1,4 @@
-import { ID_GROUP_FOR_MULTI_ACC, TEST_GROUP_ID, VIP_STATUSES } from "@config/user-statuses";
+import { TEST_GROUP_ID, VIP_STATUSES } from "@config/user-statuses";
 import { STATUSES, VIP_CLUB_STATUSES } from "@config/vip-clubs";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
@@ -10,6 +10,8 @@ import { loadManagersConfigReq } from "../../services/api/requests/configs";
 import { addPlayerToGroup } from "../../services/api/requests/player";
 import { useLevelsStore } from "../levels/levelsStore";
 import { useUserInfo } from "./userInfo";
+
+const ID_GROUP_FOR_MULTI_ACC = 100;
 
 export const useUserStatuses = defineStore("userStatuses", () => {
     const userStore = useUserInfo();
