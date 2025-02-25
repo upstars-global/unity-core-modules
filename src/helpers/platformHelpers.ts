@@ -21,7 +21,7 @@ export function isIOSUserAgent(uaHints: IResult): boolean {
         return uaHints.os.name === "iOS";
     }
 
-    if (uaHints.device.model) {
+    if (uaHints.device?.model) {
         return [ "iPad", "iPhone", "iPod" ].includes(uaHints.device.model);
     }
 
@@ -29,6 +29,6 @@ export function isIOSUserAgent(uaHints: IResult): boolean {
 }
 
 export function getBrowserName(uaHints: IResult) {
-    return uaHints.browser.name;
+    return uaHints.browser?.name;
 }
 
