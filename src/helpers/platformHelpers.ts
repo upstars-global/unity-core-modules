@@ -6,7 +6,7 @@ export function isAndroidUserAgent(uaHints: IResult): boolean {
     }
 
     if (uaHints.os) {
-        return uaHints.os.name === "Android";
+        return uaHints.os?.name === "Android";
     }
 
     return (/Android/i).test(uaHints.ua);
@@ -18,7 +18,7 @@ export function isIOSUserAgent(uaHints: IResult): boolean {
     }
 
     if (uaHints.os) {
-        return uaHints.os.name === "iOS";
+        return uaHints.os?.name === "iOS";
     }
 
     if (uaHints.device?.model) {

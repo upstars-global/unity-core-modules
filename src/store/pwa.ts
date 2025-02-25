@@ -1,6 +1,8 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
+import { isServer } from "../helpers/ssrHelpers";
+
 export const usePWA = defineStore("pwa", () => {
     const deferredPWAPrompt = ref<BeforeInstallPromptEvent | null>(null);
     const showPwaInfo = ref(true);
@@ -15,7 +17,9 @@ export const usePWA = defineStore("pwa", () => {
 
 
     function setIsPWA() {
-        isPWA.value = window.matchMedia("(display-mode: standalone)").matches;
+        if (!isServer) {
+            isPWA.value = window.matchMedia("(display-mode: standalone)").matches;
+        }
     }
 
     return {
