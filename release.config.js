@@ -32,6 +32,7 @@ export default {
                 { type: "BREAKING CHANGE", release: "major" },
             ],
         } ],
+
         [ "@semantic-release/release-notes-generator", {
             preset: "conventionalcommits",
             parserOpts: {
