@@ -1,9 +1,11 @@
 import { LIMIT_TYPE_COOLING_OFF, LIMIT_TYPE_DEPOSIT } from "@modules/Limits/limitConstants";
 import { defineStore, storeToRefs } from "pinia";
+import { type Currencies } from "src/models/enums/currencies";
 import { computed, ref } from "vue";
 
 import { log } from "../../controllers/Logger";
 import { http } from "../../services/api/http";
+import { useCommon } from "../common";
 import { useUserInfo } from "./userInfo";
 
 interface ILimitAccount {
@@ -27,12 +29,33 @@ interface IUserLimit {
 }
 
 export const useUserLimits = defineStore("userLimits", () => {
+    const { isCryptoCurrency } = useCommon();
+
     const limits = ref<IUserLimit[]>([]);
+    const isOnlyFiatLimits = ref<boolean>(false);
+
+    const getUserLimits = computed(() => {
+        return limits.value.map(({ ...limitItem }) => {
+            if (limitItem.accounts) {
+                const filteredAccounts = limitItem.accounts.filter(({ currency }) => !isCryptoCurrency(currency as Currencies));
+                return {
+                    ...limitItem,
+                    accounts: filteredAccounts,
+                };
+            }
+
+            return limitItem;
+        });
+    });
+
+    const getLimits = computed(() => {
+        return isOnlyFiatLimits.value ? getUserLimits.value : limits.value;
+    });
 
     // @ts-expect-error No overload matches this call.
     const getLimitsByType = computed<IUserLimit[]>(() => {
         return (type: string): IUserLimit[] => {
-            return limits.value.filter((limitItem: IUserLimit) => {
+            return getLimits.value.filter((limitItem: IUserLimit) => {
                 return limitItem.type === type;
             });
         };
@@ -42,7 +65,7 @@ export const useUserLimits = defineStore("userLimits", () => {
         const specialType = [ LIMIT_TYPE_COOLING_OFF ];
         const { getUserCurrency: userCurr } = storeToRefs(useUserInfo());
 
-        return Boolean(limits.value.length) && limits.value.some((limit) => {
+        return Boolean(getLimits.value.length) && getLimits.value.some((limit) => {
             if (specialType.includes(limit.type)) {
                 return true;
             }
@@ -58,7 +81,7 @@ export const useUserLimits = defineStore("userLimits", () => {
 
     const hasDepositLimit = computed<boolean | undefined>(() => {
         const { getUserCurrency: userCurr } = storeToRefs(useUserInfo());
-        return Boolean(limits.value.length) && limits.value.some((limit) => {
+        return Boolean(getLimits.value.length) && getLimits.value.some((limit) => {
             return limit.accounts?.some((acc) => {
                 return limit.type === LIMIT_TYPE_DEPOSIT &&
                   // @ts-expect-error This comparison appears to be unintentional
@@ -71,7 +94,7 @@ export const useUserLimits = defineStore("userLimits", () => {
     const hasSomeReachedLimit = computed<boolean>(() => {
         const specialType = [ LIMIT_TYPE_COOLING_OFF ];
 
-        return Boolean(limits.value.length) && limits.value.some((limit) => {
+        return Boolean(getLimits.value.length) && getLimits.value.some((limit) => {
             if (specialType.includes(limit.type)) {
                 return true;
             }
@@ -80,6 +103,10 @@ export const useUserLimits = defineStore("userLimits", () => {
             });
         });
     });
+
+    function setOnlyFiatLimits(value: boolean): void {
+        isOnlyFiatLimits.value = value;
+    }
 
     async function loadUserLimits(): Promise<void> {
         try {
@@ -136,11 +163,14 @@ export const useUserLimits = defineStore("userLimits", () => {
 
     return {
         limits,
+        getUserLimits,
 
         getLimitsByType,
         isOneLimitReached,
         hasDepositLimit,
         hasSomeReachedLimit,
+
+        setOnlyFiatLimits,
 
         clearState,
         loadUserLimits,
