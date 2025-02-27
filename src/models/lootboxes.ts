@@ -67,4 +67,25 @@ export interface ModeLootbox {
 
 export type LootboxMap = Record<Mode, ModeLootbox>;
 
+type RocketItemSkin = {
+    [key in Mode]: {
+        rocket: string;
+        light: string;
+        lightSpin: string;
+        porthole: string;
+    };
+}
+
+type SkinImage = {
+    default: string;
+    retina: string;
+}
+
+export type RocketLootboxSkin = RocketItemSkin & {
+    slot: SkinImage
+    prizes: {
+        [key in `prize${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8}`]: SkinImage
+    };
+}
+
 export default {};
