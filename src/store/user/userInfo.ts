@@ -314,7 +314,7 @@ export const useUserInfo = defineStore("userInfo", () => {
 
     async function sendFreshChatRestoreId(restoreId: string, project: string) {
         // to prevent override restore id when it is not initialized yet
-        if (freshchatRestoreIdLoaded.value || restoreId === freshchatRestoreId.value) {
+        if (!freshchatRestoreIdLoaded.value || restoreId === freshchatRestoreId.value) {
             return;
         }
 
