@@ -44,7 +44,8 @@ export const useGamesCommon = defineStore("gamesCommon", () => {
     const gameLimits = ref<Record<string, number>>({});
     const recentGames = ref<IRecentGames>({});
     const gamesJackpots = ref<IJackpots>({});
-    const { getUserCurrency } = storeToRefs(useUserInfo());
+    const userInfoStore = useUserInfo();
+    const { getUserCurrency } = storeToRefs(userInfoStore);
     const getGamesCategories = computed(() => gamesCategories.value);
     const menuGameCategories = ref<Record<string, SlugCategoriesGames[]>>({});
     const defaultMenuGameCategories = ref<Record<string, SlugCategoriesGames[]>>(CONFIG_DEFAULT_COLLECTIONS_MENU_SLUGS);
@@ -82,8 +83,6 @@ export const useGamesCommon = defineStore("gamesCommon", () => {
     });
 
     const getJackpotTotalByCurrency = computed(() => {
-        const { getSubunitsToUnitsByCode: subUnits } = useUserInfo();
-
         const userCurrency = getUserCurrency.value;
         const gamesJackpotsVal = getGamesJackpots.value;
 
@@ -91,7 +90,7 @@ export const useGamesCommon = defineStore("gamesCommon", () => {
             return prevValue + currentValue;
         }, 0);
 
-        return currencyView(totalJackpot, userCurrency, null, subUnits(), 2);
+        return currencyView(totalJackpot, userCurrency, null, userInfoStore.getSubunitsToUnitsByCode(), 2);
     });
 
     function setGameToCache(game: IGame): void {
