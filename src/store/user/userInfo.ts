@@ -1,4 +1,5 @@
 import { usePopupNewProvider } from "@modules/Popups/PopupProviderNew/usePopupNewProviderController";
+import { PROJECT } from "@theme/configs/constantsFreshChat";
 import { getStateByCounty } from "@theme/configs/stateFieldConfig";
 import { defineStore, type Pinia, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
@@ -231,7 +232,7 @@ export const useUserInfo = defineStore("userInfo", () => {
                 cioIdentifyUser(response.data);
                 checkToShowPopup();
 
-                loadFreshChatRestoreId();
+                loadFreshChatRestoreId(PROJECT);
 
                 loadPlayerFieldsInfo({ reload: true })
                     .then(checkUserState);
