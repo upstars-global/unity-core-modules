@@ -1,7 +1,7 @@
 import {
     AFFB_ID_COOKIE,
     AFFB_ID_DEFAULT,
-    AFFB_ID_DEFAULT_SEO,
+    AFFB_ID_NEW_PARTNERS,
     DEFAULT_STAGS_COUNTRY_REFER,
     REFERRER,
     STAG_PARTNER_COOKIE,
@@ -138,7 +138,7 @@ function initAffbId(queryParams: URLSearchParams, referrer: string): void {
         setAffbId(affbIdQuery);
     } else {
         const searchEngine = getReferSearchEnginesMatch(referrer as string);
-        const computedAffbId = searchEngine ? AFFB_ID_DEFAULT_SEO : AFFB_ID_DEFAULT;
+        const computedAffbId = searchEngine ? AFFB_ID_NEW_PARTNERS : AFFB_ID_DEFAULT;
 
         setAffbId(computedAffbId);
     }
