@@ -1,6 +1,7 @@
 import {
     AFFB_ID_COOKIE,
     AFFB_ID_DEFAULT,
+    AFFB_ID_DEFAULT_SEO,
     DEFAULT_STAGS_COUNTRY_REFER,
     REFERRER,
     STAG_PARTNER_COOKIE,
@@ -30,11 +31,15 @@ interface IStagInfo {
 const expires = 30 * 86400; // 30 days
 
 
+function getReferSearchEnginesMatch(referrer: string): string {
+    return Object.values(REFERRER).find((refItem) => referrer.includes(refItem as string)) || "";
+}
+
 function getStagByReferrerName({ referrer, stagsByReferName, path, country } = {} as IGetStagParams): string {
     if (referrer) {
-        const referSearchEnginesMatch = Object.values(REFERRER).find((refItem) => referrer.includes(refItem));
+        const searchEngine = getReferSearchEnginesMatch(referrer as string);
 
-        if (!referSearchEnginesMatch) {
+        if (!searchEngine) {
             return "";
         }
         const localStagsByReferName = stagsByReferName || {
@@ -42,9 +47,9 @@ function getStagByReferrerName({ referrer, stagsByReferName, path, country } = {
             countries: DEFAULT_STAGS_COUNTRY_REFER,
         };
 
-        const stagReferPathValue = localStagsByReferName?.pages?.[referSearchEnginesMatch]?.[path];
-        const stagReferGeoValue = localStagsByReferName?.countries?.[country]?.[referSearchEnginesMatch];
-        const stagReferOthersGeoValue = localStagsByReferName?.countries?.others?.[referSearchEnginesMatch];
+        const stagReferPathValue = localStagsByReferName?.pages?.[searchEngine]?.[path];
+        const stagReferGeoValue = localStagsByReferName?.countries?.[country]?.[searchEngine];
+        const stagReferOthersGeoValue = localStagsByReferName?.countries?.others?.[searchEngine];
 
         return stagReferPathValue || stagReferGeoValue || stagReferOthersGeoValue || "";
     }
@@ -79,12 +84,11 @@ function sendLogUserEmptyStag(referrer: string): void {
     log.error("STAG_ERROR_EMPTY", `Referrer: ${referrer}`);
 }
 
-async function initStag(queryParams: URLSearchParams, path: string): Promise<void> {
+async function initStag(queryParams: URLSearchParams, path: string, referrer: string): Promise<void> {
     if (getStag()) {
         return;
     }
 
-    const referrer = referrerHelper();
     const stagQuery = queryParams.get("stag");
 
     if (stagQuery) {
@@ -123,13 +127,21 @@ function getAffbId(): string | undefined {
     return CookieController.get(AFFB_ID_COOKIE);
 }
 
-function initAffbId(queryParams: URLSearchParams): void {
+function initAffbId(queryParams: URLSearchParams, referrer: string): void {
     if (getAffbId()) {
         return;
     }
 
     const affbIdQuery = queryParams.get("affb_id");
-    setAffbId(affbIdQuery || AFFB_ID_DEFAULT);
+
+    if (affbIdQuery) {
+        setAffbId(affbIdQuery);
+    } else {
+        const searchEngine = getReferSearchEnginesMatch(referrer as string);
+        const computedAffbId = searchEngine ? AFFB_ID_DEFAULT_SEO : AFFB_ID_DEFAULT;
+
+        setAffbId(computedAffbId);
+    }
 }
 
 
@@ -138,12 +150,13 @@ function init(): void {
         return;
     }
 
+    const referrer = referrerHelper() || "";
     const url = new URL(window.location.href);
     const path = url.pathname;
     const queryParams = new URLSearchParams(url.search);
 
-    initAffbId(queryParams);
-    initStag(queryParams, path);
+    initAffbId(queryParams, referrer);
+    initStag(queryParams, path, referrer);
 }
 
 export const StagController = {
