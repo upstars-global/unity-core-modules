@@ -17,8 +17,10 @@ export const usePWA = defineStore("pwa", () => {
 
 
     function setIsPWA() {
+        console.log("setIsPWA", isPWA.value, isServer);
         if (!isServer) {
             isPWA.value = window.matchMedia("(display-mode: standalone)").matches;
+            console.log("setIsPWA_2", isPWA.value, isServer);
         }
     }
 
