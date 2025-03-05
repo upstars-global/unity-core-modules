@@ -139,7 +139,8 @@ function initAffbId(queryParams: URLSearchParams, referrer: string): void {
         setAffbId(affbIdQuery);
     } else {
         const searchEngine = getReferSearchEnginesMatch(referrer as string);
-        const computedAffbId = searchEngine ? AFFB_ID_NEW_PARTNERS : AFFB_ID_DEFAULT;
+        const useNewPartnersId = AFFB_ID_NEW_PARTNERS && searchEngine;
+        const computedAffbId = useNewPartnersId ? AFFB_ID_NEW_PARTNERS : AFFB_ID_DEFAULT;
 
         setAffbId(computedAffbId);
     }
