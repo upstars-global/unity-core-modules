@@ -42,10 +42,11 @@ function getStagByReferrerName({ referrer, stagsByReferName, path, country } = {
         if (!searchEngine) {
             return "";
         }
-        const localStagsByReferName = stagsByReferName || {
+
+        const localStagsByReferName = DEFAULT_STAGS_COUNTRY_REFER ? stagsByReferName || {
             pages: null,
             countries: DEFAULT_STAGS_COUNTRY_REFER,
-        };
+        } : stagsByReferName;
 
         const stagReferPathValue = localStagsByReferName?.pages?.[searchEngine]?.[path];
         const stagReferGeoValue = localStagsByReferName?.countries?.[country]?.[searchEngine];
@@ -155,7 +156,10 @@ function init(): void {
     const path = url.pathname;
     const queryParams = new URLSearchParams(url.search);
 
-    initAffbId(queryParams, referrer);
+    if (AFFB_ID_COOKIE) {
+        initAffbId(queryParams, referrer);
+    }
+
     initStag(queryParams, path, referrer);
 }
 
