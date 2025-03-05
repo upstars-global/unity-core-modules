@@ -37,4 +37,12 @@ export interface IPlayerPayment {
     cancellation_reason?: string;
 
 }
+
+export interface TransactionMetricInfo {
+    type: ActionsTransaction,
+    isSuccessTransaction: boolean,
+    paymentSystem: string,
+    amount: string,
+    currency: string
+}
 export default {};
