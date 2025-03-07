@@ -118,9 +118,8 @@ export const useGamesProviders = defineStore("gamesProviders", () => {
                 return {
                     ...provider,
                     slug: provider.id,
-                    url: `/producers/${provider.id}`,
+                    url: `/producers/${ provider.id }`,
                     name: provider.title,
-                    image: `https://cdn2.softswiss.net/logos/providers/color/${provider.id}.svg`,
                 };
             });
             setAllProviders(data);
