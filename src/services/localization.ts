@@ -1,3 +1,4 @@
+import { AVAILABLE_LOCALES } from "@theme/configs/constsLocales";
 import { AFFB_ID_KEY, STAG_PARTNER_KEY } from "@theme/configs/stagConsts";
 import type { Composer, VueI18n } from "vue-i18n";
 
@@ -27,7 +28,11 @@ export async function loadLocales() {
     }
 
     return loadLocalesReq(query.toString()).then((data: Locales) => {
-        setLocales(data);
+        const localesComputed = data.filter((item) => {
+            return Object.keys(AVAILABLE_LOCALES).includes(item.code);
+        });
+
+        setLocales(localesComputed);
         if (!getUserLocale) {
             setLocale(getDefaultLang);
         }
