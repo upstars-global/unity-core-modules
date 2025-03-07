@@ -29,14 +29,12 @@ interface IPostMessage {
 export function sendPostMessageToParent(messageType: PostMessagesType, payload: IPostMessagePayload): void {
     const formInFrame = inIframe();
     console.log({ formInFrame });
-
     if (formInFrame) {
         const message: IPostMessage = {
             type: messageType,
             ...(payload ? { payload } : {}),
         };
-        console.log("postMessage", message);
-
+        console.log("postMessage", JSON.stringify(message, null, 2));
         window.parent.postMessage(message, "*");
     }
 }
