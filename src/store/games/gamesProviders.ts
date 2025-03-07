@@ -1,4 +1,4 @@
-import { DEFAULT_PAGE_LIMIT } from "@theme/configs/games";
+import { DEFAULT_PAGE_LIMIT, SPECIAL_GAME_PROVIDER_NAME } from "@theme/configs/games";
 import { defineStore, type Pinia, storeToRefs } from "pinia";
 import { ref, type UnwrapRef } from "vue";
 
@@ -30,8 +30,8 @@ export const useGamesProviders = defineStore("gamesProviders", () => {
     }
 
     function getProviderBySlug(slug: string): IGamesProvider | undefined {
-        // workaround to not display softswiss provider
-        const sanitizedSlug = slug === "softswiss" ? "bgaming" : slug;
+        // workaround to not display ss provider
+        const sanitizedSlug = slug === SPECIAL_GAME_PROVIDER_NAME ? "bgaming" : slug;
         return gamesProviders.value.find((providerObj: IGamesProvider) => providerObj.slug === sanitizedSlug);
     }
 
