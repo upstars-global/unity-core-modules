@@ -86,6 +86,13 @@ export const useRedeemableCompPointsStore = defineStore("redeemableCompPointsSto
 
         return currentStaticPage.value.meta.json.freeSpinsWager || {};
     });
+    const getSpinRate = computed(() => {
+        if (!currentStaticPage.value?.meta.json || !currentStaticPage.value.slug === pageSlug) {
+            return {};
+        }
+
+        return currentStaticPage.value.meta.json.spinRate || {};
+    });
     const getMockCards = computed(() => {
         if (!currentStaticPage.value?.meta.json || !currentStaticPage.value.slug === pageSlug) {
             return;
@@ -151,6 +158,7 @@ export const useRedeemableCompPointsStore = defineStore("redeemableCompPointsSto
         exchangeBySlug,
         loadRates,
         getGameInfo,
+        getSpinRate,
     };
 });
 
