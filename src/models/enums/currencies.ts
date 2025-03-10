@@ -1,5 +1,6 @@
 export enum Currencies {
     EUR = "EUR",
+    GBP = "GBP",
     USD = "USD",
     CAD = "CAD",
     AUD = "AUD",
@@ -23,6 +24,7 @@ export enum Currencies {
 
 export const currencyCodesOfCountry = {
     AU: "AUD",
+    GB: "GBP",
     CA: "CAD",
     NZ: "NZD",
     US: "USD",
