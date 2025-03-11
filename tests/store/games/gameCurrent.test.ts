@@ -1,7 +1,11 @@
 import { createPinia, setActivePinia } from "pinia";
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useGameCurrent } from "./gameCurrent";
+import { useGameCurrent } from "../../../src/store/games/gameCurrent";
+
+vi.mock("@theme/configs/constantsFreshChat", () => ({
+    PROJECT: "project",
+}));
 
 describe("store/games/gameCurrent", () => {
     beforeEach(() => {

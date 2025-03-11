@@ -1,4 +1,5 @@
 import { usePopupNewProvider } from "@modules/Popups/PopupProviderNew/usePopupNewProviderController";
+import { PROJECT } from "@theme/configs/constantsFreshChat";
 import { getStateByCounty } from "@theme/configs/stateFieldConfig";
 import { defineStore, type Pinia, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
@@ -190,7 +191,7 @@ export const useUserInfo = defineStore("userInfo", () => {
     // @ts-expect-error Parameter 'data' implicitly has an 'any' type.
     async function putUserSubscription(data) {
         await putUserSubscriptionReq(data);
-        return loadUserSubscriptions({ reload: false });
+        return loadUserSubscriptions({ reload: true });
     }
 
     async function loadUserProfile({ reload = false, route }: { reload?: boolean; route?: string } = {}) {
@@ -231,7 +232,7 @@ export const useUserInfo = defineStore("userInfo", () => {
                 cioIdentifyUser(response.data);
                 checkToShowPopup();
 
-                loadFreshChatRestoreId();
+                loadFreshChatRestoreId(PROJECT);
 
                 loadPlayerFieldsInfo({ reload: true })
                     .then(checkUserState);
@@ -313,7 +314,7 @@ export const useUserInfo = defineStore("userInfo", () => {
 
     async function sendFreshChatRestoreId(restoreId: string, project: string) {
         // to prevent override restore id when it is not initialized yet
-        if (freshchatRestoreIdLoaded.value || restoreId === freshchatRestoreId.value) {
+        if (!freshchatRestoreIdLoaded.value || restoreId === freshchatRestoreId.value) {
             return;
         }
 
