@@ -3,6 +3,7 @@ import { defineStore, type Pinia, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
 import { CompPointRatesTypes, CompPointsTypes } from "../../models/enums/compPoints";
+import { Currencies } from "../../models/enums/currencies";
 import { GameMode } from "../../models/enums/gamesConsts";
 import type { IRedeemableCards } from "../../services/api/DTO/compPoints";
 import { exchangeCompPointRateBySlug, loadCompPointRateBySlug } from "../../services/api/requests/compPoints";
@@ -71,13 +72,19 @@ export const useRedeemableCompPointsStore = defineStore("redeemableCompPointsSto
         return currentStaticPage.value.meta.json.gamesTitles || {};
     });
     const getMaxWin = computed(() => {
-        if (!currentStaticPage.value?.meta.json || !currentStaticPage.value.slug === pageSlug) {
+        if (!currentStaticPage.value?.meta.json ||
+            !currentStaticPage.value.slug === pageSlug ||
+            !currentStaticPage.value.meta.json.maxWin) {
             return "";
         }
 
-        return currentStaticPage.value.meta.json.maxWin ?
-            `${currentStaticPage.value.meta.json.maxWin[getUserCurrency.value]} ${getUserCurrency.value}` :
-            "";
+        const maxWinByUserCurrency = currentStaticPage.value.meta.json.maxWin[getUserCurrency.value];
+        const data = {
+            maxMin: maxWinByUserCurrency || currentStaticPage.value.meta.json.maxWin[Currencies.EUR],
+            currency: maxWinByUserCurrency ? getUserCurrency.value : Currencies.EUR,
+        };
+
+        return `${data.maxMin} ${data.currency}`;
     });
     const getFreeSpinsWager = computed(() => {
         if (!currentStaticPage.value?.meta.json || !currentStaticPage.value.slug === pageSlug) {
