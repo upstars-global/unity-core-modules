@@ -3704,6 +3704,9 @@ export const useLootboxesStore = defineStore("lootboxes", () => {
     const getMockSegmentWheelUser = computed<ILootboxItemConfig[]>(() => {
         return mockSectionsWheelSegmentConfigs.value[userGroupForWheel.value] || [];
     });
+    const getRedeemableSpinInfo = computed(() => {
+        return redeemableSpinInfo.value || currentStaticPage.value?.meta?.json.rateInfo;
+    });
 
     async function loadLootboxesList({ reload }: { reload?: boolean } = {}): Promise<ILootbox[]> {
         if ((!reload && lootboxesList.value.length) || !getIsLogged.value) {
@@ -3768,9 +3771,8 @@ export const useLootboxesStore = defineStore("lootboxes", () => {
         if (getIsLogged.value) {
             const rates = await loadCompPointRateBySlug(CompPointRatesTypes.LOOTBOXES);
             redeemableSpinInfo.value = rates?.find((item) => item.bonus_title?.includes("manual_wheel"));
-        } else {
-            redeemableSpinInfo.value = currentStaticPage.value?.meta?.json.rateInfo;
         }
+        return redeemableSpinInfo.value;
     }
 
     function clearLootboxesUserData(): void {
@@ -3793,6 +3795,7 @@ export const useLootboxesStore = defineStore("lootboxes", () => {
         mockSectionsWheelConfigs,
         mockSectionsWheelSegmentConfigs,
         pageContentByGroup,
+        getRedeemableSpinInfo,
 
         loadMockWheel,
         loadMockSegmentsWheel,
