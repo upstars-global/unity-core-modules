@@ -3746,7 +3746,7 @@ export const useLootboxesStore = defineStore("lootboxes", () => {
     async function loadMockSegmentsWheel() {
         const fileMockSectionsWheel = await loadMockLootboxWheelSegmentsConfigs();
         if (fileMockSectionsWheel) {
-            // mockSectionsWheelSegmentConfigs.value = fileMockSectionsWheel as Record<string, ILootboxesFileConfig>;
+            mockSectionsWheelSegmentConfigs.value = fileMockSectionsWheel as Record<string, ILootboxesFileConfig>;
         }
     }
 
