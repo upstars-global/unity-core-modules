@@ -14,6 +14,8 @@ import {
     loadMockLootboxWheelSegmentsConfigs,
     loadPageContentFromWheelCmsReq,
 } from "../services/api/requests/lootbox";
+import { useCMS } from "./CMS";
+import { useUserInfo } from "./user/userInfo";
 import { useUserStatuses } from "./user/userStatuses";
 
 
@@ -1653,7 +1655,7 @@ export const useLootboxesStore = defineStore("lootboxes", () => {
                 id:868,
             },
         ],
-        1058:[
+        1308:[
             {
                 weight:5000,
                 bonuses:[
@@ -2589,7 +2591,7 @@ export const useLootboxesStore = defineStore("lootboxes", () => {
                 id:868,
             },
         ],
-        1080:[
+        1309:[
             {
                 weight:5000,
                 bonuses:[
@@ -3686,8 +3688,9 @@ export const useLootboxesStore = defineStore("lootboxes", () => {
     });
     const redeemableSpinInfo = ref<Record<string, unknown>>();
     const { getUserGroups } = storeToRefs(useUserStatuses());
+    const { getIsLogged } = storeToRefs(useUserInfo());
+    const { currentStaticPage } = storeToRefs(useCMS());
 
-    // const userGroupForWheel = ref<UserGroup>();
     const pageContentByGroup = ref<IPageItemCMS>();
 
     const lootboxListIssued = computed<ILootbox[]>(() => {
@@ -3703,7 +3706,7 @@ export const useLootboxesStore = defineStore("lootboxes", () => {
     });
 
     async function loadLootboxesList({ reload }: { reload?: boolean } = {}): Promise<ILootbox[]> {
-        if (!reload && lootboxesList.value.length) {
+        if ((!reload && lootboxesList.value.length) || !getIsLogged.value) {
             return lootboxesList.value;
         }
         try {
@@ -3743,7 +3746,7 @@ export const useLootboxesStore = defineStore("lootboxes", () => {
     async function loadMockSegmentsWheel() {
         const fileMockSectionsWheel = await loadMockLootboxWheelSegmentsConfigs();
         if (fileMockSectionsWheel) {
-            mockSectionsWheelSegmentConfigs.value = fileMockSectionsWheel as Record<string, ILootboxesFileConfig>;
+            // mockSectionsWheelSegmentConfigs.value = fileMockSectionsWheel as Record<string, ILootboxesFileConfig>;
         }
     }
 
@@ -3762,8 +3765,12 @@ export const useLootboxesStore = defineStore("lootboxes", () => {
     }
 
     async function loadRedeemableSpinInto() {
-        const rates = await loadCompPointRateBySlug(CompPointRatesTypes.LOOTBOXES);
-        redeemableSpinInfo.value = rates?.find((item) => item.bonus_title?.includes("manual_wheel"));
+        if (getIsLogged.value) {
+            const rates = await loadCompPointRateBySlug(CompPointRatesTypes.LOOTBOXES);
+            redeemableSpinInfo.value = rates?.find((item) => item.bonus_title?.includes("manual_wheel"));
+        } else {
+            redeemableSpinInfo.value = currentStaticPage.value?.meta?.json.rateInfo;
+        }
     }
 
     function clearLootboxesUserData(): void {
