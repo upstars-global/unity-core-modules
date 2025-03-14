@@ -28,7 +28,7 @@ interface IPostMessage {
 
 export function sendPostMessageToParent(messageType: PostMessagesType, payload: IPostMessagePayload): void {
     const formInFrame = inIframe();
-    console.log({ formInFrame });
+
     if (formInFrame) {
         const message: IPostMessage = {
             type: messageType,
