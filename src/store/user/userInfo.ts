@@ -302,7 +302,7 @@ export const useUserInfo = defineStore("userInfo", () => {
 
     async function loadFreshChatRestoreId(project: string) {
         setFreshChatRestoreIdLoaded(false);
-        const data = await loadFreshChatRestoreIdReq(info.value.user_id, project);
+        const { data } = await loadFreshChatRestoreIdReq(info.value.user_id, project);
 
         const restoreId = data?.restoreId;
 
