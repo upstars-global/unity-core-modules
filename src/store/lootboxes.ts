@@ -3709,7 +3709,7 @@ export const useLootboxesStore = defineStore("lootboxes", () => {
     });
 
     async function loadLootboxesList({ reload }: { reload?: boolean } = {}): Promise<ILootbox[]> {
-        if ((!reload && lootboxesList.value.length) || !getIsLogged.value) {
+        if (!reload && lootboxesList.value.length) {
             return lootboxesList.value;
         }
         try {
