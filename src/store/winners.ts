@@ -1,4 +1,4 @@
-import { gamePath } from "@config/games";
+import { getGameImagePath } from "@helpers/gameImage";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
@@ -54,10 +54,7 @@ export const useWinners = defineStore("winners", () => {
             return {
                 game: {
                     has_demo_mode: false,
-                    image: winner.game_table_image_path.replace(
-                        "https://cdn.softswiss.net/i/s1/",
-                        gamePath,
-                    ),
+                    image: getGameImagePath(winner.game_identifier),
                     link: `play/${ slug }`,
                     slug,
                     title: winner.game_title,
