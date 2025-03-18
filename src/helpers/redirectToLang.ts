@@ -1,7 +1,8 @@
 import { type Locales } from "../services/api/DTO/multilang";
+import { inIframe } from "./iframeHelpers";
 
 export function redirectToLang(lang: string, defaultLang: string, enableLocales: Locales) {
-    if (typeof window === "undefined") {
+    if (typeof window === "undefined" || inIframe()) {
         return;
     }
     const originalUrl = window.location.pathname + window.location.search;
