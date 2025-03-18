@@ -1,3 +1,10 @@
+## [1.2.0](https://github.com/upstars-global/unity-core-modules/compare/v1.1.11...v1.2.0) (2025-03-17)
+
+### 🚀 Features
+
+* add semver to protected branch ([#122](https://github.com/upstars-global/unity-core-modules/issues/122))
+ ([2447568](https://github.com/upstars-global/unity-core-modules/commit/2447568a05166b3e3c317428efb5885fab4a2623))
+
 ## [1.1.10](https://github.com/upstars-global/unity-core-modules/compare/v1.1.9...v1.1.10) (2025-03-10)
 
 ### 🐛 Bug Fixes
