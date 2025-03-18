@@ -28,11 +28,11 @@ export async function loadLocales() {
     }
 
     return loadLocalesReq(query.toString()).then((data: Locales) => {
-        const localesComputed = data.filter((item) => {
-            return Object.keys(AVAILABLE_LOCALES).includes(item.code);
-        });
+        // const localesComputed = data.filter((item) => {
+        //     return Object.keys(AVAILABLE_LOCALES).includes(item.code);
+        // });
 
-        setLocales(localesComputed);
+        setLocales(data);
         if (!getUserLocale) {
             setLocale(getDefaultLang);
         }
