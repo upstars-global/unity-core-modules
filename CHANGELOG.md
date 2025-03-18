@@ -1,3 +1,14 @@
+## [1.4.0](https://github.com/upstars-global/unity-core-modules/compare/v1.3.0...v1.4.0) (2025-03-18)
+
+### 🚀 Features
+
+* UN-209 pwa store
+ ([0937c2a](https://github.com/upstars-global/unity-core-modules/commit/0937c2a857c7750ca0261dd03ae6464ed040a3e4))
+
+
+
+    * feat: UN-209 pwa store
+
 ## [1.3.0](https://github.com/upstars-global/unity-core-modules/compare/v1.2.1...v1.3.0) (2025-03-18)
 
 ### 🧪 Testing
