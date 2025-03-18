@@ -1,3 +1,5 @@
+import { wait } from "./functionsHelper";
+
 export function inIframe(): boolean {
     if (typeof window === "undefined") {
         return false;
@@ -26,7 +28,7 @@ interface IPostMessage {
     payload?: IPostMessagePayload;
 }
 
-export function sendPostMessageToParent(messageType: PostMessagesType, payload: IPostMessagePayload): void {
+export async function sendPostMessageToParent(messageType: PostMessagesType, payload: IPostMessagePayload): void {
     const formInFrame = inIframe();
 
     if (formInFrame) {
@@ -36,5 +38,6 @@ export function sendPostMessageToParent(messageType: PostMessagesType, payload: 
         };
         console.log("postMessage", JSON.stringify(message, null, 2));
         window.parent.postMessage(message, "*");
+        await wait(200);
     }
 }
