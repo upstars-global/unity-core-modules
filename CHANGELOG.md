@@ -1,3 +1,20 @@
+## [1.2.1](https://github.com/upstars-global/unity-core-modules/compare/v1.2.0...v1.2.1) (2025-03-18)
+
+### 🐛 Bug Fixes
+
+* fresh-chat restore id response handling
+ ([3a52d85](https://github.com/upstars-global/unity-core-modules/commit/3a52d85557cec43d258733492ed52ff9a11917f2))
+
+
+
+    * fix: add project name to loadFreshChatRestoreId
+
+    * fix set fresh restore id logic
+
+    * fix: tests
+
+    * fix: destructuring response with fresh chat restore id
+
 ## [1.2.0](https://github.com/upstars-global/unity-core-modules/compare/v1.1.11...v1.2.0) (2025-03-17)
 
 ### 🚀 Features
