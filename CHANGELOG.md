@@ -1,3 +1,16 @@
+## [1.5.0](https://github.com/upstars-global/unity-core-modules/compare/v1.4.0...v1.5.0) (2025-03-20)
+
+### 🚀 Features
+
+* disable redirectToLang in iframe &  add waiter to sendPostMessa…
+ ([055fefb](https://github.com/upstars-global/unity-core-modules/commit/055fefb87fd27797d46e7f120a8afdf99bfe7a13))
+
+
+
+    feat: disable redirectToLang in iframe &  add waiter to sendPostMessageToParent
+
+    Co-authored-by: d-tashchi <kabak133@gmail.com>
+
 ## [1.4.0](https://github.com/upstars-global/unity-core-modules/compare/v1.3.0...v1.4.0) (2025-03-18)
 
 ### 🚀 Features
