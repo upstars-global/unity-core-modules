@@ -1,11 +1,22 @@
+## [1.5.0](https://github.com/upstars-global/unity-core-modules/compare/v1.4.0...v1.5.0) (2025-03-20)
+
+### 🚀 Features
+
+* disable redirectToLang in iframe &  add waiter to sendPostMessa…
+ ([055fefb](https://github.com/upstars-global/unity-core-modules/commit/055fefb87fd27797d46e7f120a8afdf99bfe7a13))
+
+
+
+    feat: disable redirectToLang in iframe &  add waiter to sendPostMessageToParent
+
+    Co-authored-by: d-tashchi <kabak133@gmail.com>
+
 ## [1.4.0](https://github.com/upstars-global/unity-core-modules/compare/v1.3.0...v1.4.0) (2025-03-18)
 
 ### 🚀 Features
 
 * UN-209 pwa store
- ([0937c2a](https://github.com/upstars-global/unity-core-modules/commit/0937c2a857c7750ca0261dd03ae6464ed040a3e4))
-
-
+  ([0937c2a](https://github.com/upstars-global/unity-core-modules/commit/0937c2a857c7750ca0261dd03ae6464ed040a3e4))
 
     * feat: UN-209 pwa store
 
@@ -14,9 +25,7 @@
 ### 🧪 Testing
 
 * test-semantic-release ([#124](https://github.com/upstars-global/unity-core-modules/issues/124))
- ([162d5e0](https://github.com/upstars-global/unity-core-modules/commit/162d5e0ab2474700e371d4eb682e323f63745fe4))
-
-
+  ([162d5e0](https://github.com/upstars-global/unity-core-modules/commit/162d5e0ab2474700e371d4eb682e323f63745fe4))
 
     - test semantic release
 
@@ -25,9 +34,7 @@
 ### 🐛 Bug Fixes
 
 * fresh-chat restore id response handling
- ([3a52d85](https://github.com/upstars-global/unity-core-modules/commit/3a52d85557cec43d258733492ed52ff9a11917f2))
-
-
+  ([3a52d85](https://github.com/upstars-global/unity-core-modules/commit/3a52d85557cec43d258733492ed52ff9a11917f2))
 
     * fix: add project name to loadFreshChatRestoreId
 
@@ -42,16 +49,14 @@
 ### 🚀 Features
 
 * add semver to protected branch ([#122](https://github.com/upstars-global/unity-core-modules/issues/122))
- ([2447568](https://github.com/upstars-global/unity-core-modules/commit/2447568a05166b3e3c317428efb5885fab4a2623))
+  ([2447568](https://github.com/upstars-global/unity-core-modules/commit/2447568a05166b3e3c317428efb5885fab4a2623))
 
 ## [1.1.10](https://github.com/upstars-global/unity-core-modules/compare/v1.1.9...v1.1.10) (2025-03-10)
 
 ### 🐛 Bug Fixes
 
 * add missed GBP currency required in king ([#118](https://github.com/upstars-global/unity-core-modules/issues/118))
- ([8587b5a](https://github.com/upstars-global/unity-core-modules/commit/8587b5ac052bd9ece3e019c743b95c0903fe5266))
-
-
+  ([8587b5a](https://github.com/upstars-global/unity-core-modules/commit/8587b5ac052bd9ece3e019c743b95c0903fe5266))
 
     Closes: UN-914
 
@@ -64,9 +69,7 @@
 ### 🚀 Features
 
 * add SemVer ([#99](https://github.com/upstars-global/unity-core-modules/issues/99))
- ([6770e5a](https://github.com/upstars-global/unity-core-modules/commit/6770e5a55a1dad883f0daa0e34a527655739b58e))
-
-
+  ([6770e5a](https://github.com/upstars-global/unity-core-modules/commit/6770e5a55a1dad883f0daa0e34a527655739b58e))
 
     * feat: add SemVer
 
