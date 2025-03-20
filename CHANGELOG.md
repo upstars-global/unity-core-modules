@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/upstars-global/unity-core-modules/compare/v1.5.0...v1.5.1) (2025-03-20)
+
+### 🐛 Bug Fixes
+
+* UN-998 add optional param to sendPostMessageToParent ([#128](https://github.com/upstars-global/unity-core-modules/issues/128))
+ ([a41cf86](https://github.com/upstars-global/unity-core-modules/commit/a41cf86d2a9d55ea4f070dc864a8030bcbb73022))
+
 ## [1.5.0](https://github.com/upstars-global/unity-core-modules/compare/v1.4.0...v1.5.0) (2025-03-20)
 
 ### 🚀 Features
