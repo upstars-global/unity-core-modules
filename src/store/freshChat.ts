@@ -63,7 +63,7 @@ export const useFreshChatStore = defineStore("freshchatStore", () => {
             restoreId: externalId ? restoreId.value : undefined,
             // externalId cause generating new restoreId, so we need wait initializing
             // our saved restoreId to prevent overriding
-            externalId: restoreIdLoaded.value ? externalId : undefined,
+            // externalId: restoreIdLoaded.value ? externalId : undefined,
             ...(userData.value || {}),
             pending: isLoaded.value && !restoreIdLoaded.value,
         };
