@@ -1,9 +1,9 @@
+import { COOKIE_BY_LOCALE } from "@theme/configs/constsLocales";
 import fetchAdapter from "@vespaiach/axios-fetch-adapter";
 import type { AxiosInstance, AxiosRequestConfig } from "axios";
 import axios from "axios";
 import axiosRetry from "axios-retry";
 
-import { COOKIE_BY_LOCALE } from "../../consts/cookies_by_locales";
 import { log } from "../../controllers/Logger";
 import { isServer } from "../../helpers/ssrHelpers";
 import { BUS_EVENTS, EventBus } from "../../plugins/EventBus";
