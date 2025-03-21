@@ -1,6 +1,6 @@
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { reactive, ref } from "vue";
+import { ref } from "vue";
 
 import { useFreshChatStore } from "../../src/store/freshChat";
 import { useUserInfo } from "../../src/store/user/userInfo";
@@ -15,6 +15,10 @@ vi.mock("@theme/configs/config", () => ({
 }));
 vi.mock("../../src/store/user/userInfo", () => ({
     useUserInfo: vi.fn(),
+}));
+
+vi.mock("@theme/configs/constantsFreshChat", () => ({
+    PROJECT: "project",
 }));
 
 describe("store/freshChat", () => {
@@ -63,7 +67,7 @@ describe("store/freshChat", () => {
         const store = useFreshChatStore();
 
         expect(store.userData).toEqual({
-            externalId: "id",
+            externalId: "project-id",
             email: "email",
             firstName: "first_name",
             lastName: "last_name",
@@ -109,7 +113,7 @@ describe("store/freshChat", () => {
             token: "token",
             widgetUuid: "widgetUuid",
             restoreId: undefined,
-            // externalId: null,
+            externalId: null,
             pending: false,
         });
     });

@@ -1,4 +1,5 @@
 import config from "@theme/configs/config";
+import { PROJECT } from "@theme/configs/constantsFreshChat";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
@@ -37,7 +38,7 @@ export const useFreshChatStore = defineStore("freshchatStore", () => {
         const { id, mobile_phone, email, first_name, last_name } = userInfo.value;
         if (id) {
             return {
-                externalId: `${ id }`,
+                externalId: `${ PROJECT }-${ id }`,
                 email,
                 firstName: first_name,
                 lastName: last_name,
@@ -63,7 +64,7 @@ export const useFreshChatStore = defineStore("freshchatStore", () => {
             restoreId: externalId ? restoreId.value : undefined,
             // externalId cause generating new restoreId, so we need wait initializing
             // our saved restoreId to prevent overriding
-            // externalId: restoreIdLoaded.value ? externalId : undefined,
+            externalId: restoreIdLoaded.value && externalId ? `${ PROJECT }-${ externalId }` : null,
             ...(userData.value || {}),
             pending: isLoaded.value && !restoreIdLoaded.value,
         };
