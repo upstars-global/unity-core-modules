@@ -109,7 +109,7 @@ describe("store/freshChat", () => {
             token: "token",
             widgetUuid: "widgetUuid",
             restoreId: undefined,
-            externalId: null,
+            // externalId: null,
             pending: false,
         });
     });
