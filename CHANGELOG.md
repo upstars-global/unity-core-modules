@@ -1,3 +1,18 @@
+## [1.5.3](https://github.com/upstars-global/unity-core-modules/compare/v1.5.2...v1.5.3) (2025-03-21)
+
+### 🐛 Bug Fixes
+
+* add prefix to externalId for freshChat
+ ([2fc6e1d](https://github.com/upstars-global/unity-core-modules/commit/2fc6e1d5f7ecd6c044e79e09a2f493a0f16b921b))
+
+
+
+    * UN-1007: disable send ID user for init FreshChat
+
+    * fix test
+
+    * add prefix to externalId for freshChat
+
 ## [1.5.1](https://github.com/upstars-global/unity-core-modules/compare/v1.5.0...v1.5.1) (2025-03-20)
 
 ### 🐛 Bug Fixes
