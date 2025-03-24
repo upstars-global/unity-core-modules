@@ -12,5 +12,6 @@ export enum LOCALES {
     NORWEGIAN = "no",
     ITALIAN = "it",
     ESTONIAN = "et",
-};
+    FAKE_AUSTRALIAN_ENGLISH = "en-KW",
+}
 export default {};
