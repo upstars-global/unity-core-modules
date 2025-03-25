@@ -8,10 +8,6 @@ export function useContentParser() {
     const { userCurrency } = useUserBalance();
 
     function replaceContentVariables(content: string, variables: Record<string, Record<Currencies, string>>) {
-        if (!variables) {
-            return;
-        }
-
         const resolvedVariables = Object.entries(variables).reduce((acc: Record<string, string>, [ key, value ]) => {
             acc[key] = value[userCurrency as Currencies] || value.EUR;
             return acc;
@@ -20,7 +16,18 @@ export function useContentParser() {
         return rt(content, resolvedVariables);
     }
 
+    function formatText(text: string, variables: Record<string, Record<Currencies, string>>) {
+        if (!text) {
+            return "";
+        }
+
+        return variables
+            ? replaceContentVariables(text, variables)
+            : text;
+    }
+
     return {
         replaceContentVariables,
+        formatText,
     };
 }
