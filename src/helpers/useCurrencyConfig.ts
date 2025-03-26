@@ -18,20 +18,16 @@ export function useCurrencyConfig() {
     }
 
     function increaseAmount(amount: number, steps: Step[], precision = 0) {
+        const epsilon = 1e-10;
+
         for (let i = 0; i < steps.length; i++) {
             const { min, max, step } = steps[i];
 
             if (amount >= min && amount < Number(max)) {
-                let nextAmount = Math.ceil(amount / step) * step;
-                nextAmount = roundAmount(nextAmount, precision);
+                const ratio = (amount - min) / step;
+                const nextAmount = min + (Math.floor(ratio + epsilon) + 1) * step;
 
-                if (nextAmount > amount) {
-                    return nextAmount;
-                }
-
-                const newAmount = nextAmount + step < Number(max) ? nextAmount + step : Number(max);
-
-                return roundAmount(newAmount, precision);
+                return roundAmount(nextAmount, precision);
             }
         }
 
@@ -43,18 +39,19 @@ export function useCurrencyConfig() {
             const { min, max, step } = steps[i];
 
             if (amount >= min && amount < Number(max)) {
-                let nextAmount = Math.floor(amount / step) * step;
-                nextAmount = roundAmount(nextAmount, precision);
-
-                if (nextAmount < amount) {
-                    return nextAmount;
+                if ((amount - min) % step === 0) {
+                    if (amount === min) {
+                        if (i > 0) {
+                            return roundAmount(Number(steps[i - 1].max) - steps[i - 1].step, precision);
+                        }
+                        return roundAmount(min, precision);
+                    }
+                    return roundAmount(amount - step, precision);
                 }
 
-                const newAmount = nextAmount - step >= min
-                    ? nextAmount - step
-                    : (Number(steps[i - 1]?.max) - steps[i - 1]?.step || min);
+                const downAmount = min + Math.floor((amount - min) / step) * step;
 
-                return roundAmount(newAmount, precision);
+                return roundAmount(downAmount, precision);
             }
         }
 
