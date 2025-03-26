@@ -27,6 +27,7 @@ import { useUserStatuses } from "./user/userStatuses";
 export const useBannerStore = defineStore("bannerStore", () => {
     const { getIsLogged, isCryptoUserCurrency } = storeToRefs(useUserInfo());
     const { getUserGroups } = storeToRefs(useUserStatuses());
+    const { getUserLocale } = storeToRefs(useMultilangStore());
 
     const banners = ref<IBannerConfig[]>([]);
     const tournamentsFiles = ref<IFileCMS[]>([]);
@@ -95,7 +96,6 @@ export const useBannerStore = defineStore("bannerStore", () => {
         banners.value = [];
         termsFiles.value = [];
 
-        const { getUserLocale } = storeToRefs(useMultilangStore());
         const filesCMS: IFileCMS[] = await loadAllFilesFromCMSReq(getUserLocale.value);
 
         filesCMS.forEach((file) => {
@@ -118,7 +118,7 @@ export const useBannerStore = defineStore("bannerStore", () => {
     }
 
     async function loadBanners() {
-        const config = await loadBannersConfigReq();
+        const config = await loadBannersConfigReq(getUserLocale.value);
         if (config) {
             banners.value = config.banners;
         }
