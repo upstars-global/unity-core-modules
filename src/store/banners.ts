@@ -17,7 +17,6 @@ import { useWelcomePack } from "../controllers/useWelcomePack";
 import { prepareJackpotsBanners } from "../helpers/jackpotsHelpers";
 import type { IBannerConfig, IViewedGTMBanners } from "../models/banners";
 import type { IFileCMS } from "../services/api/DTO/CMS";
-import { loadBannersConfigReq } from "../services/api/requests/banners";
 import { loadAllFilesFromCMSReq } from "../services/api/requests/CMS";
 import { useMultilangStore } from "./multilang";
 import { useSettings } from "./settings";
@@ -117,13 +116,6 @@ export const useBannerStore = defineStore("bannerStore", () => {
         return filesCMS;
     }
 
-    async function loadBanners() {
-        const config = await loadBannersConfigReq(getUserLocale.value);
-        if (config) {
-            banners.value = config.banners;
-        }
-    }
-
     function welcomePackBannersFilter(bannersList: IBannerConfig[] = []): IBannerConfig[] {
         const { showWelcomePack } = useWelcomePack();
 
@@ -146,7 +138,6 @@ export const useBannerStore = defineStore("bannerStore", () => {
 
     return {
         loadCMSPages,
-        loadBanners,
         banners,
         tournamentsFiles,
         lotteriesFiles,
@@ -163,11 +154,9 @@ export const useBannerStore = defineStore("bannerStore", () => {
 export function useBannersFetchService(pinia?: Pinia) {
     const {
         loadCMSPages,
-        loadBanners,
     } = useBannerStore(pinia);
 
     return {
         loadCMSPages,
-        loadBanners,
     };
 }
