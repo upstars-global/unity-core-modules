@@ -34,10 +34,12 @@ export function getAutocompleteForm(fieldName?: AUTOCOMPLETE_FORM_NAME): IAutoco
 
 export function setAutocompleteField(formName: AUTOCOMPLETE_FORM_NAME, fieldValue: IAutocompleteField): void {
     if (!isServer) {
-        const currentData = getAutocompleteForm(formName) || {};
+        const currentDataCommon = getAutocompleteForm() || {};
+        const currentDataForm = getAutocompleteForm(formName) || {};
         const newData = {
+            ...currentDataCommon,
             [formName]: {
-                ...currentData,
+                ...currentDataForm,
                 ...fieldValue,
             },
         } as IAutocompleteForm;
