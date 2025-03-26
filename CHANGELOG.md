@@ -1,3 +1,14 @@
+## [1.6.0](https://github.com/upstars-global/unity-core-modules/compare/v1.5.3...v1.6.0) (2025-03-25)
+
+### 🚀 Features
+
+* UN-675 wheel tabs ([#109](https://github.com/upstars-global/unity-core-modules/issues/109))
+ ([b49a32c](https://github.com/upstars-global/unity-core-modules/commit/b49a32ca34b5555ae52a730fa0b95baaf0547604))
+
+
+
+    * feat: UN-675 wheel tabs
+
 ## [1.5.3](https://github.com/upstars-global/unity-core-modules/compare/v1.5.2...v1.5.3) (2025-03-21)
 
 ### 🐛 Bug Fixes
