@@ -1,3 +1,49 @@
+## [1.7.0](https://github.com/upstars-global/unity-core-modules/compare/v1.6.0...v1.7.0) (2025-03-27)
+
+### 🚀 Features
+
+* **UN-726:** add configStore to be able to set games limit ([#133](https://github.com/upstars-global/unity-core-modules/issues/133))
+ ([62ff9f7](https://github.com/upstars-global/unity-core-modules/commit/62ff9f7d9d03cd55465af72c6d8d2722190a1f4e))
+
+
+
+    * feat(UN-726): add configStore to be able to set games limit
+
+    * feat: replace DEFAULT_PAGE_LIMIT with gamesPageLimit from config store in gameProviders store
+
+## [1.6.0](https://github.com/upstars-global/unity-core-modules/compare/v1.5.3...v1.6.0) (2025-03-25)
+
+### 🚀 Features
+
+* UN-675 wheel tabs ([#109](https://github.com/upstars-global/unity-core-modules/issues/109))
+ ([b49a32c](https://github.com/upstars-global/unity-core-modules/commit/b49a32ca34b5555ae52a730fa0b95baaf0547604))
+
+
+
+    * feat: UN-675 wheel tabs
+
+## [1.5.3](https://github.com/upstars-global/unity-core-modules/compare/v1.5.2...v1.5.3) (2025-03-21)
+
+### 🐛 Bug Fixes
+
+* add prefix to externalId for freshChat
+ ([2fc6e1d](https://github.com/upstars-global/unity-core-modules/commit/2fc6e1d5f7ecd6c044e79e09a2f493a0f16b921b))
+
+
+
+    * UN-1007: disable send ID user for init FreshChat
+
+    * fix test
+
+    * add prefix to externalId for freshChat
+
+## [1.5.1](https://github.com/upstars-global/unity-core-modules/compare/v1.5.0...v1.5.1) (2025-03-20)
+
+### 🐛 Bug Fixes
+
+* UN-998 add optional param to sendPostMessageToParent ([#128](https://github.com/upstars-global/unity-core-modules/issues/128))
+ ([a41cf86](https://github.com/upstars-global/unity-core-modules/commit/a41cf86d2a9d55ea4f070dc864a8030bcbb73022))
+
 ## [1.5.0](https://github.com/upstars-global/unity-core-modules/compare/v1.4.0...v1.5.0) (2025-03-20)
 
 ### 🚀 Features

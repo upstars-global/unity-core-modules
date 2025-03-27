@@ -1,5 +1,3 @@
-import { slugWheelStaticPage } from "@config/lootboxes";
-
 import { log } from "../../../controllers/Logger";
 import type { ILootbox } from "../../../models/lootboxes";
 import type { UserGroup } from "../../../models/user";
@@ -10,7 +8,17 @@ import { http } from "../http";
 export async function loadMockLootboxWheelConfigs():
     Promise<ILootboxesFileConfig | Error | undefined> {
     try {
-        const { data } = await http().get<ILootboxesFileConfig>("/api/fe/config/wheel-config-segments");
+        const { data } = await http().get<ILootboxesFileConfig>("/api/fe/config/wheel-config");
+
+        return data;
+    } catch (err) {
+        log.error("LOAD_MOCK_SECTIONS_ROCKET_WHEEL_ERROR", err);
+        throw err;
+    }
+} export async function loadMockLootboxWheelSegmentsConfigs():
+    Promise<Record<string, ILootboxesFileConfig> | Error | undefined> {
+    try {
+        const { data } = await http().get<Record<string, ILootboxesFileConfig>>("/api/fe/config/wheel-config-segments");
 
         return data;
     } catch (err) {
@@ -49,9 +57,9 @@ export async function loadPageContentFromCmsReq(slugPage: UserGroup): Promise<IP
     }
 }
 
-export async function loadPageContentFromWheelCmsReq(userId: UserGroup): Promise<IPageItemCMS | void> {
+export async function loadPageContentFromWheelCmsReq(slug: string): Promise<IPageItemCMS | void> {
     try {
-        const { data } = await http().get<IPageItemCMS>(`/api/cms/pages/${slugWheelStaticPage}/${ userId }`);
+        const { data } = await http().get<IPageItemCMS>(`/api/cms/pages/${slug}`);
         return data;
     } catch (err) {
         log.error("LOAD_PAGE_CONTENT_FORM_CMS_REQ_ERROR", err);
