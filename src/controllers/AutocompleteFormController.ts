@@ -2,17 +2,12 @@ import { isServer } from "../helpers/ssrHelpers";
 
 export const LOCAL_STORAGE_NAME = "autocomplete_form";
 
-
 export enum AUTOCOMPLETE_FORM_NAME {
     LOGIN = "login",
     REGISTRATION = "registration",
 };
-export enum DISALLOWED_FIELD_NAME {
-    PASSWORD = "password",
-}
-
 export type IAutocompleteField = {
-    [fieldName: Exclude<string, keyof typeof DISALLOWED_FIELD_NAME>]: string;
+    [fieldName: string]: string;
 }
 export type IAutocompleteForm = {
     [formName in AUTOCOMPLETE_FORM_NAME]: IAutocompleteField | null;
