@@ -25,7 +25,11 @@ export function useCurrencyConfig() {
 
             if (amount >= min && amount < Number(max)) {
                 const ratio = (amount - min) / step;
-                const nextAmount = min + (Math.floor(ratio + epsilon) + 1) * step;
+                let nextAmount = min + (Math.floor(ratio + epsilon) + 1) * step;
+
+                if (nextAmount > Number(max)) {
+                    nextAmount = Number(max);
+                }
 
                 return roundAmount(nextAmount, precision);
             }
