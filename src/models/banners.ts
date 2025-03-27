@@ -34,6 +34,7 @@ export interface IBannerConfig {
             desc: string;
         }
     };
+    order: Record<string, number>,
     image: string;
 }
 
@@ -42,4 +43,8 @@ export interface IViewedGTMBanners {
     promotion_name: string;
     location_id: string;
     creative_slot: number;
+}
+
+export interface IBannerCMSConfig {
+    banners: IBannerConfig[]
 }
