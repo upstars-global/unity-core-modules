@@ -1,3 +1,16 @@
+## [1.7.0](https://github.com/upstars-global/unity-core-modules/compare/v1.6.0...v1.7.0) (2025-03-27)
+
+### 🚀 Features
+
+* **UN-726:** add configStore to be able to set games limit ([#133](https://github.com/upstars-global/unity-core-modules/issues/133))
+ ([62ff9f7](https://github.com/upstars-global/unity-core-modules/commit/62ff9f7d9d03cd55465af72c6d8d2722190a1f4e))
+
+
+
+    * feat(UN-726): add configStore to be able to set games limit
+
+    * feat: replace DEFAULT_PAGE_LIMIT with gamesPageLimit from config store in gameProviders store
+
 ## [1.6.0](https://github.com/upstars-global/unity-core-modules/compare/v1.5.3...v1.6.0) (2025-03-25)
 
 ### 🚀 Features
