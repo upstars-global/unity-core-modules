@@ -20,6 +20,10 @@ export function useCurrencyConfig() {
     function increaseAmount(amount: number, steps: Step[], precision = 0) {
         const epsilon = 1e-10;
 
+        if (amount < steps[0].min) {
+            return roundAmount(steps[0].min, precision);
+        }
+
         for (let i = 0; i < steps.length; i++) {
             const { min, max, step } = steps[i];
 
@@ -40,6 +44,10 @@ export function useCurrencyConfig() {
 
     function decreaseAmount(amount: number, steps: Step[], precision = 0) {
         const epsilon = 1e-10;
+
+        if (amount < steps[0].min) {
+            return roundAmount(amount, precision);
+        }
 
         for (let i = 0; i < steps.length; i++) {
             const { min, max, step } = steps[i];
