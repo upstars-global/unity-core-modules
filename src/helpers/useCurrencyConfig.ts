@@ -39,11 +39,15 @@ export function useCurrencyConfig() {
     }
 
     function decreaseAmount(amount: number, steps: Step[], precision = 0) {
+        const epsilon = 1e-10;
+
         for (let i = 0; i < steps.length; i++) {
             const { min, max, step } = steps[i];
 
             if (amount >= min && amount < Number(max)) {
-                if ((amount - min) % step === 0) {
+                const division = (amount - min) / step;
+
+                if (Math.abs(division - Math.round(division)) < epsilon) {
                     if (amount === min) {
                         if (i > 0) {
                             return roundAmount(Number(steps[i - 1].max) - steps[i - 1].step, precision);
