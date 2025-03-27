@@ -1,3 +1,12 @@
+## [1.8.0](https://github.com/upstars-global/unity-core-modules/compare/v1.7.1...v1.8.0) (2025-03-27)
+
+### 🚀 Features
+
+* Revert of "feat(UN-726): add configStore to be able to set games limit (… ([#135](https://github.com/upstars-global/unity-core-modules/issues/135))
+ ([403bb64](https://github.com/upstars-global/unity-core-modules/commit/403bb642efb1aa47aa7aa8379757f56d605af819))
+
+, closes [#133](https://github.com/upstars-global/unity-core-modules/issues/)
+
 ## [1.7.0](https://github.com/upstars-global/unity-core-modules/compare/v1.6.0...v1.7.0) (2025-03-27)
 
 ### 🚀 Features
