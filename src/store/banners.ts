@@ -129,6 +129,9 @@ export const useBannerStore = defineStore("bannerStore", () => {
         });
     }
 
+    function setBanners(list: IBannerConfig[]) {
+        banners.value = list;
+    }
     function setViewedGTMBanners(items: IViewedGTMBanners) {
         viewedGTMBanners.value.push(items);
     }
@@ -138,6 +141,7 @@ export const useBannerStore = defineStore("bannerStore", () => {
 
     return {
         loadCMSPages,
+        setBanners,
         banners,
         tournamentsFiles,
         lotteriesFiles,

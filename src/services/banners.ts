@@ -11,6 +11,6 @@ export async function loadBanners() {
     const config = await loadBannersConfigReq(getUserLocale.value);
 
     if (config) {
-        bannersStore.banners.value = config.banners;
+        bannersStore.setBanners(config.banners);
     }
 }
