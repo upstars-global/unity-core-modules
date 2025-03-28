@@ -1,4 +1,5 @@
 import { isServer } from "../helpers/ssrHelpers";
+import { log } from "./Logger";
 
 export const LOCAL_STORAGE_NAME = "autocomplete_form";
 
@@ -10,10 +11,10 @@ export type IAutocompleteField = {
     [fieldName: string]: string;
 }
 export type IAutocompleteForm = {
-    [formName in AUTOCOMPLETE_FORM_NAME]: IAutocompleteField | null;
-};
+    [formName in AUTOCOMPLETE_FORM_NAME]: IAutocompleteField;
+} | Record<string, never>;
 
-export function getAutocompleteForm(fieldName?: AUTOCOMPLETE_FORM_NAME): IAutocompleteForm | void {
+export function getAutocompleteForm(fieldName?: AUTOCOMPLETE_FORM_NAME): IAutocompleteForm {
     if (!isServer) {
         const currentData = localStorage.getItem(LOCAL_STORAGE_NAME);
 
@@ -26,15 +27,18 @@ export function getAutocompleteForm(fieldName?: AUTOCOMPLETE_FORM_NAME): IAutoco
                 return JSON.parse(currentData);
             }
         } catch (error) {
-            console.error(error);
+            log.error("ERROR_JSON_PARSE_AUTOCOMPLETE_FORM", error);
+            return {};
         }
     }
+
+    return {};
 }
 
 export function setAutocompleteField(formName: AUTOCOMPLETE_FORM_NAME, fieldValue: IAutocompleteField): void {
     if (!isServer) {
-        const currentDataCommon = getAutocompleteForm() || {};
-        const currentDataForm = getAutocompleteForm(formName) || {};
+        const currentDataCommon = getAutocompleteForm();
+        const currentDataForm = getAutocompleteForm(formName);
         const newData = {
             ...currentDataCommon,
             [formName]: {
