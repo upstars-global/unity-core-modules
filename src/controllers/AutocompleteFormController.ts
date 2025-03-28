@@ -17,12 +17,16 @@ export function getAutocompleteForm(fieldName?: AUTOCOMPLETE_FORM_NAME): IAutoco
     if (!isServer) {
         const currentData = localStorage.getItem(LOCAL_STORAGE_NAME);
 
-        if (currentData) {
-            if (fieldName) {
-                return JSON.parse(currentData)[fieldName];
-            }
+        try {
+            if (currentData) {
+                if (fieldName) {
+                    return JSON.parse(currentData)[fieldName];
+                }
 
-            return JSON.parse(currentData);
+                return JSON.parse(currentData);
+            }
+        } catch (error) {
+            console.error(error);
         }
     }
 }
