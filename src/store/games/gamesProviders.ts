@@ -1,4 +1,4 @@
-import { SPECIAL_GAME_PROVIDER_NAME } from "@theme/configs/games";
+import { DEFAULT_PAGE_LIMIT, SPECIAL_GAME_PROVIDER_NAME } from "@theme/configs/games";
 import { defineStore, type Pinia, storeToRefs } from "pinia";
 import { ref, type UnwrapRef } from "vue";
 
@@ -6,7 +6,6 @@ import { log } from "../../controllers/Logger";
 import { processGameForNewAPI } from "../../helpers/gameHelpers";
 import type { ICollectionItem, ICollections, IGamesProvider, IGamesProviderCollection } from "../../models/game";
 import { http } from "../../services/api/http";
-import { useConfigStore } from "../configStore";
 import { useRootStore } from "../root";
 import { useGamesCommon } from "./gamesStore";
 import { defaultCollection } from "./helpers/games";
@@ -16,10 +15,9 @@ export const useGamesProviders = defineStore("gamesProviders", () => {
     const gamesProviders = ref<IGamesProvider[]>([] as IGamesProvider[]);
     const collections = ref<ICollections>({});
     const gamesProvidersCollectionData = ref<IGamesProviderCollection>({});
-    const { gamesPageLimit } = storeToRefs(useConfigStore());
 
     function getCollection(slug: string, page: number = 1, startPage: number = 0) {
-        return collections.value[slug]?.data.slice(startPage * gamesPageLimit.value, page * gamesPageLimit.value) || [];
+        return collections.value[slug]?.data.slice(startPage * DEFAULT_PAGE_LIMIT, page * DEFAULT_PAGE_LIMIT) || [];
     }
 
     function isLoaded(slug: string, page: number) {
@@ -103,7 +101,7 @@ export const useGamesProviders = defineStore("gamesProviders", () => {
                     providers: [ slug ],
                 },
                 page,
-                page_size: gamesPageLimit.value,
+                page_size: DEFAULT_PAGE_LIMIT,
             });
             setData(data, slug);
             return data;

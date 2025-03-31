@@ -1,3 +1,4 @@
+import { DEFAULT_PAGE_LIMIT } from "@theme/configs/games";
 import { type Pinia, storeToRefs } from "pinia";
 import { defineStore } from "pinia";
 import { ref, toRefs } from "vue";
@@ -7,7 +8,6 @@ import { getRandomGame, processGameForNewAPI } from "../../helpers/gameHelpers";
 import type { ICollectionItem, IGame } from "../../models/game";
 import type { ICollectionRecord, IGameFilter } from "../../services/api/DTO/gamesDTO";
 import { loadGamesCategory as loadGamesCategoryReq } from "../../services/api/requests/games";
-import { useConfigStore } from "../configStore";
 import { useMultilangStore } from "../multilang";
 import { useRootStore } from "../root";
 import { useUserInfo } from "../user/userInfo";
@@ -20,7 +20,6 @@ export const useGamesCategory = defineStore("gamesCategory", () => {
     const collections = ref<ICollectionRecord>({});
     const { getUserGeo } = toRefs(useMultilangStore());
     const { getIsLogged, getUserCurrency } = storeToRefs(useUserInfo());
-    const { gamesPageLimit } = storeToRefs(useConfigStore());
 
     const categoryGeo = (slug: string): string => {
         const slugWithGeo = getUserGeo.value ? `${slug}:${getUserGeo.value.toLocaleLowerCase()}` : "";
@@ -35,7 +34,7 @@ export const useGamesCategory = defineStore("gamesCategory", () => {
     const getCollection = (slug: string = DEFAULT_COLLECTION_NAME, page: number = 1, startPage: number = 0): IGame[] => {
         const slugCollection = categoryGeo(slug);
         const collection = collections.value[slugCollection];
-        return collection?.data.slice(startPage * gamesPageLimit.value, page * gamesPageLimit.value) || [];
+        return collection?.data.slice(startPage * DEFAULT_PAGE_LIMIT, page * DEFAULT_PAGE_LIMIT) || [];
     };
 
     const getCollectionPagination = (slug: string = DEFAULT_COLLECTION_NAME): ICollectionItem["pagination"] | undefined => {
@@ -102,7 +101,7 @@ export const useGamesCategory = defineStore("gamesCategory", () => {
                     },
                 },
                 page,
-                page_size: gamesPageLimit.value,
+                page_size: DEFAULT_PAGE_LIMIT,
             };
 
             const data = await loadGamesCategoryReq(reqConfig);
