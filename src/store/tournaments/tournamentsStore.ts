@@ -23,6 +23,8 @@ import { useCMS } from "../CMS";
 import { useQuestStore } from "../quest/questStore";
 
 export const useTournamentsStore = defineStore("tournamentsStore", () => {
+    const questStore = useQuestStore();
+
     const currentTournament = ref<Partial<ITournament> | null>(null);
     const currentUserTournamentsStatuses = ref<IPlayersList>([]);
     const recentTournaments = ref<ITournamentsList>([]);
@@ -143,6 +145,9 @@ export const useTournamentsStore = defineStore("tournamentsStore", () => {
         const tournamentsResponse = await loadTournamentsListReq();
         tournamentsList.value = tournamentsResponse
             .filter(({ frontend_identifier }) => frontend_identifier !== "nonvisible");
+
+        await questStore.loadQuestsData(tournamentsResponse);
+
         return tournamentsResponse;
     }
 
@@ -176,7 +181,6 @@ export const useTournamentsStore = defineStore("tournamentsStore", () => {
     }
 
     async function loadCurrentUserTourStatuses(): Promise<void> {
-        const questStore = useQuestStore();
         const hasUserTourStatuses = Boolean(currentUserTournamentsStatuses.value.length);
 
         await questStore.loadQuestsData(tournamentsList.value);
