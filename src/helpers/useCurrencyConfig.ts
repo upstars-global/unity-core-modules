@@ -13,29 +13,26 @@ export function useCurrencyConfig() {
         return currencyConfig.value?.[getUserCurrency.value as CurrencyCode] ?? null;
     });
 
-    function roundAmount(amount: number, precision: number) {
-        return parseFloat(amount.toFixed(precision));
-    }
+    const roundAmount = (amount: number, precision: number) => Number(amount.toFixed(precision));
 
     function increaseAmount(amount: number, steps: Step[], precision = 0) {
-        const epsilon = 1e-10;
-
         if (amount < steps[0].min) {
-            return roundAmount(steps[0].min, precision);
+            return steps[0].min;
         }
 
         for (let i = 0; i < steps.length; i++) {
             const { min, max, step } = steps[i];
 
             if (amount >= min && amount < Number(max)) {
-                const ratio = (amount - min) / step;
-                let nextAmount = min + (Math.floor(ratio + epsilon) + 1) * step;
+                let candidate = roundAmount(Math.ceil(amount / step) * step, precision);
 
-                if (nextAmount > Number(max)) {
-                    nextAmount = Number(max);
+                if (candidate > amount) {
+                    return candidate;
                 }
 
-                return roundAmount(nextAmount, precision);
+                candidate = candidate + step < Number(max) ? candidate + step : Number(max);
+
+                return roundAmount(candidate, precision);
             }
         }
 
@@ -43,31 +40,30 @@ export function useCurrencyConfig() {
     }
 
     function decreaseAmount(amount: number, steps: Step[], precision = 0) {
-        const epsilon = 1e-10;
-
-        if (amount < steps[0].min) {
-            return roundAmount(amount, precision);
-        }
-
         for (let i = 0; i < steps.length; i++) {
             const { min, max, step } = steps[i];
 
             if (amount >= min && amount < Number(max)) {
-                const division = (amount - min) / step;
+                const candidate = roundAmount(Math.floor(amount / step) * step, precision);
 
-                if (Math.abs(division - Math.round(division)) < epsilon) {
-                    if (amount === min) {
-                        if (i > 0) {
-                            return roundAmount(Number(steps[i - 1].max) - steps[i - 1].step, precision);
-                        }
-                        return roundAmount(min, precision);
-                    }
-                    return roundAmount(amount - step, precision);
+                if (candidate < min) {
+                    return min;
                 }
 
-                const downAmount = min + Math.floor((amount - min) / step) * step;
+                if (candidate < amount) {
+                    return candidate;
+                }
 
-                return roundAmount(downAmount, precision);
+                // eslint-disable-next-line @typescript-eslint/init-declarations
+                let newAmount;
+
+                if (candidate - step >= min) {
+                    newAmount = candidate - step;
+                } else {
+                    newAmount = i > 0 ? Number(steps[i - 1].max) - steps[i - 1].step : min;
+                }
+
+                return roundAmount(newAmount, precision);
             }
         }
 
