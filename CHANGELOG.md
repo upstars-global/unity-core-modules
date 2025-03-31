@@ -1,3 +1,12 @@
+## [1.9.0](https://github.com/upstars-global/unity-core-modules/compare/v1.8.0...v1.9.0) (2025-03-31)
+
+### 🚀 Features
+
+* UN-726 reapply ([#137](https://github.com/upstars-global/unity-core-modules/issues/137))
+ ([1c2de5b](https://github.com/upstars-global/unity-core-modules/commit/1c2de5bb0960b488d52e26bc5ebf16faa88e5817))
+
+, closes [#133](https://github.com/upstars-global/unity-core-modules/issues/) [#133](https://github.com/upstars-global/unity-core-modules/issues/) [#135](https://github.com/upstars-global/unity-core-modules/issues/)
+
 ## [1.8.0](https://github.com/upstars-global/unity-core-modules/compare/v1.7.1...v1.8.0) (2025-03-27)
 
 ### 🚀 Features
