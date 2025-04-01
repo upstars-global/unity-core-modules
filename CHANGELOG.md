@@ -1,3 +1,16 @@
+## [1.10.0](https://github.com/upstars-global/unity-core-modules/compare/v1.9.1...v1.10.0) (2025-04-01)
+
+### 🚀 Features
+
+* add useContentParser composable helper to replace variables in … ([#131](https://github.com/upstars-global/unity-core-modules/issues/131))
+ ([62a258d](https://github.com/upstars-global/unity-core-modules/commit/62a258d466776bce993e7e25e89dc0787c08f0eb))
+
+
+
+    * feat: add useContentParser composable helper to replace variables in text
+
+    * fix after review
+
 ## [1.9.1](https://github.com/upstars-global/unity-core-modules/compare/v1.9.0...v1.9.1) (2025-04-01)
 
 ### 🐛 Bug Fixes
