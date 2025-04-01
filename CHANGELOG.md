@@ -1,3 +1,14 @@
+## [1.9.1](https://github.com/upstars-global/unity-core-modules/compare/v1.9.0...v1.9.1) (2025-04-01)
+
+### 🐛 Bug Fixes
+
+* Modify metaHrefLangsLink for new seo-AU ([#139](https://github.com/upstars-global/unity-core-modules/issues/139))
+ ([8cbd747](https://github.com/upstars-global/unity-core-modules/commit/8cbd7477c2510ede31a04e62844ae93cabcc21c0))
+
+
+
+    modify metaHrefLangsLink
+
 ## [1.9.0](https://github.com/upstars-global/unity-core-modules/compare/v1.8.0...v1.9.0) (2025-03-31)
 
 ### 🚀 Features
