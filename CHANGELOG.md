@@ -1,3 +1,10 @@
+## [1.11.0](https://github.com/upstars-global/unity-core-modules/compare/v1.10.0...v1.11.0) (2025-04-01)
+
+### 🔧 Maintenance
+
+* UN-601: обновление пакетов (минорные/патчи) ([#136](https://github.com/upstars-global/unity-core-modules/issues/136))
+ ([2db767b](https://github.com/upstars-global/unity-core-modules/commit/2db767b3f0d1c40d234540866f86bda526948453))
+
 ## [1.10.0](https://github.com/upstars-global/unity-core-modules/compare/v1.9.1...v1.10.0) (2025-04-01)
 
 ### 🚀 Features
