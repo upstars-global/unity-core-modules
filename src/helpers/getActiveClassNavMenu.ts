@@ -34,7 +34,6 @@ export const useGetActiveClass = () => {
         }
         item.routeName = item.routeName || null;
 
-        console.log($route.fullPath);
         if (item.routeName === routeNames.main) {
             active = $route.fullPath === "/" ||
                 $route.fullPath.startsWith("/categories") ||
