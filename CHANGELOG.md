@@ -1,3 +1,14 @@
+## [1.12.0](https://github.com/upstars-global/unity-core-modules/compare/v1.11.0...v1.12.0) (2025-04-02)
+
+### 🚀 Features
+
+* UN-817 banner config ([#132](https://github.com/upstars-global/unity-core-modules/issues/132))
+ ([2a1c70a](https://github.com/upstars-global/unity-core-modules/commit/2a1c70a081a9ccbec8f6ec9ca37fc87cfb7717c3))
+
+
+
+    * feat: UN-817 banner config
+
 ## [1.11.0](https://github.com/upstars-global/unity-core-modules/compare/v1.10.0...v1.11.0) (2025-04-01)
 
 ### 🔧 Maintenance
