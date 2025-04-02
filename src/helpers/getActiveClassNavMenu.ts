@@ -22,12 +22,16 @@ export interface IItemMenu {
 export const useGetActiveClass = () => {
     const $route = useRoute();
 
-    // @ts-expect-error Parameter 'isActive' implicitly has an 'any' type.    
+    // @ts-expect-error Parameter 'isActive' implicitly has an 'any' type.
     function getActiveClass(item: IItemMenu, isActive, hiddenItems: string[] = []): string[] | { active: boolean } {
         if (hiddenItems.includes(item.title)) {
             return [ "item-hidden" ];
         }
+
         let active = isActive;
+        if (!$route) {
+            return { active };
+        }
         item.routeName = item.routeName || null;
 
         if (item.routeName === routeNames.main) {
