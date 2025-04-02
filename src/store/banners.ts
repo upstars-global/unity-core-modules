@@ -25,6 +25,8 @@ import { useUserStatuses } from "./user/userStatuses";
 
 export const useBannerStore = defineStore("bannerStore", () => {
     const { getIsLogged, isCryptoUserCurrency } = storeToRefs(useUserInfo());
+    const { getUserGroups } = storeToRefs(useUserStatuses());
+    const { getUserLocale } = storeToRefs(useMultilangStore());
 
     const banners = ref<IBannerConfig[]>([]);
     const tournamentsFiles = ref<IFileCMS[]>([]);
@@ -34,10 +36,6 @@ export const useBannerStore = defineStore("bannerStore", () => {
     const viewedGTMBanners = ref<IViewedGTMBanners[]>([]);
 
     const getBannersData = computed(() => {
-        const userStatuses = useUserStatuses();
-        const userGroups = userStatuses.getUserStatuses?.map((group) => {
-            return Number(group.id) || group.id;
-        });
         dayjs.extend(customParseFormat);
 
         let bannersFilteredByConfigsFile = welcomePackBannersFilter(banners.value).filter(({ groups, liveTime }) => {
@@ -57,7 +55,7 @@ export const useBannerStore = defineStore("bannerStore", () => {
 
             if (groups?.length) {
                 return groups.some((groupId) => {
-                    return userGroups?.includes(groupId);
+                    return getUserGroups.value?.includes(groupId);
                 });
             }
             return true;
@@ -80,17 +78,6 @@ export const useBannerStore = defineStore("bannerStore", () => {
         });
     });
 
-    function prepareFileBanner(file: IFileCMS): IBannerConfig {
-        let config: IBannerConfig = file;
-        try {
-            config = { ...config, ...JSON.parse(file.description) };
-            config.image = file.url;
-        } catch (err) {
-            config.description = file.description;
-        }
-
-        return config as IBannerConfig;
-    }
     async function loadCMSPages(): Promise<IFileCMS[] | undefined> {
         if (
             tournamentsFiles.value.length &&
@@ -108,7 +95,6 @@ export const useBannerStore = defineStore("bannerStore", () => {
         banners.value = [];
         termsFiles.value = [];
 
-        const { getUserLocale } = storeToRefs(useMultilangStore());
         const filesCMS: IFileCMS[] = await loadAllFilesFromCMSReq(getUserLocale.value);
 
         filesCMS.forEach((file) => {
@@ -122,10 +108,6 @@ export const useBannerStore = defineStore("bannerStore", () => {
                 questFiles.value = [ ...questFiles.value, file ];
             }
 
-            if (file.categories.some((fileCategory) => BANNERS_CATEGORIES_ENABLE[fileCategory])) {
-                banners.value = [ ...banners.value, prepareFileBanner(file) ];
-            }
-
             if (file.categories.includes(BANNER_CATEGORY_TERMS_CONDITIONS)) {
                 termsFiles.value = [ ...termsFiles.value, file ];
             }
@@ -134,19 +116,22 @@ export const useBannerStore = defineStore("bannerStore", () => {
         return filesCMS;
     }
 
-    function welcomePackBannersFilter(bannesList: IBannerConfig[] = []): IBannerConfig[] {
+    function welcomePackBannersFilter(bannersList: IBannerConfig[] = []): IBannerConfig[] {
         const { showWelcomePack } = useWelcomePack();
 
-        return bannesList.filter((banerData) => {
+        return bannersList.filter((bannerData) => {
             if (showWelcomePack.value) {
-                return banerData.categories.includes(BANNER_CATEGORY_131811_SHOW) ||
-                    !banerData.categories.includes(BANNER_CATEGORY_131811__HIDE);
+                return bannerData.categories.includes(BANNER_CATEGORY_131811_SHOW) ||
+                    !bannerData.categories.includes(BANNER_CATEGORY_131811__HIDE);
             }
 
-            return !banerData.categories.includes(BANNER_CATEGORY_131811_SHOW);
+            return !bannerData.categories.includes(BANNER_CATEGORY_131811_SHOW);
         });
     }
 
+    function setBanners(list: IBannerConfig[]) {
+        banners.value = list;
+    }
     function setViewedGTMBanners(items: IViewedGTMBanners) {
         viewedGTMBanners.value.push(items);
     }
@@ -156,6 +141,7 @@ export const useBannerStore = defineStore("bannerStore", () => {
 
     return {
         loadCMSPages,
+        setBanners,
         banners,
         tournamentsFiles,
         lotteriesFiles,
