@@ -1,3 +1,76 @@
+## [1.11.0](https://github.com/upstars-global/unity-core-modules/compare/v1.10.0...v1.11.0) (2025-04-01)
+
+### 🔧 Maintenance
+
+* UN-601: обновление пакетов (минорные/патчи) ([#136](https://github.com/upstars-global/unity-core-modules/issues/136))
+ ([2db767b](https://github.com/upstars-global/unity-core-modules/commit/2db767b3f0d1c40d234540866f86bda526948453))
+
+## [1.10.0](https://github.com/upstars-global/unity-core-modules/compare/v1.9.1...v1.10.0) (2025-04-01)
+
+### 🚀 Features
+
+* add useContentParser composable helper to replace variables in … ([#131](https://github.com/upstars-global/unity-core-modules/issues/131))
+ ([62a258d](https://github.com/upstars-global/unity-core-modules/commit/62a258d466776bce993e7e25e89dc0787c08f0eb))
+
+
+
+    * feat: add useContentParser composable helper to replace variables in text
+
+    * fix after review
+
+## [1.9.1](https://github.com/upstars-global/unity-core-modules/compare/v1.9.0...v1.9.1) (2025-04-01)
+
+### 🐛 Bug Fixes
+
+* Modify metaHrefLangsLink for new seo-AU ([#139](https://github.com/upstars-global/unity-core-modules/issues/139))
+ ([8cbd747](https://github.com/upstars-global/unity-core-modules/commit/8cbd7477c2510ede31a04e62844ae93cabcc21c0))
+
+
+
+    modify metaHrefLangsLink
+
+## [1.9.0](https://github.com/upstars-global/unity-core-modules/compare/v1.8.0...v1.9.0) (2025-03-31)
+
+### 🚀 Features
+
+* UN-726 reapply ([#137](https://github.com/upstars-global/unity-core-modules/issues/137))
+ ([1c2de5b](https://github.com/upstars-global/unity-core-modules/commit/1c2de5bb0960b488d52e26bc5ebf16faa88e5817))
+
+, closes [#133](https://github.com/upstars-global/unity-core-modules/issues/) [#133](https://github.com/upstars-global/unity-core-modules/issues/) [#135](https://github.com/upstars-global/unity-core-modules/issues/)
+
+## [1.8.0](https://github.com/upstars-global/unity-core-modules/compare/v1.7.1...v1.8.0) (2025-03-27)
+
+### 🚀 Features
+
+* Revert of "feat(UN-726): add configStore to be able to set games limit (… ([#135](https://github.com/upstars-global/unity-core-modules/issues/135))
+ ([403bb64](https://github.com/upstars-global/unity-core-modules/commit/403bb642efb1aa47aa7aa8379757f56d605af819))
+
+, closes [#133](https://github.com/upstars-global/unity-core-modules/issues/)
+
+## [1.7.0](https://github.com/upstars-global/unity-core-modules/compare/v1.6.0...v1.7.0) (2025-03-27)
+
+### 🚀 Features
+
+* **UN-726:** add configStore to be able to set games limit ([#133](https://github.com/upstars-global/unity-core-modules/issues/133))
+ ([62ff9f7](https://github.com/upstars-global/unity-core-modules/commit/62ff9f7d9d03cd55465af72c6d8d2722190a1f4e))
+
+
+
+    * feat(UN-726): add configStore to be able to set games limit
+
+    * feat: replace DEFAULT_PAGE_LIMIT with gamesPageLimit from config store in gameProviders store
+
+## [1.6.0](https://github.com/upstars-global/unity-core-modules/compare/v1.5.3...v1.6.0) (2025-03-25)
+
+### 🚀 Features
+
+* UN-675 wheel tabs ([#109](https://github.com/upstars-global/unity-core-modules/issues/109))
+ ([b49a32c](https://github.com/upstars-global/unity-core-modules/commit/b49a32ca34b5555ae52a730fa0b95baaf0547604))
+
+
+
+    * feat: UN-675 wheel tabs
+
 ## [1.5.3](https://github.com/upstars-global/unity-core-modules/compare/v1.5.2...v1.5.3) (2025-03-21)
 
 ### 🐛 Bug Fixes

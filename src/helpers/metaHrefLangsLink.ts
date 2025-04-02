@@ -1,4 +1,5 @@
 import {
+    AVAILABLE_LOCALES,
     DOMAIN_FOR_AUSTRALIA,
     MAIN_LOCALES_AND_DOMAINS,
 } from "@theme/configs/constsLocales";
@@ -19,11 +20,13 @@ export function metaHrefLangsLink(routePath: string): IAllDomainsHrefLangs[] {
     ];
 
     Object.keys(MAIN_LOCALES_AND_DOMAINS).forEach((locale) => {
-        allDomainsHrefLangs.push({
-            rel: "alternate",
-            hreflang: locale,
-            href: `https://${ MAIN_LOCALES_AND_DOMAINS[locale] }${ routePath }`,
-        });
+        if (AVAILABLE_LOCALES[locale] === true) {
+            allDomainsHrefLangs.push({
+                rel: "alternate",
+                hreflang: locale,
+                href: `https://${ MAIN_LOCALES_AND_DOMAINS[locale] }${ routePath }`,
+            });
+        }
     });
 
     return allDomainsHrefLangs;
