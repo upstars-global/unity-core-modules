@@ -1,3 +1,74 @@
+## [1.12.1](https://github.com/upstars-global/unity-core-modules/compare/v1.12.0...v1.12.1) (2025-04-02)
+
+### 🐛 Bug Fixes
+
+* UN-1059 fix getActiveClass ([#140](https://github.com/upstars-global/unity-core-modules/issues/140))
+ ([0bce252](https://github.com/upstars-global/unity-core-modules/commit/0bce2523b4b67f80efde65d96530831c7376a1df))
+
+
+
+    * fix: UN-1059 fix getActiveClass
+
+## [1.12.0](https://github.com/upstars-global/unity-core-modules/compare/v1.11.0...v1.12.0) (2025-04-02)
+
+### 🚀 Features
+
+* UN-817 banner config ([#132](https://github.com/upstars-global/unity-core-modules/issues/132))
+ ([2a1c70a](https://github.com/upstars-global/unity-core-modules/commit/2a1c70a081a9ccbec8f6ec9ca37fc87cfb7717c3))
+
+
+
+    * feat: UN-817 banner config
+
+## [1.11.0](https://github.com/upstars-global/unity-core-modules/compare/v1.10.0...v1.11.0) (2025-04-01)
+
+### 🔧 Maintenance
+
+* UN-601: обновление пакетов (минорные/патчи) ([#136](https://github.com/upstars-global/unity-core-modules/issues/136))
+ ([2db767b](https://github.com/upstars-global/unity-core-modules/commit/2db767b3f0d1c40d234540866f86bda526948453))
+
+## [1.10.0](https://github.com/upstars-global/unity-core-modules/compare/v1.9.1...v1.10.0) (2025-04-01)
+
+### 🚀 Features
+
+* add useContentParser composable helper to replace variables in … ([#131](https://github.com/upstars-global/unity-core-modules/issues/131))
+ ([62a258d](https://github.com/upstars-global/unity-core-modules/commit/62a258d466776bce993e7e25e89dc0787c08f0eb))
+
+
+
+    * feat: add useContentParser composable helper to replace variables in text
+
+    * fix after review
+
+## [1.9.1](https://github.com/upstars-global/unity-core-modules/compare/v1.9.0...v1.9.1) (2025-04-01)
+
+### 🐛 Bug Fixes
+
+* Modify metaHrefLangsLink for new seo-AU ([#139](https://github.com/upstars-global/unity-core-modules/issues/139))
+ ([8cbd747](https://github.com/upstars-global/unity-core-modules/commit/8cbd7477c2510ede31a04e62844ae93cabcc21c0))
+
+
+
+    modify metaHrefLangsLink
+
+## [1.9.0](https://github.com/upstars-global/unity-core-modules/compare/v1.8.0...v1.9.0) (2025-03-31)
+
+### 🚀 Features
+
+* UN-726 reapply ([#137](https://github.com/upstars-global/unity-core-modules/issues/137))
+ ([1c2de5b](https://github.com/upstars-global/unity-core-modules/commit/1c2de5bb0960b488d52e26bc5ebf16faa88e5817))
+
+, closes [#133](https://github.com/upstars-global/unity-core-modules/issues/) [#133](https://github.com/upstars-global/unity-core-modules/issues/) [#135](https://github.com/upstars-global/unity-core-modules/issues/)
+
+## [1.8.0](https://github.com/upstars-global/unity-core-modules/compare/v1.7.1...v1.8.0) (2025-03-27)
+
+### 🚀 Features
+
+* Revert of "feat(UN-726): add configStore to be able to set games limit (… ([#135](https://github.com/upstars-global/unity-core-modules/issues/135))
+ ([403bb64](https://github.com/upstars-global/unity-core-modules/commit/403bb642efb1aa47aa7aa8379757f56d605af819))
+
+, closes [#133](https://github.com/upstars-global/unity-core-modules/issues/)
+
 ## [1.7.0](https://github.com/upstars-global/unity-core-modules/compare/v1.6.0...v1.7.0) (2025-03-27)
 
 ### 🚀 Features
