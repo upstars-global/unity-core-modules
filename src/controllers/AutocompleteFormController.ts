@@ -4,6 +4,7 @@ import { log } from "./Logger";
 export const LOCAL_STORAGE_NAME = "autocomplete_form";
 
 export enum AUTOCOMPLETE_FORM_NAME {
+    GLOBAL = "global",
     LOGIN = "login",
     REGISTRATION = "registration",
 };
