@@ -27,9 +27,11 @@ const loadModifyGiftsConfigReq = () =>
 const loadManagersConfigReq = (userGroups) => loadConfig("/api/fe/config/managers", "LOAD_MANAGERS_CONFIG_ERROR", { userGroups });
 const loadExcludedPromoStagsReq = () =>
     loadConfig<string[]>("/api/fe/config/excluded-promo-stags", "LOAD_EXCLUDED_PROMO_STAGS_CONFIG_ERROR");
+const loadCurrencyConfigReq = () => loadConfig<string[]>("/api/fe/config/currency-config", "LOAD_CURRENCY_CONFIG_ERROR");
 
 export {
     loadBettingConfigReq,
+    loadCurrencyConfigReq,
     loadDisabledBonusesConfigReq,
     loadExcludedPromoStagsReq,
     loadManagersConfigReq,
