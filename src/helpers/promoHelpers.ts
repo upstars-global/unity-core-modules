@@ -1,4 +1,3 @@
-import { typePromotionsFiles } from "@config/tournaments";
 import { toRefs } from "vue";
 
 import { PromoType, STATUS_PROMO } from "../models/enums/tournaments";
@@ -6,35 +5,17 @@ import type { ITournament } from "../services/api/DTO/tournamentsDTO";
 import { useBannerStore } from "../store/banners";
 import { useUserStatuses } from "../store/user/userStatuses";
 
-export function parseImageDescription(file) {
-    try {
-        return JSON.parse(file.description);
-    } catch (err) {
-        return {};
-    }
-}
-
 export function promoFilterAndSettings<T extends { group_ids: number[]; frontend_identifier: string }>(
     promoList: Array<T> = [],
     type = PromoType.TOURNAMENT,
 ): T[] | [] {
     const userStatuses = useUserStatuses();
     const {
-        tournamentsFiles,
-        lotteriesFiles,
-        questFiles,
+        banners,
     } = toRefs(useBannerStore());
 
     if (!promoList.length) {
         return promoList;
-    }
-
-    let imagesByTypeCollection = tournamentsFiles.value;
-    if (type === typePromotionsFiles.lottery) {
-        imagesByTypeCollection = lotteriesFiles.value;
-    }
-    if (type === typePromotionsFiles.quest) {
-        imagesByTypeCollection = questFiles.value;
     }
 
     return promoList
@@ -46,14 +27,14 @@ export function promoFilterAndSettings<T extends { group_ids: number[]; frontend
             }
             return true;
         }).map((promo) => {
-            const image = imagesByTypeCollection.find(({ id }) => id.includes(promo.frontend_identifier));
+            const banner = banners.value.find((item) => item.frontend_identifier?.includes(promo.frontend_identifier)) || {};
 
             return {
                 ...promo,
                 status: statusForTournament<T>(promo),
                 type,
-                image: image?.url,
-                file: parseImageDescription(image),
+                image: banner?.image,
+                file: banner,
             };
         });
 }
