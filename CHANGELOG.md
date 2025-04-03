@@ -1,3 +1,25 @@
+## [1.12.1](https://github.com/upstars-global/unity-core-modules/compare/v1.12.0...v1.12.1) (2025-04-02)
+
+### 🐛 Bug Fixes
+
+* UN-1059 fix getActiveClass ([#140](https://github.com/upstars-global/unity-core-modules/issues/140))
+ ([0bce252](https://github.com/upstars-global/unity-core-modules/commit/0bce2523b4b67f80efde65d96530831c7376a1df))
+
+
+
+    * fix: UN-1059 fix getActiveClass
+
+## [1.12.0](https://github.com/upstars-global/unity-core-modules/compare/v1.11.0...v1.12.0) (2025-04-02)
+
+### 🚀 Features
+
+* UN-817 banner config ([#132](https://github.com/upstars-global/unity-core-modules/issues/132))
+ ([2a1c70a](https://github.com/upstars-global/unity-core-modules/commit/2a1c70a081a9ccbec8f6ec9ca37fc87cfb7717c3))
+
+
+
+    * feat: UN-817 banner config
+
 ## [1.11.0](https://github.com/upstars-global/unity-core-modules/compare/v1.10.0...v1.11.0) (2025-04-01)
 
 ### 🔧 Maintenance
