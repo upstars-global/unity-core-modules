@@ -1,3 +1,10 @@
+## [1.12.2](https://github.com/upstars-global/unity-core-modules/compare/v1.12.1...v1.12.2) (2025-04-04)
+
+### 🐛 Bug Fixes
+
+* UN-1063 "ua-parser-js" version rollback ([#142](https://github.com/upstars-global/unity-core-modules/issues/142))
+ ([5fbd565](https://github.com/upstars-global/unity-core-modules/commit/5fbd5653fe4491787ce2b24229409bc3207d706e))
+
 ## [1.12.1](https://github.com/upstars-global/unity-core-modules/compare/v1.12.0...v1.12.1) (2025-04-02)
 
 ### 🐛 Bug Fixes
