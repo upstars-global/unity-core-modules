@@ -1,6 +1,4 @@
-import * as URL from "url";
-
-import { IBannerConfig } from "../models/banners";
+import type { IBannerConfig } from "../models/banners";
 import { STATUS_PROMO } from "../models/enums/tournaments";
 
 export const getCssGradient = (gradient) => {
