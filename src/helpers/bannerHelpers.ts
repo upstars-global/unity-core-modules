@@ -1,3 +1,6 @@
+import * as URL from "url";
+
+import { IBannerConfig } from "../models/banners";
 import { STATUS_PROMO } from "../models/enums/tournaments";
 
 export const getCssGradient = (gradient) => {
@@ -60,4 +63,16 @@ export function isSameHost(url: string) {
     } catch (e) {
         return true;
     }
+}
+
+export function sortBanners(list: IBannerConfig[], sortBy: string) {
+    if (!Array.isArray(list) || !list.length || !sortBy) {
+        return list;
+    }
+
+    return list.toSorted((prev, next) => {
+        const prevOrder = prev?.order?.[sortBy] ?? Infinity;
+        const nextOrder = next?.order?.[sortBy] ?? Infinity;
+        return prevOrder - nextOrder;
+    });
 }
