@@ -6,7 +6,6 @@ import {
     BANNERS_CATEGORIES_ENABLE,
     shouldDisplayRegistrationBanner,
 } from "@config/banners";
-import { typePromotionsFiles } from "@config/tournaments";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import type{ Pinia } from "pinia";
@@ -29,9 +28,6 @@ export const useBannerStore = defineStore("bannerStore", () => {
     const { getUserLocale } = storeToRefs(useMultilangStore());
 
     const banners = ref<IBannerConfig[]>([]);
-    const tournamentsFiles = ref<IFileCMS[]>([]);
-    const lotteriesFiles = ref<IFileCMS[]>([]);
-    const questFiles = ref<IFileCMS[]>([]);
     const termsFiles = ref<IFileCMS[]>([]);
     const viewedGTMBanners = ref<IViewedGTMBanners[]>([]);
 
@@ -80,34 +76,14 @@ export const useBannerStore = defineStore("bannerStore", () => {
 
     async function loadCMSPages(): Promise<IFileCMS[] | undefined> {
         if (
-            tournamentsFiles.value.length &&
-            lotteriesFiles.value.length &&
-            questFiles.value.length &&
-            banners.value.length &&
             termsFiles.value.length
         ) {
             return;
         }
 
-        tournamentsFiles.value = [];
-        lotteriesFiles.value = [];
-        questFiles.value = [];
-        banners.value = [];
-        termsFiles.value = [];
-
         const filesCMS: IFileCMS[] = await loadAllFilesFromCMSReq(getUserLocale.value);
 
         filesCMS.forEach((file) => {
-            if (file.categories.includes(typePromotionsFiles.tournaments)) {
-                tournamentsFiles.value = [ ...tournamentsFiles.value, file ];
-            }
-            if (file.categories.includes(typePromotionsFiles.lottery)) {
-                lotteriesFiles.value = [ ...lotteriesFiles.value, file ];
-            }
-            if (file.categories.includes(typePromotionsFiles.quest)) {
-                questFiles.value = [ ...questFiles.value, file ];
-            }
-
             if (file.categories.includes(BANNER_CATEGORY_TERMS_CONDITIONS)) {
                 termsFiles.value = [ ...termsFiles.value, file ];
             }
@@ -143,9 +119,6 @@ export const useBannerStore = defineStore("bannerStore", () => {
         loadCMSPages,
         setBanners,
         banners,
-        tournamentsFiles,
-        lotteriesFiles,
-        questFiles,
         termsFiles,
         getBannersData,
 

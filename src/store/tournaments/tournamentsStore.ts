@@ -5,7 +5,7 @@ import { computed, ref } from "vue";
 import { log } from "../../controllers/Logger";
 import { isAchievement } from "../../helpers/achievementHelpers";
 import { parseJson } from "../../helpers/parseJson";
-import { parseImageDescription, promoFilterAndSettings, statusForTournament } from "../../helpers/promoHelpers";
+import { promoFilterAndSettings, statusForTournament } from "../../helpers/promoHelpers";
 import { isQuest } from "../../helpers/questHelpers";
 import { PromoType } from "../../models/enums/tournaments";
 import type { ISnippetItemCMS } from "../../services/api/DTO/CMS";
@@ -40,10 +40,10 @@ export const useTournamentsStore = defineStore("tournamentsStore", () => {
         return promoFilterAndSettings(tournaments, PromoType.TOURNAMENT);
     });
 
-    const { snippets } = useCMS();
+    const { snippets } = storeToRefs(useCMS());
     const getCustomTournamentsList = computed(() => {
         try {
-            const tournaments = snippets
+            const tournaments = snippets.value
                 .filter((snippet: ISnippetItemCMS) => {
                     return snippet.categories.includes("tournament");
                 })
@@ -71,16 +71,16 @@ export const useTournamentsStore = defineStore("tournamentsStore", () => {
         });
     });
 
-    const { tournamentsFiles } = storeToRefs(useBannerStore());
+    const { banners } = storeToRefs(useBannerStore());
     const getCurrentTournament = computed(() => {
         if (!currentTournament.value?.frontend_identifier) {
             return {};
         }
 
-        const image = tournamentsFiles.value.find(({ id }) => {
-            return currentTournament.value?.frontend_identifier && id.includes(currentTournament.value?.frontend_identifier);
+        const banner = banners.value.find(({ frontend_identifier }) => {
+            return currentTournament.value?.frontend_identifier &&
+                frontend_identifier?.includes(currentTournament.value?.frontend_identifier);
         });
-        const dataFile = parseImageDescription(image);
 
         return {
             ...currentTournament.value,
@@ -88,9 +88,7 @@ export const useTournamentsStore = defineStore("tournamentsStore", () => {
             status: statusForTournament(currentTournament.value),
             type: PromoType.TOURNAMENT,
             file: {
-                image: image?.url,
-                ...image,
-                ...dataFile,
+                ...banner,
             },
         };
     });

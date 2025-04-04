@@ -36,6 +36,7 @@ export interface IBannerConfig {
     };
     order: Record<string, number>,
     image: string;
+    frontend_identifier: string;
 }
 
 export interface IViewedGTMBanners {
