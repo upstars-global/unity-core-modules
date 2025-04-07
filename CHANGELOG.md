@@ -1,3 +1,14 @@
+## [1.14.0](https://github.com/upstars-global/unity-core-modules/compare/v1.13.0...v1.14.0) (2025-04-07)
+
+### 🚀 Features
+
+* UN-1061 new banners in tournaments ([#141](https://github.com/upstars-global/unity-core-modules/issues/141))
+ ([0ef2f44](https://github.com/upstars-global/unity-core-modules/commit/0ef2f44940264d94c18ec44ebb743e9e27ad86fa))
+
+
+
+    * feat: UN-1061 new banners in tournaments
+
 ## [1.13.0](https://github.com/upstars-global/unity-core-modules/compare/v1.12.2...v1.13.0) (2025-04-07)
 
 ## [1.12.2](https://github.com/upstars-global/unity-core-modules/compare/v1.12.1...v1.12.2) (2025-04-04)
