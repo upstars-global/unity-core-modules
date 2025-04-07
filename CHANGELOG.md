@@ -1,3 +1,5 @@
+## [1.13.0](https://github.com/upstars-global/unity-core-modules/compare/v1.12.2...v1.13.0) (2025-04-07)
+
 ## [1.12.2](https://github.com/upstars-global/unity-core-modules/compare/v1.12.1...v1.12.2) (2025-04-04)
 
 ### 🐛 Bug Fixes
