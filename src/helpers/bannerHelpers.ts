@@ -68,7 +68,7 @@ export function sortBanners(list: IBannerConfig[], sortBy: string) {
         return list;
     }
 
-    return list.toSorted((prev, next) => {
+    return list.slice().sort((prev, next) => {
         const prevOrder = prev?.order?.[sortBy] ?? Infinity;
         const nextOrder = next?.order?.[sortBy] ?? Infinity;
         return prevOrder - nextOrder;
