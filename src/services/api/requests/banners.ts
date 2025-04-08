@@ -1,3 +1,4 @@
+import { log } from "../../../controllers/Logger";
 import type { IBannerCMSConfig } from "../../../models/banners";
 import { http } from "../http";
 
