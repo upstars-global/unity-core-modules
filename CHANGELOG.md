@@ -1,3 +1,10 @@
+## [1.14.1](https://github.com/upstars-global/unity-core-modules/compare/v1.14.0...v1.14.1) (2025-04-08)
+
+### 🐛 Bug Fixes
+
+* UN-1078 fix sortBanners ([#146](https://github.com/upstars-global/unity-core-modules/issues/146))
+ ([06baacf](https://github.com/upstars-global/unity-core-modules/commit/06baacfdea916162151acd1a506e49b8cc75e855))
+
 ## [1.14.0](https://github.com/upstars-global/unity-core-modules/compare/v1.13.0...v1.14.0) (2025-04-07)
 
 ### 🚀 Features
