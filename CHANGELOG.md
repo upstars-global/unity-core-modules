@@ -1,3 +1,14 @@
+## [1.15.0](https://github.com/upstars-global/unity-core-modules/compare/v1.14.1...v1.15.0) (2025-04-09)
+
+### 🚀 Features
+
+* UN-984: add AutocompleteFormController ([#134](https://github.com/upstars-global/unity-core-modules/issues/134))
+ ([96ab5bf](https://github.com/upstars-global/unity-core-modules/commit/96ab5bf9147589a056b833091ec41f81af239edc))
+
+
+
+    * New feature: add AutocompleteFormController
+
 ## [1.14.1](https://github.com/upstars-global/unity-core-modules/compare/v1.14.0...v1.14.1) (2025-04-08)
 
 ### 🐛 Bug Fixes
