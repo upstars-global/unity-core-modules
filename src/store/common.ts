@@ -5,6 +5,7 @@ import { computed, ref } from "vue";
 
 import { isValidCurrency } from "../helpers/currencyOfCountry";
 import { getUserAgentPlatform, type IPlatformState } from "../helpers/userAgentPlatform";
+import { CurrencyData } from "../models/cashbox";
 import type { IPlayerFieldsInfo } from "../models/common";
 import type { IStagByReferName, ISurveyConfig } from "../models/configs";
 import { Currencies } from "../models/enums/currencies";
@@ -32,6 +33,7 @@ export const useCommon = defineStore("common", () => {
     const enableCurrencies = ref<string[]>(ENABLE_CURRENCIES);
     const playerFieldsInfo = ref<IPlayerFieldsInfo>();
     const excludedPromoStags = ref<string[]>([]);
+    const currencyConfig = ref<null | CurrencyData>(null);
 
     if (typeof window !== "undefined") {
         getUserAgentPlatform().then((platformData) => {
@@ -158,6 +160,10 @@ export const useCommon = defineStore("common", () => {
         cryptoExchangeRates.value = await loadCryptoExchangeRatesReq();
     }
 
+    function setCurrencyConfig(data: CurrencyData) {
+        currencyConfig.value = data;
+    }
+
     return {
         isMobile,
 
@@ -196,6 +202,9 @@ export const useCommon = defineStore("common", () => {
 
         excludedPromoStags,
         setExcludedPromoStags,
+
+        currencyConfig,
+        setCurrencyConfig,
     };
 });
 
