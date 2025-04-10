@@ -1,3 +1,41 @@
+## [1.15.0](https://github.com/upstars-global/unity-core-modules/compare/v1.14.1...v1.15.0) (2025-04-09)
+
+### 🚀 Features
+
+* UN-984: add AutocompleteFormController ([#134](https://github.com/upstars-global/unity-core-modules/issues/134))
+ ([96ab5bf](https://github.com/upstars-global/unity-core-modules/commit/96ab5bf9147589a056b833091ec41f81af239edc))
+
+
+
+    * New feature: add AutocompleteFormController
+
+## [1.14.1](https://github.com/upstars-global/unity-core-modules/compare/v1.14.0...v1.14.1) (2025-04-08)
+
+### 🐛 Bug Fixes
+
+* UN-1078 fix sortBanners ([#146](https://github.com/upstars-global/unity-core-modules/issues/146))
+ ([06baacf](https://github.com/upstars-global/unity-core-modules/commit/06baacfdea916162151acd1a506e49b8cc75e855))
+
+## [1.14.0](https://github.com/upstars-global/unity-core-modules/compare/v1.13.0...v1.14.0) (2025-04-07)
+
+### 🚀 Features
+
+* UN-1061 new banners in tournaments ([#141](https://github.com/upstars-global/unity-core-modules/issues/141))
+ ([0ef2f44](https://github.com/upstars-global/unity-core-modules/commit/0ef2f44940264d94c18ec44ebb743e9e27ad86fa))
+
+
+
+    * feat: UN-1061 new banners in tournaments
+
+## [1.13.0](https://github.com/upstars-global/unity-core-modules/compare/v1.12.2...v1.13.0) (2025-04-07)
+
+## [1.12.2](https://github.com/upstars-global/unity-core-modules/compare/v1.12.1...v1.12.2) (2025-04-04)
+
+### 🐛 Bug Fixes
+
+* UN-1063 "ua-parser-js" version rollback ([#142](https://github.com/upstars-global/unity-core-modules/issues/142))
+ ([5fbd565](https://github.com/upstars-global/unity-core-modules/commit/5fbd5653fe4491787ce2b24229409bc3207d706e))
+
 ## [1.12.1](https://github.com/upstars-global/unity-core-modules/compare/v1.12.0...v1.12.1) (2025-04-02)
 
 ### 🐛 Bug Fixes
