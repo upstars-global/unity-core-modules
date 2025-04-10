@@ -1,3 +1,26 @@
+## [1.16.0](https://github.com/upstars-global/unity-core-modules/compare/v1.15.0...v1.16.0) (2025-04-10)
+
+### 🚀 Features
+
+* **UN-763:** cashbox amount change logic ([#127](https://github.com/upstars-global/unity-core-modules/issues/127))
+ ([2d39a11](https://github.com/upstars-global/unity-core-modules/commit/2d39a11781da2e8722643e1789a79050e2807ebd))
+
+
+
+    * feat: UN-763: add currency config for deposit buttons
+
+    * update currency codes
+
+    * fix: UN-1015
+
+    * fix: max value
+
+    * fix down calculation
+
+    * fix min value
+
+    * fix
+
 ## [1.15.0](https://github.com/upstars-global/unity-core-modules/compare/v1.14.1...v1.15.0) (2025-04-09)
 
 ### 🚀 Features
