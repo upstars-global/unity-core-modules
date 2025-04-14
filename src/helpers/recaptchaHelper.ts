@@ -3,10 +3,17 @@ import { load } from "recaptcha-v3";
 
 import { useUserInfo } from "../store/user/userInfo";
 
-export async function generateCaptcha(recaptchaAction) {
+let countRetries = 0;
+
+export async function generateCaptcha(recaptchaAction: string) {
+    countRetries++;
     const { getSettings } = storeToRefs(useUserInfo());
+    if (countRetries >= 5) {
+        return;
+    }
+
     if (!getSettings.value?.recaptcha) {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 500));
         return generateCaptcha(recaptchaAction);
     }
     try {
