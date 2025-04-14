@@ -1,3 +1,18 @@
+## [1.16.1](https://github.com/upstars-global/unity-core-modules/compare/v1.16.0...v1.16.1) (2025-04-14)
+
+### 🐛 Bug Fixes
+
+* (UN-1098): Limit retries in captcha generation to prevent infinite loops ([#149](https://github.com/upstars-global/unity-core-modules/issues/149))
+ ([d839202](https://github.com/upstars-global/unity-core-modules/commit/d8392025c381d52860350ed6201db75c18612988))
+
+
+
+    Limit retries in captcha generation to prevent infinite loops
+
+    Added a retry counter to cap recursion at 5 attempts in `generateCaptcha`. Also adjusted the timeout duration to 500ms for efficiency. This prevents potential infinite loops and improves error handling.
+
+    Co-authored-by: d-tashchi <kabak133@gmail.com>
+
 ## [1.16.0](https://github.com/upstars-global/unity-core-modules/compare/v1.15.0...v1.16.0) (2025-04-10)
 
 ### 🚀 Features
