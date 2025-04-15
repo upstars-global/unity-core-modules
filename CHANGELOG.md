@@ -1,3 +1,10 @@
+## [1.16.2](https://github.com/upstars-global/unity-core-modules/compare/v1.16.1...v1.16.2) (2025-04-15)
+
+### 🐛 Bug Fixes
+
+* UN-1080 import log ([#147](https://github.com/upstars-global/unity-core-modules/issues/147))
+ ([9b609e5](https://github.com/upstars-global/unity-core-modules/commit/9b609e5358c291061cb007799103c110218fa3e7))
+
 ## [1.16.1](https://github.com/upstars-global/unity-core-modules/compare/v1.16.0...v1.16.1) (2025-04-14)
 
 ### 🐛 Bug Fixes
