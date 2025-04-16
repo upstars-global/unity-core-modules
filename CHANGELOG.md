@@ -1,3 +1,10 @@
+## [1.17.0](https://github.com/upstars-global/unity-core-modules/compare/v1.16.2...v1.17.0) (2025-04-16)
+
+### 🚀 Features
+
+* UN-921 add static page category ([#148](https://github.com/upstars-global/unity-core-modules/issues/148))
+ ([7b60456](https://github.com/upstars-global/unity-core-modules/commit/7b6045625c94107c40bd2564cbb9e69ef3883774))
+
 ## [1.16.2](https://github.com/upstars-global/unity-core-modules/compare/v1.16.1...v1.16.2) (2025-04-15)
 
 ### 🐛 Bug Fixes
