@@ -6,15 +6,9 @@ import bodyDisableScroll from "../helpers/bodyDisableScroll";
 import type { IModalOptions } from "../models/modalOptions";
 import { EventBus as bus } from "../plugins/EventBus";
 
-type IFormInputsData = Record<string, string>;
-
 export const useUIStore = defineStore("UI", () => {
     const showModal = ref<boolean>(false);
     const modals = ref<IModalOptions[]>([]);
-    const formsInputs = ref<IFormInputsData>({
-        login: "",
-        password: "",
-    });
 
     const colorTheme = ref<string>(config.theme);
     const isThemeDark = ref<boolean>(colorTheme.value === "theme-dark");
@@ -54,15 +48,6 @@ export const useUIStore = defineStore("UI", () => {
         bus.$emit("modal.closed", name, { ...args });
     }
 
-    function setNewDataToFormInputs(fieldData: IFormInputsData) {
-        formsInputs.value = {
-            ...formsInputs.value,
-            ...fieldData,
-        };
-    }
-
-    const getFormInputs = (key: string) => formsInputs.value[key];
-
     return {
         colorTheme,
         modals,
@@ -72,8 +57,5 @@ export const useUIStore = defineStore("UI", () => {
 
         setShowModal,
         closeModal,
-        setNewDataToFormInputs,
-
-        getFormInputs,
     };
 });
