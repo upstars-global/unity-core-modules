@@ -1,3 +1,10 @@
+## [1.17.1](https://github.com/upstars-global/unity-core-modules/compare/v1.17.0...v1.17.1) (2025-04-22)
+
+### 🐛 Bug Fixes
+
+* UN-1111 fix checkHasAvailableCards ([#152](https://github.com/upstars-global/unity-core-modules/issues/152))
+ ([89ee56c](https://github.com/upstars-global/unity-core-modules/commit/89ee56ceab06b138b9338cd8c0d4a055642695a5))
+
 ## [1.17.0](https://github.com/upstars-global/unity-core-modules/compare/v1.16.2...v1.17.0) (2025-04-16)
 
 ### 🚀 Features
