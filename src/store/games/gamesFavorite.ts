@@ -41,7 +41,7 @@ export const useGamesFavorite = defineStore("gamesFavorite", () => {
 
     async function addGameToFavorites(idGame: number): Promise<void> {
         try {
-            await http({ auth: true }).put(`/api/player/favorite_games/${idGame}`);
+            await http({ auth: true }).put(`/api/player/favorite_games/${ idGame }`);
             await loadFavoriteGames();
         } catch (err) {
             log.error("ADD_GAME_TO_FAVORITES_ERROR", err);
@@ -51,7 +51,7 @@ export const useGamesFavorite = defineStore("gamesFavorite", () => {
 
     async function deleteGameFromFavorites(idGame: number) {
         try {
-            await http().delete(`/api/player/favorite_games/${idGame}`);
+            await http().delete(`/api/player/favorite_games/${ idGame }`);
 
             favoritesId.value = favoritesId.value.filter((idFavorite) => idFavorite !== idGame);
             gamesFavoriteFullData.value = gamesFavoriteFullData.value.filter((gameFavorite) => {
@@ -73,6 +73,7 @@ export const useGamesFavorite = defineStore("gamesFavorite", () => {
     return {
         gamesFavoriteID,
         gamesFavoriteFullData,
+        favoritesId,
 
         getGamesFavoriteFullData,
 
