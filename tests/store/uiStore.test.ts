@@ -30,8 +30,6 @@ describe("useUIStore", () => {
         expect(store.modals).toEqual([]);
         expect(store.isThemeDark).toBeDefined();
         expect(store.colorTheme).toBeDefined();
-        expect(store.getFormInputs("login")).toBe("");
-        expect(store.getFormInputs("password")).toBe("");
     });
 
     it("should open a modal and call bodyDisableScroll", () => {
@@ -77,15 +75,6 @@ describe("useUIStore", () => {
         store.closeModal({ name: "testModal", immediate: true });
 
         expect(store.showModal).toBe(false);
-    });
-
-    it("should update form inputs correctly", () => {
-        const store = useUIStore();
-
-        store.setNewDataToFormInputs({ login: "user123", password: "securePass" });
-
-        expect(store.getFormInputs("login")).toBe("user123");
-        expect(store.getFormInputs("password")).toBe("securePass");
     });
 
     it("should update theme correctly", () => {

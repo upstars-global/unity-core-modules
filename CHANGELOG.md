@@ -1,3 +1,14 @@
+## [1.18.0](https://github.com/upstars-global/unity-core-modules/compare/v1.17.1...v1.18.0) (2025-04-23)
+
+### 🔨 Refactoring
+
+* remove deprecated autocomplete from useUIStore
+ ([2e7e6b9](https://github.com/upstars-global/unity-core-modules/commit/2e7e6b9953a284c72acc3eca7413d96fd7e692dd))
+
+
+
+    remove deprecated autocomplete from useUIStore
+
 ## [1.17.1](https://github.com/upstars-global/unity-core-modules/compare/v1.17.0...v1.17.1) (2025-04-22)
 
 ### 🐛 Bug Fixes
