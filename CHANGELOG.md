@@ -1,3 +1,10 @@
+## [1.19.0](https://github.com/upstars-global/unity-core-modules/compare/v1.18.0...v1.19.0) (2025-04-25)
+
+### 🚀 Features
+
+* **UN-920:** add groupIds property to IBannerConfig interface ([#155](https://github.com/upstars-global/unity-core-modules/issues/155))
+ ([7f63c8b](https://github.com/upstars-global/unity-core-modules/commit/7f63c8b0dfc0b1bd67d390d8eeac27960728409d))
+
 ## [1.18.0](https://github.com/upstars-global/unity-core-modules/compare/v1.17.1...v1.18.0) (2025-04-23)
 
 ### 🔨 Refactoring
