@@ -1,3 +1,16 @@
+## [1.20.0](https://github.com/upstars-global/unity-core-modules/compare/v1.19.0...v1.20.0) (2025-04-25)
+
+### 🧪 Testing
+
+* UN-362: Add unit tests for environments store and fetch service ([#153](https://github.com/upstars-global/unity-core-modules/issues/153))
+ ([f1c1035](https://github.com/upstars-global/unity-core-modules/commit/f1c1035e754e8f127e3e069d5a8aee890e50cd40))
+
+
+
+    UN-362: Add unit tests for environments store and fetch service
+
+    Introduce comprehensive tests for the `useEnvironments` store and `useEnvironmentsFetchService`, covering default values, computed properties, and service methods. These tests ensure correct initialization, environment handling, and proper functioning of store-related services.
+
 ## [1.19.0](https://github.com/upstars-global/unity-core-modules/compare/v1.18.0...v1.19.0) (2025-04-25)
 
 ### 🚀 Features
