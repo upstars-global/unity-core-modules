@@ -2,7 +2,6 @@ import getQuestConfig, { DEFAULT_QUEST_SIZE } from "@config/quest";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
-import { wait } from "../../helpers/functionsHelper";
 import { promoFilterAndSettings } from "../../helpers/promoHelpers";
 import { findNextLevelData, getCurrentLevelData, isQuest, questSizeById, questSlugById } from "../../helpers/questHelpers";
 import { PromoType } from "../../models/enums/tournaments";
@@ -10,6 +9,7 @@ import type { ICurrentUserQuestsStatus, IQuestData, IQuestItem, IUserStatusQuest
 import type { ITournamentsList } from "../../services/api/DTO/tournamentsDTO";
 import { loadQuestDataReq } from "../../services/api/requests/tournaments";
 import { useUserInfo } from "../user/userInfo";
+import { questMock } from "./questMock";
 
 function promoFilterAndSettingsOneItem(item, type) {
     const [ result ] = promoFilterAndSettings([ item ], type);
@@ -21,17 +21,10 @@ export const useQuestStore = defineStore("questStore", () => {
     const questsList = ref<IQuestItem[]>([]);
     const currentUserQuestsStatuses = ref<ICurrentUserQuestsStatus[]>([]);
     const { getIsLogged } = storeToRefs(useUserInfo());
-    const openedQuestSlug = ref<string>("");
-
-    const questData = computed(() => {
-        return questsList.value.find((questItem) => questItem.frontend_identifier.includes(openedQuestSlug.value));
-    });
+    const questData = ref<IQuestData | null>(null);
 
     const getQuestData = computed(() => {
-        if (questData.value) {
-            questData.value.group_ids = [];
-        }
-        if (questData.value && questData.value.id) {
+        if (questData.value?.id) {
             return promoFilterAndSettingsOneItem(questData.value, PromoType.QUEST);
         }
 
@@ -161,46 +154,48 @@ export const useQuestStore = defineStore("questStore", () => {
 
     function setQuestsList(newList: IQuestItem[] = []) {
         let newQuestsList = [] as IQuestItem[];
-        if (questsList.value) {
-            newQuestsList = [
-                ...questsList.value.filter(({ id }) => {
-                    return !newList.some(({ id: newID }) => {
-                        return newID === id;
-                    });
-                }),
-                ...newList,
-            ].map((quest) => {
-                quest.questSize = questSizeById(quest.frontend_identifier) || DEFAULT_QUEST_SIZE;
-                quest.questSlug = questSlugById(quest.frontend_identifier);
 
-                return quest;
-            });
-        }
+        newQuestsList = [
+            ...questsList.value.filter(({ id }) => {
+                return !newList.some(({ id: newID }) => {
+                    return newID === id;
+                });
+            }),
+            ...newList,
+        ].map((quest) => {
+            quest.questSize = questSizeById(quest.frontend_identifier) || DEFAULT_QUEST_SIZE;
+            quest.questSlug = questSlugById(quest.frontend_identifier);
+
+            return quest;
+        });
 
         questsList.value = newQuestsList;
     }
 
-    function setCurrentQuestFromList(slug: string) {
+    function setCurrentQuestFromList(slug: string, priorityId?: number | null) {
         if (questsList.value) {
-            // @ts-expect-error Cannot assign to 'value' because it is a read-only property.
-            questData.value = questsList.value.find(({ frontend_identifier: frontId }) => {
-                return frontId.includes(slug);
-            }) || {} as IQuestData;
+            if (priorityId) {
+                questData.value = questsList.value.find(({ frontend_identifier: frontId, group_ids }) => {
+                    return frontId.includes(slug) && group_ids.includes(priorityId);
+                });
+            } else {
+                questData.value = questsList.value.find(({ frontend_identifier: frontId }) => {
+                    return frontId.includes(slug);
+                });
+            }
         }
     }
 
     async function loadQuestsData(tournamentsList: ITournamentsList) {
-        if (!tournamentsList.length) {
-            await wait(200);
-            loadQuestsData(tournamentsList);
-            return;
-        }
-        const filteredQuestsList = [ ...tournamentsList ].filter(({ frontend_identifier: frontId }) => {
+        const filteredQuestsList = [ ...tournamentsList, ...questMock ].filter(({ frontend_identifier: frontId }) => {
             return isQuest(frontId);
         });
+
         // @ts-expect-error missing properties
         setQuestsList(filteredQuestsList);
+
         if (getIsLogged.value) {
+            // @ts-expect-error missing properties
             const statuses = await loadQuestDataReq(filteredQuestsList) || [];
             setNewStatusesUserQuest(statuses);
         }
