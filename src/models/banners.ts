@@ -1,3 +1,5 @@
+import { type UserGroup } from "./user";
+
 export interface IBannerConfig {
     categories: string[];
     url: string;
@@ -37,6 +39,7 @@ export interface IBannerConfig {
     order: Record<string, number>,
     image: string;
     frontend_identifier: string;
+    groupIds?: UserGroup[]
 }
 
 export interface IViewedGTMBanners {
