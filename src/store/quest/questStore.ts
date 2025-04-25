@@ -177,11 +177,11 @@ export const useQuestStore = defineStore("questStore", () => {
             if (priorityId) {
                 questData.value = questsList.value.find(({ frontend_identifier: frontId, group_ids }) => {
                     return frontId.includes(slug) && group_ids.includes(priorityId);
-                });
+                }) || {} as IQuestData;
             } else {
                 questData.value = questsList.value.find(({ frontend_identifier: frontId }) => {
                     return frontId.includes(slug);
-                });
+                }) || {} as IQuestData;
             }
         }
     }
