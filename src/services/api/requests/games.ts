@@ -2,8 +2,14 @@ import type { SlugCategoriesGames } from "@theme/configs/categoryesGames";
 
 import { log } from "../../../controllers/Logger";
 import type { IGame } from "../../../models/game";
-import { useGamesCommon } from "../../../store/games/gamesStore";
-import { IGameCollection, IGameFilterResponse, IJackpots, IPlayedGame } from "../DTO/gamesDTO";
+import {
+    AcceptGamesVersion,
+    IGameCollection,
+    IGameFilterResponse,
+    IJackpots,
+    IPlayedGame,
+    ResponseGamesByVersion,
+} from "../DTO/gamesDTO";
 import { http } from "../http";
 
 export async function loadGamesJackpots(): Promise<IJackpots> {
@@ -64,5 +70,33 @@ export async function loadCategoriesFileConfigRequest() {
     } catch (err) {
         log.error("LOAD_CATEGORIES_PAGE_FILE_CONFIG_ERROR", err);
         throw err;
+    }
+}
+
+export async function fetchFavoriteGames<V extends AcceptGamesVersion>(version: V): Promise<ResponseGamesByVersion<V>> {
+    try {
+        const headers = { "accept-client": version } as const;
+        const { data } = await http({ headers })
+            .get<ResponseGamesByVersion<V>>("/api/player/favorite_games");
+        return data;
+    } catch (err) {
+        log.error("FETCH_FAVORITE_GAMES_ERROR", err);
+        throw err;
+    }
+}
+
+export async function fetchAddFavoriteGamesCount(idGame: number): Promise<void> {
+    try {
+        return await http({ auth: true }).put(`/api/player/favorite_games/${ idGame }`);
+    } catch (err) {
+        log.error("FETCH_FAVORITE_GAMES_COUNT_ERROR", err);
+    }
+}
+
+export async function fetchDeleteGameFromFavorites(idGame: number): Promise<void> {
+    try {
+        return await http({ auth: true }).put(`/api/player/favorite_games/${ idGame }`);
+    } catch (err) {
+        log.error("FETCH_DELETE_GAME_FROM_FAVORITES_ERROR", err);
     }
 }
