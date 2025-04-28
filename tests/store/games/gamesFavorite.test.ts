@@ -1,229 +1,149 @@
-import { type AxiosInstance } from "axios";
 import { createPinia, setActivePinia } from "pinia";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
 import { log } from "../../../src/controllers/Logger";
-import { type IGameItem, processGame } from "../../../src/helpers/gameHelpers";
-import { http } from "../../../src/services/api/http";
+import { IGameItem, processGame } from "../../../src/helpers/gameHelpers";
+import { IGame } from "../../../src/models/game";
+import { AcceptsGamesVariants } from "../../../src/services/api/DTO/gamesDTO";
+import {
+    fetchAddFavoriteGamesCount,
+    fetchDeleteGameFromFavorites,
+    fetchFavoriteGames,
+} from "../../../src/services/api/requests/games";
 import { useGamesFavorite } from "../../../src/store/games/gamesFavorite";
 
-
-const MOCK_FAVORITE_GAME_ID = 123;
-const MOCK_GAMES_ID = [ 101, 102 ];
-
-
-// Mock dependencies
-vi.mock("../../../src/services/api/http", () => ({
-    http: vi.fn((config) => ({
-        get: vi.fn(),
-        put: vi.fn(),
-        delete: vi.fn(),
-        config,
-    })),
-}));
-
 vi.mock("../../../src/controllers/Logger", () => ({
-    log: {
-        error: vi.fn(),
-    },
+    log: { error: vi.fn() },
 }));
-
 vi.mock("../../../src/helpers/gameHelpers", () => ({
     processGame: vi.fn((game, id) => ({ ...game, processed: true, id })),
 }));
+vi.mock("../../../src/services/api/requests/games", () => ({
+    fetchFavoriteGames: vi.fn(),
+    fetchAddFavoriteGamesCount: vi.fn(),
+    fetchDeleteGameFromFavorites: vi.fn(),
+}));
+
+
+const mockFetchFavorite = vi.mocked(fetchFavoriteGames);
+const mockFetchAddFavorite = vi.mocked(fetchAddFavoriteGamesCount);
+const mockFetchDelFavorite = vi.mocked(fetchDeleteGameFromFavorites);
 
 describe("useGamesFavorite", () => {
-    const mockHttp = {
-        get: vi.fn(),
-        put: vi.fn(),
-        delete: vi.fn(),
-        config: undefined,
-    };
+    const MOCK_ID = 123;
+    const MOCK_IDS = [ 101, 102 ];
+    const MOCK_FULL = [
+        { identifier: "game1", title: "Game 1" } as IGame,
+        { identifier: "game2", title: "Game 2" } as IGame,
+    ];
 
     beforeEach(() => {
         setActivePinia(createPinia());
         vi.clearAllMocks();
-
-        // Reset mock implementation for http
-        (http as unknown as ReturnType<typeof vi.fn>).mockImplementation((config) => {
-            mockHttp.config = config;
-            return mockHttp;
-        });
     });
 
     it("should initialize with default values", () => {
         const store = useGamesFavorite();
-
-        expect(store.gamesFavoriteID).toEqual([]);
+        expect(store.favoritesId).toEqual([]);
         expect(store.gamesFavoriteFullData).toEqual([]);
+        expect(store.gamesFavoriteID).toEqual([]);
         expect(store.getGamesFavoriteFullData).toEqual([]);
     });
 
     it("should load favorite games successfully", async () => {
-        const mockGamesFullData = {
-            data: [
-                { identifier: "game1", title: "Game 1" },
-                { identifier: "game2", title: "Game 2" },
-            ],
-        };
-
-        const mockGamesID = {
-            data: MOCK_GAMES_ID,
-        };
-
-        mockHttp.get.mockImplementation(async (url) => {
-            if (url === "/api/player/favorite_games") {
-                // Return different responses based on headers
-                const headers = mockHttp.config?.headers;
-                if (headers?.["accept-client"] === "application/vnd.s.v2+json") {
-                    return mockGamesFullData;
-                } else if (headers?.["accept-client"] === "application/vnd.s.v1+json") {
-                    return mockGamesID;
-                }
-            }
-            return { data: [] };
-        });
+        mockFetchFavorite
+            .mockResolvedValueOnce(MOCK_FULL) // fullData
+            .mockResolvedValueOnce(MOCK_IDS); // onlyID
 
         const store = useGamesFavorite();
         await store.loadFavoriteGames();
 
-        // Verify http was called with correct parameters
-        expect(http).toHaveBeenCalledWith({
-            headers: { "accept-client": "application/vnd.s.v2+json" },
-        });
-        expect(mockHttp.get).toHaveBeenCalledWith("/api/player/favorite_games");
-
-        // Verify state was updated correctly
-        expect(store.gamesFavoriteID).toEqual(MOCK_GAMES_ID.reverse());
+        expect(mockFetchFavorite).toHaveBeenCalledWith(AcceptsGamesVariants.fullData);
+        expect(mockFetchFavorite).toHaveBeenCalledWith(AcceptsGamesVariants.onlyID);
         expect(processGame).toHaveBeenCalledTimes(2);
-        expect(processGame).toHaveBeenCalledWith(
-            { identifier: "game1", title: "Game 1" },
-            "game1",
-        );
+        expect(store.favoritesId).toEqual(MOCK_IDS);
+        expect(store.gamesFavoriteFullData).toEqual([
+            { ...MOCK_FULL[0], processed: true, id: "game1" },
+            { ...MOCK_FULL[1], processed: true, id: "game2" },
+        ]);
     });
 
     it("should handle error when loading favorite games", async () => {
         const error = new Error("API error");
-        mockHttp.get.mockRejectedValue(error);
+        mockFetchFavorite.mockRejectedValue(error);
 
         const store = useGamesFavorite();
-
-        await expect(store.loadFavoriteGames()).rejects.toThrow("API error");
+        await expect(store.loadFavoriteGames()).rejects.toThrow(error);
         expect(log.error).toHaveBeenCalledWith("LOAD_FAVORITE_GAMES_ERROR", error);
     });
 
     it("should add game to favorites successfully", async () => {
-        // Создаем мок-объект с методом get, который возвращает разные значения
-        const mockHttpClient = {
-            get: vi.fn(async (url) => {
-                return { data: [ MOCK_FAVORITE_GAME_ID ] };
-            }),
-            put: vi.fn().mockResolvedValue({}),
-        } as Partial<AxiosInstance>;
-
-        // Мокаем http чтобы он возвращал наш mockHttpClient
-        vi.mocked(http).mockImplementation(() => mockHttpClient as AxiosInstance);
+        mockFetchAddFavorite.mockResolvedValue(undefined);
+        mockFetchFavorite
+            .mockResolvedValueOnce(MOCK_FULL)
+            .mockResolvedValueOnce([ MOCK_ID ]);
 
         const store = useGamesFavorite();
-        await store.addGameToFavorites(MOCK_FAVORITE_GAME_ID);
+        await store.addGameToFavorites(MOCK_ID);
 
-        // Проверяем вызов PUT запроса
-        expect(mockHttpClient.put).toHaveBeenCalledWith(`/api/player/favorite_games/${ MOCK_FAVORITE_GAME_ID }`);
-
-        // Добавляем небольшую задержку, чтобы дать время на обновление store
-        await new Promise((resolve) => setTimeout(resolve, 0));
-
-        // Проверяем состояние store
-        expect(store.favoritesId).toEqual([ MOCK_FAVORITE_GAME_ID ]);
+        expect(mockFetchAddFavorite).toHaveBeenCalledWith(MOCK_ID);
+        expect(mockFetchFavorite).toHaveBeenCalledTimes(2);
+        expect(store.favoritesId).toEqual([ MOCK_ID ]);
     });
 
     it("should handle error when adding game to favorites", async () => {
         const error = new Error("API error");
-        mockHttp.put.mockRejectedValue(error);
+        mockFetchAddFavorite.mockRejectedValue(error);
 
         const store = useGamesFavorite();
-
-        await expect(store.addGameToFavorites(MOCK_FAVORITE_GAME_ID)).rejects.toThrow("API error");
-        expect(log.error).toHaveBeenCalledWith("ADD_GAME_TO_FAVORITES_ERROR", error);
+        await expect(store.addGameToFavorites(MOCK_ID)).rejects.toThrow(error);
+        expect(mockFetchAddFavorite).toHaveBeenCalledWith(MOCK_ID);
     });
 
     it("should delete game from favorites successfully", async () => {
-        mockHttp.delete.mockResolvedValue({});
+        mockFetchDelFavorite.mockResolvedValue(undefined);
 
         const store = useGamesFavorite();
-
-        type MinimalGameItem = {
-            currencies: {
-                [key: string]: {
-                    id: number
-                }
-            }
-        };
-
-        // Set the initial state
+        store.favoritesId = [ MOCK_ID, 102 ];
         store.gamesFavoriteFullData = [
-            {
-                id: "game1",
-                currencies: {
-                    USD: { id: MOCK_FAVORITE_GAME_ID },
-                    EUR: { id: 102 },
-                    UAH: { id: 102 },
-                },
-            } as MinimalGameItem ] as unknown as IGameItem[];
+            { currencies: { USD: { id: MOCK_ID }, EUR: { id: 999 } } },
+        ] as unknown as IGameItem[];
 
-        store.favoritesId = [ MOCK_FAVORITE_GAME_ID, 102, 103 ];
+        await store.deleteGameFromFavorites(MOCK_ID);
 
-        await store.deleteGameFromFavorites(MOCK_FAVORITE_GAME_ID);
-
-        expect(http).toHaveBeenCalled();
-        expect(mockHttp.delete).toHaveBeenCalledWith(`/api/player/favorite_games/${ MOCK_FAVORITE_GAME_ID }`);
-
-        // Verify the state was updated correctly
-        expect(store.favoritesId).toEqual([ 102, 103 ]);
+        expect(mockFetchDelFavorite).toHaveBeenCalledWith(MOCK_ID);
+        expect(store.favoritesId).toEqual([ 102 ]);
         expect(store.gamesFavoriteFullData).toEqual([]);
     });
 
     it("should handle error when deleting game from favorites", async () => {
         const error = new Error("API error");
-        mockHttp.delete.mockRejectedValue(error);
+        mockFetchDelFavorite.mockRejectedValue(error);
 
         const store = useGamesFavorite();
-
-        await expect(store.deleteGameFromFavorites(101)).rejects.toThrow("API error");
-        expect(log.error).toHaveBeenCalledWith("DELETE_GAME_FROM_FAVORITES_ERROR", error);
+        await expect(store.deleteGameFromFavorites(MOCK_ID)).rejects.toThrow(error);
+        expect(mockFetchDelFavorite).toHaveBeenCalledWith(MOCK_ID);
     });
 
     it("should clear user data", () => {
         const store = useGamesFavorite();
-
-        // Set initial state
-        store.gamesFavoriteFullData = [ { id: "game1" } ] as IGameItem[];
-        store.favoritesId = MOCK_GAMES_ID;
+        store.favoritesId = [ 1 ];
+        store.gamesFavoriteFullData = [ { identifier: "game1", currencies: {} } ] as IGameItem[];
 
         store.clearUserData();
-
         expect(store.favoritesId).toEqual([]);
         expect(store.gamesFavoriteFullData).toEqual([]);
     });
 
     it("should return reversed favorites IDs", () => {
         const store = useGamesFavorite();
+        store.favoritesId = [ 1, 2 ];
+        store.gamesFavoriteFullData = [ { identifier: "a" }, { identifier: "b" } ] as IGameItem[];
 
-        store.favoritesId = MOCK_GAMES_ID;
-        expect(store.gamesFavoriteID).toEqual(MOCK_GAMES_ID.reverse());
-    });
-
-    it("should return reversed full game data", () => {
-        const store = useGamesFavorite();
-
-        store.gamesFavoriteFullData = [
-            { id: "game1" },
-            { id: "game2" },
-        ] as IGameItem[];
-
+        expect(store.gamesFavoriteID).toEqual([ 2, 1 ]);
         expect(store.getGamesFavoriteFullData).toEqual([
-            { id: "game2" },
-            { id: "game1" },
+            { identifier: "b" },
+            { identifier: "a" },
         ]);
     });
 });
