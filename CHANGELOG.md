@@ -1,3 +1,24 @@
+## [1.21.0](https://github.com/upstars-global/unity-core-modules/compare/v1.20.0...v1.21.0) (2025-04-28)
+
+### 🧪 Testing
+
+* UN-833 Add tests for gamesFavorite store and improve code form… ([#154](https://github.com/upstars-global/unity-core-modules/issues/154))
+ ([83922a2](https://github.com/upstars-global/unity-core-modules/commit/83922a2035d6ffd8f1fa06ec32cbd040c5632630))
+
+
+
+    * tests: UN-833 Add tests for gamesFavorite store and improve code formatting
+
+    Implemented unit tests for gamesFavorite store to ensure functionality of main actions such as loading, adding, and deleting favorite games. Refactored and standardized header and code formatting for consistency.
+
+    * Refactor favorite games API calls and optimize logic
+
+    Replaced direct HTTP calls with dedicated functions (fetchFavoriteGames, fetchAddFavoriteGamesCount, fetchDeleteGameFromFavorites) for better reusability. Simplified and optimized the favorite games store logic. Introduced type safety for game versions with `AcceptsGamesVariants` and improved maintainability.
+
+    * Refactor favorite games store and unit tests
+
+    Replaced direct HTTP mocks with specific API request mocks for better modularity and readability. Streamlined data setup in tests and updated store logic for clarity and consistency. Improved error handling and removed redundant legacy code.
+
 ## [1.20.0](https://github.com/upstars-global/unity-core-modules/compare/v1.19.0...v1.20.0) (2025-04-25)
 
 ### 🧪 Testing
