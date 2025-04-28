@@ -1,3 +1,41 @@
+## [1.20.0](https://github.com/upstars-global/unity-core-modules/compare/v1.19.0...v1.20.0) (2025-04-25)
+
+### 🧪 Testing
+
+* UN-362: Add unit tests for environments store and fetch service ([#153](https://github.com/upstars-global/unity-core-modules/issues/153))
+ ([f1c1035](https://github.com/upstars-global/unity-core-modules/commit/f1c1035e754e8f127e3e069d5a8aee890e50cd40))
+
+
+
+    UN-362: Add unit tests for environments store and fetch service
+
+    Introduce comprehensive tests for the `useEnvironments` store and `useEnvironmentsFetchService`, covering default values, computed properties, and service methods. These tests ensure correct initialization, environment handling, and proper functioning of store-related services.
+
+## [1.19.0](https://github.com/upstars-global/unity-core-modules/compare/v1.18.0...v1.19.0) (2025-04-25)
+
+### 🚀 Features
+
+* **UN-920:** add groupIds property to IBannerConfig interface ([#155](https://github.com/upstars-global/unity-core-modules/issues/155))
+ ([7f63c8b](https://github.com/upstars-global/unity-core-modules/commit/7f63c8b0dfc0b1bd67d390d8eeac27960728409d))
+
+## [1.18.0](https://github.com/upstars-global/unity-core-modules/compare/v1.17.1...v1.18.0) (2025-04-23)
+
+### 🔨 Refactoring
+
+* remove deprecated autocomplete from useUIStore
+ ([2e7e6b9](https://github.com/upstars-global/unity-core-modules/commit/2e7e6b9953a284c72acc3eca7413d96fd7e692dd))
+
+
+
+    remove deprecated autocomplete from useUIStore
+
+## [1.17.1](https://github.com/upstars-global/unity-core-modules/compare/v1.17.0...v1.17.1) (2025-04-22)
+
+### 🐛 Bug Fixes
+
+* UN-1111 fix checkHasAvailableCards ([#152](https://github.com/upstars-global/unity-core-modules/issues/152))
+ ([89ee56c](https://github.com/upstars-global/unity-core-modules/commit/89ee56ceab06b138b9338cd8c0d4a055642695a5))
+
 ## [1.17.0](https://github.com/upstars-global/unity-core-modules/compare/v1.16.2...v1.17.0) (2025-04-16)
 
 ### 🚀 Features

@@ -19,9 +19,12 @@ function checkHasAvailableCards(list: IRedeemableCards[], isLogged: boolean, bal
     }
 
     return list.some((card) => {
-        const points = card.type === CompPointRatesTypes.MONEY ?
-            card.rates.find((item) => item.currency === currency).points :
-            card.rate.points;
+        let points = card.rate?.points;
+
+        if (card.type === CompPointRatesTypes.MONEY) {
+            points = card.rates.find((item) => item.currency === currency)?.points ||
+                card.rates.find((item) => item.currency === Currencies.EUR)?.points;
+        }
 
         return balance >= points;
     });
