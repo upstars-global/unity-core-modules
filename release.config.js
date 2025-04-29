@@ -18,16 +18,19 @@ export default {
     plugins: [
         [ "@semantic-release/commit-analyzer", {
             releaseRules: [
-                { type: "revert", release: "patch" },
+                { type: "feat", release: "minor" },
+
                 { type: "fix", release: "patch" },
                 { type: "perf", release: "patch" },
-                { type: "feat", release: "minor" },
-                { type: "minor", release: "minor" },
-                { type: "refactor", release: "minor" },
-                { type: "style", release: "minor" },
-                { type: "docs", release: "minor" },
-                { type: "test", release: "minor" },
-                { type: "chore", release: "minor" },
+                { type: "refactor", release: "patch" },
+                { type: "revert", release: "patch" },
+                { type: "chore", release: "patch" },
+                { type: "test", release: "patch" },
+
+                { type: "style", release: false },
+                { type: "docs", release: false },
+                { type: "test", release: false },
+
                 { breaking: true, release: "major" },
                 { type: "BREAKING CHANGE", release: "major" },
             ],
