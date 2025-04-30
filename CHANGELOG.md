@@ -1,3 +1,14 @@
+## [1.21.1](https://github.com/upstars-global/unity-core-modules/compare/v1.21.0...v1.21.1) (2025-04-30)
+
+### 🔨 Refactoring
+
+* release config and add semantic-release docs ([#158](https://github.com/upstars-global/unity-core-modules/issues/158))
+ ([b571504](https://github.com/upstars-global/unity-core-modules/commit/b571504fdbc862daf655d7b3dffb47b36cb71e0e))
+
+
+
+    Updated `release.config.js` for consistent style and refined release rules, aligning with best practices. Added `semantic-release.md` to document commit message conventions for semantic release automation.
+
 ## [1.21.0](https://github.com/upstars-global/unity-core-modules/compare/v1.20.0...v1.21.0) (2025-04-28)
 
 ### 🧪 Testing
