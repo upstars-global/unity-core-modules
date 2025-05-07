@@ -19,5 +19,6 @@ export async function sendPWAEvent(event: PWAEvent) {
     pwaStore.setIsPWA();
     if (pwaStore.isPWA && userStore.getIsLogged) {
         await sendPWAEventReq(event);
+        console.log("PWAEvent sent");
     }
 }
