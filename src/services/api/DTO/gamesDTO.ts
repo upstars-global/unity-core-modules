@@ -1,4 +1,4 @@
-import type { ICollectionItem } from "../../../models/game";
+import type { ICollectionItem, IGame } from "../../../models/game";
 
 export interface IJackpots {
     [currency: string]: {
@@ -52,3 +52,16 @@ export type IGameFilterResponse = IGameFilter | Record<string, unknown>;
 export interface ICollectionRecord {
     [slug: string]: ICollectionItem;
 }
+
+export const AcceptsGamesVariants = {
+    onlyID: "application/vnd.s.v1+json",
+    fullData: "application/vnd.s.v2+json",
+} as const;
+
+
+export type AcceptGamesVersion = typeof AcceptsGamesVariants[keyof typeof AcceptsGamesVariants];
+
+export type ResponseGamesByVersion<V extends AcceptGamesVersion> =
+    V extends typeof AcceptsGamesVariants.onlyID ? number[] :
+        V extends typeof AcceptsGamesVariants.fullData ? IGame[] :
+            never;

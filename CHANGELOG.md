@@ -1,3 +1,55 @@
+## [1.21.1](https://github.com/upstars-global/unity-core-modules/compare/v1.21.0...v1.21.1) (2025-04-30)
+
+### 🔨 Refactoring
+
+* release config and add semantic-release docs ([#158](https://github.com/upstars-global/unity-core-modules/issues/158))
+ ([b571504](https://github.com/upstars-global/unity-core-modules/commit/b571504fdbc862daf655d7b3dffb47b36cb71e0e))
+
+
+
+    Updated `release.config.js` for consistent style and refined release rules, aligning with best practices. Added `semantic-release.md` to document commit message conventions for semantic release automation.
+
+## [1.21.0](https://github.com/upstars-global/unity-core-modules/compare/v1.20.0...v1.21.0) (2025-04-28)
+
+### 🧪 Testing
+
+* UN-833 Add tests for gamesFavorite store and improve code form… ([#154](https://github.com/upstars-global/unity-core-modules/issues/154))
+ ([83922a2](https://github.com/upstars-global/unity-core-modules/commit/83922a2035d6ffd8f1fa06ec32cbd040c5632630))
+
+
+
+    * tests: UN-833 Add tests for gamesFavorite store and improve code formatting
+
+    Implemented unit tests for gamesFavorite store to ensure functionality of main actions such as loading, adding, and deleting favorite games. Refactored and standardized header and code formatting for consistency.
+
+    * Refactor favorite games API calls and optimize logic
+
+    Replaced direct HTTP calls with dedicated functions (fetchFavoriteGames, fetchAddFavoriteGamesCount, fetchDeleteGameFromFavorites) for better reusability. Simplified and optimized the favorite games store logic. Introduced type safety for game versions with `AcceptsGamesVariants` and improved maintainability.
+
+    * Refactor favorite games store and unit tests
+
+    Replaced direct HTTP mocks with specific API request mocks for better modularity and readability. Streamlined data setup in tests and updated store logic for clarity and consistency. Improved error handling and removed redundant legacy code.
+
+## [1.20.0](https://github.com/upstars-global/unity-core-modules/compare/v1.19.0...v1.20.0) (2025-04-25)
+
+### 🧪 Testing
+
+* UN-362: Add unit tests for environments store and fetch service ([#153](https://github.com/upstars-global/unity-core-modules/issues/153))
+ ([f1c1035](https://github.com/upstars-global/unity-core-modules/commit/f1c1035e754e8f127e3e069d5a8aee890e50cd40))
+
+
+
+    UN-362: Add unit tests for environments store and fetch service
+
+    Introduce comprehensive tests for the `useEnvironments` store and `useEnvironmentsFetchService`, covering default values, computed properties, and service methods. These tests ensure correct initialization, environment handling, and proper functioning of store-related services.
+
+## [1.19.0](https://github.com/upstars-global/unity-core-modules/compare/v1.18.0...v1.19.0) (2025-04-25)
+
+### 🚀 Features
+
+* **UN-920:** add groupIds property to IBannerConfig interface ([#155](https://github.com/upstars-global/unity-core-modules/issues/155))
+ ([7f63c8b](https://github.com/upstars-global/unity-core-modules/commit/7f63c8b0dfc0b1bd67d390d8eeac27960728409d))
+
 ## [1.18.0](https://github.com/upstars-global/unity-core-modules/compare/v1.17.1...v1.18.0) (2025-04-23)
 
 ### 🔨 Refactoring
