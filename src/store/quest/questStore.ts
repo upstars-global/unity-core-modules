@@ -105,6 +105,7 @@ export const useQuestStore = defineStore("questStore", () => {
         // @ts-expect-error Element implicitly has an 'any' type
         const currentLevelData = getListQuestsLevelPoint.value[id]?.[1];
         const userBetsInTargetQuest = getUserBetsInQuestById.value(id);
+
         return findNextLevelData(quest.questSize, currentLevelData, defaultCurrency, userBetsInTargetQuest);
     }
 
@@ -189,6 +190,7 @@ export const useQuestStore = defineStore("questStore", () => {
         if (getIsLogged.value) {
             // @ts-expect-error missing properties
             const statuses = await loadQuestDataReq(filteredQuestsList) || [];
+
             setNewStatusesUserQuest(statuses);
         }
     }
