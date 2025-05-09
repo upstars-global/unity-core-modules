@@ -20,7 +20,6 @@ import {
 } from "../../services/api/requests/tournaments";
 import { useBannerStore } from "../banners";
 import { useCMS } from "../CMS";
-import { useQuestStore } from "../quest/questStore";
 
 export const useTournamentsStore = defineStore("tournamentsStore", () => {
     const currentTournament = ref<Partial<ITournament> | null>(null);
@@ -174,10 +173,7 @@ export const useTournamentsStore = defineStore("tournamentsStore", () => {
     }
 
     async function loadCurrentUserTourStatuses(): Promise<void> {
-        const questStore = useQuestStore();
         const hasUserTourStatuses = Boolean(currentUserTournamentsStatuses.value.length);
-
-        await questStore.loadQuestsData(tournamentsList.value);
 
         const statuses = await Promise.all(getAllTournamentsOnlyUser.value.map((tourItem: ITournament) => {
             return loadUserStatusesReq(tourItem.id);
