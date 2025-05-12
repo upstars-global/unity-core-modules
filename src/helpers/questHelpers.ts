@@ -33,7 +33,8 @@ export function findNextLevelData(questSize, currentLevelData, defaultCurrency, 
     }
     return Object.entries(getQuestConfig(questSize).mockLevels)
         .find(([ , { bets } ], index, array) => {
-            const [ , nextItemData ] = array[index + 1] || [];
+            const [ , nextItemData ] = array[index] || [];
+
             if (nextItemData && currentLevelData) {
                 const betForNext = nextItemData?.bets?.[defaultCurrency];
                 return userBetsInTargetQuest < bets[defaultCurrency] &&
