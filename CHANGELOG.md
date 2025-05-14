@@ -1,3 +1,22 @@
+## [1.22.0](https://github.com/upstars-global/unity-core-modules/compare/v1.21.1...v1.22.0) (2025-05-14)
+
+### 🚀 Features
+
+* **UN-1142:** added new endpoint for pwa events ([#159](https://github.com/upstars-global/unity-core-modules/issues/159))
+ ([4749d88](https://github.com/upstars-global/unity-core-modules/commit/4749d88ee15c50f2c2a42ac2ad8049fe6695d6ef))
+
+
+
+    * UN-1142: added new endpoint for pwa events
+
+    * UN-1142: added check for logged user for pwa events
+
+    * UN-1142: added check for logged user for pwa events
+
+    * UN-1142: added logs
+
+    * UN-1142: removed logs
+
 ## [1.21.1](https://github.com/upstars-global/unity-core-modules/compare/v1.21.0...v1.21.1) (2025-04-30)
 
 ### 🔨 Refactoring
