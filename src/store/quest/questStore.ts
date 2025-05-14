@@ -63,6 +63,7 @@ export const useQuestStore = defineStore("questStore", () => {
 
     const getListQuestsLevelPoint = computed(() => {
         const result = {};
+
         if (getQuestsList.value) {
             getQuestsList.value.forEach((questItem) => {
                 const userBets = getUserBetsInQuestById.value(questItem.id);
@@ -77,6 +78,7 @@ export const useQuestStore = defineStore("questStore", () => {
                 result[questItem.id] = getCurrentLevelData(questSize, defaultCurrency, userBets);
             });
         }
+
         return result;
     });
 

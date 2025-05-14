@@ -20,9 +20,15 @@ export function getCurrentLevelData(questSize, defaultCurrency, userBets) {
     if (!questSize && !defaultCurrency && !userBets) {
         return [];
     }
+
     return Object.entries(getQuestConfig(questSize).mockLevels).find(([ , { bets } = {} ], index, array) => {
         const [ , nextItemData ] = array[index + 1] || [];
         const betForNext = nextItemData?.bets?.[defaultCurrency];
+
+        if ((array.length - 1) === index) {
+            return userBets >= bets[defaultCurrency];
+        }
+
         return userBets >= bets[defaultCurrency] && userBets < betForNext;
     }) || [];
 }
@@ -37,8 +43,13 @@ export function findNextLevelData(questSize, currentLevelData, defaultCurrency, 
 
             if (nextItemData && currentLevelData) {
                 const betForNext = nextItemData?.bets?.[defaultCurrency];
+
+                if ((array.length - 1) === index) {
+                    return userBetsInTargetQuest >= currentLevelData.bets[defaultCurrency];
+                }
+
                 return userBetsInTargetQuest < bets[defaultCurrency] &&
-                    currentLevelData.bets[defaultCurrency] < betForNext;
+                    currentLevelData.bets[defaultCurrency] <= betForNext;
             }
         }) || [];
 }
