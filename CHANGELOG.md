@@ -1,3 +1,14 @@
+## [1.22.1](https://github.com/upstars-global/unity-core-modules/compare/v1.22.0...v1.22.1) (2025-05-14)
+
+### 🔨 Refactoring
+
+* remove default hreflang
+ ([232d7c8](https://github.com/upstars-global/unity-core-modules/commit/232d7c8aa8b3a1d24b345757099777057a5d462a))
+
+
+
+    done
+
 ## [1.22.0](https://github.com/upstars-global/unity-core-modules/compare/v1.21.1...v1.22.0) (2025-05-14)
 
 ### 🚀 Features
