@@ -9,7 +9,6 @@ import type { ICurrentUserQuestsStatus, IQuestData, IQuestItem, IUserStatusQuest
 import type { ITournamentsList } from "../../services/api/DTO/tournamentsDTO";
 import { loadQuestDataReq } from "../../services/api/requests/tournaments";
 import { useUserInfo } from "../user/userInfo";
-import { questMock } from "./questMock";
 
 function promoFilterAndSettingsOneItem(item, type) {
     const [ result ] = promoFilterAndSettings([ item ], type);
@@ -182,7 +181,7 @@ export const useQuestStore = defineStore("questStore", () => {
     }
 
     async function loadQuestsData(tournamentsList: ITournamentsList) {
-        const filteredQuestsList = [ ...tournamentsList, ...questMock ].filter(({ frontend_identifier: frontId }) => {
+        const filteredQuestsList = tournamentsList.filter(({ frontend_identifier: frontId }) => {
             return isQuest(frontId);
         });
 
