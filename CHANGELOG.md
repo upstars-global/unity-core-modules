@@ -1,3 +1,26 @@
+## [1.22.2](https://github.com/upstars-global/unity-core-modules/compare/v1.22.1...v1.22.2) (2025-05-15)
+
+### 🔧 Maintenance
+
+* Refactor and fix questStore
+ ([4b9fb0b](https://github.com/upstars-global/unity-core-modules/commit/4b9fb0b23c2ed32155649910976774e43dff7595))
+
+
+
+    * done
+
+    * fix
+
+    * feat: UN-1045
+
+    * modify loadQuestDataReq
+
+    * fix findNextLevelData
+
+    * fix max level
+
+    * remove mock
+
 ## [1.22.1](https://github.com/upstars-global/unity-core-modules/compare/v1.22.0...v1.22.1) (2025-05-14)
 
 ### 🔨 Refactoring
