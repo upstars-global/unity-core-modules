@@ -59,14 +59,18 @@ export async function loadUserStatusesReq(id: number): Promise<IPlayer> {
 
 export async function loadQuestDataReq(questList: ITournament[]) {
     try {
-        const statuses = await Promise.all(
+        const statuses = await Promise.allSettled(
             questList.map((questItem) => {
                 return http().get(`/api/tournaments/${ questItem.id }/status`);
             }),
         );
 
-        return statuses.map(({ data }) => {
-            return data;
+        return statuses.map((item) => {
+            if (item.status === "fulfilled") {
+                return item.value.data;
+            }
+
+            return {};
         });
     } catch (err) {
         log.error("LOAD_QUESTS_DATA_ERROR", err);
