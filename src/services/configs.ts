@@ -1,5 +1,5 @@
 import { useCommon } from "../store/common";
-import { loadCurrencyConfigReq, loadExcludedPromoStagsReq } from "./api/requests/configs";
+import { loadCurrencyConfigReq, loadExcludedPromoStagsReq, loadMainWidgetConfigReq } from "./api/requests/configs";
 
 export async function loadExcludedPromoStags() {
     const commonStore = useCommon();
@@ -27,4 +27,8 @@ export async function loadCurrencyConfig() {
     if (data) {
         commonStore.setCurrencyConfig(data);
     }
+}
+
+export async function loadMainWidgetConfig() {
+    return await loadMainWidgetConfigReq();
 }
