@@ -1,6 +1,5 @@
 import {
     AVAILABLE_LOCALES,
-    DOMAIN_FOR_AUSTRALIA,
     MAIN_LOCALES_AND_DOMAINS,
 } from "@theme/configs/constsLocales";
 
@@ -11,13 +10,7 @@ interface IAllDomainsHrefLangs {
 }
 
 export function metaHrefLangsLink(routePath: string): IAllDomainsHrefLangs[] {
-    const allDomainsHrefLangs: IAllDomainsHrefLangs[] = [
-        {
-            rel: "alternate",
-            hreflang: "x-default",
-            href: `https://${ DOMAIN_FOR_AUSTRALIA }${ routePath }`,
-        },
-    ];
+    const allDomainsHrefLangs: IAllDomainsHrefLangs[] = [];
 
     Object.keys(MAIN_LOCALES_AND_DOMAINS).forEach((locale) => {
         if (AVAILABLE_LOCALES[locale] === true) {
