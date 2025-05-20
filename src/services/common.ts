@@ -13,7 +13,7 @@ export async function loadCurrentIP() {
     }
 }
 
-export async function sendPWAEvent(event: PWAEvent, ignoreCheck = false) {
+export async function sendPWAEvent(event: PWAEvent) {
     console.log("sendPWAEvent");
     const pwaStore = usePWA();
     const userStore = useUserInfo();
@@ -22,8 +22,14 @@ export async function sendPWAEvent(event: PWAEvent, ignoreCheck = false) {
     console.log("pwaStore.isPWA", pwaStore.isPWA);
     console.log("userStore.getIsLogged", userStore.getIsLogged);
 
-    if (ignoreCheck || (pwaStore.isPWA && userStore.getIsLogged)) {
+    const justInstalled = localStorage.getItem("justInstalled");
+
+    if ((pwaStore.isPWA || justInstalled) && userStore.getIsLogged) {
         console.log("before request");
         await sendPWAEventReq(event);
+        if (justInstalled) {
+            console.log("removing justInstalled from LS");
+            localStorage.removeItem("justInstalled");
+        }
     }
 }
