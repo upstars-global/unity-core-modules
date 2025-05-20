@@ -14,16 +14,12 @@ export async function loadCurrentIP() {
 }
 
 export async function sendPWAEvent(event: PWAEvent, ignoreCheck = false) {
-    console.log("sendPWAEvent");
     const pwaStore = usePWA();
     const userStore = useUserInfo();
 
     pwaStore.setIsPWA();
-    console.log("pwaStore.isPWA", pwaStore.isPWA);
-    console.log("userStore.getIsLogged", userStore.getIsLogged);
 
     if (ignoreCheck || (pwaStore.isPWA && userStore.getIsLogged)) {
-        console.log("before request");
         await sendPWAEventReq(event);
     }
 }
