@@ -22,14 +22,10 @@ export async function sendPWAEvent(event: PWAEvent) {
     console.log("pwaStore.isPWA", pwaStore.isPWA);
     console.log("userStore.getIsLogged", userStore.getIsLogged);
 
-    const justInstalled = localStorage.getItem("justInstalled");
 
-    if ((pwaStore.isPWA || justInstalled) && userStore.getIsLogged) {
+    if (pwaStore.isPWA && userStore.getIsLogged) {
         console.log("before request");
         await sendPWAEventReq(event);
-        if (justInstalled) {
-            console.log("removing justInstalled from LS");
-            localStorage.removeItem("justInstalled");
-        }
+        console.log("after request");
     }
 }
