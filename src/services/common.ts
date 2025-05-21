@@ -20,6 +20,12 @@ export async function subscribeToStandaloneMQL() {
 
     pwaStore.setIsPWA(); // setting default state;
 
+    if (pwaStore.isPwa) {
+        console.log("default pwa state");
+        await sendPWAEvent("open");
+        hasBeenSent = true;
+    }
+
     const standaloneMediaQuery = window.matchMedia("(display-mode: standalone)");
 
     standaloneMediaQuery.addEventListener("change", async (event) => {
