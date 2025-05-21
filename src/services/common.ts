@@ -13,25 +13,20 @@ export async function loadCurrentIP() {
     }
 }
 
-export async function sendPWAEvent(event: PWAEvent) {
-    console.log("sendPWAEvent");
+export async function subscribeToStandaloneMQL() {
     const pwaStore = usePWA();
     const userStore = useUserInfo();
+    let hasBeenSent = false;
 
-    pwaStore.setIsPWA();
-    const justInstalled = localStorage.getItem("justInstalled");
+    pwaStore.setIsPWA(); // setting default state;
 
-    console.log("pwaStore.isPWA", pwaStore.isPWA);
-    console.log("userStore.getIsLogged", userStore.getIsLogged);
-    console.log("justInstalled", justInstalled);
+    const standaloneMediaQuery = window.matchMedia("(display-mode: standalone)");
 
-
-    if ((pwaStore.isPWA || justInstalled) && userStore.getIsLogged) {
-        console.log("before request");
-        await sendPWAEventReq(event);
-        if (justInstalled) {
-            console.log("removing justInstalled from LS");
-            localStorage.removeItem("justInstalled");
+    standaloneMediaQuery.addEventListener("change", async (event) => {
+        pwaStore.setIsPWA(event.matches);
+        if (event.matches && !hasBeenSent && userStore.getIsLogged) {
+            await sendPWAEventReq("open");
+            hasBeenSent = true;
         }
-    }
+    });
 }
