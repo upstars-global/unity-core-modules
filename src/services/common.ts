@@ -23,9 +23,11 @@ export async function subscribeToStandaloneMQL() {
     const standaloneMediaQuery = window.matchMedia("(display-mode: standalone)");
 
     standaloneMediaQuery.addEventListener("change", async (event) => {
+        console.log("on change handler");
         pwaStore.setIsPWA(event.matches);
         if (event.matches && !hasBeenSent && userStore.getIsLogged) {
             await sendPWAEventReq("open");
+            console.log("sendPWAEventReq");
             hasBeenSent = true;
         }
     });
