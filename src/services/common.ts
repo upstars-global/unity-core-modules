@@ -26,9 +26,13 @@ export async function subscribeToStandaloneMQL() {
         console.log("on change handler");
         pwaStore.setIsPWA(event.matches);
         if (event.matches && !hasBeenSent && userStore.getIsLogged) {
-            await sendPWAEventReq("open");
-            console.log("sendPWAEventReq");
+            await sendPWAEvent("open");
             hasBeenSent = true;
         }
     });
+}
+
+export async function sendPWAEvent(event: PWAEvent) {
+    console.log("sendPWAEvent", event);
+    await sendPWAEventReq(event);
 }
