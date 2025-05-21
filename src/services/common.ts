@@ -19,9 +19,9 @@ export async function subscribeToStandaloneMQL() {
     let hasBeenSent = false;
 
     pwaStore.setIsPWA(); // setting default state;
-    console.log("pwaStore.isPwa", pwaStore.isPwa);
+    console.log("pwaStore.isPWA", pwaStore.isPwa);
 
-    if (pwaStore.isPwa) {
+    if (pwaStore.isPWA) {
         console.log("default pwa state");
         await sendPWAEvent("open");
         hasBeenSent = true;
