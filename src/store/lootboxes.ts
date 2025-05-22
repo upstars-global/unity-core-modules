@@ -3732,9 +3732,15 @@ export const useLootboxesStore = defineStore("lootboxes", () => {
     }
 
     function updateLootboxList({ data: newData }: { data: ILootbox }): void {
-        lootboxesList.value = lootboxesList.value.map((item) => {
-            return item.id === newData.id ? newData : item;
-        });
+        const indexNewData = lootboxesList.value.findIndex((item) => item.id === newData.id);
+
+        lootboxesList.value =
+            indexNewData === -1 ?
+                [ newData, ...lootboxesList.value ] :
+                lootboxesList.value.map(
+                    (item, index) =>
+                        (index === indexNewData ? newData : item),
+                );
     }
 
     async function loadMockWheel() {
