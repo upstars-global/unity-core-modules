@@ -3734,13 +3734,13 @@ export const useLootboxesStore = defineStore("lootboxes", () => {
     function updateLootboxList({ data: newData }: { data: ILootbox }): void {
         const indexNewData = lootboxesList.value.findIndex((item) => item.id === newData.id);
 
-        lootboxesList.value =
-            indexNewData === -1 ?
-                [ newData, ...lootboxesList.value ] :
-                lootboxesList.value.map(
-                    (item, index) =>
-                        (index === indexNewData ? newData : item),
-                );
+        if (indexNewData === -1) {
+            lootboxesList.value = [ newData, ...lootboxesList.value ];
+        } else {
+            lootboxesList.value = lootboxesList.value.map((item, index) =>
+                (index === indexNewData ? newData : item),
+            );
+        }
     }
 
     async function loadMockWheel() {
