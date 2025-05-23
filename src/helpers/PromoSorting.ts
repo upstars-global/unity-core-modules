@@ -28,7 +28,6 @@ export function filterByStatus(arr, status) {
 }
 
 export function filterByRegex(arr: Array<{ frontend_identifier: string }>, regex: RegExp) {
-    debugger;
     return arr
         .filter((item) => {
             return item.frontend_identifier.match(regex);
