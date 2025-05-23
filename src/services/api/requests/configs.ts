@@ -28,15 +28,17 @@ const loadManagersConfigReq = (userGroups) => loadConfig("/api/fe/config/manager
 const loadExcludedPromoStagsReq = () =>
     loadConfig<string[]>("/api/fe/config/excluded-promo-stags", "LOAD_EXCLUDED_PROMO_STAGS_CONFIG_ERROR");
 const loadCurrencyConfigReq = () => loadConfig<string[]>("/api/fe/config/currency-config", "LOAD_CURRENCY_CONFIG_ERROR");
+const loadFooterPaymentsConfigReq = () =>
+    loadConfig<string[]>("/api/fe/config/footer-payments-config", "LOAD_FOOTER_PAYMENTS_CONFIG_ERROR");
 
 export {
     loadBettingConfigReq,
     loadCurrencyConfigReq,
     loadDisabledBonusesConfigReq,
     loadExcludedPromoStagsReq,
+    loadFooterPaymentsConfigReq,
     loadManagersConfigReq,
     loadModifyGiftsConfigReq,
     loadStagByReferNameReq,
     loadSurveyConfigReq,
-    loadVipAdventuresConfigReq,
-};
+    loadVipAdventuresConfigReq };

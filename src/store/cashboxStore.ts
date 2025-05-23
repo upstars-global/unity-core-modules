@@ -165,7 +165,6 @@ export const useCashboxStore = defineStore("cashboxStore", () => {
             }
 
             const [ depositMethods, cashoutMethods ] = await getPaymentsApiMethods(currencyCode);
-
             paymentSystems.value = depositMethods.map(srcPaymentImage);
             payoutSystems.value = cashoutMethods.map(srcPaymentImage);
 
