@@ -30,5 +30,9 @@ export async function loadCurrencyConfig() {
 }
 
 export async function loadMainWidgetConfig() {
-    return await loadMainWidgetConfigReq();
+    const commonStore = useCommon();
+    const { widgets } = await loadMainWidgetConfigReq();
+    if (widgets) {
+        commonStore.setMainWidgetConfig(widgets);
+    }
 }
