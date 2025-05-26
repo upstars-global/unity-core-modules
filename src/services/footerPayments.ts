@@ -6,7 +6,9 @@ export function useFooterPayments() {
     const paymentsLogo = ref<string[]>([]);
     async function loadFooterPayments() {
         const data = await loadFooterPaymentsConfigReq();
-        paymentsLogo.value = data.payments;
+        if (data) {
+            paymentsLogo.value = data.payments;
+        }
     }
 
 
