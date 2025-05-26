@@ -17,10 +17,20 @@ function sortByDate(first, second) {
     }
     return 0;
 }
+
 export function filterByStatus(arr, status) {
     return arr
         .filter((item) => {
             return item.status === status;
+        })
+        .sort(sortByDate)
+        .sort(sortByOrder);
+}
+
+export function filterByRegex(arr: Array<{ frontend_identifier: string }>, regex: RegExp) {
+    return arr
+        .filter((item) => {
+            return item.frontend_identifier.match(regex);
         })
         .sort(sortByDate)
         .sort(sortByOrder);
