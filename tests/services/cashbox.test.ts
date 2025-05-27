@@ -148,7 +148,7 @@ vi.mock("../../src/services/api/requests/player", () => ({
 describe("useCashBoxService", () => {
     describe("loadPaymentMethods", () => {
         beforeEach(() => {
-            vi.clearAllMocks();
+            vi.resetAllMocks();
             vi.spyOn(cashboxStoreModule, "useCashboxStore").mockReturnValue({
                 coinspaidAddresses: ref([]),
                 paymentHistory: ref([]),
@@ -293,17 +293,15 @@ describe("useCashBoxService", () => {
     describe("removeWithdrawRequestById", () => {
         beforeEach(async () => {
             vi.resetModules();
-            vi.clearAllMocks();
-            vi.doMock("../../src/store/cashboxStore", () => ({
-                useCashboxStore: vi.fn(() => ({
-                    coinspaidAddresses: ref([]),
-                    paymentHistory: ref([]),
-                    historyDeposits: ref([]),
-                    historyPayouts: ref([]),
-                    paymentSystems: ref([]),
-                    payoutSystems: ref(),
-                })),
-            }));
+            vi.resetAllMocks();
+            vi.spyOn(cashboxStoreModule, "useCashboxStore").mockReturnValue({
+                coinspaidAddresses: ref([]),
+                paymentHistory: ref([]),
+                historyDeposits: ref([]),
+                historyPayouts: ref([]),
+                paymentSystems: ref([]),
+                payoutSystems: ref(),
+            });
         });
         it("calls cancelWithdrawRequestByID and reloads user balance", async () => {
             const cancelWithdrawRequestByIDSpy = playerRequests.cancelWithdrawRequestByID as vi.Mock;
@@ -327,13 +325,11 @@ describe("useCashBoxService", () => {
         beforeEach(() => {
             setActivePinia(createPinia());
             vi.resetModules();
-            vi.clearAllMocks();
             vi.resetAllMocks();
         });
 
         afterEach(() => {
             vi.resetModules();
-            vi.clearAllMocks();
             vi.resetAllMocks();
         });
 
