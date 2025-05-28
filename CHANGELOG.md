@@ -1,3 +1,10 @@
+## [1.24.1](https://github.com/upstars-global/unity-core-modules/compare/v1.24.0...v1.24.1) (2025-05-28)
+
+### 🐛 Bug Fixes
+
+* **UN-1213:** fixed fetchDeleteGameFromFavorites request method type ([#170](https://github.com/upstars-global/unity-core-modules/issues/170))
+ ([5d9d4f0](https://github.com/upstars-global/unity-core-modules/commit/5d9d4f054d1128ebbbda78bf8f339872d9a279c3))
+
 ## [1.24.0](https://github.com/upstars-global/unity-core-modules/compare/v1.23.1...v1.24.0) (2025-05-28)
 
 ### 🚀 Features
