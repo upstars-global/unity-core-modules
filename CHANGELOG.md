@@ -1,3 +1,27 @@
+## [1.23.1](https://github.com/upstars-global/unity-core-modules/compare/v1.23.0...v1.23.1) (2025-05-27)
+
+### 🔨 Refactoring
+
+* Upgrade dependencies and update semantic-release config ([#169](https://github.com/upstars-global/unity-core-modules/issues/169))
+ ([d36e8d5](https://github.com/upstars-global/unity-core-modules/commit/d36e8d5f723150735e376468a1d72e4d12d19997))
+
+
+
+    Updated Octokit packages to their latest versions, ensuring compatibility and security improvements. Refactored `release.config.js` to use consistent single quotes across the file, aligning with the preferred code style.
+
+    Co-authored-by: d-tashchi <kabak133@gmail.com>
+
+## [1.22.3](https://github.com/upstars-global/unity-core-modules/compare/v1.22.2...v1.22.3) (2025-05-23)
+
+### 🐛 Bug Fixes
+
+* UN-1199 fix lootboxes ([#163](https://github.com/upstars-global/unity-core-modules/issues/163))
+ ([ecd0c9d](https://github.com/upstars-global/unity-core-modules/commit/ecd0c9d406902cb4be53d47f32f240f77c5b2a22))
+
+
+
+    * fix: UN-1199 fix lootboxes
+
 ## [1.22.2](https://github.com/upstars-global/unity-core-modules/compare/v1.22.1...v1.22.2) (2025-05-15)
 
 ### 🔧 Maintenance

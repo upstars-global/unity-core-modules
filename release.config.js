@@ -29,7 +29,6 @@ export default {
 
                 { type: "style", release: false },
                 { type: "docs", release: false },
-                { type: "test", release: false },
 
                 { breaking: true, release: "major" },
                 { type: "BREAKING CHANGE", release: "major" },
