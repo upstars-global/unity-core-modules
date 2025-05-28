@@ -95,7 +95,7 @@ export async function fetchAddFavoriteGamesCount(idGame: number): Promise<void> 
 
 export async function fetchDeleteGameFromFavorites(idGame: number): Promise<void> {
     try {
-        return await http({ auth: true }).put(`/api/player/favorite_games/${ idGame }`);
+        return await http({ auth: true }).delete(`/api/player/favorite_games/${ idGame }`);
     } catch (err) {
         log.error("FETCH_DELETE_GAME_FROM_FAVORITES_ERROR", err);
     }
