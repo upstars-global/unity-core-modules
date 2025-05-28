@@ -1,3 +1,20 @@
+## [1.24.0](https://github.com/upstars-global/unity-core-modules/compare/v1.23.1...v1.24.0) (2025-05-28)
+
+### 🚀 Features
+
+* **UN-1142:** modified new endpoint for pwa events ([#162](https://github.com/upstars-global/unity-core-modules/issues/162))
+ ([17146ca](https://github.com/upstars-global/unity-core-modules/commit/17146cab49313af0c5ca70acb381ee3eac68f5c7))
+
+
+
+    * feat(UN-1142): added new endpoint for pwa events
+
+    * feat(UN-1142) added check for logged user for pwa events
+
+    * feat(UN-1142): added subscription for mode standalone MQL
+
+    * feat(UN-1142): added isServer check for MQL subscription
+
 ## [1.23.1](https://github.com/upstars-global/unity-core-modules/compare/v1.23.0...v1.23.1) (2025-05-27)
 
 ### 🔨 Refactoring
