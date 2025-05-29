@@ -6,7 +6,7 @@ import type { ActionsTransaction } from "./api/DTO/cashbox";
 
 export function usePaymentsAPI() {
     function isExistPaymentsAPI () {
-        return typeof window.PaymentsAPI === "undefined";
+        return typeof window.PaymentsAPI !== "undefined";
     }
 
     function getPaymentMethods (currency: Currencies, paymentAction: ActionsTransaction) {

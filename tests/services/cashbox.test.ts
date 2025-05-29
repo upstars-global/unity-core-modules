@@ -293,7 +293,7 @@ describe("useCashBoxService", () => {
     describe("removeWithdrawRequestById", () => {
         beforeEach(async () => {
             vi.resetModules();
-            vi.resetAllMocks();
+            vi.clearAllMocks();
             vi.spyOn(cashboxStoreModule, "useCashboxStore").mockReturnValue({
                 coinspaidAddresses: ref([]),
                 paymentHistory: ref([]),
