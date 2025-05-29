@@ -34,7 +34,7 @@ export function useCashBoxService() {
         }
         try {
             const { userWallets } = storeToRefs(useUserBalance());
-            console.log(userWallets);
+
             const targetWallets = getTargetWallets(userWallets.value);
             const arrayPaymentMethods = await Promise.all(
                 targetWallets.map((currency) => {
