@@ -1,3 +1,40 @@
+## [1.24.1](https://github.com/upstars-global/unity-core-modules/compare/v1.24.0...v1.24.1) (2025-05-28)
+
+### 🐛 Bug Fixes
+
+* **UN-1213:** fixed fetchDeleteGameFromFavorites request method type ([#170](https://github.com/upstars-global/unity-core-modules/issues/170))
+ ([5d9d4f0](https://github.com/upstars-global/unity-core-modules/commit/5d9d4f054d1128ebbbda78bf8f339872d9a279c3))
+
+## [1.24.0](https://github.com/upstars-global/unity-core-modules/compare/v1.23.1...v1.24.0) (2025-05-28)
+
+### 🚀 Features
+
+* **UN-1142:** modified new endpoint for pwa events ([#162](https://github.com/upstars-global/unity-core-modules/issues/162))
+ ([17146ca](https://github.com/upstars-global/unity-core-modules/commit/17146cab49313af0c5ca70acb381ee3eac68f5c7))
+
+
+
+    * feat(UN-1142): added new endpoint for pwa events
+
+    * feat(UN-1142) added check for logged user for pwa events
+
+    * feat(UN-1142): added subscription for mode standalone MQL
+
+    * feat(UN-1142): added isServer check for MQL subscription
+
+## [1.23.1](https://github.com/upstars-global/unity-core-modules/compare/v1.23.0...v1.23.1) (2025-05-27)
+
+### 🔨 Refactoring
+
+* Upgrade dependencies and update semantic-release config ([#169](https://github.com/upstars-global/unity-core-modules/issues/169))
+ ([d36e8d5](https://github.com/upstars-global/unity-core-modules/commit/d36e8d5f723150735e376468a1d72e4d12d19997))
+
+
+
+    Updated Octokit packages to their latest versions, ensuring compatibility and security improvements. Refactored `release.config.js` to use consistent single quotes across the file, aligning with the preferred code style.
+
+    Co-authored-by: d-tashchi <kabak133@gmail.com>
+
 ## [1.22.3](https://github.com/upstars-global/unity-core-modules/compare/v1.22.2...v1.22.3) (2025-05-23)
 
 ### 🐛 Bug Fixes
