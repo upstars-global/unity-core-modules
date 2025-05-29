@@ -9,7 +9,7 @@ import { ActionsTransaction, IPlayerPayment, IPlayerPaymentState } from "../../s
 import type { IUserAccount } from "../../src/services/api/DTO/playerDTO";
 import * as playerRequests from "../../src/services/api/requests/player";
 import { useCashBoxService } from "../../src/services/cashbox";
-import * as paymentsApiModule from "../../src/services/paymentsApi";
+import * as paymentsApiModule from "../../src/services/paymentsAPI";
 import { useCashboxStore } from "../../src/store/cashboxStore";
 import * as cashboxStoreModule from "../../src/store/cashboxStore";
 import * as userBalanceModule from "../../src/store/user/userBalance";
@@ -132,7 +132,7 @@ vi.mock("../../src/controllers/Logger", () => ({
         error: vi.fn(),
     },
 }));
-vi.mock("../../src/services/paymentsApi", () => ({
+vi.mock("../../src/services/paymentsAPI", () => ({
     usePaymentsAPI: () => ({
         resetCache: vi.fn(),
         getPaymentMethods: vi.fn(),
