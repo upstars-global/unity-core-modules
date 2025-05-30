@@ -30,6 +30,7 @@ const loadExcludedPromoStagsReq = () =>
 const loadCurrencyConfigReq = () => loadConfig<string[]>("/api/fe/config/currency-config", "LOAD_CURRENCY_CONFIG_ERROR");
 const loadFooterPaymentsConfigReq = () =>
     loadConfig<string[]>("/api/fe/config/footer-payments-config", "LOAD_FOOTER_PAYMENTS_CONFIG_ERROR");
+const loadMainWidgetConfigReq = () => loadConfig<string[]>("/api/fe/config/main-widget-config", "LOAD_MAIN_WIDGET_CONFIG_ERROR");
 
 export {
     loadBettingConfigReq,
@@ -37,6 +38,7 @@ export {
     loadDisabledBonusesConfigReq,
     loadExcludedPromoStagsReq,
     loadFooterPaymentsConfigReq,
+    loadMainWidgetConfigReq,
     loadManagersConfigReq,
     loadModifyGiftsConfigReq,
     loadStagByReferNameReq,
