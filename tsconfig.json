@@ -4,7 +4,8 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "lib": [
-      "ESNext"
+      "ESNext",
+      "dom",
     ],
     "allowJs": true,
     "strict": true,
