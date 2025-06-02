@@ -165,6 +165,7 @@ export const useGiftsStore = defineStore("giftsStore", () => {
         setRegistrationGiftsAll,
         setFSGiftsAll,
 
+        registrationGiftsAll,
         depositGiftsAll,
         depositGifts,
 

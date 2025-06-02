@@ -5,10 +5,24 @@ import {
     TYPE_GIFT_FS,
     TYPE_GIFT_REGISTRATION } from "@src/config/gift";
 
-import type { IGift, IGiftDeposit, IGiftFreeSpins } from "../services/api/DTO/gifts";
-import { loadDisabledBonusesConfigReq, loadModifyGiftsConfigReq } from "../services/api/requests/configs";
 import { useGiftsStore } from "../store/gifts";
-import { http } from "./api/http";
+import type { IGift, IGiftDeposit, IGiftFreeSpins } from "./api/DTO/gifts";
+import {
+    loadAdditionalDepositGiftsConfigReq,
+    loadDisabledBonusesConfigReq,
+    loadModifyGiftsConfigReq,
+} from "./api/requests/configs";
+import {
+    activateBonusesReq,
+    activateFreespinsReq,
+    cancelBonusesReq,
+    cancelFreespinsReq,
+    getDepositBonusesReq,
+    getPlayerBonusesReq,
+    getPlayerFreespinsReq,
+    getRegistrationBonusesReq,
+} from "./api/requests/gifts";
+
 
 function preparingGiftData<T extends IGift | IGiftFreeSpins>(
     giftsCollection: T[],
@@ -48,7 +62,7 @@ export async function loadGiftsData(): Promise<IGift[]> {
     giftsStore.setGiftsLoading(true);
 
     try {
-        const { data } = await http().get("/api/player/bonuses");
+        const data = await getPlayerBonusesReq();
         const prepareGiftsData = preparingGiftData<IGift>(data, TYPE_GIFT_BONUS);
         const activeGifts = filterActiveGifts(prepareGiftsData, giftsStore.disabledBonuses);
 
@@ -83,11 +97,9 @@ export async function loadModifyGiftsConfig(): Promise<void> {
 export async function loadAdditionalDepositGifts(): Promise<void> {
     try {
         const giftsStore = useGiftsStore();
-        const { data } = await http().get(
-            "/api/fe/config/additional-gifts",
-        );
+        const data = await loadAdditionalDepositGiftsConfigReq();
 
-        giftsStore.setAdditionalGifts(data);
+        giftsStore.setAdditionalGifts(data || []);
     } catch (err) {
         log.error("ERROR_LOAD_ADDITIONAL_GIFT_FILE", err);
         throw err;
@@ -97,7 +109,7 @@ export async function loadAdditionalDepositGifts(): Promise<void> {
 export async function loadDepositGiftsData(): Promise<void> {
     try {
         const giftsStore = useGiftsStore();
-        const { data } = await http().get("/api/bonuses/deposit");
+        const data = await getDepositBonusesReq();
         const prepareGiftsData = preparingGiftOther(data, TYPE_GIFT_DEPOSIT);
 
         giftsStore.setDepositGiftsAll(prepareGiftsData);
@@ -110,7 +122,7 @@ export async function loadDepositGiftsData(): Promise<void> {
 export async function loadRegistrationGiftsData(): Promise<void> {
     try {
         const giftsStore = useGiftsStore();
-        const { data } = await http().get("/api/bonuses/registration");
+        const data = await getRegistrationBonusesReq();
         const prepareRegistrationGifts = preparingGiftOther(data, TYPE_GIFT_REGISTRATION);
 
         giftsStore.setRegistrationGiftsAll(prepareRegistrationGifts);
@@ -123,7 +135,7 @@ export async function loadRegistrationGiftsData(): Promise<void> {
 export async function loadFSGiftsData(): Promise<void> {
     try {
         const giftsStore = useGiftsStore();
-        const { data } = await http().get("/api/player/freespins");
+        const data = await getPlayerFreespinsReq();
         const prepareFSGiftsData = preparingGiftData<IGiftFreeSpins>(data, TYPE_GIFT_FS);
 
         giftsStore.setFSGiftsAll(prepareFSGiftsData);
@@ -135,7 +147,7 @@ export async function loadFSGiftsData(): Promise<void> {
 
 export async function cancelsFreespins(id: number) {
     try {
-        await http().delete(`/api/player/freespins/${ id }`);
+        await cancelFreespinsReq(id);
 
         return loadFSGiftsData();
     } catch (err) {
@@ -143,9 +155,9 @@ export async function cancelsFreespins(id: number) {
     }
 }
 
-export async function activationFreespins(id: number) {
+export function activationFreespins(id: number) {
     try {
-        return await http().post(`/api/player/freespins/${ id }/activation`);
+        return activateFreespinsReq(id);
     } catch (err) {
         log.error("ACTIVATION_FREESPINS", err);
     }
@@ -153,7 +165,7 @@ export async function activationFreespins(id: number) {
 
 export async function cancelsBonus(id: number) {
     try {
-        await http().delete(`/api/player/bonuses/${ id }`);
+        await cancelBonusesReq(id);
 
         loadGiftsData();
     } catch (err) {
@@ -163,7 +175,7 @@ export async function cancelsBonus(id: number) {
 
 export async function activationBonus(id: number) {
     try {
-        await http().post(`/api/player/bonuses/${ id }/activation`);
+        await activateBonusesReq(id);
 
         loadGiftsData();
     } catch (err) {

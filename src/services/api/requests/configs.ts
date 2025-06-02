@@ -30,8 +30,13 @@ const loadExcludedPromoStagsReq = () =>
 const loadCurrencyConfigReq = () => loadConfig<string[]>("/api/fe/config/currency-config", "LOAD_CURRENCY_CONFIG_ERROR");
 const loadFooterPaymentsConfigReq = () =>
     loadConfig<string[]>("/api/fe/config/footer-payments-config", "LOAD_FOOTER_PAYMENTS_CONFIG_ERROR");
+const loadAdditionalDepositGiftsConfigReq = () => loadConfig(
+    "/api/fe/config/additional-gifts",
+    "LOAD_ADDITIONAL_DEPOSIT_GIFTS_CONFIG_ERROR",
+);
 
 export {
+    loadAdditionalDepositGiftsConfigReq,
     loadBettingConfigReq,
     loadCurrencyConfigReq,
     loadDisabledBonusesConfigReq,
@@ -41,4 +46,5 @@ export {
     loadModifyGiftsConfigReq,
     loadStagByReferNameReq,
     loadSurveyConfigReq,
-    loadVipAdventuresConfigReq };
+    loadVipAdventuresConfigReq,
+};
