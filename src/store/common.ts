@@ -9,6 +9,7 @@ import { CurrencyData } from "../models/cashbox";
 import type { IPlayerFieldsInfo } from "../models/common";
 import type { IStagByReferName, ISurveyConfig } from "../models/configs";
 import { Currencies } from "../models/enums/currencies";
+import type { MainWidgetItem } from "../models/mainWidget";
 import type { ICurrentIP } from "../services/api/DTO/current-ip";
 import type { ICountries, ICryptoExchangeRates, ICurrencies, IProjectInfo } from "../services/api/DTO/info";
 import { loadStagByReferNameReq, loadSurveyConfigReq } from "../services/api/requests/configs";
@@ -34,6 +35,7 @@ export const useCommon = defineStore("common", () => {
     const playerFieldsInfo = ref<IPlayerFieldsInfo>();
     const excludedPromoStags = ref<string[]>([]);
     const currencyConfig = ref<null | CurrencyData>(null);
+    const widgetsConfig = ref<MainWidgetItem[]>([]);
 
     if (typeof window !== "undefined") {
         getUserAgentPlatform().then((platformData) => {
@@ -164,6 +166,10 @@ export const useCommon = defineStore("common", () => {
         currencyConfig.value = data;
     }
 
+    const setMainWidgetConfig = (data: MainWidgetItem[]) => {
+        widgetsConfig.value = data;
+    };
+
     return {
         isMobile,
 
@@ -205,6 +211,9 @@ export const useCommon = defineStore("common", () => {
 
         currencyConfig,
         setCurrencyConfig,
+
+        widgetsConfig,
+        setMainWidgetConfig,
     };
 });
 
