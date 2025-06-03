@@ -1,3 +1,14 @@
+## [1.25.0](https://github.com/upstars-global/unity-core-modules/compare/v1.24.1...v1.25.0) (2025-06-03)
+
+### 🚀 Features
+
+* **UN-1106:** added new api for main widget config ([#161](https://github.com/upstars-global/unity-core-modules/issues/161))
+ ([40ed6d1](https://github.com/upstars-global/unity-core-modules/commit/40ed6d16c6a660d0262e934b384e6b8bfa080999))
+
+
+
+    * feat(UN-1106): added new api for main widget config
+
 ## [1.24.1](https://github.com/upstars-global/unity-core-modules/compare/v1.24.0...v1.24.1) (2025-05-28)
 
 ### 🐛 Bug Fixes
