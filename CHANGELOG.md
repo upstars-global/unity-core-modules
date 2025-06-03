@@ -1,3 +1,10 @@
+## [1.25.1](https://github.com/upstars-global/unity-core-modules/compare/v1.25.0...v1.25.1) (2025-06-03)
+
+### 🐛 Bug Fixes
+
+* **UN-1230:** added check for destructure in widgets request ([#173](https://github.com/upstars-global/unity-core-modules/issues/173))
+ ([7dd45b1](https://github.com/upstars-global/unity-core-modules/commit/7dd45b10b130819d6a9289ca793215cc4f332545))
+
 ## [1.25.0](https://github.com/upstars-global/unity-core-modules/compare/v1.24.1...v1.25.0) (2025-06-03)
 
 ### 🚀 Features
