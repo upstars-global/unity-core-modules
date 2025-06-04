@@ -1,3 +1,10 @@
+## [1.25.2](https://github.com/upstars-global/unity-core-modules/compare/v1.25.1...v1.25.2) (2025-06-04)
+
+### 🐛 Bug Fixes
+
+* **hotfix:** added default export ([#174](https://github.com/upstars-global/unity-core-modules/issues/174))
+ ([0c9a029](https://github.com/upstars-global/unity-core-modules/commit/0c9a02945178912f90979c76482b11ae51fb972f))
+
 ## [1.25.1](https://github.com/upstars-global/unity-core-modules/compare/v1.25.0...v1.25.1) (2025-06-03)
 
 ### 🐛 Bug Fixes
