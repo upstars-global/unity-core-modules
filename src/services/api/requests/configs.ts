@@ -34,6 +34,7 @@ const loadAdditionalDepositGiftsConfigReq = () => loadConfig(
     "/api/fe/config/additional-gifts",
     "LOAD_ADDITIONAL_DEPOSIT_GIFTS_CONFIG_ERROR",
 );
+const loadMainWidgetConfigReq = () => loadConfig<string[]>("/api/fe/config/main-widget-config", "LOAD_MAIN_WIDGET_CONFIG_ERROR");
 
 export {
     loadAdditionalDepositGiftsConfigReq,
@@ -42,6 +43,7 @@ export {
     loadDisabledBonusesConfigReq,
     loadExcludedPromoStagsReq,
     loadFooterPaymentsConfigReq,
+    loadMainWidgetConfigReq,
     loadManagersConfigReq,
     loadModifyGiftsConfigReq,
     loadStagByReferNameReq,
