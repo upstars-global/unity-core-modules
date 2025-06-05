@@ -35,7 +35,6 @@ export interface IPlayerPayment {
     brand: string;
     success: boolean;
     cancellation_reason?: string;
-
 }
 
 export interface TransactionMetricInfo {
