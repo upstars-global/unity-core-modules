@@ -1,3 +1,14 @@
+## [1.25.3](https://github.com/upstars-global/unity-core-modules/compare/v1.25.2...v1.25.3) (2025-06-05)
+
+### 🔨 Refactoring
+
+* Un 347 ([#168](https://github.com/upstars-global/unity-core-modules/issues/168))
+ ([51e2841](https://github.com/upstars-global/unity-core-modules/commit/51e2841ef03bef80a31a6ec7569e587ac14159ad))
+
+
+
+    * refactor: UN-347 refactor cashbox and write tests
+
 ## [1.25.2](https://github.com/upstars-global/unity-core-modules/compare/v1.25.1...v1.25.2) (2025-06-04)
 
 ### 🐛 Bug Fixes
