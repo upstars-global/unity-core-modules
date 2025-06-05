@@ -1,3 +1,28 @@
+## [1.25.2](https://github.com/upstars-global/unity-core-modules/compare/v1.25.1...v1.25.2) (2025-06-04)
+
+### 🐛 Bug Fixes
+
+* **hotfix:** added default export ([#174](https://github.com/upstars-global/unity-core-modules/issues/174))
+ ([0c9a029](https://github.com/upstars-global/unity-core-modules/commit/0c9a02945178912f90979c76482b11ae51fb972f))
+
+## [1.25.1](https://github.com/upstars-global/unity-core-modules/compare/v1.25.0...v1.25.1) (2025-06-03)
+
+### 🐛 Bug Fixes
+
+* **UN-1230:** added check for destructure in widgets request ([#173](https://github.com/upstars-global/unity-core-modules/issues/173))
+ ([7dd45b1](https://github.com/upstars-global/unity-core-modules/commit/7dd45b10b130819d6a9289ca793215cc4f332545))
+
+## [1.25.0](https://github.com/upstars-global/unity-core-modules/compare/v1.24.1...v1.25.0) (2025-06-03)
+
+### 🚀 Features
+
+* **UN-1106:** added new api for main widget config ([#161](https://github.com/upstars-global/unity-core-modules/issues/161))
+ ([40ed6d1](https://github.com/upstars-global/unity-core-modules/commit/40ed6d16c6a660d0262e934b384e6b8bfa080999))
+
+
+
+    * feat(UN-1106): added new api for main widget config
+
 ## [1.24.1](https://github.com/upstars-global/unity-core-modules/compare/v1.24.0...v1.24.1) (2025-05-28)
 
 ### 🐛 Bug Fixes
