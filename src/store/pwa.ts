@@ -4,6 +4,8 @@ import { ref } from "vue";
 import { isServer } from "../helpers/ssrHelpers";
 
 function initDeferredPWAPrompt(): BeforeInstallPromptEvent | null {
+    console.log("initDeferredPWAPrompt", isServer, window.__deferredPWAInstallEvent);
+
     if (isServer) {
         return null;
     }
@@ -17,6 +19,7 @@ export const usePWA = defineStore("pwa", () => {
     const isPWA = ref<boolean>(false);
 
     function setDeferredPWAPrompt(event: BeforeInstallPromptEvent) {
+        console.log("setDeferredPWAPrompt", event);
         deferredPWAPrompt.value = event;
     }
 
