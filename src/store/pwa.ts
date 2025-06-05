@@ -3,19 +3,10 @@ import { ref } from "vue";
 
 import { isServer } from "../helpers/ssrHelpers";
 
-
 export const usePWA = defineStore("pwa", () => {
-    const deferredPWAPrompt = ref<BeforeInstallPromptEvent | null>(initDeferredPWAPrompt());
+    const deferredPWAPrompt = ref<BeforeInstallPromptEvent | null>();
     const showPwaInfo = ref(true);
     const isPWA = ref<boolean>(false);
-
-    function initDeferredPWAPrompt(): BeforeInstallPromptEvent | null {
-        if (isServer) {
-            return null;
-        }
-
-        return window.__deferredPWAInstallEvent || null;
-    }
 
     function setDeferredPWAPrompt(event: BeforeInstallPromptEvent) {
         deferredPWAPrompt.value = event;
@@ -39,6 +30,5 @@ export const usePWA = defineStore("pwa", () => {
         setDeferredPWAPrompt,
         setShowPwaInfo,
         setIsPWA,
-        initDeferredPWAPrompt,
     };
 });
