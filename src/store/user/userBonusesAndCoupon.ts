@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 import { log } from "../../controllers/Logger";
 import { http } from "../../services/api/http";
 import { activeCouponReq } from "../../services/api/requests/couponePromoCodes";
-import { useGiftsStore } from "../gifts";
+import { loadDepositGiftsData } from "../../services/gifts";
 import { useUserInfo } from "./userInfo";
 
 export const useUserBonusesAndCoupon = defineStore("userBonusesAndCoupon", () => {
@@ -15,7 +15,6 @@ export const useUserBonusesAndCoupon = defineStore("userBonusesAndCoupon", () =>
                 deposit_bonus_code: code,
             });
             userStore.loadUserProfile({ reload: true });
-            const { loadDepositGiftsData } = useGiftsStore();
             const giftsArr = await loadDepositGiftsData();
 
             return { promoIsValid: Boolean(giftsArr.length) };
@@ -28,7 +27,6 @@ export const useUserBonusesAndCoupon = defineStore("userBonusesAndCoupon", () =>
         try {
             await http().delete("/api/player/clear_bonus_code");
             userStore.loadUserProfile({ reload: true });
-            const { loadDepositGiftsData } = useGiftsStore();
             loadDepositGiftsData();
         } catch (err) {
             log.error("deleteDepositBonusCode", err);
@@ -38,7 +36,6 @@ export const useUserBonusesAndCoupon = defineStore("userBonusesAndCoupon", () =>
     async function useBonuses(data: { can_issue: boolean }) {
         try {
             await http().patch("/api/player/update_bonus_settings", data);
-            const { loadDepositGiftsData } = useGiftsStore();
             userStore.loadUserProfile({ reload: true });
             return await loadDepositGiftsData();
         } catch (err) {
