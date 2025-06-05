@@ -2,7 +2,7 @@ import type { ActionsTransaction } from "../services/api/DTO/cashbox";
 import type { IFieldConfig } from "./common";
 import type { Currencies } from "./enums/currencies";
 
-enum PaymentLibMethodsTypes {
+export enum PaymentLibMethodsTypes {
     BankTransfer = "bank_transfer",
     Cards = "cards",
     Crypto = "crypto",
@@ -16,7 +16,7 @@ type MethodType = PaymentLibMethodsTypes.BankTransfer |
     PaymentLibMethodsTypes.Direct |
     PaymentLibMethodsTypes.Voucher;
 
-interface ISavedProfile {
+export interface ISavedProfile {
     id: string;
     isRemoveAvailable: boolean;
     title: string;
@@ -40,11 +40,18 @@ export interface IPaymentsMethod {
 
 type MethodField = Record<string, unknown>;
 
-interface IGetMethodFieldsResult {
+export interface IGetMethodFieldsResult {
     amountField: null | MethodField;
     isSubmitAvailable: boolean;
     methodFields: MethodField[];
     playerFields: IFieldConfig[];
+}
+
+export interface IPayloadMethodFields {
+    id: string;
+    currency: string;
+    paymentAction: ActionsTransaction;
+    savedProfileId?: string;
 }
 
 declare global {
@@ -55,12 +62,7 @@ declare global {
                 paymentAction: ActionsTransaction,
             }) => Promise<IPaymentsMethod[]>;
 
-            getMethodFields: (config: {
-                id: string;
-                currency: string;
-                paymentAction: ActionsTransaction;
-                savedProfileId?: string;
-            }) => Promise<IGetMethodFieldsResult>;
+            getMethodFields: (config: IPayloadMethodFields) => Promise<IGetMethodFieldsResult>;
 
             resetCache: () => Promise<void>;
         };
