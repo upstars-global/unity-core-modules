@@ -91,7 +91,7 @@ export async function loadModifyGiftsConfig(): Promise<void> {
     const giftsStore = useGiftsStore();
     const data = await loadModifyGiftsConfigReq();
 
-    giftsStore.setModifyGiftsConfig(data);
+    giftsStore.setModifyGiftsConfig(data || []);
 }
 
 export async function loadAdditionalDepositGifts(): Promise<void> {
