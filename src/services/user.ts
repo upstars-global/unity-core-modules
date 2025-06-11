@@ -4,7 +4,7 @@ import type { IPlayerFieldsInfo } from "../models/common";
 import { useCommon } from "../store/common";
 import { useUserInfo } from "../store/user/userInfo";
 import { useUserStatuses } from "../store/user/userStatuses";
-import { addPlayerToGroup, loadPlayerFieldsInfoRequest } from "./api/requests/player";
+import { addPlayerToGroup, loadBettingPlayerSettingsRequest, loadPlayerFieldsInfoRequest } from "./api/requests/player";
 
 export async function userSetToGroupForAbTest() {
     const userInfo = useUserInfo();
@@ -32,5 +32,21 @@ export async function loadPlayerFieldsInfo({ reload } = { reload: false }): Prom
 
     if (data) {
         setPlayerFieldsInfo(data);
+    }
+}
+
+export async function loadBettingPlayerSettings() {
+    try {
+        const data = await loadBettingPlayerSettingsRequest();
+        const { setBettingPlayerSettings } = useUserInfo();
+
+        if (data) {
+            setBettingPlayerSettings({
+                oddsTypes: data.odds_types.available,
+                selectedOddsType: data.odds_types.selected,
+            });
+        }
+    } catch (error) {
+        log.error("LOAD_BETTING_PLAYER_SETTINGS_ERROR", error);
     }
 }

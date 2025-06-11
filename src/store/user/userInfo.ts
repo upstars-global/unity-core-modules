@@ -8,11 +8,13 @@ import { cioIdentifyUser } from "../../controllers/CustomerIO";
 import { useUserTermsAcceptingPopup } from "../../controllers/userTermsAcceptingPopup";
 import { EnumContextFields, EnumFormFields } from "../../models/common";
 import { Currencies } from "../../models/enums/currencies";
+import { BettingPlayerSettings } from "../../models/player";
 import type { IUserData } from "../../models/user";
 import { EventBus as bus } from "../../plugins/EventBus";
 import type { IPlayerStats, ISubscriptions, IUserSettings } from "../../services/api/DTO/playerDTO";
 import {
-    confirmEmailResendReg, confirmPlayerReq, loadFreshChatRestoreIdReq, loadUserBettingBonuses,
+    confirmEmailResendReg, confirmPlayerReq,
+    loadFreshChatRestoreIdReq, loadUserBettingBonuses,
     loadUserProfileReq,
     loadUserSettingsReq, loadUserStatsReq, loadUserSubscriptionsReq,
     putUserSubscriptionReq, restorePasswordRequestReq, restorePasswordRestoreReq, sendFreshChatRestoreIdReq,
@@ -77,6 +79,10 @@ export const useUserInfo = defineStore("userInfo", () => {
     const notice = ref<unknown[]>([]);
     const stats = ref<IPlayerStats>();
     const bettingBonuses = ref([]);
+    const bettingPlayerSettings = ref<BettingPlayerSettings>({
+        oddsTypes: [],
+        selectedOddsType: "european",
+    });
 
     const getUserInfo = computed(() => {
         return info.value;
@@ -365,6 +371,10 @@ export const useUserInfo = defineStore("userInfo", () => {
         return currencyInfo?.subunits_to_unit;
     };
 
+    function setBettingPlayerSettings(data: BettingPlayerSettings) {
+        bettingPlayerSettings.value = data;
+    }
+
     return {
         getUserInfo,
         getUserSumsubVerified,
@@ -405,6 +415,7 @@ export const useUserInfo = defineStore("userInfo", () => {
         loadUserBonuses,
         loadUserStats,
         loadUserSubscriptions,
+        setBettingPlayerSettings,
     };
 });
 
