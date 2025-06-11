@@ -4,10 +4,12 @@ import { log } from "../../controllers/Logger";
 import { http } from "../../services/api/http";
 import { activeCouponReq } from "../../services/api/requests/couponePromoCodes";
 import { loadDepositGiftsData } from "../../services/gifts";
+import { useGiftsStore } from "../gifts";
 import { useUserInfo } from "./userInfo";
 
 export const useUserBonusesAndCoupon = defineStore("userBonusesAndCoupon", () => {
     const userStore = useUserInfo();
+    const giftsStore = useGiftsStore();
 
     async function setDepositBonusCode(code: string) {
         try {
@@ -15,9 +17,10 @@ export const useUserBonusesAndCoupon = defineStore("userBonusesAndCoupon", () =>
                 deposit_bonus_code: code,
             });
             userStore.loadUserProfile({ reload: true });
-            const giftsArr = await loadDepositGiftsData();
 
-            return { promoIsValid: Boolean(giftsArr.length) };
+            await loadDepositGiftsData();
+
+            return { promoIsValid: Boolean(giftsStore.depositGiftsAll.length) };
         } catch (err) {
             log.error("setDepositBonusCode", err);
         }
