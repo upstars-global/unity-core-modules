@@ -415,6 +415,8 @@ export const useUserInfo = defineStore("userInfo", () => {
         loadUserBonuses,
         loadUserStats,
         loadUserSubscriptions,
+
+        bettingPlayerSettings,
         setBettingPlayerSettings,
     };
 });
