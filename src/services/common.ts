@@ -2,6 +2,7 @@ import { isServer } from "../helpers/ssrHelpers";
 import { useCommon } from "../store/common";
 import { usePWA } from "../store/pwa";
 import { useUserInfo } from "../store/user/userInfo";
+import { useUserStatuses } from "../store/user/userStatuses";
 import type { PWAEvent } from "./api/DTO/PWAEvent";
 import { fetchCurrentIPReq, sendPWAEventReq } from "./api/requests/common";
 
@@ -18,12 +19,17 @@ export async function subscribeToStandaloneMQL() {
     if (!isServer) {
         const pwaStore = usePWA();
         const userStore = useUserInfo();
+        const userStatusesStore = useUserStatuses();
+
+        const PWAInstallGroupId = 1401;
         let hasBeenSent = false;
 
         pwaStore.setIsPWA(); // setting default state;
 
         if (pwaStore.isPWA) {
             await sendPWAEvent("open");
+            await userStatusesStore.addUserToGroup(PWAInstallGroupId);
+
             hasBeenSent = true;
         }
 
@@ -33,6 +39,7 @@ export async function subscribeToStandaloneMQL() {
             pwaStore.setIsPWA(event.matches);
             if (event.matches && !hasBeenSent && userStore.getIsLogged) {
                 await sendPWAEvent("open");
+                await userStatusesStore.addUserToGroup(PWAInstallGroupId);
                 hasBeenSent = true;
             }
         });
