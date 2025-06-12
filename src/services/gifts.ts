@@ -5,6 +5,7 @@ import {
     TYPE_GIFT_FS,
     TYPE_GIFT_REGISTRATION } from "@src/config/gift";
 
+import { log } from "../controllers/Logger";
 import { useGiftsStore } from "../store/gifts";
 import type { IGift, IGiftDeposit, IGiftFreeSpins } from "./api/DTO/gifts";
 import {
