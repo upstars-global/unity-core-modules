@@ -1,3 +1,56 @@
+## [1.26.1](https://github.com/upstars-global/unity-core-modules/compare/v1.26.0...v1.26.1) (2025-06-12)
+
+### 🐛 Bug Fixes
+
+* missing log import in gifts service ([#177](https://github.com/upstars-global/unity-core-modules/issues/177))
+ ([8194859](https://github.com/upstars-global/unity-core-modules/commit/819485904c9182524859ec32968954783670d7c3))
+
+## [1.26.0](https://github.com/upstars-global/unity-core-modules/compare/v1.25.3...v1.26.0) (2025-06-12)
+
+### 🚀 Features
+
+* **UN-363:** refactor gifts store and cover it with test ([#171](https://github.com/upstars-global/unity-core-modules/issues/171))
+ ([d61deb7](https://github.com/upstars-global/unity-core-modules/commit/d61deb7e8b9cb72271cba963f4511acca0d7ec42))
+
+
+
+    * feat(UN-363): move requests from store to services
+
+    * feat: cover with test
+
+    * feat: move http requests from service to requests file and cover gifts service with tests
+
+    * fix(UN-1236)
+
+    * fix: modify-gifts-config
+
+    * fix: deposit bonus bug caused by refactor gifts store
+
+## [1.25.3](https://github.com/upstars-global/unity-core-modules/compare/v1.25.2...v1.25.3) (2025-06-05)
+
+### 🔨 Refactoring
+
+* Un 347 ([#168](https://github.com/upstars-global/unity-core-modules/issues/168))
+ ([51e2841](https://github.com/upstars-global/unity-core-modules/commit/51e2841ef03bef80a31a6ec7569e587ac14159ad))
+
+
+
+    * refactor: UN-347 refactor cashbox and write tests
+
+## [1.25.2](https://github.com/upstars-global/unity-core-modules/compare/v1.25.1...v1.25.2) (2025-06-04)
+
+### 🐛 Bug Fixes
+
+* **hotfix:** added default export ([#174](https://github.com/upstars-global/unity-core-modules/issues/174))
+ ([0c9a029](https://github.com/upstars-global/unity-core-modules/commit/0c9a02945178912f90979c76482b11ae51fb972f))
+
+## [1.25.1](https://github.com/upstars-global/unity-core-modules/compare/v1.25.0...v1.25.1) (2025-06-03)
+
+### 🐛 Bug Fixes
+
+* **UN-1230:** added check for destructure in widgets request ([#173](https://github.com/upstars-global/unity-core-modules/issues/173))
+ ([7dd45b1](https://github.com/upstars-global/unity-core-modules/commit/7dd45b10b130819d6a9289ca793215cc4f332545))
+
 ## [1.25.0](https://github.com/upstars-global/unity-core-modules/compare/v1.24.1...v1.25.0) (2025-06-03)
 
 ### 🚀 Features

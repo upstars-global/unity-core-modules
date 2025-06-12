@@ -14,3 +14,5 @@ export interface MainWidgetItem {
     frontend_identifier?:string; // used if a quest is shown in the widget
     isActivePage?: boolean;
 }
+
+export default {};
