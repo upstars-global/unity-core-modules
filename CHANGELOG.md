@@ -1,3 +1,10 @@
+## [1.26.1](https://github.com/upstars-global/unity-core-modules/compare/v1.26.0...v1.26.1) (2025-06-12)
+
+### 🐛 Bug Fixes
+
+* missing log import in gifts service ([#177](https://github.com/upstars-global/unity-core-modules/issues/177))
+ ([8194859](https://github.com/upstars-global/unity-core-modules/commit/819485904c9182524859ec32968954783670d7c3))
+
 ## [1.26.0](https://github.com/upstars-global/unity-core-modules/compare/v1.25.3...v1.26.0) (2025-06-12)
 
 ### 🚀 Features
