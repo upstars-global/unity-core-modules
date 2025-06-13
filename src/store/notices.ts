@@ -17,6 +17,7 @@ import {
     WSNotificationName,
 } from "../models/WSnotices";
 import { GiftState } from "../services/api/DTO/gifts";
+import { WSBettingNotificationName } from "../services/betting";
 import { useUserStatuses } from "./user/userStatuses";
 
 const { notificationDB } = useNotificationDB();
@@ -61,7 +62,7 @@ export const useNoticesStore = defineStore("notices", () => {
         headerNotices.value = [ ...newState ];
     }
 
-    function addRealTimeNotification({ data }, type: WSNotificationName): void {
+    function addRealTimeNotification({ data }, type: WSNotificationName | WSBettingNotificationName): void {
         if (eventsHandlers[type]) {
             const hasExcludedTitle = excludeNotificationTitles.some((title: string) => data.title.includes(title));
             if (hasExcludedTitle) {
