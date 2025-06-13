@@ -1,3 +1,31 @@
+## [1.26.1](https://github.com/upstars-global/unity-core-modules/compare/v1.26.0...v1.26.1) (2025-06-12)
+
+### 🐛 Bug Fixes
+
+* missing log import in gifts service ([#177](https://github.com/upstars-global/unity-core-modules/issues/177))
+ ([8194859](https://github.com/upstars-global/unity-core-modules/commit/819485904c9182524859ec32968954783670d7c3))
+
+## [1.26.0](https://github.com/upstars-global/unity-core-modules/compare/v1.25.3...v1.26.0) (2025-06-12)
+
+### 🚀 Features
+
+* **UN-363:** refactor gifts store and cover it with test ([#171](https://github.com/upstars-global/unity-core-modules/issues/171))
+ ([d61deb7](https://github.com/upstars-global/unity-core-modules/commit/d61deb7e8b9cb72271cba963f4511acca0d7ec42))
+
+
+
+    * feat(UN-363): move requests from store to services
+
+    * feat: cover with test
+
+    * feat: move http requests from service to requests file and cover gifts service with tests
+
+    * fix(UN-1236)
+
+    * fix: modify-gifts-config
+
+    * fix: deposit bonus bug caused by refactor gifts store
+
 ## [1.25.3](https://github.com/upstars-global/unity-core-modules/compare/v1.25.2...v1.25.3) (2025-06-05)
 
 ### 🔨 Refactoring
