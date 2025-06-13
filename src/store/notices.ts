@@ -14,10 +14,10 @@ import type {
     INotification,
 } from "../models/WSnotices";
 import {
+    WSBettingNotificationName,
     WSNotificationName,
 } from "../models/WSnotices";
 import { GiftState } from "../services/api/DTO/gifts";
-import { WSBettingNotificationName } from "../services/betting";
 import { useUserStatuses } from "./user/userStatuses";
 
 const { notificationDB } = useNotificationDB();

@@ -1,10 +1,7 @@
+import { WSBettingNotificationName } from "../models/WSnotices";
 import { useNoticesStore } from "../store/notices";
 import { loadBetBonusReq } from "./api/requests/lootbox";
 import { loadWebsocketAuthorizeReq, loadWebsocketTokenReq } from "./api/requests/websocket";
-
-export enum WSBettingNotificationName {
-    BONUS_ISSUED = "bonus_issued"
-}
 
 export enum BonusTypes {
     freebet_only_win = "freebets",
@@ -12,22 +9,22 @@ export enum BonusTypes {
     lootbox = "lootboxes",
     comboboost = "comboboosts"
 }
-export function useBettingService() {
-    async function loadSocketConnection(user_id: string, locale: string) {
-        const [ token, channels ] = await Promise.all([
-            loadWebsocketTokenReq(),
-            loadWebsocketAuthorizeReq(user_id, locale),
-        ]);
+export async function loadSocketConnection(user_id: string, locale: string) {
+    const [ token, channels ] = await Promise.all([
+        loadWebsocketTokenReq(),
+        loadWebsocketAuthorizeReq(user_id, locale),
+    ]);
 
-        return {
-            token,
-            channels,
-        };
-    }
+    return {
+        token,
+        channels,
+    };
+}
 
-    async function addBonusNotificationItem(type: string, id: string) {
-        const { addRealTimeNotification } = useNoticesStore();
-        const bonus = await loadBetBonusReq(BonusTypes[type], id);
+export async function addBonusNotificationItem(type: string, id: string) {
+    const { addRealTimeNotification } = useNoticesStore();
+    const bonus = await loadBetBonusReq(BonusTypes[type], id);
+    if (bonus) {
         const payload = {
             data: {
                 ...bonus,
@@ -39,10 +36,4 @@ export function useBettingService() {
             WSBettingNotificationName.BONUS_ISSUED,
         );
     }
-
-
-    return {
-        loadSocketConnection,
-        addBonusNotificationItem,
-    };
 }
