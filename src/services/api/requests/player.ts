@@ -3,7 +3,7 @@ import { v4 as uuid } from "uuid";
 import { log } from "../../../controllers/Logger";
 import type { IUserInfo } from "../../../models/user";
 import { IPlayerPayment } from "../DTO/cashbox";
-import { IPlayerStats, ISubscriptions, IUserAccount, IUserSettings } from "../DTO/playerDTO";
+import { BettingPlayerSettingsDTO, IPlayerStats, ISubscriptions, IUserAccount, IUserSettings } from "../DTO/playerDTO";
 import { http } from "../http";
 
 export async function addPlayerToGroup(groupForAdding: string | number) {
@@ -224,5 +224,15 @@ export async function loadPlayerFieldsInfoRequest() {
     } catch (err) {
         log.error("LOAD_PLAYER_FIELDS_INFO", err);
         throw err;
+    }
+}
+
+export async function loadBettingPlayerSettingsRequest(): Promise<BettingPlayerSettingsDTO | undefined> {
+    try {
+        const { data } = await http().get("/api/v2/settings");
+
+        return data;
+    } catch (err) {
+        log.error("LOAD_BETTING_PLAYER_SETTINGS_REQUEST_ERROR", err);
     }
 }

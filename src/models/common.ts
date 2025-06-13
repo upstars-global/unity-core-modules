@@ -97,3 +97,11 @@ export interface AppContext {
     uaHints?: IResult;
     url: string;
 }
+
+export type OddsType =
+    | "european"
+    | "british"
+    | "hongkong"
+    | "american"
+    | "indonesian"
+    | "malaysian";
