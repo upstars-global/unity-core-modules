@@ -20,7 +20,7 @@ const SYMBOL_SATOSHI_BY_CURRENCY = {
     [CODE_BTC]: SYMBOL_MICRO,
 };
 
-export const currencyView = (value, currency, toCeil, subUntil = 1, maxFractionDigits = 8) => {
+export const currencyView = (value, currency, toCeil, subUntil = 1, maxFractionDigits = 8, locale: string | undefined) => {
     let normalizeValue = Number(value);
     if (isNaN(normalizeValue)) {
         return `${value} ${currency || ""}`;
@@ -33,13 +33,15 @@ export const currencyView = (value, currency, toCeil, subUntil = 1, maxFractionD
         const prefixCurrency = SYMBOL_SATOSHI_BY_CURRENCY[currency] || "";
 
         return `${(normalizeValue / countCurrency).toLocaleString(
-            undefined,
+            locale,
             { maximumFractionDigits: maxFractionDigits },
         )} ${prefixCurrency}${currency}`;
     }
 
-    return normalizeValue.toLocaleString(undefined, { maximumFractionDigits: maxFractionDigits });
+    return normalizeValue.toLocaleString(locale, { maximumFractionDigits: maxFractionDigits });
 };
+
+export const formatNumberWithSpaces = (value: number) => value.toLocaleString("en-US").replace(",", " ");
 
 export const sanitizeNumber = (num, separator = ",") => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, separator);
 
