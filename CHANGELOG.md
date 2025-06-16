@@ -1,3 +1,16 @@
+## [1.27.0](https://github.com/upstars-global/unity-core-modules/compare/v1.26.1...v1.27.0) (2025-06-16)
+
+### 🚀 Features
+
+* **UN-943:** request and fill store with betting player settings data ([#176](https://github.com/upstars-global/unity-core-modules/issues/176))
+ ([c7322ab](https://github.com/upstars-global/unity-core-modules/commit/c7322abe1e2da4e1654fc03ac2d9f420f0883849))
+
+
+
+    * feat(UN-943): request and fill store with betting player settings data
+
+    * fix: export bettingPlayerSettings
+
 ## [1.26.1](https://github.com/upstars-global/unity-core-modules/compare/v1.26.0...v1.26.1) (2025-06-12)
 
 ### 🐛 Bug Fixes
