@@ -1,3 +1,4 @@
+import type { OddsType } from "../../../models/common";
 import type { Currencies } from "../../../models/enums/currencies";
 
 export interface IUserAccountCompatibility {
@@ -55,4 +56,43 @@ export interface IPlayerStats {
     bets_sum: IDepositsSum;
     messages: IMessages;
 }
+
+type ProviderStatus = "active" | "inactive";
+
+interface AdditionalProvider {
+    enabled: boolean;
+    provider: string;
+}
+
+export interface BettingPlayerSettingsDTO {
+    provider_statuses: Record<string, ProviderStatus>;
+    video_settings?: {
+        enabled: boolean;
+        providers: string[];
+    };
+    stakes: {
+        [K in keyof typeof Currencies]: number[];
+    };
+    custom_bet_allow_single: boolean;
+    custom_bet_enabled: boolean;
+    auto_accept_odds_change?: string;
+    odds_types: {
+        available: OddsType[];
+        selected: OddsType;
+    };
+    sport_type_providers: {
+        regular: string;
+        cyber: string;
+    };
+    updated_at: string;
+    multi_bet_settings: {
+        available_by_provider: Record<string, boolean>;
+    };
+    additional_providers: {
+        horse_racing: AdditionalProvider;
+        lotto: AdditionalProvider;
+    };
+    allow_multiple_active_user_freebets: boolean;
+}
+
 export default {};
