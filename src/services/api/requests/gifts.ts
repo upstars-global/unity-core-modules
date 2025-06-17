@@ -1,3 +1,4 @@
+import { log } from "../../../controllers/Logger";
 import { http } from "../http";
 
 export async function getPlayerBonusesReq() {
