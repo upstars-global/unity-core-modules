@@ -26,7 +26,7 @@ export async function subscribeToStandaloneMQL() {
 
         pwaStore.setIsPWA(); // setting default state;
 
-        if (pwaStore.isPWA) {
+        if (pwaStore.isPWA && userStore.getIsLogged) {
             await sendPWAEvent("open");
             await userStatusesStore.addUserToGroup(PWAInstallGroupId);
 
