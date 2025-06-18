@@ -1,3 +1,25 @@
+## [1.27.2](https://github.com/upstars-global/unity-core-modules/compare/v1.27.1...v1.27.2) (2025-06-18)
+
+### 🐛 Bug Fixes
+
+* import log in src/services/cashbox.ts
+ ([5c37009](https://github.com/upstars-global/unity-core-modules/commit/5c37009d29e2563ccc3d23abd8f799ef49b483a5))
+
+## [1.27.1](https://github.com/upstars-global/unity-core-modules/compare/v1.27.0...v1.27.1) (2025-06-17)
+
+### 🐛 Bug Fixes
+
+* **UN-1229:** adding user to group if while opening pwa ([#175](https://github.com/upstars-global/unity-core-modules/issues/175))
+ ([8a204e6](https://github.com/upstars-global/unity-core-modules/commit/8a204e6ed41b145d4b1fb89b250fa0f21af35861))
+
+
+
+    * fix(UN-1229): adding user to group if while opening pwa
+
+    * fix(UN-1229): removed logs
+
+    * fix(UN-1229): added missing import
+
 ## [1.27.0](https://github.com/upstars-global/unity-core-modules/compare/v1.26.1...v1.27.0) (2025-06-16)
 
 ### 🚀 Features
