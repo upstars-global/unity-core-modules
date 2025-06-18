@@ -4,6 +4,7 @@ import {
 } from "@config/cashbox";
 import { storeToRefs } from "pinia";
 
+import { log } from "../controllers/Logger";
 import type { ICoinspaidAddresses } from "../models/cashbox";
 import { Currencies } from "../models/enums/currencies";
 import { IPayloadMethodFields } from "../models/PaymentsLib";
