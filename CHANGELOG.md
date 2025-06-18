@@ -1,3 +1,16 @@
+## [1.28.0](https://github.com/upstars-global/unity-core-modules/compare/v1.27.2...v1.28.0) (2025-06-18)
+
+### 🚀 Features
+
+* UN-1012 add betting service ([#178](https://github.com/upstars-global/unity-core-modules/issues/178))
+ ([fc28c12](https://github.com/upstars-global/unity-core-modules/commit/fc28c1298a77c6a36786eb3e1772c8af8b59d5e2))
+
+
+
+    * feat: UN-1012 add betting service
+
+    * feat: UN-1012 add betting service
+
 ## [1.27.2](https://github.com/upstars-global/unity-core-modules/compare/v1.27.1...v1.27.2) (2025-06-18)
 
 ### 🐛 Bug Fixes
