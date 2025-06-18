@@ -1,3 +1,10 @@
+## [1.27.2](https://github.com/upstars-global/unity-core-modules/compare/v1.27.1...v1.27.2) (2025-06-18)
+
+### 🐛 Bug Fixes
+
+* import log in src/services/cashbox.ts
+ ([5c37009](https://github.com/upstars-global/unity-core-modules/commit/5c37009d29e2563ccc3d23abd8f799ef49b483a5))
+
 ## [1.27.1](https://github.com/upstars-global/unity-core-modules/compare/v1.27.0...v1.27.1) (2025-06-17)
 
 ### 🐛 Bug Fixes
