@@ -10,6 +10,10 @@ export enum WSNotificationName {
     FREESPINS_CHANGES = "freespins_changes",
 }
 
+export enum WSBettingNotificationName {
+    BONUS_ISSUED = "bonus_issued"
+}
+
 export enum EventsNotice {
     TOURNAMENT_STARTED = "tournament_started",
     PLAYER_JOINED_LEADERBOARD = "player_joined_leaderboard",
