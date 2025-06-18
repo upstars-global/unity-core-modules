@@ -5,3 +5,4 @@ export function onesignalId() {
         return ONESIGNAL_KEY_BY_HOST[window.location.hostname];
     }
 }
+
