@@ -47,5 +47,9 @@ export async function subscribeToStandaloneMQL() {
 }
 
 export async function sendPWAEvent(event: PWAEvent) {
-    await sendPWAEventReq(event);
+    const userStore = useUserInfo();
+
+    if (userStore.getIsLogged) {
+        await sendPWAEventReq(event);
+    }
 }
