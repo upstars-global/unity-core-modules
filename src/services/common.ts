@@ -18,18 +18,13 @@ export async function loadCurrentIP() {
 export async function subscribeToStandaloneMQL() {
     if (!isServer) {
         const pwaStore = usePWA();
-        const userStore = useUserInfo();
-        const userStatusesStore = useUserStatuses();
 
-        const PWAInstallGroupId = 1401;
         let hasBeenSent = false;
 
         pwaStore.setIsPWA(); // setting default state;
 
         if (pwaStore.isPWA) {
             await sendPWAEvent("open");
-            await userStatusesStore.addUserToGroup(PWAInstallGroupId);
-
             hasBeenSent = true;
         }
 
@@ -37,9 +32,8 @@ export async function subscribeToStandaloneMQL() {
 
         standaloneMediaQuery.addEventListener("change", async (event) => {
             pwaStore.setIsPWA(event.matches);
-            if (event.matches && !hasBeenSent && userStore.getIsLogged) {
+            if (event.matches && !hasBeenSent) {
                 await sendPWAEvent("open");
-                await userStatusesStore.addUserToGroup(PWAInstallGroupId);
                 hasBeenSent = true;
             }
         });
@@ -47,9 +41,13 @@ export async function subscribeToStandaloneMQL() {
 }
 
 export async function sendPWAEvent(event: PWAEvent) {
+    const PWAInstallGroupId = 1401;
+
     const userStore = useUserInfo();
+    const userStatusesStore = useUserStatuses();
 
     if (userStore.getIsLogged) {
         await sendPWAEventReq(event);
+        await userStatusesStore.addUserToGroup(PWAInstallGroupId);
     }
 }
