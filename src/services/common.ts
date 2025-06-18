@@ -27,6 +27,7 @@ export async function subscribeToStandaloneMQL() {
         pwaStore.setIsPWA(); // setting default state;
 
         if (pwaStore.isPWA && userStore.getIsLogged) {
+            console.log("initial pwa send", userStatusesStore.getUserGroups);
             await sendPWAEvent("open");
             await userStatusesStore.addUserToGroup(PWAInstallGroupId);
 
@@ -38,6 +39,7 @@ export async function subscribeToStandaloneMQL() {
         standaloneMediaQuery.addEventListener("change", async (event) => {
             pwaStore.setIsPWA(event.matches);
             if (event.matches && !hasBeenSent && userStore.getIsLogged) {
+                console.log("inside pwa send", userStatusesStore.getUserGroups);
                 await sendPWAEvent("open");
                 await userStatusesStore.addUserToGroup(PWAInstallGroupId);
                 hasBeenSent = true;
