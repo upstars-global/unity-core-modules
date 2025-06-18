@@ -1,4 +1,3 @@
-
 import { type AxiosError } from "axios";
 
 import { log } from "../../../controllers/Logger";
