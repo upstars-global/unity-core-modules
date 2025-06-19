@@ -1,3 +1,29 @@
+## [1.28.2](https://github.com/upstars-global/unity-core-modules/compare/v1.28.1...v1.28.2) (2025-06-18)
+
+### 🔨 Refactoring
+
+* (UN-1172) Simplify PWA event handling logic ([#185](https://github.com/upstars-global/unity-core-modules/issues/185))
+ ([2740550](https://github.com/upstars-global/unity-core-modules/commit/2740550eb0a37964ab0c9cce1f692793b5d5e459))
+
+
+
+    Streamline PWA event logic by moving user group updates into the sendPWAEvent function. This improves modularity and ensures separation of concerns for better maintainability.
+
+    Co-authored-by: d-tashchi <kabak133@gmail.com>
+
+## [1.28.1](https://github.com/upstars-global/unity-core-modules/compare/v1.28.0...v1.28.1) (2025-06-18)
+
+### 🐛 Bug Fixes
+
+* (UN-1172) Add user login check before sending PWA events ([#184](https://github.com/upstars-global/unity-core-modules/issues/184))
+ ([a9a8115](https://github.com/upstars-global/unity-core-modules/commit/a9a811575b94c973ef5701bd5b52b3bc65882101))
+
+
+
+    Ensure PWA events are only sent for logged-in users by introducing a check using the user store. This prevents unnecessary event requests and aligns with user authentication requirements.
+
+    Co-authored-by: d-tashchi <kabak133@gmail.com>
+
 ## [1.28.0](https://github.com/upstars-global/unity-core-modules/compare/v1.27.2...v1.28.0) (2025-06-18)
 
 ### 🚀 Features
