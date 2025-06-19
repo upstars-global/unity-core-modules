@@ -8,7 +8,6 @@ import { http } from "../http";
 
 export async function addPlayerToGroup(groupForAdding: string | number) {
     try {
-        console.log("API", groupForAdding);
         const { data } = await http().post<void>(
             "/api/player/groups",
             {
