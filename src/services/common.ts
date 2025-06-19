@@ -42,30 +42,10 @@ export async function subscribeToStandaloneMQL() {
 }
 
 export async function sendPWAEvent(event: PWAEvent) {
-    const PWAInstallGroupId = 1401;
-
     const userStore = useUserInfo();
-    const userStatusesStore = useUserStatuses();
-
-    // async function tryAddUserToPWAGroup() {
-    //     if (userStatusesStore.getUserGroups.length) {
-    //         await userStatusesStore.addUserToGroup(PWAInstallGroupId);
-    //         console.log("PWA user group added to user groups");
-    //         return true;
-    //     }
-    //     console.log("No user groups loaded.");
-    //     return false;
-    // }
 
     if (userStore.getIsLogged) {
         await sendPWAEventReq(event);
-
-        // const addedToGroup = await tryAddUserToPWAGroup();
-        // if (!addedToGroup) {
-        //     console.log("First try to add user to pwa group failed, waiting for 5 seconds.");
-        //     await wait(5000);
-        //     await tryAddUserToPWAGroup();
-        // }
     }
 }
 
