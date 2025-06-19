@@ -72,7 +72,6 @@ export const useUserStatuses = defineStore("userStatuses", () => {
     });
 
     async function addUserToGroup(groupForAdding: string | number) {
-        console.log("addUserToGroup", groupForAdding, getUserGroups.value);
         if (!getUserGroups.value.includes(groupForAdding)) {
             await addPlayerToGroup(groupForAdding);
             userStore.addUserGroup({ id: groupForAdding, name: "" });

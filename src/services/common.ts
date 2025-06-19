@@ -1,3 +1,4 @@
+import { wait } from "../helpers/functionsHelper";
 import { isServer } from "../helpers/ssrHelpers";
 import { useCommon } from "../store/common";
 import { usePWA } from "../store/pwa";
@@ -46,21 +47,25 @@ export async function sendPWAEvent(event: PWAEvent) {
     const userStore = useUserInfo();
     const userStatusesStore = useUserStatuses();
 
-    if (userStore.getIsLogged) {
-        await sendPWAEventReq(event);
-        console.log("sendPWAEvent, userGroups: ", userStatusesStore.getUserGroups);
+    async function tryAddUserToPWAGroup() {
         if (userStatusesStore.getUserGroups.length) {
             await userStatusesStore.addUserToGroup(PWAInstallGroupId);
-        } else {
-            console.log("no user groups found for request, enabling 10s timeout ");
-            setTimeout(async() => {
-                console.log("inside timeout");
-                if (userStatusesStore.getUserGroups.length) {
-                    await userStatusesStore.addUserToGroup(PWAInstallGroupId);
-                } else {
-                    console.log("no user groups found for request second time, cancleling adding to group ");
-                }
-            }, 10000);
+            console.log("PWA user group added to user groups");
+            return true;
+        }
+        console.log("No user groups loaded.");
+        return false;
+    }
+
+    if (userStore.getIsLogged) {
+        await sendPWAEventReq(event);
+
+        const addedToGroup = await tryAddUserToPWAGroup();
+        if (!addedToGroup) {
+            console.log("First try to add user to pwa group failed, waiting for 5 seconds.");
+            await wait(5000);
+            await tryAddUserToPWAGroup();
         }
     }
 }
+
