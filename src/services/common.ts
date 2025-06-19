@@ -1,9 +1,7 @@
-import { wait } from "../helpers/functionsHelper";
 import { isServer } from "../helpers/ssrHelpers";
 import { useCommon } from "../store/common";
 import { usePWA } from "../store/pwa";
 import { useUserInfo } from "../store/user/userInfo";
-import { useUserStatuses } from "../store/user/userStatuses";
 import type { PWAEvent } from "./api/DTO/PWAEvent";
 import { fetchCurrentIPReq, sendPWAEventReq } from "./api/requests/common";
 
