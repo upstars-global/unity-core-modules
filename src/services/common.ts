@@ -23,8 +23,7 @@ export async function subscribeToStandaloneMQL() {
 
         pwaStore.setIsPWA(); // setting default state;
 
-        if (pwaStore.isPWA && userStore.getIsLogged) {
-            console.log("initial pwa send", userStatusesStore.getUserGroups);
+        if (pwaStore.isPWA) {
             await sendPWAEvent("open");
             hasBeenSent = true;
         }
@@ -33,8 +32,7 @@ export async function subscribeToStandaloneMQL() {
 
         standaloneMediaQuery.addEventListener("change", async (event) => {
             pwaStore.setIsPWA(event.matches);
-            if (event.matches && !hasBeenSent && userStore.getIsLogged) {
-                console.log("inside pwa send", userStatusesStore.getUserGroups);
+            if (event.matches && !hasBeenSent) {
                 await sendPWAEvent("open");
                 hasBeenSent = true;
             }
@@ -50,6 +48,19 @@ export async function sendPWAEvent(event: PWAEvent) {
 
     if (userStore.getIsLogged) {
         await sendPWAEventReq(event);
-        await userStatusesStore.addUserToGroup(PWAInstallGroupId);
+        console.log("sendPWAEvent, userGroups: ", userStatusesStore.getUserGroups);
+        if (userStatusesStore.getUserGroups.length) {
+            await userStatusesStore.addUserToGroup(PWAInstallGroupId);
+        } else {
+            console.log("no user groups found for request, enabling 10s timeout ");
+            setTimeout(async() => {
+                console.log("inside timeout");
+                if (userStatusesStore.getUserGroups.length) {
+                    await userStatusesStore.addUserToGroup(PWAInstallGroupId);
+                } else {
+                    console.log("no user groups found for request second time, cancleling adding to group ");
+                }
+            }, 10000);
+        }
     }
 }
