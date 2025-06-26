@@ -13,7 +13,7 @@ import { useLotteriesStore } from "../lotteries";
 import { useUserInfo } from "../user/userInfo";
 import { useStatusCompPointsStore } from "./statusCompPointsStore";
 
-function checkHasAvailableCards(list: IRedeemableCards[], isLogged: boolean, balance: number, currency: string) {
+export function checkHasAvailableCards(list: IRedeemableCards[], isLogged: boolean, balance: number, currency: string) {
     if (!isLogged || !balance || !list) {
         return false;
     }
