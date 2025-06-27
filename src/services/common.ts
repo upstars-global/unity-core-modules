@@ -41,6 +41,7 @@ export async function subscribeToStandaloneMQL() {
 }
 
 export async function sendPWAEvent(event: PWAEvent) {
+    return; // todo remove when it's time to bring back pwa events
     const PWAInstallGroupId = 1401;
 
     const userStore = useUserInfo();
