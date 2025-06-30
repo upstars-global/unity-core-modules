@@ -15,8 +15,10 @@ export async function loadCurrentIP() {
 }
 
 export function checkIsNativePWA() {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get("pwaType") === "native";
+    if (!isServer) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get("pwaType") === "native";
+    }
 }
 
 export async function subscribeToStandaloneMQL() {
