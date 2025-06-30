@@ -14,6 +14,11 @@ export async function loadCurrentIP() {
     }
 }
 
+export function checkIsNativePWA() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get("pwaType") === "native";
+}
+
 export async function subscribeToStandaloneMQL() {
     if (!isServer) {
         const pwaStore = usePWA();
@@ -41,8 +46,8 @@ export async function subscribeToStandaloneMQL() {
 
 export async function sendPWAEvent(event: PWAEvent) {
     const userStore = useUserInfo();
-
-    if (userStore.getIsLogged) {
+    const isNativePWA = checkIsNativePWA();
+    if (userStore.getIsLogged && isNativePWA) {
         await sendPWAEventReq(event);
     }
 }
