@@ -2,7 +2,8 @@ export enum Widgets {
     rocketMart = "rocketMart",
     adventures = "adventures",
     lootBox = "lootBox",
-    quest = "quest"
+    quest = "quest",
+    activityHub = "activityHub"
 }
 
 export interface MainWidgetItem {
