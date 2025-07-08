@@ -1,8 +1,4 @@
 import { COOKIE_BY_LOCALE } from "@theme/configs/constsLocales";
-import fetchAdapter from "@vespaiach/axios-fetch-adapter";
-import type { AxiosInstance, AxiosRequestConfig } from "axios";
-import axios from "axios";
-import axiosRetry from "axios-retry";
 
 import { log } from "../../controllers/Logger";
 import { isServer } from "../../helpers/ssrHelpers";
@@ -26,31 +22,261 @@ interface IHttpParams {
     locale?: string;
 }
 
-export function http({ headers, locale }: IHttpParams = {}): AxiosInstance {
-    const params: AxiosRequestConfig = {
-        baseURL: isServer ? "http://localhost:2004" : "/",
-        timeout,
-        headers: {
-            "X-Requested-With": "XMLHttpRequest",
-            ...(headers || {}),
-        },
-        adapter: fetchAdapter,
+interface RequestConfig {
+    method?: string;
+    headers?: Record<string, string>;
+    body?: unknown;
+    timeout?: number;
+    url?: string;
+}
 
+interface HttpResponse<T = unknown> {
+    data: T;
+    status: number;
+    statusText: string;
+    headers: Headers;
+    config: RequestConfig;
+}
+
+interface HttpError extends Error {
+    response?: {
+        status: number;
+        statusText: string;
+        data: unknown;
     };
+    config?: RequestConfig;
+}
 
-    if (isServer && locale) {
-        params.headers = {
-            ...params.headers,
-            Cookie: `locale=${ COOKIE_BY_LOCALE[locale] };`,
+class HttpClient {
+    private readonly baseURL: string;
+    private readonly defaultHeaders: Record<string, string>;
+    private readonly timeout: number;
+    private readonly responseInterceptors: Array<{
+        fulfilled: (response: HttpResponse) => HttpResponse;
+        rejected: (error: HttpError) => Promise<HttpError>;
+    }> = [];
+
+    constructor(config: { baseURL: string; timeout: number; headers: Record<string, string> }) {
+        this.baseURL = config.baseURL;
+        this.defaultHeaders = config.headers;
+        this.timeout = config.timeout;
+    }
+
+    private async fetchWithTimeout(url: string, options: RequestInit): Promise<Response> {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), this.timeout);
+
+        try {
+            return await fetch(url, {
+                ...options,
+                signal: controller.signal,
+            });
+        } catch (error) {
+            if ((error as Error).name === "AbortError") {
+                throw new Error(`timeout of ${this.timeout}ms exceeded`);
+            }
+            throw error;
+        } finally {
+            clearTimeout(timeoutId);
+        }
+    }
+
+    private async retryRequest(
+        url: string,
+        options: RequestInit,
+        retries: number = RETRY_COUNT,
+    ): Promise<Response> {
+        let lastError: Error = new Error("Max retries exceeded");
+        for (let i = 0; i <= retries; i++) {
+            try {
+                return await this.fetchWithTimeout(url, options);
+            } catch (error) {
+                lastError = error as Error;
+                const shouldRetry = lastError.message in RETRY_CONDITION;
+
+                if (i === retries || !shouldRetry) {
+                    throw lastError;
+                }
+
+                const delay = Math.pow(2, i) * 1000 + Math.random() * 1000;
+                await new Promise((resolve) => setTimeout(resolve, delay));
+            }
+        }
+
+        throw lastError;
+    }
+
+    private buildUrl(url: string): string {
+        if (url.startsWith("http")) {
+            return url;
+        }
+
+        // If baseURL is "/" (client-side), use relative URLs
+        if (this.baseURL === "/") {
+            return url.startsWith("/") ? url : `/${url}`;
+        }
+
+        // For server-side (localhost:2004), append the URL to baseURL
+        return `${this.baseURL}${url.startsWith("/") ? url : `/${url}`}`;
+    }
+
+    private async parseResponse(response: Response): Promise<unknown> {
+        const contentType = response.headers.get("content-type");
+
+        if (contentType?.includes("application/json")) {
+            try {
+                return await response.json();
+            } catch {
+                return await response.text();
+            }
+        }
+
+        const text = await response.text();
+        try {
+            return JSON.parse(text);
+        } catch {
+            return text;
+        }
+    }
+
+    private async request<T = unknown>(config: RequestConfig): Promise<HttpResponse<T>> {
+        const url = this.buildUrl(config.url || "");
+        const headers = { ...this.defaultHeaders, ...config.headers };
+
+        let body: string | FormData | undefined = undefined;
+        if (config.body) {
+            if (config.body instanceof FormData) {
+                body = config.body;
+            } else {
+                headers["Content-Type"] = headers["Content-Type"] || "application/json";
+                body = JSON.stringify(config.body);
+            }
+        }
+
+        const options: RequestInit = {
+            method: config.method || "GET",
+            headers,
+            body,
+        };
+
+        try {
+            const response = isServer
+                ? await this.fetchWithTimeout(url, options)
+                : await this.retryRequest(url, options);
+
+            const responseData = await this.parseResponse(response);
+            const httpResponse: HttpResponse<T> = {
+                data: responseData as T,
+                status: response.status,
+                statusText: response.statusText,
+                headers: response.headers,
+                config,
+            };
+
+            if (!response.ok) {
+                const error = new Error(`HTTP ${response.status}: ${response.statusText}`) as HttpError;
+                error.response = {
+                    status: response.status,
+                    statusText: response.statusText,
+                    data: responseData,
+                };
+                error.config = config;
+                Object.assign(error, { data: responseData, status: response.status });
+                throw error;
+            }
+
+            return this.applyResponseInterceptors(httpResponse);
+        } catch (error) {
+            const httpError = error as HttpError;
+            httpError.config = config;
+            throw await this.applyErrorInterceptors(httpError);
+        }
+    }
+
+    private applyResponseInterceptors<T>(response: HttpResponse<T>): HttpResponse<T> {
+        return this.responseInterceptors.reduce(
+            (result, interceptor) => interceptor.fulfilled(result) as HttpResponse<T>,
+            response,
+        );
+    }
+
+    private async applyErrorInterceptors(error: HttpError): Promise<HttpError> {
+        let result = error;
+        for (const interceptor of this.responseInterceptors) {
+            result = await interceptor.rejected(result);
+        }
+        return result;
+    }
+
+    get<T = unknown>(url: string, config?: Omit<RequestConfig, "method" | "url">): Promise<HttpResponse<T>> {
+        return this.request<T>({ ...config, method: "GET", url });
+    }
+
+    post<T = unknown>(
+        url: string,
+        data?: unknown,
+        config?: Omit<RequestConfig, "method" | "url" | "body">,
+    ): Promise<HttpResponse<T>> {
+        return this.request<T>({ ...config, method: "POST", url, body: data });
+    }
+
+    put<T = unknown>(
+        url: string,
+        data?: unknown,
+        config?: Omit<RequestConfig, "method" | "url" | "body">,
+    ): Promise<HttpResponse<T>> {
+        return this.request<T>({ ...config, method: "PUT", url, body: data });
+    }
+
+    delete<T = unknown>(url: string, config?: Omit<RequestConfig, "method" | "url">): Promise<HttpResponse<T>> {
+        return this.request<T>({ ...config, method: "DELETE", url });
+    }
+
+    patch<T = unknown>(
+        url: string,
+        data?: unknown,
+        config?: Omit<RequestConfig, "method" | "url" | "body">,
+    ): Promise<HttpResponse<T>> {
+        return this.request<T>({ ...config, method: "PATCH", url, body: data });
+    }
+
+    get interceptors() {
+        return {
+            response: {
+                use: (fulfilled: (response: HttpResponse) => HttpResponse, rejected: (error: HttpError) => Promise<HttpError>) => {
+                    this.responseInterceptors.push({ fulfilled, rejected });
+                },
+            },
         };
     }
 
-    const client: AxiosInstance = axios.create(params);
-    client.defaults.transitional = {
-        silentJSONParsing: true,
-        forcedJSONParsing: true,
-        clarifyTimeoutError: false,
+    get defaults() {
+        return {
+            transitional: {
+                silentJSONParsing: true,
+                forcedJSONParsing: true,
+                clarifyTimeoutError: false,
+            },
+        };
+    }
+}
+
+export function http({ headers, locale }: IHttpParams = {}): HttpClient {
+    const clientHeaders: Record<string, string> = {
+        "X-Requested-With": "XMLHttpRequest",
+        ...(headers || {}),
     };
+
+    if (isServer && locale) {
+        clientHeaders.Cookie = `locale=${COOKIE_BY_LOCALE[locale]};`;
+    }
+
+    const client = new HttpClient({
+        baseURL: isServer ? "http://localhost:2004" : "/",
+        timeout,
+        headers: clientHeaders,
+    });
+
     client.interceptors.response.use((response) => {
         return response;
     }, (error) => {
@@ -68,15 +294,6 @@ export function http({ headers, locale }: IHttpParams = {}): AxiosInstance {
 
         return Promise.reject(error);
     });
-
-    if (!isServer) {
-        axiosRetry(client, {
-            retries: RETRY_COUNT,
-            retryCondition: (error) => Object.hasOwnProperty.call(RETRY_CONDITION, error.message),
-            retryDelay: axiosRetry.exponentialDelay,
-            shouldResetTimeout: true,
-        });
-    }
 
     return client;
 }
