@@ -1,3 +1,36 @@
+## [1.28.5](https://github.com/upstars-global/unity-core-modules/compare/v1.28.4...v1.28.5) (2025-07-09)
+
+### 🔧 Maintenance
+
+* UN-1201 add widget type ([#186](https://github.com/upstars-global/unity-core-modules/issues/186))
+ ([1b95525](https://github.com/upstars-global/unity-core-modules/commit/1b9552540c96228b5d7e0f596d10d48baf6b78f4))
+
+
+
+    Co-authored-by: zeroequalzero <d.zavadskyi@upstars.com>
+
+## [1.28.4](https://github.com/upstars-global/unity-core-modules/compare/v1.28.3...v1.28.4) (2025-06-27)
+
+### 🐛 Bug Fixes
+
+* **UN-1309:** turned off pwa events ([#188](https://github.com/upstars-global/unity-core-modules/issues/188))
+ ([c7407b7](https://github.com/upstars-global/unity-core-modules/commit/c7407b737a9e7f00cbfdeabed935324564d9d508))
+
+
+
+    fix(UN-1309): turned off pwa events
+
+## [1.28.3](https://github.com/upstars-global/unity-core-modules/compare/v1.28.2...v1.28.3) (2025-06-26)
+
+### 🔧 Maintenance
+
+* add GA helper
+ ([34b70b9](https://github.com/upstars-global/unity-core-modules/commit/34b70b924be239c8770eeff80b53f4e9e9354de1))
+
+
+
+    done
+
 ## [1.28.2](https://github.com/upstars-global/unity-core-modules/compare/v1.28.1...v1.28.2) (2025-06-18)
 
 ### 🔨 Refactoring
