@@ -38,7 +38,9 @@ export interface IBannerConfig {
     };
     order: Record<string, number>,
     image: string;
+    overlayImage: string;
     frontend_identifier: string;
+    isSkeleton: boolean;
     groupIds?: UserGroup[]
 }
 
