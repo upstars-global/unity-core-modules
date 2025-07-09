@@ -1,3 +1,14 @@
+## [1.28.5](https://github.com/upstars-global/unity-core-modules/compare/v1.28.4...v1.28.5) (2025-07-09)
+
+### 🔧 Maintenance
+
+* UN-1201 add widget type ([#186](https://github.com/upstars-global/unity-core-modules/issues/186))
+ ([1b95525](https://github.com/upstars-global/unity-core-modules/commit/1b9552540c96228b5d7e0f596d10d48baf6b78f4))
+
+
+
+    Co-authored-by: zeroequalzero <d.zavadskyi@upstars.com>
+
 ## [1.28.4](https://github.com/upstars-global/unity-core-modules/compare/v1.28.3...v1.28.4) (2025-06-27)
 
 ### 🐛 Bug Fixes
