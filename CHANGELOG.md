@@ -1,3 +1,14 @@
+## [1.28.7](https://github.com/upstars-global/unity-core-modules/compare/v1.28.6...v1.28.7) (2025-07-10)
+
+### 🔧 Maintenance
+
+* Un 996 ([#187](https://github.com/upstars-global/unity-core-modules/issues/187))
+ ([b769d5d](https://github.com/upstars-global/unity-core-modules/commit/b769d5da866f4da6c312d2b5998497a3dec370d1))
+
+
+
+    chore: UN-996 rocket mart discount
+
 ## [1.28.6](https://github.com/upstars-global/unity-core-modules/compare/v1.28.5...v1.28.6) (2025-07-10)
 
 ### 🐛 Bug Fixes
