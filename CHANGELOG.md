@@ -1,3 +1,14 @@
+## [1.28.6](https://github.com/upstars-global/unity-core-modules/compare/v1.28.5...v1.28.6) (2025-07-10)
+
+### 🐛 Bug Fixes
+
+* **UN-1290:** extended MainWidgetItem type ([#189](https://github.com/upstars-global/unity-core-modules/issues/189))
+ ([8e54bce](https://github.com/upstars-global/unity-core-modules/commit/8e54bcea95ad17eb816c01a376106d7244e1dd42))
+
+
+
+    fix(UN-1229): extended MainWidgetItem type
+
 ## [1.28.5](https://github.com/upstars-global/unity-core-modules/compare/v1.28.4...v1.28.5) (2025-07-09)
 
 ### 🔧 Maintenance
