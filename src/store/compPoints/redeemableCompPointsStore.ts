@@ -13,7 +13,7 @@ import { useLotteriesStore } from "../lotteries";
 import { useUserInfo } from "../user/userInfo";
 import { useStatusCompPointsStore } from "./statusCompPointsStore";
 
-function checkHasAvailableCards(list: IRedeemableCards[], isLogged: boolean, balance: number, currency: string) {
+export function checkHasAvailableCards(list: IRedeemableCards[], isLogged: boolean, balance: number, currency: string) {
     if (!isLogged || !balance || !list) {
         return false;
     }
@@ -118,7 +118,7 @@ export const useRedeemableCompPointsStore = defineStore("redeemableCompPointsSto
 
         rates.value = {
             MONEY_REWARD: money,
-            FREE_SPINS: freeSpins.length ? freeSpins : getMockCards.value.FREE_SPINS,
+            FREE_SPINS: freeSpins.length ? freeSpins : getMockCards.value?.FREE_SPINS || [],
             SPECIAL_REWARDS: [ ...lootBoxes, ...lotteries ],
         };
     }
