@@ -28,6 +28,7 @@ interface RequestConfig {
     body?: unknown;
     timeout?: number;
     url?: string;
+    params?: Record<string, unknown>;
 }
 
 interface HttpResponse<T = unknown> {
@@ -140,8 +141,22 @@ class HttpClient {
     }
 
     private async request<T = unknown>(config: RequestConfig): Promise<HttpResponse<T>> {
-        const url = this.buildUrl(config.url || "");
+        let url = this.buildUrl(config.url || "");
         const headers = { ...this.defaultHeaders, ...config.headers };
+
+        if (config.params) {
+            const params = new URLSearchParams();
+            for (const key of Object.keys(config.params)) {
+                const value = config.params[key];
+                if (value !== null && value !== undefined) {
+                    params.append(key, String(value));
+                }
+            }
+            const queryString = params.toString();
+            if (queryString) {
+                url = `${url }${url.includes("?") ? "&" : "?"}${queryString}`;
+            }
+        }
 
         let body: string | FormData | undefined = undefined;
         if (config.body) {
