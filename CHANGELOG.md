@@ -1,3 +1,10 @@
+## [1.28.8](https://github.com/upstars-global/unity-core-modules/compare/v1.28.7...v1.28.8) (2025-07-11)
+
+### 🔧 Maintenance
+
+* UN-1312 update IBannerConfig ([#191](https://github.com/upstars-global/unity-core-modules/issues/191))
+ ([a6b5243](https://github.com/upstars-global/unity-core-modules/commit/a6b52439e665a52adf8eb14b83b1e70416687b10))
+
 ## [1.28.7](https://github.com/upstars-global/unity-core-modules/compare/v1.28.6...v1.28.7) (2025-07-10)
 
 ### 🔧 Maintenance
