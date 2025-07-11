@@ -162,6 +162,10 @@ class HttpClient {
         if (config.body) {
             if (config.body instanceof FormData) {
                 body = config.body;
+                const contentTypeKey = Object.keys(headers).find((key) => key.toLowerCase() === "content-type");
+                if (contentTypeKey) {
+                    delete headers[contentTypeKey];
+                }
             } else {
                 headers["Content-Type"] = headers["Content-Type"] || "application/json";
                 body = JSON.stringify(config.body);
