@@ -1,5 +1,3 @@
-import type { AxiosError } from "axios";
-
 import { log } from "../../../controllers/Logger";
 import { IDocument } from "../DTO/documents";
 import { http } from "../http";
@@ -29,7 +27,7 @@ export async function uploadDocuments(file: File, description: string): Promise<
         return data;
     } catch (err) {
         log.error("UPLOAD_DOCUMENTS_ERROR", err);
-        throw (err as AxiosError).response;
+        throw err;
     }
 }
 
