@@ -282,6 +282,7 @@ class HttpClient {
 
 export function http({ headers, locale }: IHttpParams = {}): HttpClient {
     const clientHeaders: Record<string, string> = {
+        "Accept": "application/json, text/plain, */*",
         "X-Requested-With": "XMLHttpRequest",
         ...(headers || {}),
     };
