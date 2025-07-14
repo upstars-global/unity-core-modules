@@ -122,17 +122,16 @@ class HttpClient {
     }
 
     private async parseResponse(response: Response): Promise<unknown> {
-        const contentType = response.headers.get("content-type");
-
-        if (contentType?.includes("application/json")) {
-            try {
-                return await response.json();
-            } catch {
-                return await response.text();
-            }
+        if (response.status === 204) {
+            return null;
         }
 
         const text = await response.text();
+
+        if (!text) {
+            return null;
+        }
+
         try {
             return JSON.parse(text);
         } catch {
@@ -200,7 +199,6 @@ class HttpClient {
                     data: responseData,
                 };
                 error.config = config;
-                Object.assign(error, { data: responseData, status: response.status });
                 throw error;
             }
 
