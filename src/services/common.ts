@@ -2,7 +2,6 @@ import { isServer } from "../helpers/ssrHelpers";
 import { useCommon } from "../store/common";
 import { usePWA } from "../store/pwa";
 import { useUserInfo } from "../store/user/userInfo";
-import { useUserStatuses } from "../store/user/userStatuses";
 import type { PWAEvent } from "./api/DTO/PWAEvent";
 import { fetchCurrentIPReq, sendPWAEventReq } from "./api/requests/common";
 
@@ -12,6 +11,13 @@ export async function loadCurrentIP() {
 
     if (data) {
         commonStore.setCurrentIpInfo(data);
+    }
+}
+
+export function checkIsNativePWA() {
+    if (!isServer) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get("pwaType") === "native";
     }
 }
 
@@ -41,14 +47,10 @@ export async function subscribeToStandaloneMQL() {
 }
 
 export async function sendPWAEvent(event: PWAEvent) {
-    return; // todo remove when it's time to bring back pwa events
-    const PWAInstallGroupId = 1401;
-
     const userStore = useUserInfo();
-    const userStatusesStore = useUserStatuses();
-
-    if (userStore.getIsLogged) {
+    const isNativePWA = checkIsNativePWA();
+    if (userStore.getIsLogged && isNativePWA) {
         await sendPWAEventReq(event);
-        await userStatusesStore.addUserToGroup(PWAInstallGroupId);
     }
 }
+
