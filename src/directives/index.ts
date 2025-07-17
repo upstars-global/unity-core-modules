@@ -1,10 +1,10 @@
 import type { Plugin } from "vue";
 
-import { filterNumbers } from "./filterNumbers";
+import { filterExcludeNumbers } from "./filterExcludeNumbers";
 
 const plugin: Plugin = {
     install(app) {
-        app.directive("filter-numbers", filterNumbers);
+        app.directive("filter-exclude-numbers", filterExcludeNumbers);
     },
 };
 
