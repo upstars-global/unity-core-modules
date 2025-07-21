@@ -1,3 +1,14 @@
+## [1.28.9](https://github.com/upstars-global/unity-core-modules/compare/v1.28.8...v1.28.9) (2025-07-16)
+
+### 🐛 Bug Fixes
+
+* **UN-1229:** added check for logged user and native pwa support ([#182](https://github.com/upstars-global/unity-core-modules/issues/182))
+ ([3635376](https://github.com/upstars-global/unity-core-modules/commit/3635376daab101b2c63105ebd9577d26ca0e3042))
+
+
+* **UN-1229:** updated lock file ([#192](https://github.com/upstars-global/unity-core-modules/issues/192))
+ ([5812abe](https://github.com/upstars-global/unity-core-modules/commit/5812abed47b99eee658dc65cd0bd7a3dd8a672d3))
+
 ## [1.28.8](https://github.com/upstars-global/unity-core-modules/compare/v1.28.7...v1.28.8) (2025-07-11)
 
 ### 🔧 Maintenance
