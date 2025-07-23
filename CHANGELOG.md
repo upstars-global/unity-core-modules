@@ -1,3 +1,28 @@
+## [1.29.1](https://github.com/upstars-global/unity-core-modules/compare/v1.29.0...v1.29.1) (2025-07-23)
+
+### 🐛 Bug Fixes
+
+* **UN-119:** axios compability for delete requests ([#196](https://github.com/upstars-global/unity-core-modules/issues/196))
+ ([3aca358](https://github.com/upstars-global/unity-core-modules/commit/3aca3581c25da44e46d51ac39f51986ac78ba045))
+
+
+
+    * UN-119 fetch instead of axios
+
+    * remove axios from package.json
+
+    * chore: update yarn.lock
+
+    * UN-119 improve params
+
+    * UN-119 fix document uploading
+
+    * UN-119 fix sign_up with accept header
+
+    * UN-119 fix empty response from patch
+
+    * UN-119 delete method compatibility with axios
+
 ## [1.29.0](https://github.com/upstars-global/unity-core-modules/compare/v1.28.9...v1.29.0) (2025-07-23)
 
 ### 🚀 Features
