@@ -9,4 +9,5 @@ cli/.env.cli
 .envrc
 .DS_Store
 *.tmp
+
 .vscode

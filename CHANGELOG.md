@@ -1,3 +1,14 @@
+## [1.29.0](https://github.com/upstars-global/unity-core-modules/compare/v1.28.9...v1.29.0) (2025-07-23)
+
+### 🚀 Features
+
+* (UN-119) fetch instead of axios ([#190](https://github.com/upstars-global/unity-core-modules/issues/190)) [#88](https://github.com/upstars-global/unity-core-modules/issues/88) ([#195](https://github.com/upstars-global/unity-core-modules/issues/195))
+ ([3c6992b](https://github.com/upstars-global/unity-core-modules/commit/3c6992b1ba43f1ae101ca49ac87051bda31fd8a1))
+
+
+
+    Co-authored-by: d-tashchi <kabak133@gmail.com>
+
 ## [1.28.9](https://github.com/upstars-global/unity-core-modules/compare/v1.28.8...v1.28.9) (2025-07-16)
 
 ### 🐛 Bug Fixes
