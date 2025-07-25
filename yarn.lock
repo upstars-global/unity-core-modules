@@ -43,7 +43,7 @@
   dependencies:
     "@babel/types" "^7.26.5"
 
-"@babel/runtime@^7.14.0", "@babel/runtime@^7.15.4":
+"@babel/runtime@^7.14.0":
   version "7.26.0"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.26.0.tgz#8600c2f595f277c60815256418b85356a65173c1"
   integrity sha512-FDSOghenHTiToteC/QRlv2q3DhPZ/oOXTBoirfWNx1Cx3TMVcGWQtMMmQcSvb/JjpNeGzx8Pq/b4fKEJuWm1sw==
@@ -773,10 +773,10 @@
     proc-log "^5.0.0"
     which "^5.0.0"
 
-"@octokit/auth-app@^8.0.1":
-  version "8.0.1"
-  resolved "https://registry.yarnpkg.com/@octokit/auth-app/-/auth-app-8.0.1.tgz#8d34ba9fe4c9d8ae492ade0d3f2c522fe068ccd6"
-  integrity sha512-P2J5pB3pjiGwtJX4WqJVYCtNkcZ+j5T2Wm14aJAEIC3WJOrv12jvBley3G1U/XI8q9o1A7QMG54LiFED2BiFlg==
+"@octokit/auth-app@^8.0.2":
+  version "8.0.2"
+  resolved "https://registry.yarnpkg.com/@octokit/auth-app/-/auth-app-8.0.2.tgz#d44d59697421a4456e345e959a96a635e5e73bef"
+  integrity sha512-dLTmmA9gUlqiAJZgozfOsZFfpN/OldH3xweb7lqSnngax5Rs+PfO5dDlokaBfc41H1xOtsLYV5QqR0DkBAtPmw==
   dependencies:
     "@octokit/auth-oauth-app" "^9.0.1"
     "@octokit/auth-oauth-user" "^6.0.0"
@@ -1586,11 +1586,6 @@
     "@typescript-eslint/types" "7.18.0"
     eslint-visitor-keys "^3.4.3"
 
-"@vespaiach/axios-fetch-adapter@^0.3.1":
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/@vespaiach/axios-fetch-adapter/-/axios-fetch-adapter-0.3.1.tgz#b0c08167bec9cc558f578a1b9ccff52ead1cf1cb"
-  integrity sha512-+1F52VWXmQHSRFSv4/H0wtnxfvjRMPK5531e880MIjypPdUSX6QZuoDgEVeCE1vjhzDdxCVX7rOqkub7StEUwQ==
-
 "@vitest/coverage-v8@^3.0.9":
   version "3.0.9"
   resolved "https://registry.yarnpkg.com/@vitest/coverage-v8/-/coverage-v8-3.0.9.tgz#279f54b54e0096ce23fd10dba52087165899b654"
@@ -1901,21 +1896,6 @@ available-typed-arrays@^1.0.7:
   integrity sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==
   dependencies:
     possible-typed-array-names "^1.0.0"
-
-axios-retry@^3.9.1:
-  version "3.9.1"
-  resolved "https://registry.yarnpkg.com/axios-retry/-/axios-retry-3.9.1.tgz#c8924a8781c8e0a2c5244abf773deb7566b3830d"
-  integrity sha512-8PJDLJv7qTTMMwdnbMvrLYuvB47M81wRtxQmEdV5w4rgbTXTt+vtPkXwajOfOdSyv/wZICJOC+/UhXH4aQ/R+w==
-  dependencies:
-    "@babel/runtime" "^7.15.4"
-    is-retry-allowed "^2.2.0"
-
-axios@^0.26.0:
-  version "0.26.1"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-0.26.1.tgz#1ede41c51fcf51bbbd6fd43669caaa4f0495aaa9"
-  integrity sha512-fPwcX4EvnSHuInCMItEhAGnaSEXRBjtzh9fOtsE6E1G6p7vl7edEeZe11QHf18+6+9gR5PbKV/sGKNaD8YaMeA==
-  dependencies:
-    follow-redirects "^1.14.8"
 
 balanced-match@^1.0.0:
   version "1.0.2"
@@ -3207,11 +3187,6 @@ flatted@^3.2.9:
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-3.3.2.tgz#adba1448a9841bec72b42c532ea23dbbedef1a27"
   integrity sha512-AiwGJM8YcNOaobumgtng+6NHuOqC3A7MixFeDafM3X9cIUM+xUXoS5Vfgf+OihAYe20fxqNM9yPBXJzRtZ/4eA==
 
-follow-redirects@^1.14.8:
-  version "1.15.9"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.9.tgz#a604fa10e443bf98ca94228d9eebcc2e8a2c8ee1"
-  integrity sha512-gew4GsXizNgdoRyqmyfMHyAmXsZDk6mHkSxZFCzW9gwlbtOW44CDtYavM+y+72qD/Vq2l550kMF52DT8fOLJqQ==
-
 for-each@^0.3.3:
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/for-each/-/for-each-0.3.3.tgz#69b447e88a0a5d32c3e7084f3f1710034b21376e"
@@ -3806,11 +3781,6 @@ is-plain-obj@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/is-plain-obj/-/is-plain-obj-4.1.0.tgz#d65025edec3657ce032fd7db63c97883eaed71f0"
   integrity sha512-+Pgi+vMuUNkJyExiMBt5IlFoMyKnr5zhJ4Uspz58WOhBF5QoIZkFyNHIbBAtHwzVAgk5RtndVNsDRN61/mmDqg==
-
-is-retry-allowed@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/is-retry-allowed/-/is-retry-allowed-2.2.0.tgz#88f34cbd236e043e71b6932d09b0c65fb7b4d71d"
-  integrity sha512-XVm7LOeLpTW4jV19QSH38vkswxoLud8sQ57YwJVTPWdiaI9I8keEhGFpBlslyVsgdQy4Opg8QOLb8YRgsyZiQg==
 
 is-standalone-pwa@^0.1.1:
   version "0.1.1"
