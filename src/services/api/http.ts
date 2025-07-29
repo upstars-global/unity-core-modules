@@ -312,8 +312,6 @@ export function http({ headers, locale }: IHttpParams = {}): HttpClient {
             log.error(`LOAD_${apiLabel}_ERROR`, error);
         }
 
-        console.log("new debug: ", error.response);
-
         if (error.response) {
             const axiosLikeError = {
                 ...error.response,
