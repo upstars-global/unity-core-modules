@@ -41,6 +41,10 @@ export interface IGamesProvider {
     name: string;
 }
 
+export interface IDisabledGamesProvider {
+    [key: string]: "all" | string[];
+}
+
 export type IGamesProviderCollection = Record<string, IGamesProvider>;
 
 export interface ICollectionItem {

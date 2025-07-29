@@ -4,12 +4,21 @@ import { ref, type UnwrapRef } from "vue";
 
 import { log } from "../../controllers/Logger";
 import { processGameForNewAPI } from "../../helpers/gameHelpers";
-import type { ICollectionItem, ICollections, IGamesProvider, IGamesProviderCollection } from "../../models/game";
+import type {
+    ICollectionItem,
+    ICollections,
+    IDisabledGamesProvider,
+    IGamesProvider,
+    IGamesProviderCollection,
+} from "../../models/game";
 import { http } from "../../services/api/http";
+import { loadDisabledProvidersConfigReq } from "../../services/api/requests/configs";
+import { useCommon } from "../common";
 import { useConfigStore } from "../configStore";
 import { useRootStore } from "../root";
 import { useGamesCommon } from "./gamesStore";
 import { defaultCollection } from "./helpers/games";
+
 
 export const useGamesProviders = defineStore("gamesProviders", () => {
     const { isMobile } = storeToRefs(useRootStore());
@@ -17,6 +26,7 @@ export const useGamesProviders = defineStore("gamesProviders", () => {
     const collections = ref<ICollections>({});
     const gamesProvidersCollectionData = ref<IGamesProviderCollection>({});
     const { gamesPageLimit } = storeToRefs(useConfigStore());
+    const { currentIpInfo } = storeToRefs(useCommon());
 
     function getCollection(slug: string, page: number = 1, startPage: number = 0) {
         return collections.value[slug]?.data.slice(startPage * gamesPageLimit.value, page * gamesPageLimit.value) || [];
@@ -115,18 +125,42 @@ export const useGamesProviders = defineStore("gamesProviders", () => {
 
     async function loadGamesProviders(): Promise<IGamesProvider[]> {
         try {
-            const response = await http().get("/api/games/providers");
-            const data = response.data.map((provider: IGamesProvider) => {
-                return {
-                    ...provider,
-                    slug: provider.id,
-                    url: `/producers/${ provider.id }`,
-                    name: provider.title,
-                };
-            });
-            setAllProviders(data);
-            initCollection(data);
-            return data;
+            const [ allProviders, disabledProviders ] = await Promise.allSettled([
+                http().get("/api/games/providers"),
+                loadDisabledProvidersConfigReq(),
+            ]);
+
+            if (allProviders.status === "fulfilled") {
+                let data = (allProviders.value as { data: IGamesProvider[] }).data.map((provider: IGamesProvider) => {
+                    return {
+                        ...provider,
+                        slug: provider.id,
+                        url: `/producers/${ provider.id }`,
+                        name: provider.title,
+                    };
+                });
+
+                if (disabledProviders.status === "fulfilled") {
+                    data = data.filter((provider: IGamesProvider) => {
+                        const currentDisabledProvider = (disabledProviders.value as IDisabledGamesProvider)[provider.id];
+
+                        if (currentDisabledProvider === "all") {
+                            return false;
+                        } else if (Array.isArray(currentDisabledProvider)) {
+                            return !currentDisabledProvider.includes(String(currentIpInfo.value?.country_code));
+                        }
+
+                        return true;
+                    });
+                }
+
+                setAllProviders(data);
+                initCollection(data);
+                return data;
+            }
+
+            log.error("LOAD_GAMES_PROVIDERS_ERROR", allProviders.reason);
+            throw allProviders.reason;
         } catch (err) {
             log.error("LOAD_GAMES_PROVIDERS_ERROR", err);
             throw err;
