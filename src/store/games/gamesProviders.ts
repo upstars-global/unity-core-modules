@@ -1,3 +1,4 @@
+import featureFlags from "@theme/configs/featureFlags";
 import { SPECIAL_GAME_PROVIDER_NAME } from "@theme/configs/games";
 import { defineStore, type Pinia, storeToRefs } from "pinia";
 import { ref, type UnwrapRef } from "vue";
@@ -139,7 +140,9 @@ export const useGamesProviders = defineStore("gamesProviders", () => {
             setAllProviders(data);
             initCollection(data);
 
-            filterDisabledProviders(data);
+            if (!featureFlags.enableAllProviders) {
+                filterDisabledProviders(data);
+            }
 
             return data;
         } catch (err) {
