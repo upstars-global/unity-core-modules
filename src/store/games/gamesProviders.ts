@@ -125,46 +125,53 @@ export const useGamesProviders = defineStore("gamesProviders", () => {
 
     async function loadGamesProviders(): Promise<IGamesProvider[]> {
         try {
-            const [ allProviders, disabledProviders ] = await Promise.allSettled([
-                http().get("/api/games/providers"),
-                loadDisabledProvidersConfigReq(),
-            ]);
+            const response = await http().get<{ data: IGamesProvider[] }>("/api/games/providers");
 
-            if (allProviders.status === "fulfilled") {
-                let data = (allProviders.value as { data: IGamesProvider[] }).data.map((provider: IGamesProvider) => {
-                    return {
-                        ...provider,
-                        slug: provider.id,
-                        url: `/producers/${ provider.id }`,
-                        name: provider.title,
-                    };
-                });
+            const data = response.data.map((provider: IGamesProvider) => {
+                return {
+                    ...provider,
+                    slug: provider.id,
+                    url: `/producers/${ provider.id }`,
+                    name: provider.title,
+                };
+            });
 
-                if (disabledProviders.status === "fulfilled") {
-                    data = data.filter((provider: IGamesProvider) => {
-                        const currentDisabledProvider = (disabledProviders.value as IDisabledGamesProvider)[provider.id];
+            setAllProviders(data);
+            initCollection(data);
 
-                        if (currentDisabledProvider === "all") {
-                            return false;
-                        } else if (Array.isArray(currentDisabledProvider)) {
-                            return !currentDisabledProvider.includes(String(currentIpInfo.value?.country_code));
-                        }
+            filterDisabledProviders(data);
 
-                        return true;
-                    });
-                }
-
-                setAllProviders(data);
-                initCollection(data);
-                return data;
-            }
-
-            log.error("LOAD_GAMES_PROVIDERS_ERROR", allProviders.reason);
-            throw allProviders.reason;
+            return data;
         } catch (err) {
             log.error("LOAD_GAMES_PROVIDERS_ERROR", err);
             throw err;
         }
+    }
+
+    function filterDisabledProviders(data: IGamesProvider[]): void {
+        loadDisabledProvidersConfigReq().then((disabledProviders) => {
+            if (disabledProviders) {
+                const filterData = data.filter((provider: IGamesProvider) => {
+                    const currentDisabledProvider = (disabledProviders as IDisabledGamesProvider)[provider.id];
+
+                    if (currentDisabledProvider === "all") {
+                        return false;
+                    } else if (Array.isArray(currentDisabledProvider)) {
+                        return !currentDisabledProvider.includes(String(currentIpInfo.value?.country_code));
+                    }
+
+                    return true;
+                });
+
+                setAllProviders(filterData);
+                initCollection(filterData);
+
+                return filterData;
+            }
+        }).catch((err) => {
+            log.error("LOAD_DISABLED_PROVIDERS_ERROR", err);
+            throw err;
+        });
     }
 
     return {
