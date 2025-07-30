@@ -26,6 +26,7 @@ interface RequestConfig {
     method?: string;
     headers?: Record<string, string>;
     body?: unknown;
+    data?: unknown; // for axios compatibility
     timeout?: number;
     url?: string;
     params?: Record<string, unknown>;
@@ -158,16 +159,17 @@ class HttpClient {
         }
 
         let body: string | FormData | undefined = undefined;
-        if (config.body) {
-            if (config.body instanceof FormData) {
-                body = config.body;
+        if (config.body || config.data) {
+            const bodyData = config.body || config.data;
+            if (bodyData instanceof FormData) {
+                body = bodyData;
                 const contentTypeKey = Object.keys(headers).find((key) => key.toLowerCase() === "content-type");
                 if (contentTypeKey) {
                     delete headers[contentTypeKey];
                 }
             } else {
                 headers["Content-Type"] = headers["Content-Type"] || "application/json";
-                body = JSON.stringify(config.body);
+                body = JSON.stringify(bodyData);
             }
         }
 
