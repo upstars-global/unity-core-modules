@@ -1,4 +1,5 @@
 import { log } from "../../../controllers/Logger";
+import { isTestHostname } from "../../../helpers/isTestHostname";
 import type { ICurrentIP } from "../DTO/current-ip";
 import type { PWAEvent } from "../DTO/PWAEvent";
 import { http } from "../http";
@@ -19,9 +20,10 @@ export async function sendContactMessageReq(contact: IContactMessage) {
     }
 };
 
-export async function fetchCurrentIPReq() {
+export async function fetchCurrentIPReq(hostname: string = "") {
     try {
-        const { data } = await http().get<ICurrentIP>("/api/current_ip");
+        const url = isTestHostname(hostname) ? "https://rocketplay.com" : "";
+        const { data } = await http().get<ICurrentIP>(`${url}/api/current_ip`);
         return data;
     } catch ({ response }) {
         log.error("LOAD_CURRENT_IP_ERROR", response);

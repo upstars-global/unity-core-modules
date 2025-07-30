@@ -6,11 +6,13 @@ import type { PWAEvent } from "./api/DTO/PWAEvent";
 import { fetchCurrentIPReq, sendPWAEventReq } from "./api/requests/common";
 
 export async function loadCurrentIP() {
-    const commonStore = useCommon();
-    const data = await fetchCurrentIPReq();
+    if (!isServer) {
+        const commonStore = useCommon();
+        const data = await fetchCurrentIPReq(window.location.hostname);
 
-    if (data) {
-        commonStore.setCurrentIpInfo(data);
+        if (data) {
+            commonStore.setCurrentIpInfo(data);
+        }
     }
 }
 
@@ -53,4 +55,3 @@ export async function sendPWAEvent(event: PWAEvent) {
         await sendPWAEventReq(event);
     }
 }
-
