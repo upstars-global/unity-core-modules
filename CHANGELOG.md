@@ -1,3 +1,12 @@
+## [1.30.1](https://github.com/upstars-global/unity-core-modules/compare/v1.30.0...v1.30.1) (2025-08-01)
+
+### ⏪ Reverts
+
+* Revert "feat(UN-1438): axios error format" ([#200](https://github.com/upstars-global/unity-core-modules/issues/200))
+ ([c3cc448](https://github.com/upstars-global/unity-core-modules/commit/c3cc4486ee0f13d7bf16dfa9a8456b22afef7dde))
+
+, closes [#197](https://github.com/upstars-global/unity-core-modules/issues/)
+
 ## [1.30.0](https://github.com/upstars-global/unity-core-modules/compare/v1.29.1...v1.30.0) (2025-08-01)
 
 ### 🚀 Features
