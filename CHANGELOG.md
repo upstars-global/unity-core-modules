@@ -1,3 +1,16 @@
+## [1.30.0](https://github.com/upstars-global/unity-core-modules/compare/v1.29.1...v1.30.0) (2025-08-01)
+
+### 🚀 Features
+
+* **UN-1438:** axios error format ([#197](https://github.com/upstars-global/unity-core-modules/issues/197))
+ ([1470acc](https://github.com/upstars-global/unity-core-modules/commit/1470acc3eb6dc6df397a9acaf4a694f59d8d4e27))
+
+
+
+    * UN-1438 axios error format
+
+    * remove log
+
 ## [1.29.1](https://github.com/upstars-global/unity-core-modules/compare/v1.29.0...v1.29.1) (2025-07-23)
 
 ### 🐛 Bug Fixes
