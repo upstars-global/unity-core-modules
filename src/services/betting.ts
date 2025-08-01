@@ -22,7 +22,7 @@ export async function addBonusNotificationItem(type: string, id: string) {
     const { bettingConfig } = storeToRefs(useConfigStore());
     const { addRealTimeNotification } = useNoticesStore();
     const bonusTypesMap = bettingConfig.value?.bonusTypesMap as Record<string, string>;
-    const bonus = await loadBetBonusReq(bonusTypesMap[type] || type, id);
+    const bonus = await loadBetBonusReq(bonusTypesMap?.[type] || type, id);
 
     if (bonus) {
         const payload = {
