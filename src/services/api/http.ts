@@ -313,11 +313,8 @@ export function http({ headers, locale }: IHttpParams = {}): HttpClient {
         }
 
         if (error.response) {
-            const axiosLikeError = {
-                ...error.response,
-                config: error.config,
-            };
-            return Promise.reject(axiosLikeError);
+            Object.assign(error, error.response);
+            delete error.response;
         }
 
         return Promise.reject(error);
