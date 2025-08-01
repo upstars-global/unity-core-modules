@@ -312,6 +312,14 @@ export function http({ headers, locale }: IHttpParams = {}): HttpClient {
             log.error(`LOAD_${apiLabel}_ERROR`, error);
         }
 
+        if (error.response) {
+            const axiosLikeError = {
+                ...error.response,
+                config: error.config,
+            };
+            return Promise.reject(axiosLikeError);
+        }
+
         return Promise.reject(error);
     });
 
