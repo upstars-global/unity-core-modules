@@ -1,5 +1,12 @@
+import { type IBettingConfig } from "../models/configs";
 import { useCommon } from "../store/common";
-import { loadCurrencyConfigReq, loadExcludedPromoStagsReq, loadMainWidgetConfigReq } from "./api/requests/configs";
+import { useConfigStore } from "../store/configStore";
+import {
+    loadBettingConfigReq,
+    loadCurrencyConfigReq,
+    loadExcludedPromoStagsReq,
+    loadMainWidgetConfigReq,
+} from "./api/requests/configs";
 
 export async function loadExcludedPromoStags() {
     const commonStore = useCommon();
@@ -32,7 +39,17 @@ export async function loadCurrencyConfig() {
 export async function loadMainWidgetConfig() {
     const commonStore = useCommon();
     const response = await loadMainWidgetConfigReq();
+
     if (response?.widgets) {
         commonStore.setMainWidgetConfig(response.widgets);
+    }
+}
+
+export async function loadBettingConfig() {
+    const configStore = useConfigStore();
+    const config = await loadBettingConfigReq();
+
+    if (config) {
+        configStore.setBettingConfig(config as IBettingConfig);
     }
 }
