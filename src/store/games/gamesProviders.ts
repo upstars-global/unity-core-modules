@@ -1,6 +1,6 @@
 import { SPECIAL_GAME_PROVIDER_NAME } from "@theme/configs/games";
 import { defineStore, type Pinia, storeToRefs } from "pinia";
-import { provide, ref, type UnwrapRef } from "vue";
+import { ref, type UnwrapRef } from "vue";
 
 import { log } from "../../controllers/Logger";
 import { processGameForNewAPI } from "../../helpers/gameHelpers";
