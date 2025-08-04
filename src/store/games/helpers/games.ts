@@ -29,7 +29,7 @@ export function defaultCollection(): ICollectionItem {
     };
 }
 
-export function filterDisabledProviders(data: IGame[] | IGamesProvider[]): IGame[] | IGamesProvider[] {
+export function filterDisabledProviders(data: (IGamesProvider | IGame)[]): (IGamesProvider | IGame)[] {
     if (!featureFlags.enableAllProviders) {
         const { disabledGamesProviders } = storeToRefs(useGamesProviders());
         const { currentIpInfo } = storeToRefs(useCommon());
