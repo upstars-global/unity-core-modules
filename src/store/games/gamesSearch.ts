@@ -4,6 +4,7 @@ import { log } from "../../controllers/Logger";
 import { processGameForNewAPI } from "../../helpers/gameHelpers";
 import { http } from "../../services/api/http";
 import { useRootStore } from "../root";
+import { filterDisabledProviders } from "./helpers/games";
 
 export const useGamesSearch = defineStore("gamesSearch", () => {
     async function loadFoundGames(searchString: string) {
@@ -15,7 +16,7 @@ export const useGamesSearch = defineStore("gamesSearch", () => {
                     title: searchString,
                 },
             });
-            return data.data.map(processGameForNewAPI);
+            return filterDisabledProviders(data.data.map(processGameForNewAPI));
         } catch (err) {
             log.error("LOAD_FOUND_GAMES_ERROR", err);
         }

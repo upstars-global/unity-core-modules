@@ -1,4 +1,9 @@
-import type { ICollectionItem, IGame } from "../../../models/game";
+import featureFlags from "@theme/configs/featureFlags";
+import { storeToRefs } from "pinia";
+
+import type { ICollectionItem, IGame, IGamesProvider } from "../../../models/game";
+import { useCommon } from "../../common";
+import { useGamesProviders } from "../gamesProviders";
 
 // tslint:disable-next-line:max-line-length
 function findGameBySeoTittleAndProducerWithDuplicate(gamesCollection: IGame[], { producer, seoTitle }): IGame | undefined {
@@ -22,4 +27,30 @@ export function defaultCollection(): ICollectionItem {
             total_count: 0,
         },
     };
+}
+
+export function filterDisabledProviders(data: IGame[] | IGamesProvider[]): IGame[] | IGamesProvider[] {
+    if (!featureFlags.enableAllProviders) {
+        const { disabledGamesProviders } = storeToRefs(useGamesProviders());
+        const { currentIpInfo } = storeToRefs(useCommon());
+
+        if (disabledGamesProviders.value && Array.isArray(data)) {
+            const filterData = data.filter((dataItem: IGame | IGamesProvider) => {
+                const providerName = dataItem.provider;
+                const currentDisabledProviderOpts = disabledGamesProviders.value[providerName];
+
+                if (currentDisabledProviderOpts === "all") {
+                    return false;
+                } else if (Array.isArray(currentDisabledProviderOpts)) {
+                    return !currentDisabledProviderOpts.includes(String(currentIpInfo.value?.country_code));
+                }
+
+                return true;
+            });
+
+            return filterData;
+        }
+    }
+
+    return data;
 }

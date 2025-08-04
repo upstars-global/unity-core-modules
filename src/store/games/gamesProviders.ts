@@ -1,7 +1,7 @@
 import featureFlags from "@theme/configs/featureFlags";
 import { SPECIAL_GAME_PROVIDER_NAME } from "@theme/configs/games";
 import { defineStore, type Pinia, storeToRefs } from "pinia";
-import { ref, type UnwrapRef } from "vue";
+import { provide, ref, type UnwrapRef } from "vue";
 
 import { log } from "../../controllers/Logger";
 import { processGameForNewAPI } from "../../helpers/gameHelpers";
@@ -13,21 +13,20 @@ import type {
     IGamesProviderCollection,
 } from "../../models/game";
 import { http } from "../../services/api/http";
-import { loadDisabledProvidersConfigReq } from "../../services/api/requests/configs";
-import { useCommon } from "../common";
 import { useConfigStore } from "../configStore";
 import { useRootStore } from "../root";
 import { useGamesCommon } from "./gamesStore";
 import { defaultCollection } from "./helpers/games";
+import { filterDisabledProviders } from "./helpers/games";
 
 
 export const useGamesProviders = defineStore("gamesProviders", () => {
     const { isMobile } = storeToRefs(useRootStore());
     const gamesProviders = ref<IGamesProvider[]>([] as IGamesProvider[]);
+    const disabledGamesProviders = ref<IDisabledGamesProvider>({});
     const collections = ref<ICollections>({});
     const gamesProvidersCollectionData = ref<IGamesProviderCollection>({});
     const { gamesPageLimit } = storeToRefs(useConfigStore());
-    const { currentIpInfo } = storeToRefs(useCommon());
 
     function getCollection(slug: string, page: number = 1, startPage: number = 0) {
         return collections.value[slug]?.data.slice(startPage * gamesPageLimit.value, page * gamesPageLimit.value) || [];
@@ -62,6 +61,15 @@ export const useGamesProviders = defineStore("gamesProviders", () => {
 
         for (const item of providers) {
             gamesProvidersCollectionData.value[item.id] = item;
+        }
+    }
+
+    function setDisabledGamesProviders(data: IDisabledGamesProvider): void {
+        try {
+            disabledGamesProviders.value = data;
+        } catch (error) {
+            log.error("LOAD_DISABLED_GAMES_PROVIDERS_ERROR", err);
+            throw err;
         }
     }
 
@@ -128,21 +136,20 @@ export const useGamesProviders = defineStore("gamesProviders", () => {
         try {
             const response = await http().get<{ data: IGamesProvider[] }>("/api/games/providers");
 
-            const data = response.data.map((provider: IGamesProvider) => {
+            let data = response.data.map((provider: IGamesProvider) => {
                 return {
                     ...provider,
+                    provider: provider.id,
                     slug: provider.id,
                     url: `/producers/${ provider.id }`,
                     name: provider.title,
                 };
             });
 
+            data = filterDisabledProviders(data);
+
             setAllProviders(data);
             initCollection(data);
-
-            if (!featureFlags.enableAllProviders) {
-                filterDisabledProviders(data);
-            }
 
             return data;
         } catch (err) {
@@ -151,34 +158,9 @@ export const useGamesProviders = defineStore("gamesProviders", () => {
         }
     }
 
-    function filterDisabledProviders(data: IGamesProvider[]): void {
-        loadDisabledProvidersConfigReq().then((disabledProviders) => {
-            if (disabledProviders) {
-                const filterData = data.filter((provider: IGamesProvider) => {
-                    const currentDisabledProvider = (disabledProviders as IDisabledGamesProvider)[provider.id];
-
-                    if (currentDisabledProvider === "all") {
-                        return false;
-                    } else if (Array.isArray(currentDisabledProvider)) {
-                        return !currentDisabledProvider.includes(String(currentIpInfo.value?.country_code));
-                    }
-
-                    return true;
-                });
-
-                setAllProviders(filterData);
-                initCollection(filterData);
-
-                return filterData;
-            }
-        }).catch((err) => {
-            log.error("LOAD_DISABLED_PROVIDERS_ERROR", err);
-            throw err;
-        });
-    }
-
     return {
         gamesProviders,
+        disabledGamesProviders,
         collections,
         getCollection,
         getGameCategoryOrProviderByUrl,
@@ -188,6 +170,7 @@ export const useGamesProviders = defineStore("gamesProviders", () => {
         loadGamesProviders,
 
         gamesProvidersCollectionData,
+        setDisabledGamesProviders,
     };
 });
 

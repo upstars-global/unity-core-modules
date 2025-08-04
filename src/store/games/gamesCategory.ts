@@ -13,6 +13,7 @@ import { useRootStore } from "../root";
 import { useUserInfo } from "../user/userInfo";
 import { useGamesCommon } from "./gamesStore";
 import { defaultCollection } from "./helpers/games";
+import { filterDisabledProviders } from "./helpers/games";
 
 const DEFAULT_COLLECTION_NAME = "default";
 
@@ -56,7 +57,8 @@ export const useGamesCategory = defineStore("gamesCategory", () => {
 
     function setData(data: ICollectionItem, slug: string): void {
         const propsGame = { ...data };
-        propsGame.data = data.data.map(processGameForNewAPI);
+        propsGame.data = filterDisabledProviders(data.data.map(processGameForNewAPI));
+
         if (!collections.value[slug]) {
             collections.value = {
                 ...collections.value,

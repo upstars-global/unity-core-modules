@@ -10,6 +10,7 @@ import {
     fetchDeleteGameFromFavorites,
     fetchFavoriteGames,
 } from "../../services/api/requests/games";
+import { filterDisabledProviders } from "./helpers/games";
 
 export const useGamesFavorite = defineStore("gamesFavorite", () => {
     const favoritesId = ref<GameFavoriteIds>([]);
@@ -30,6 +31,8 @@ export const useGamesFavorite = defineStore("gamesFavorite", () => {
             favoritesId.value = gamesID;
             gamesFavoriteFullData.value = gamesFullData
                 .map((game) => processGame(game, game.identifier));
+
+            gamesFavoriteFullData.value = filterDisabledProviders(gamesFavoriteFullData.value);
         } catch (err) {
             log.error("LOAD_FAVORITE_GAMES_ERROR", err);
             throw err;
