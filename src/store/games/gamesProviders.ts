@@ -64,12 +64,7 @@ export const useGamesProviders = defineStore("gamesProviders", () => {
     }
 
     function setDisabledGamesProviders(data: IDisabledGamesProvider): void {
-        try {
-            disabledGamesProviders.value = data;
-        } catch (error) {
-            log.error("LOAD_DISABLED_GAMES_PROVIDERS_ERROR", err);
-            throw err;
-        }
+        disabledGamesProviders.value = data;
     }
 
     async function setData(data: ICollectionItem, slug) {
@@ -145,7 +140,7 @@ export const useGamesProviders = defineStore("gamesProviders", () => {
                 };
             });
 
-            data = filterDisabledProviders(data);
+            data = filterDisabledProviders(data, disabledGamesProviders.value);
 
             setAllProviders(data);
             initCollection(data);

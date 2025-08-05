@@ -5,10 +5,6 @@ import { useGamesProviders } from "../store/games/gamesProviders";
 export async function loadDisabledGamesProviders(): Promise<void> {
     const providers = useGamesProviders();
 
-    if (Object.keys(providers.disabledGamesProviders).length) {
-        return;
-    }
-
     const data = await loadDisabledProvidersConfigReq();
 
     if (data) {

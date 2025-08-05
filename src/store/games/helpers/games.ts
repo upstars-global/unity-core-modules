@@ -1,9 +1,9 @@
 import featureFlags from "@theme/configs/featureFlags";
 import { storeToRefs } from "pinia";
 
-import type { ICollectionItem, IGame, IGamesProvider } from "../../../models/game";
+import type { ICollectionItem, IDisabledGamesProvider, IGame, IGamesProvider } from "../../../models/game";
+import { GameDisableGeoStatus } from "../../../models/game";
 import { useCommon } from "../../common";
-import { useGamesProviders } from "../gamesProviders";
 
 // tslint:disable-next-line:max-line-length
 function findGameBySeoTittleAndProducerWithDuplicate(gamesCollection: IGame[], { producer, seoTitle }): IGame | undefined {
@@ -29,17 +29,18 @@ export function defaultCollection(): ICollectionItem {
     };
 }
 
-export function filterDisabledProviders(data: (IGamesProvider | IGame)[]): (IGamesProvider | IGame)[] {
+export function filterDisabledProviders(
+    data: (IGamesProvider | IGame)[], disabledGamesProviders: IDisabledGamesProvider,
+): (IGamesProvider | IGame)[] {
     if (!featureFlags.enableAllProviders) {
-        const { disabledGamesProviders } = storeToRefs(useGamesProviders());
         const { currentIpInfo } = storeToRefs(useCommon());
 
-        if (disabledGamesProviders.value && Array.isArray(data)) {
-            const filterData = data.filter((dataItem: IGame | IGamesProvider) => {
+        if (disabledGamesProviders && Array.isArray(data)) {
+            return data.filter((dataItem: IGame | IGamesProvider) => {
                 const providerName = dataItem.provider;
-                const currentDisabledProviderOpts = disabledGamesProviders.value[providerName];
+                const currentDisabledProviderOpts = disabledGamesProviders[providerName];
 
-                if (currentDisabledProviderOpts === "all") {
+                if (currentDisabledProviderOpts === GameDisableGeoStatus.all) {
                     return false;
                 } else if (Array.isArray(currentDisabledProviderOpts)) {
                     return !currentDisabledProviderOpts.includes(String(currentIpInfo.value?.country_code));
@@ -47,8 +48,6 @@ export function filterDisabledProviders(data: (IGamesProvider | IGame)[]): (IGam
 
                 return true;
             });
-
-            return filterData;
         }
     }
 

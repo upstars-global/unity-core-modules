@@ -42,8 +42,12 @@ export interface IGamesProvider {
     name: string;
 }
 
+export enum GameDisableGeoStatus {
+    all = "all",
+}
+
 export interface IDisabledGamesProvider {
-    [key: string]: "all" | string[];
+    [key: string]: GameDisableGeoStatus.all | string[];
 }
 
 export type IGamesProviderCollection = Record<string, IGamesProvider>;
