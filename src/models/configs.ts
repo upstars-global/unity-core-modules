@@ -17,3 +17,5 @@ export type ISurveyConfig = {
     survey_collector_id: string;
     is_enable_widget: boolean;
 };
+
+export type IBettingConfig = Record<string, unknown>;
