@@ -1,6 +1,6 @@
 import { log } from "../../../controllers/Logger";
-import { Currencies } from "../../../models/enums/currencies";
 import { IVipProgress } from "../DTO/vipAdventuresDTO";
+import { http } from "../http";
 import { loadVipAdventuresConfigReq } from "./configs";
 
 export async function loadVipAdventuresConfigFile() {
@@ -14,18 +14,13 @@ export async function loadVipAdventuresConfigFile() {
 
 export async function loadVipStatusProgress(): Promise<IVipProgress> {
     try {
-        return {
-            userId: 984902,
-            currency: Currencies.EUR,
-            currentStatus: "BRONZE",
-            activeStatus: "BRONZE",
-            nextStatus: "SILVER",
-            depositAmountCents: 600100,
-            depositThresholdCents: 1200000,
-            betSumCents: 6000100,
-            betSumThresholdCents: 12000000,
-            overallProgress: 0.5,
-        };
+        const { data } = await http().get(
+            "/jam/vip_status_progress",
+            {
+                withCredentials: true,
+            },
+        );
+        return data;
     } catch (err) {
         log.error("LOAD_VIP_STATUS_PROGRESS", err);
         throw err;
