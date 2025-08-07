@@ -134,6 +134,9 @@ export const useUserInfo = defineStore("userInfo", () => {
     const getIsLoadedUsedData = computed(() => {
         return isLoadedUsedData.value;
     });
+    const getPlayerStats = computed(() => {
+        return stats.value;
+    });
 
     // @ts-expect-error Parameter 'data' implicitly has an 'any' type.
     function setUserData(data) {
@@ -394,6 +397,7 @@ export const useUserInfo = defineStore("userInfo", () => {
         getUserNickName,
         getIsLoadedUsedData,
         getUserBettingBonuses,
+        getPlayerStats,
         getSubunitsToUnitsByCode,
 
         toggleUserIsLogged,
