@@ -48,10 +48,13 @@ export const useGamesCategory = defineStore("gamesCategory", () => {
 
     const isLoaded = (slug: string, page: number): boolean => {
         const collection = collections.value[slug];
-        return (page === 1 && collection?.data.length) ||
-            collection?.pagination.next_page === null ||
-            page > collection?.pagination.next_page ||
-            collection?.pagination.current_page >= page;
+        if (!collection) {
+            return false;
+        }
+        return (page === 1 && collection.data.length > 0) ||
+            collection.pagination.next_page === null ||
+            (collection.pagination.next_page !== null && page > collection.pagination.next_page) ||
+            collection.pagination.current_page >= page;
     };
 
     function setData(data: ICollectionItem, slug: string): void {
