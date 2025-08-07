@@ -1,3 +1,14 @@
+## [1.31.1](https://github.com/upstars-global/unity-core-modules/compare/v1.31.0...v1.31.1) (2025-08-07)
+
+### 🔧 Maintenance
+
+* UN-1317 mock data ([#193](https://github.com/upstars-global/unity-core-modules/issues/193))
+ ([33ff5c9](https://github.com/upstars-global/unity-core-modules/commit/33ff5c98d84fe12eaf615653992f594494ee1f51))
+
+
+
+    * chore: UN-1317 mock data
+
 ## [1.31.0](https://github.com/upstars-global/unity-core-modules/compare/v1.30.1...v1.31.0) (2025-08-04)
 
 ### 🚀 Features
