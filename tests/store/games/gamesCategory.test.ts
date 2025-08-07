@@ -194,4 +194,132 @@ describe("store/games/gamesCategory", () => {
             expect(Object.keys(store.collections)).toHaveLength(3);
         });
     });
+
+    describe("Getters", () => {
+        const games = Array.from({ length: 50 }, (_, i) => ({ name: `Game ${i + 1}` } as IGame));
+
+        beforeEach(() => {
+            const store = useGamesCategory();
+            store.collections = {
+                slots: {
+                    data: games,
+                    pagination: {
+                        current_page: 3,
+                        next_page: 4,
+                    },
+                } as ICollectionItem,
+                last: {
+                    data: games.slice(0, 10),
+                    pagination: {
+                        current_page: 5,
+                        next_page: null,
+                    },
+                } as ICollectionItem,
+                empty: { data: [], pagination: { current_page: 0, next_page: 1 } } as ICollectionItem,
+            };
+        });
+
+        describe("getCollection", () => {
+            it("should return an empty array for a non-existent collection", () => {
+                const store = useGamesCategory();
+                expect(store.getCollection("non-existent")).toEqual([]);
+            });
+
+            it("should return items up to the first page by default", () => {
+                const store = useGamesCategory();
+                const result = store.getCollection("slots");
+                expect(result).toHaveLength(20);
+                expect(result[0].name).toBe("Game 1");
+                expect(result[19].name).toBe("Game 20");
+            });
+
+            it("should return items up to the specified page", () => {
+                const store = useGamesCategory();
+                const page2 = store.getCollection("slots", 2);
+                expect(page2).toHaveLength(40);
+                expect(page2[0].name).toBe("Game 1");
+                expect(page2[39].name).toBe("Game 40");
+            });
+
+            it("should handle request for pages beyond available data", () => {
+                const store = useGamesCategory();
+                const page4 = store.getCollection("slots", 4);
+                expect(page4).toHaveLength(50);
+                expect(page4[49].name).toBe("Game 50");
+            });
+
+            it("should respect the startPage parameter, slicing from a different start", () => {
+                const store = useGamesCategory();
+                const result = store.getCollection("slots", 3, 1);
+                expect(result).toHaveLength(30);
+                expect(result[0].name).toBe("Game 21");
+                expect(result[29].name).toBe("Game 50");
+            });
+        });
+
+        describe("getCollectionPagination", () => {
+            it("should return undefined for a non-existent collection", () => {
+                const store = useGamesCategory();
+                expect(store.getCollectionPagination("non-existent")).toBeUndefined();
+            });
+
+            it("should return the pagination object for an existing collection", () => {
+                const store = useGamesCategory();
+                expect(store.getCollectionPagination("slots")?.current_page).toBe(3);
+                expect(store.getCollectionPagination("slots")?.next_page).toBe(4);
+            });
+        });
+
+        describe("getCollectionFullData", () => {
+            it("should return undefined for a non-existent collection", () => {
+                const store = useGamesCategory();
+                expect(store.getCollectionFullData("non-existent")).toBeUndefined();
+            });
+
+            it("should return the full collection data for an existing collection", () => {
+                const store = useGamesCategory();
+                expect(store.getCollectionFullData("slots")?.data).toHaveLength(50);
+            });
+        });
+
+        describe("isLoaded", () => {
+            it("should return false if collection does not exist", () => {
+                const store = useGamesCategory();
+                expect(store.isLoaded("non-existent", 1)).toBe(false);
+            });
+
+            it("should return true for page 1 if collection has data", () => {
+                const store = useGamesCategory();
+                expect(store.isLoaded("slots", 1)).toBe(true);
+            });
+
+            it("should return false for page 1 if collection has no data", () => {
+                const store = useGamesCategory();
+                expect(store.isLoaded("empty", 1)).toBe(false);
+            });
+
+            it("should return true if there is no next page", () => {
+                const store = useGamesCategory();
+                expect(store.isLoaded("last", 5)).toBe(true);
+                expect(store.isLoaded("last", 99)).toBe(true);
+            });
+
+            it("should return true if the requested page is already covered by current_page", () => {
+                const store = useGamesCategory();
+                expect(store.isLoaded("slots", 1)).toBe(true);
+                expect(store.isLoaded("slots", 2)).toBe(true);
+                expect(store.isLoaded("slots", 3)).toBe(true);
+            });
+
+            it("should return false if the requested page is not yet loaded", () => {
+                const store = useGamesCategory();
+                expect(store.isLoaded("slots", 4)).toBe(false);
+            });
+
+            it("should return true if requested page is beyond the next page to be loaded", () => {
+                const store = useGamesCategory();
+                expect(store.isLoaded("slots", 5)).toBe(true);
+            });
+        });
+    });
 });
