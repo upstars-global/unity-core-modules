@@ -1,4 +1,9 @@
-import type { ICollectionItem, IGame } from "../../../models/game";
+import featureFlags from "@theme/configs/featureFlags";
+import { storeToRefs } from "pinia";
+
+import type { ICollectionItem, IDisabledGamesProvider, IGame, IGamesProvider } from "../../../models/game";
+import { GameDisableGeoStatus } from "../../../models/game";
+import { useCommon } from "../../common";
 
 // tslint:disable-next-line:max-line-length
 function findGameBySeoTittleAndProducerWithDuplicate(gamesCollection: IGame[], { producer, seoTitle }): IGame | undefined {
@@ -22,4 +27,29 @@ export function defaultCollection(): ICollectionItem {
             total_count: 0,
         },
     };
+}
+
+export function filterDisabledProviders(
+    data: (IGamesProvider | IGame)[], disabledGamesProviders: IDisabledGamesProvider,
+): (IGamesProvider | IGame)[] {
+    if (!featureFlags.enableAllProviders) {
+        const { currentIpInfo } = storeToRefs(useCommon());
+
+        if (disabledGamesProviders && Array.isArray(data)) {
+            return data.filter((dataItem: IGame | IGamesProvider) => {
+                const providerName = dataItem.provider;
+                const currentDisabledProviderOpts = disabledGamesProviders[providerName];
+
+                if (currentDisabledProviderOpts === GameDisableGeoStatus.all) {
+                    return false;
+                } else if (Array.isArray(currentDisabledProviderOpts)) {
+                    return !currentDisabledProviderOpts.includes(String(currentIpInfo.value?.country_code));
+                }
+
+                return true;
+            });
+        }
+    }
+
+    return data;
 }

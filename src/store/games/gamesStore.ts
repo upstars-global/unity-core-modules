@@ -160,6 +160,7 @@ export const useGamesCommon = defineStore("gamesCommon", () => {
             gamesCategories.value = data.map((category) => {
                 return {
                     ...category,
+                    provider: category.id,
                     slug: category.id,
                     url: `/games/${category.id}`,
                     name: category.title,
