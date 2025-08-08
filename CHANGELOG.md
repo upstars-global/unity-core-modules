@@ -1,3 +1,25 @@
+## [1.31.1](https://github.com/upstars-global/unity-core-modules/compare/v1.31.0...v1.31.1) (2025-08-07)
+
+### 🔧 Maintenance
+
+* UN-1317 mock data ([#193](https://github.com/upstars-global/unity-core-modules/issues/193))
+ ([33ff5c9](https://github.com/upstars-global/unity-core-modules/commit/33ff5c98d84fe12eaf615653992f594494ee1f51))
+
+
+
+    * chore: UN-1317 mock data
+
+## [1.31.0](https://github.com/upstars-global/unity-core-modules/compare/v1.30.1...v1.31.0) (2025-08-04)
+
+### 🚀 Features
+
+* **UN-1452:** load and use betting config from cms ([#201](https://github.com/upstars-global/unity-core-modules/issues/201))
+ ([d1e2f16](https://github.com/upstars-global/unity-core-modules/commit/d1e2f1671dc53291157b72fab7de268aeadc44df))
+
+
+
+    * feat(UN-1452): load and use betting config from cms
+
 ## [1.30.1](https://github.com/upstars-global/unity-core-modules/compare/v1.30.0...v1.30.1) (2025-08-01)
 
 ### ⏪ Reverts
