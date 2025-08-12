@@ -1,3 +1,14 @@
+## [1.31.4](https://github.com/upstars-global/unity-core-modules/compare/v1.31.3...v1.31.4) (2025-08-12)
+
+### ⏪ Reverts
+
+* "refactor: gamesSearch" ([#207](https://github.com/upstars-global/unity-core-modules/issues/207))
+ ([95a721c](https://github.com/upstars-global/unity-core-modules/commit/95a721c4a27fea8e76465acd226640570bdc741a))
+
+
+
+    This reverts commit a5969859cdc21bdd432826f83a7db6956c4a9bda.
+
 ## [1.31.3](https://github.com/upstars-global/unity-core-modules/compare/v1.31.2...v1.31.3) (2025-08-12)
 
 ### 🔨 Refactoring
