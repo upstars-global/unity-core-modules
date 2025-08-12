@@ -1,3 +1,10 @@
+## [1.31.2](https://github.com/upstars-global/unity-core-modules/compare/v1.31.1...v1.31.2) (2025-08-12)
+
+### 🔧 Maintenance
+
+* UN-1350 clear UserManager ([#206](https://github.com/upstars-global/unity-core-modules/issues/206))
+ ([aaa0e40](https://github.com/upstars-global/unity-core-modules/commit/aaa0e40502dd50220c622adcf9e3d5f4fbcc548b))
+
 ## [1.31.1](https://github.com/upstars-global/unity-core-modules/compare/v1.31.0...v1.31.1) (2025-08-07)
 
 ### 🔧 Maintenance
