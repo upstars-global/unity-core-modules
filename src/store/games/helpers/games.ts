@@ -35,7 +35,7 @@ export function filterDisabledProviders(
     if (!featureFlags.enableAllProviders) {
         const { currentIpInfo } = storeToRefs(useCommon());
 
-        if (disabledGamesProviders && Array.isArray(data)) {
+        if (Object.keys(disabledGamesProviders).length && Array.isArray(data)) {
             return data.filter((dataItem: IGame | IGamesProvider) => {
                 const providerName = dataItem.provider;
                 const currentDisabledProviderOpts = disabledGamesProviders[providerName];
