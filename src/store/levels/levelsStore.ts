@@ -1,10 +1,11 @@
-import { LEVELS } from "@config/levels";
+import { mapLevelItem } from "@helpers/lootBoxes";
 import { defineStore, type Pinia } from "pinia";
 import { computed, ref } from "vue";
 
 import { log } from "../../controllers/Logger";
-import type { IGroup, ILevels, IUserLevelInfo } from "../../models/levels";
-import { http } from "../../services/api/http";
+import type { ILevels, IUserLevelInfo } from "../../models/levels";
+import { IStatus } from "../../models/levels";
+import { loadAllStatuses } from "../../services/api/requests/statuses";
 
 const getIndex = (id: string | undefined): number | undefined => {
     if (!id) {
@@ -16,8 +17,8 @@ const getIndex = (id: string | undefined): number | undefined => {
     return Number(stringIndex);
 };
 export const useLevelsStore = defineStore("levelsStore", () => {
-    const levels = ref<IUserLevelInfo[]>([]);
-    const groups = ref<IGroup[]>([]);
+    const levels = ref<ILevels[]>([]);
+    const groups = ref<IStatus[]>([]);
 
     const getLevelsData = computed<IUserLevelInfo[]>(() => {
         return levels.value
@@ -36,6 +37,10 @@ export const useLevelsStore = defineStore("levelsStore", () => {
             });
     });
 
+    const getLevels = computed(() => {
+        return levels.value;
+    });
+
     function getLevelsById(id: string): IUserLevelInfo | Record<string, unknown> {
         return levels.value.find((el: IUserLevelInfo) => {
             return el.id === id;
@@ -50,40 +55,39 @@ export const useLevelsStore = defineStore("levelsStore", () => {
         return item ? item.image : "";
     }
 
-    function createLevelData(mockLevels: ILevels): (someLevel: IUserLevelInfo) => IUserLevelInfo {
+    /* function createLevelData(mockLevels: ILevels): (someLevel: IUserLevelInfo) => IUserLevelInfo {
         return (someLevel: IUserLevelInfo) => {
             const config = mockLevels[someLevel.id];
 
             return {
                 ...someLevel,
                 image: config.image,
-
                 gift_descriptions: config.gift_descriptions,
             };
         };
-    }
+    }*/ // TODO: move to king
 
-    function setLevelsData(data) {
-        // Защита от дурака
-        levels.value = data
-            .filter(({ status }) => {
-                return status;
-            })
-            .map(createLevelData(LEVELS));
+    function setLevelsData(data: IStatus[]) {
+        const levelsList: ILevels[] = [];
+        const groupsList: IStatus[] = [];
 
-        groups.value = data.filter(({ status }) => {
-            return !status;
-        });
-    }
-
-    async function loadLevelsData({ reload }: { reload?: boolean } = {}): Promise<IGroup[]> {
-        if (!reload && levels.value.length) {
-            return levels.value;
+        for (const item of data) {
+            if (item.status) {
+                levelsList.push(mapLevelItem(item));
+            } else {
+                groupsList.push(item);
+            }
         }
+
+        levels.value = levelsList;
+        groups.value = groupsList;
+    }
+
+    async function loadLevelsData(): Promise<IStatus[]> {
         try {
-            const { data } = await http().get("/api/info/statuses");
-            setLevelsData(data);
-            return data;
+            const statuses = await loadAllStatuses();
+            setLevelsData(statuses);
+            return statuses;
         } catch (err) {
             log.error("LOAD_LEVELS_DATA_ERROR", err);
             throw err;
@@ -91,11 +95,12 @@ export const useLevelsStore = defineStore("levelsStore", () => {
     }
 
     return {
+        levels,
         groups,
         getLevelsData,
+        getLevels,
         getLevelsById,
         getLevelImageById,
-        createLevelData,
         loadLevelsData,
     };
 });

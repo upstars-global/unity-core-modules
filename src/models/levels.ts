@@ -18,18 +18,21 @@ export interface IUserLevelInfo {
     name: string;
     conditions: ILevelConditions[];
     status: boolean;
-    id: string;
+    id: number | string;
     writable: boolean;
     image: string;
     gift_descriptions: IGiftDescriptions[];
 }
 
-export interface IGroup {
+export interface IStatus {
     name: string;
     conditions: ILevelConditions[];
     status: boolean;
     id: number | string;
+    levelNumber: number;
     writable: boolean;
+    min: number;
+    max: number;
 }
 
 export interface ILevels {
