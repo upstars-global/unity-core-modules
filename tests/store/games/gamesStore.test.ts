@@ -78,8 +78,8 @@ describe("useGamesCommon", () => {
         await store.loadGamesCategories();
 
         expect(store.gamesCategories).toEqual([
-            { slug: "slot", url: "/games/slot", name: "Slots", id: "slot", title: "Slots" },
-            { slug: "poker", url: "/games/poker", name: "Poker", id: "poker", title: "Poker" },
+            { slug: "slot", provider: "slot", url: "/games/slot", name: "Slots", id: "slot", title: "Slots" },
+            { slug: "poker", provider: "poker", url: "/games/poker", name: "Poker", id: "poker", title: "Poker" },
         ]);
     });
 

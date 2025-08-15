@@ -8,11 +8,13 @@ import type { ICollectionItem, IGame } from "../../models/game";
 import type { ICollectionRecord, IGameFilter } from "../../services/api/DTO/gamesDTO";
 import { loadGamesCategory as loadGamesCategoryReq } from "../../services/api/requests/games";
 import { useConfigStore } from "../configStore";
+import { useGamesProviders } from "../games/gamesProviders";
 import { useMultilangStore } from "../multilang";
 import { useRootStore } from "../root";
 import { useUserInfo } from "../user/userInfo";
 import { useGamesCommon } from "./gamesStore";
 import { defaultCollection } from "./helpers/games";
+import { filterDisabledProviders } from "./helpers/games";
 
 const DEFAULT_COLLECTION_NAME = "default";
 
@@ -21,6 +23,7 @@ export const useGamesCategory = defineStore("gamesCategory", () => {
     const { getUserGeo } = toRefs(useMultilangStore());
     const { getIsLogged, getUserCurrency } = storeToRefs(useUserInfo());
     const { gamesPageLimit } = storeToRefs(useConfigStore());
+    const { disabledGamesProviders } = storeToRefs(useGamesProviders());
 
     const categoryGeo = (slug: string): string => {
         const slugWithGeo = getUserGeo.value ? `${slug}:${getUserGeo.value.toLocaleLowerCase()}` : "";
@@ -59,7 +62,8 @@ export const useGamesCategory = defineStore("gamesCategory", () => {
 
     function setData(data: ICollectionItem, slug: string): void {
         const propsGame = { ...data };
-        propsGame.data = data.data.map(processGameForNewAPI);
+        propsGame.data = filterDisabledProviders(data.data.map(processGameForNewAPI), disabledGamesProviders.value);
+
         if (!collections.value[slug]) {
             collections.value = {
                 ...collections.value,

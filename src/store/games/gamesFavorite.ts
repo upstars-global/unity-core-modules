@@ -1,4 +1,4 @@
-import { defineStore } from "pinia";
+import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
 import { log } from "../../controllers/Logger";
@@ -10,10 +10,13 @@ import {
     fetchDeleteGameFromFavorites,
     fetchFavoriteGames,
 } from "../../services/api/requests/games";
+import { useGamesProviders } from "../games/gamesProviders";
+import { filterDisabledProviders } from "./helpers/games";
 
 export const useGamesFavorite = defineStore("gamesFavorite", () => {
     const favoritesId = ref<GameFavoriteIds>([]);
     const gamesFavoriteFullData = ref<IGameItem[]>([]);
+    const { disabledGamesProviders } = storeToRefs(useGamesProviders());
 
     const gamesFavoriteID = computed<GameFavoriteIds>(() => [ ...favoritesId.value ].reverse());
 
@@ -30,6 +33,8 @@ export const useGamesFavorite = defineStore("gamesFavorite", () => {
             favoritesId.value = gamesID;
             gamesFavoriteFullData.value = gamesFullData
                 .map((game) => processGame(game, game.identifier));
+
+            gamesFavoriteFullData.value = filterDisabledProviders(gamesFavoriteFullData.value, disabledGamesProviders.value);
         } catch (err) {
             log.error("LOAD_FAVORITE_GAMES_ERROR", err);
             throw err;

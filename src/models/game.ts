@@ -36,9 +36,18 @@ export interface IGame {
 export interface IGamesProvider {
     id: string;
     title: string;
+    provider: string;
     slug: string;
     url: string;
     name: string;
+}
+
+export enum GameDisableGeoStatus {
+    all = "all",
+}
+
+export interface IDisabledGamesProvider {
+    [key: string]: GameDisableGeoStatus.all | string[];
 }
 
 export type IGamesProviderCollection = Record<string, IGamesProvider>;
