@@ -4,6 +4,7 @@ import { storeToRefs } from "pinia";
 import type { ICollectionItem, IDisabledGamesProvider, IGame, IGamesProvider } from "../../../models/game";
 import { GameDisableGeoStatus } from "../../../models/game";
 import { useCommon } from "../../common";
+import { useUserInfo } from "../../user/userInfo";
 
 // tslint:disable-next-line:max-line-length
 function findGameBySeoTittleAndProducerWithDuplicate(gamesCollection: IGame[], { producer, seoTitle }): IGame | undefined {
@@ -32,10 +33,14 @@ export function defaultCollection(): ICollectionItem {
 export function filterDisabledProviders(
     data: (IGamesProvider | IGame)[], disabledGamesProviders: IDisabledGamesProvider,
 ): (IGamesProvider | IGame)[] {
-    if (!featureFlags.enableAllProviders) {
-        const { currentIpInfo } = storeToRefs(useCommon());
+    const { getIsLogged } = storeToRefs(useUserInfo());
+    const enableFilter = !featureFlags.enableAllProviders && getIsLogged.value;
 
-        if (Object.keys(disabledGamesProviders).length && Array.isArray(data)) {
+    if (enableFilter) {
+        const { currentIpInfo } = storeToRefs(useCommon());
+        const hasData = Object.keys(disabledGamesProviders).length && Array.isArray(data);
+
+        if (hasData) {
             return data.filter((dataItem: IGame | IGamesProvider) => {
                 const providerName = dataItem.provider;
                 const currentDisabledProviderOpts = disabledGamesProviders[providerName];
