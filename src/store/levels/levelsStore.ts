@@ -101,6 +101,7 @@ export const useLevelsStore = defineStore("levelsStore", () => {
     return {
         levels,
         groups,
+        rewards,
         getLevelsData,
         getLevels,
         getLevelsById,
