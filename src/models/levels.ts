@@ -52,8 +52,7 @@ export interface ILevels {
     };
 }
 
-export type IRewards = {
-    [L in Level]: {
+export type Reward = {
         id: string;
         image?: string;
         eventLink?: string;
@@ -66,5 +65,6 @@ export type IRewards = {
                 link?: string;
             }>;
         };
-    };
-};
+    }
+
+export type Rewards = Record<Level, Reward[]>;

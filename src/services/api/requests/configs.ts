@@ -2,7 +2,7 @@ import { log } from "../../../controllers/Logger";
 import { type CurrencyData } from "../../../models/cashbox";
 import { type IStagByReferName, type ISurveyConfig } from "../../../models/configs";
 import { type IBettingConfig } from "../../../models/configs";
-import { type IRewards } from "../../../models/levels";
+import { type Rewards } from "../../../models/levels";
 import { type MainWidgetItem } from "../../../models/mainWidget";
 import { type IGiftModifyConfig } from "../DTO/gifts";
 import { type IVipAdventuresConfig } from "../DTO/vipAdventuresDTO";
@@ -43,7 +43,7 @@ const loadMainWidgetConfigReq = () => loadConfig<{widgets?: MainWidgetItem[]}>(
     "/api/fe/config/main-widget-config",
     "LOAD_MAIN_WIDGET_CONFIG_ERROR",
 );
-const loadVipProgramRewardsConfigReq = () => loadConfig<IRewards>(
+const loadVipProgramRewardsConfigReq = () => loadConfig<Rewards>(
     "/api/fe/config/vip-program-rewards-config",
     "LOAD_VIP_PROGRAM_REWARDS_CONFIG_ERROR",
 );
