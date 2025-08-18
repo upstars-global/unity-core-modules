@@ -1,3 +1,14 @@
+## [1.31.5](https://github.com/upstars-global/unity-core-modules/compare/v1.31.4...v1.31.5) (2025-08-18)
+
+### 🔨 Refactoring
+
+* gameSearch
+ ([5c10be7](https://github.com/upstars-global/unity-core-modules/commit/5c10be777e8f724a2ab74064451ffc5ff1a90b00))
+
+
+
+    UN-835
+
 ## [1.31.4](https://github.com/upstars-global/unity-core-modules/compare/v1.31.3...v1.31.4) (2025-08-12)
 
 ### ⏪ Reverts
