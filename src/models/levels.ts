@@ -1,3 +1,5 @@
+import { type Currencies } from "./enums/currencies";
+
 interface IPersistentCompPoints {
     type: string;
     exclude_end: boolean;
@@ -35,6 +37,11 @@ export interface IStatus {
     max: number;
 }
 
+type LifetimeLevel = `lifetime_level_${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8}`;
+type VipLevel = `vip_level_${1 | 2 | 3 | 4 | 5 | 6}`;
+
+export type Level = LifetimeLevel | VipLevel;
+
 export interface ILevels {
     [level: string]: {
         gift_descriptions: Array<{
@@ -44,3 +51,20 @@ export interface ILevels {
         image: string;
     };
 }
+
+export type IRewards = {
+    [L in Level]: {
+        id: string;
+        image?: string;
+        eventLink?: string;
+        bonusLink?: string;
+        bonus?: boolean;
+        variables?: Record<string, Record<Currencies, string>>;
+        details?: {
+            conditions?: Array<{
+                id: string;
+                link?: string;
+            }>;
+        };
+    };
+};

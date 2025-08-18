@@ -3,8 +3,7 @@ import { defineStore, type Pinia } from "pinia";
 import { computed, ref } from "vue";
 
 import { log } from "../../controllers/Logger";
-import type { ILevels, IUserLevelInfo } from "../../models/levels";
-import { IStatus } from "../../models/levels";
+import { type ILevels, type IRewards, IStatus, type IUserLevelInfo } from "../../models/levels";
 import { loadAllStatuses } from "../../services/api/requests/statuses";
 
 const getIndex = (id: string | undefined): number | undefined => {
@@ -19,6 +18,7 @@ const getIndex = (id: string | undefined): number | undefined => {
 export const useLevelsStore = defineStore("levelsStore", () => {
     const levels = ref<ILevels[]>([]);
     const groups = ref<IStatus[]>([]);
+    const rewards = ref<IRewards>();
 
     const getLevelsData = computed<IUserLevelInfo[]>(() => {
         return levels.value
@@ -94,6 +94,10 @@ export const useLevelsStore = defineStore("levelsStore", () => {
         }
     }
 
+    function setRewardsData(data: IRewards) {
+        rewards.value = data;
+    }
+
     return {
         levels,
         groups,
@@ -102,6 +106,7 @@ export const useLevelsStore = defineStore("levelsStore", () => {
         getLevelsById,
         getLevelImageById,
         loadLevelsData,
+        setRewardsData,
     };
 });
 
