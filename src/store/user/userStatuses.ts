@@ -92,6 +92,10 @@ export const useUserStatuses = defineStore("userStatuses", () => {
         return userManager.value;
     }
 
+    function clearUserManager() {
+        userManager.value = null;
+    }
+
     return {
         getUserLevelInfo,
         getUserStatuses,
@@ -107,5 +111,6 @@ export const useUserStatuses = defineStore("userStatuses", () => {
 
         addUserToGroup,
         loadUserManager,
+        clearUserManager,
     };
 });

@@ -1,3 +1,43 @@
+## [1.31.5](https://github.com/upstars-global/unity-core-modules/compare/v1.31.4...v1.31.5) (2025-08-18)
+
+### 🔨 Refactoring
+
+* gameSearch
+ ([5c10be7](https://github.com/upstars-global/unity-core-modules/commit/5c10be777e8f724a2ab74064451ffc5ff1a90b00))
+
+
+
+    UN-835
+
+## [1.31.4](https://github.com/upstars-global/unity-core-modules/compare/v1.31.3...v1.31.4) (2025-08-12)
+
+### ⏪ Reverts
+
+* "refactor: gamesSearch" ([#207](https://github.com/upstars-global/unity-core-modules/issues/207))
+ ([95a721c](https://github.com/upstars-global/unity-core-modules/commit/95a721c4a27fea8e76465acd226640570bdc741a))
+
+
+
+    This reverts commit a5969859cdc21bdd432826f83a7db6956c4a9bda.
+
+## [1.31.3](https://github.com/upstars-global/unity-core-modules/compare/v1.31.2...v1.31.3) (2025-08-12)
+
+### 🔨 Refactoring
+
+* gamesSearch
+ ([a596985](https://github.com/upstars-global/unity-core-modules/commit/a5969859cdc21bdd432826f83a7db6956c4a9bda))
+
+
+
+    UN-835
+
+## [1.31.2](https://github.com/upstars-global/unity-core-modules/compare/v1.31.1...v1.31.2) (2025-08-12)
+
+### 🔧 Maintenance
+
+* UN-1350 clear UserManager ([#206](https://github.com/upstars-global/unity-core-modules/issues/206))
+ ([aaa0e40](https://github.com/upstars-global/unity-core-modules/commit/aaa0e40502dd50220c622adcf9e3d5f4fbcc548b))
+
 ## [1.31.1](https://github.com/upstars-global/unity-core-modules/compare/v1.31.0...v1.31.1) (2025-08-07)
 
 ### 🔧 Maintenance
