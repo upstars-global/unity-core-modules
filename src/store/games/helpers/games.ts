@@ -4,7 +4,7 @@ import { storeToRefs } from "pinia";
 import type { ICollectionItem, IDisabledGamesProvider, IGame, IGamesProvider } from "../../../models/game";
 import { GameDisableGeoStatus } from "../../../models/game";
 import { useCommon } from "../../common";
-import { useUserInfo } from "../../user/userInfo";
+import { useContextStore } from "../../context";
 
 // tslint:disable-next-line:max-line-length
 function findGameBySeoTittleAndProducerWithDuplicate(gamesCollection: IGame[], { producer, seoTitle }): IGame | undefined {
@@ -33,8 +33,8 @@ export function defaultCollection(): ICollectionItem {
 export function filterDisabledProviders(
     data: (IGamesProvider | IGame)[], disabledGamesProviders: IDisabledGamesProvider,
 ): (IGamesProvider | IGame)[] {
-    const { getIsLogged } = storeToRefs(useUserInfo());
-    const enableFilter = !featureFlags.enableAllProviders && getIsLogged.value;
+    const { isBotUA } = storeToRefs(useContextStore());
+    const enableFilter = !featureFlags.enableAllProviders && !isBotUA.value;
 
     if (enableFilter) {
         const { currentIpInfo } = storeToRefs(useCommon());
