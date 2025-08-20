@@ -60,7 +60,7 @@ export async function loadVipProgramConfig() {
     const data = await loadVipProgramConfigReq();
 
     if (data) {
-        levelsStore.setRewardsData(data);
+        levelsStore.setConfigData(data);
     }
 }
 
