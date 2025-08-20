@@ -47,12 +47,14 @@ const loadVipProgramRewardsConfigReq = () => loadConfig<Rewards>(
     "/api/fe/config/vip-program-rewards-config",
     "LOAD_VIP_PROGRAM_REWARDS_CONFIG_ERROR",
 );
+const loadDisabledProvidersConfigReq = () => loadConfig<string[]>("/api/fe/config/providers-config", "LOAD_PROFIDERS_CONFIG_ERROR");
 
 export {
     loadAdditionalDepositGiftsConfigReq,
     loadBettingConfigReq,
     loadCurrencyConfigReq,
     loadDisabledBonusesConfigReq,
+    loadDisabledProvidersConfigReq,
     loadExcludedPromoStagsReq,
     loadFooterPaymentsConfigReq,
     loadMainWidgetConfigReq,
