@@ -27,18 +27,17 @@ export async function loadMockLootboxWheelConfigs():
     }
 }
 
-export async function getLootboxes() {
+export async function getLootboxesReq() {
     try {
         const { data } = await http().get<ILootbox[]>("/api/player/lootboxes");
 
         return data;
     } catch (err) {
         log.error("LOAD_LOOTBOXES_LIST_ERROR", err);
-        throw err;
     }
 }
 
-export async function activateLootbox(id: number) {
+export async function activateLootboxReq(id: number) {
     try {
         const { data } = await http().post(`/api/player/lootboxes/${id}/activation`);
 
