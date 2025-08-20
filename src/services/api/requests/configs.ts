@@ -35,12 +35,14 @@ const loadAdditionalDepositGiftsConfigReq = () => loadConfig(
     "LOAD_ADDITIONAL_DEPOSIT_GIFTS_CONFIG_ERROR",
 );
 const loadMainWidgetConfigReq = () => loadConfig<string[]>("/api/fe/config/main-widget-config", "LOAD_MAIN_WIDGET_CONFIG_ERROR");
+const loadDisabledProvidersConfigReq = () => loadConfig<string[]>("/api/fe/config/providers-config", "LOAD_PROFIDERS_CONFIG_ERROR");
 
 export {
     loadAdditionalDepositGiftsConfigReq,
     loadBettingConfigReq,
     loadCurrencyConfigReq,
     loadDisabledBonusesConfigReq,
+    loadDisabledProvidersConfigReq,
     loadExcludedPromoStagsReq,
     loadFooterPaymentsConfigReq,
     loadMainWidgetConfigReq,
