@@ -1,3 +1,12 @@
+## [1.32.0](https://github.com/upstars-global/unity-core-modules/compare/v1.31.5...v1.32.0) (2025-08-20)
+
+### 🚀 Features
+
+* add providers config and filtering functionality
+ ([bcabaf7](https://github.com/upstars-global/unity-core-modules/commit/bcabaf7ab90dc36dc05b98ae6efd0bbae21bf4ed))
+
+, closes [#198](https://github.com/upstars-global/unity-core-modules/issues/)
+
 ## [1.31.5](https://github.com/upstars-global/unity-core-modules/compare/v1.31.4...v1.31.5) (2025-08-18)
 
 ### 🔨 Refactoring
