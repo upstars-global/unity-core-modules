@@ -19,6 +19,7 @@ export const useLevelsStore = defineStore("levelsStore", () => {
     const levels = ref<ILevels[]>([]);
     const groups = ref<IStatus[]>([]);
     const rewards = ref<Rewards>();
+    const levelsSaveTarget = ref<Record<string, number>>();
 
     const getLevelsData = computed<IUserLevelInfo[]>(() => {
         return levels.value
@@ -94,20 +95,22 @@ export const useLevelsStore = defineStore("levelsStore", () => {
         }
     }
 
-    function setRewardsData(data: Rewards) {
-        rewards.value = data;
+    function setConfigData(data: {levelsSaveTarget: Record<string, number>, rewardCards: Rewards}) {
+        rewards.value = data.rewardCards;
+        levelsSaveTarget.value = data.levelsSaveTarget;
     }
 
     return {
         levels,
         groups,
         rewards,
+        levelsSaveTarget,
         getLevelsData,
         getLevels,
         getLevelsById,
         getLevelImageById,
         loadLevelsData,
-        setRewardsData,
+        setConfigData,
     };
 });
 

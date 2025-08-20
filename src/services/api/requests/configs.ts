@@ -43,8 +43,8 @@ const loadMainWidgetConfigReq = () => loadConfig<{widgets?: MainWidgetItem[]}>(
     "/api/fe/config/main-widget-config",
     "LOAD_MAIN_WIDGET_CONFIG_ERROR",
 );
-const loadVipProgramRewardsConfigReq = () => loadConfig<Rewards>(
-    "/api/fe/config/vip-program-rewards-config",
+const loadVipProgramConfigReq = () => loadConfig<Rewards>(
+    "/api/fe/config/vip-program-config",
     "LOAD_VIP_PROGRAM_REWARDS_CONFIG_ERROR",
 );
 const loadDisabledProvidersConfigReq = () => loadConfig<string[]>("/api/fe/config/providers-config", "LOAD_PROFIDERS_CONFIG_ERROR");
@@ -63,5 +63,5 @@ export {
     loadStagByReferNameReq,
     loadSurveyConfigReq,
     loadVipAdventuresConfigReq,
-    loadVipProgramRewardsConfigReq,
+    loadVipProgramConfigReq,
 };

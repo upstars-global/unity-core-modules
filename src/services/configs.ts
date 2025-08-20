@@ -1,4 +1,3 @@
-
 import { useCommon } from "../store/common";
 import { useConfigStore } from "../store/configStore";
 import { useLevelsStore } from "../store/levels/levelsStore";
@@ -6,8 +5,7 @@ import {
     loadBettingConfigReq,
     loadCurrencyConfigReq,
     loadExcludedPromoStagsReq,
-    loadMainWidgetConfigReq,
-    loadVipProgramRewardsConfigReq,
+    loadMainWidgetConfigReq, loadVipProgramConfigReq,
 } from "./api/requests/configs";
 
 export async function loadExcludedPromoStags() {
@@ -56,12 +54,13 @@ export async function loadBettingConfig() {
     }
 }
 
-export async function loadVipProgramRewardsConfig() {
+export async function loadVipProgramConfig() {
     const levelsStore = useLevelsStore();
 
-    const data = await loadVipProgramRewardsConfigReq();
+    const data = await loadVipProgramConfigReq();
 
     if (data) {
         levelsStore.setRewardsData(data);
     }
 }
+
