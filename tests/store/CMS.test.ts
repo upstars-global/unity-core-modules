@@ -98,16 +98,6 @@ describe("useCMS store", () => {
         });
     });
 
-    // describe("hasStaticPageInCMS", () => {
-    //     it("returns true if slug exists", () => {
-    //         const store = useCMS();
-    //         store.staticPages = [ { slug: "slug", url: "url", categories: [], hidden: false } ];
-    //         expect(store.hasStaticPageInCMS("slug")).toBe(true);
-    //         expect(store.hasStaticPageInCMS("url")).toBe(true);
-    //         expect(store.hasStaticPageInCMS("none")).toBe(false);
-    //     });
-    // });
-
     describe("getStaticPageBySlug", () => {
         it("returns page by slug", () => {
             const page = { slug: "slug", categories: enableCategoriesPage, hidden: false, url: "slug" };
@@ -129,14 +119,17 @@ describe("useCMS store", () => {
     });
 
     describe("getUnhiddenStaticPages", () => {
+        const pageA = { slug: "a", categories: [], hidden: false, url: "/a" };
+        const pageB = { slug: "b", categories: [], hidden: true, url: "/b" };
+
         it("returns only unhidden pages", () => {
             const store = useCMS();
             store.staticPages = [
-                { slug: "a", categories: [], hidden: false, url: "a" },
-                { slug: "b", categories: [], hidden: true, url: "b" },
+                pageA,
+                pageB,
             ];
 
-            expect(store.getUnhiddenStaticPages).toEqual([ { slug: "a", categories: [], hidden: false, url: "a" } ]);
+            expect(store.getUnhiddenStaticPages).toEqual([ pageA ]);
         });
     });
 
