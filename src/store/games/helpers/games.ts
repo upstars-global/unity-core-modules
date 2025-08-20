@@ -34,7 +34,7 @@ export function filterDisabledProviders(
     data: (IGamesProvider | IGame)[], disabledGamesProviders: IDisabledGamesProvider,
 ): (IGamesProvider | IGame)[] {
     const { isBotUA } = storeToRefs(useContextStore());
-    const enableFilter = !featureFlags.enableAllProviders && !isBotUA.value;
+    const enableFilter = disabledGamesProviders && data && !featureFlags.enableAllProviders && !isBotUA.value;
 
     if (enableFilter) {
         const { currentIpInfo } = storeToRefs(useCommon());
