@@ -3,13 +3,13 @@ import { storeToRefs } from "pinia";
 import { CompPointRatesTypes } from "../models/enums/compPoints";
 import { useLootboxesStore } from "../store/lootboxes";
 import { useUserInfo } from "../store/user/userInfo";
+import { loadPageContentFromCmsReq } from "./api/requests/CMS";
 import { loadCompPointRateBySlug } from "./api/requests/compPoints";
 import {
     activateLootboxReq,
     getLootboxesReq,
     loadMockLootboxWheelConfigs,
     loadMockLootboxWheelSegmentsConfigs,
-    loadPageContentFromWheelCmsReq,
 } from "./api/requests/lootbox";
 
 export async function loadLootboxesList({ reload }: { reload?: boolean } = {}) {
@@ -51,7 +51,7 @@ export async function loadMockSegmentsWheel() {
 export async function loadPageContentFormCMS() {
     const lootboxesStore = useLootboxesStore();
     const { userGroupForWheel } = storeToRefs(lootboxesStore);
-    const pageContent = await loadPageContentFromWheelCmsReq(userGroupForWheel.value || "");
+    const pageContent = await loadPageContentFromCmsReq(userGroupForWheel.value || "");
 
     if (pageContent) {
         lootboxesStore.setPageContentByGroup(pageContent);
@@ -60,7 +60,7 @@ export async function loadPageContentFormCMS() {
 
 export async function loadPageContentFormCMSBySlug(slug: string) {
     const lootboxesStore = useLootboxesStore();
-    const pageContent = await loadPageContentFromWheelCmsReq(slug);
+    const pageContent = await loadPageContentFromCmsReq(slug);
 
     if (pageContent) {
         lootboxesStore.setPageContentByGroup(pageContent);

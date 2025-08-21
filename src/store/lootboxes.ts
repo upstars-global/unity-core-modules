@@ -2,7 +2,7 @@ import { filterIssuedLootBoxes } from "@helpers/lootBoxes";
 import { defineStore, Pinia, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
-import { type ILootbox, sectionsWheelConfigs, sectionsWheelSegmentConfigs } from "../models/lootboxes";
+import { type ILootbox } from "../models/lootboxes";
 import type { IPageItemCMS } from "../services/api/DTO/CMS";
 import type { ILootboxesFileConfig, ILootboxItemConfig } from "../services/api/DTO/lootboxes";
 import { useCMS } from "./CMS";
@@ -11,14 +11,12 @@ import { useUserStatuses } from "./user/userStatuses";
 export const useLootboxesStore = defineStore("lootboxes", () => {
     const lootboxesList = ref<ILootbox[]>([]);
     const fakeIdPrizeWin = ref<number>();
-    const mockSectionsWheelConfigs = ref<ILootboxesFileConfig>(sectionsWheelConfigs);
-    const mockSectionsWheelSegmentConfigs = ref<Record<string, ILootboxesFileConfig>>(sectionsWheelSegmentConfigs);
+    const pageContentByGroup = ref<IPageItemCMS>();
+    const mockSectionsWheelConfigs = ref<ILootboxesFileConfig>([]);
+    const mockSectionsWheelSegmentConfigs = ref<Record<string, ILootboxesFileConfig>>({});
     const redeemableSpinInfo = ref<Record<string, unknown>>();
     const { getUserGroups } = storeToRefs(useUserStatuses());
-
     const { currentStaticPage } = storeToRefs(useCMS());
-
-    const pageContentByGroup = ref<IPageItemCMS>();
 
     const lootboxListIssued = computed<ILootbox[]>(() => {
         return filterIssuedLootBoxes(lootboxesList.value);
@@ -94,17 +92,3 @@ export const useLootboxesStore = defineStore("lootboxes", () => {
         setRedeemableSpinInfo,
     };
 });
-
-
-export function useLootboxesStoreFetchService(pinia?: Pinia) {
-    const {
-        loadMockWheel,
-        loadMockSegmentsWheel,
-    } = useLootboxesStore(pinia);
-
-    return {
-        loadMockWheel,
-        loadMockSegmentsWheel,
-    };
-}
-

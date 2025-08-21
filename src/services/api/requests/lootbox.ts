@@ -47,24 +47,6 @@ export async function activateLootboxReq(id: number) {
     }
 }
 
-export async function loadPageContentFromCmsReq(slugPage: UserGroup): Promise<IPageItemCMS | void> { // TODO: rename
-    try {
-        const { data } = await http().get<IPageItemCMS>(`/api/cms/pages/${ slugPage }`);
-        return data;
-    } catch (err) {
-        log.error("LOAD_PAGE_CONTENT_FORM_CMS_REQ_ERROR", err);
-    }
-}
-
-export async function loadPageContentFromWheelCmsReq(slug: string): Promise<IPageItemCMS | void> {
-    try {
-        const { data } = await http().get<IPageItemCMS>(`/api/cms/pages/${slug}`);
-        return data;
-    } catch (err) {
-        log.error("LOAD_PAGE_CONTENT_FORM_CMS_REQ_ERROR", err);
-    }
-}
-
 export async function loadBetBonusReq(type: string, id: string) {
     try {
         const { data } = await http().get(`/api/v2/bonuses/${type}/${id}`);
