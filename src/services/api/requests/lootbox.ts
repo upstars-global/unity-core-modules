@@ -6,24 +6,24 @@ import { ILootboxesFileConfig } from "../DTO/lootboxes";
 import { http } from "../http";
 
 export async function loadMockLootboxWheelConfigs():
-    Promise<ILootboxesFileConfig | Error | undefined> {
+    Promise<ILootboxesFileConfig | undefined> {
     try {
         const { data } = await http().get<ILootboxesFileConfig>("/api/fe/config/wheel-config");
 
         return data;
     } catch (err) {
         log.error("LOAD_MOCK_SECTIONS_ROCKET_WHEEL_ERROR", err);
-        throw err;
     }
-} export async function loadMockLootboxWheelSegmentsConfigs():
-    Promise<Record<string, ILootboxesFileConfig> | Error | undefined> {
+}
+
+export async function loadMockLootboxWheelSegmentsConfigs():
+    Promise<Record<string, ILootboxesFileConfig> | undefined> {
     try {
         const { data } = await http().get<Record<string, ILootboxesFileConfig>>("/api/fe/config/wheel-config-segments");
 
         return data;
     } catch (err) {
         log.error("LOAD_MOCK_SECTIONS_ROCKET_WHEEL_ERROR", err);
-        throw err;
     }
 }
 

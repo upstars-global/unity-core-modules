@@ -2,20 +2,10 @@ import { filterIssuedLootBoxes } from "@helpers/lootBoxes";
 import { defineStore, Pinia, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
-import { log } from "../controllers/Logger";
-import { CompPointRatesTypes } from "../models/enums/compPoints";
 import { type ILootbox, sectionsWheelConfigs, sectionsWheelSegmentConfigs } from "../models/lootboxes";
 import type { IPageItemCMS } from "../services/api/DTO/CMS";
 import type { ILootboxesFileConfig, ILootboxItemConfig } from "../services/api/DTO/lootboxes";
-import { http } from "../services/api/http";
-import { loadCompPointRateBySlug } from "../services/api/requests/compPoints";
-import {
-    loadMockLootboxWheelConfigs,
-    loadMockLootboxWheelSegmentsConfigs,
-    loadPageContentFromWheelCmsReq,
-} from "../services/api/requests/lootbox";
 import { useCMS } from "./CMS";
-import { useUserInfo } from "./user/userInfo";
 import { useUserStatuses } from "./user/userStatuses";
 
 export const useLootboxesStore = defineStore("lootboxes", () => {
@@ -25,7 +15,7 @@ export const useLootboxesStore = defineStore("lootboxes", () => {
     const mockSectionsWheelSegmentConfigs = ref<Record<string, ILootboxesFileConfig>>(sectionsWheelSegmentConfigs);
     const redeemableSpinInfo = ref<Record<string, unknown>>();
     const { getUserGroups } = storeToRefs(useUserStatuses());
-    const { getIsLogged } = storeToRefs(useUserInfo());
+
     const { currentStaticPage } = storeToRefs(useCMS());
 
     const pageContentByGroup = ref<IPageItemCMS>();
@@ -33,14 +23,17 @@ export const useLootboxesStore = defineStore("lootboxes", () => {
     const lootboxListIssued = computed<ILootbox[]>(() => {
         return filterIssuedLootBoxes(lootboxesList.value);
     });
+
     const countActiveLootbox = computed(() => lootboxListIssued.value.length);
 
     const userGroupForWheel = computed(() => {
         return Object.keys(mockSectionsWheelSegmentConfigs.value).find((key) => getUserGroups.value.includes(Number(key)));
     });
+
     const getMockSegmentWheelUser = computed<ILootboxItemConfig[]>(() => {
         return mockSectionsWheelSegmentConfigs.value[userGroupForWheel.value] || [];
     });
+
     const getRedeemableSpinInfo = computed(() => {
         return redeemableSpinInfo.value || currentStaticPage.value?.meta?.json.rateInfo;
     });
@@ -57,39 +50,20 @@ export const useLootboxesStore = defineStore("lootboxes", () => {
         }
     }
 
-    async function loadMockWheel() {
-        const fileMockSectionsWheel = await loadMockLootboxWheelConfigs();
-        if (fileMockSectionsWheel) {
-            mockSectionsWheelConfigs.value = fileMockSectionsWheel as ILootboxesFileConfig;
-        }
-    }
-    async function loadMockSegmentsWheel() {
-        const fileMockSectionsWheel = await loadMockLootboxWheelSegmentsConfigs();
-        if (fileMockSectionsWheel) {
-            mockSectionsWheelSegmentConfigs.value = fileMockSectionsWheel as Record<string, ILootboxesFileConfig>;
-        }
+    function setMockSectionsWheelConfigs(configs: ILootboxesFileConfig) {
+        mockSectionsWheelConfigs.value = configs;
     }
 
-    async function loadPageContentFormCMS() {
-        const pageContent = await loadPageContentFromWheelCmsReq(userGroupForWheel.value || "");
-        if (pageContent) {
-            pageContentByGroup.value = pageContent;
-        }
+    function setMockSectionsWheelSegmentConfigs(configs: Record<string, ILootboxesFileConfig>) {
+        mockSectionsWheelSegmentConfigs.value = configs;
     }
 
-    async function loadPageContentFormCMSBySlug(slug: string) {
-        const pageContent = await loadPageContentFromWheelCmsReq(slug);
-        if (pageContent) {
-            pageContentByGroup.value = pageContent;
-        }
+    function setPageContentByGroup(content: IPageItemCMS) {
+        pageContentByGroup.value = content;
     }
 
-    async function loadRedeemableSpinInto() {
-        if (getIsLogged.value) {
-            const rates = await loadCompPointRateBySlug(CompPointRatesTypes.LOOTBOXES);
-            redeemableSpinInfo.value = rates?.find((item) => item.bonus_title?.includes("manual_wheel"));
-        }
-        return redeemableSpinInfo.value;
+    function setRedeemableSpinInfo(info: Record<string, unknown>) {
+        redeemableSpinInfo.value = info;
     }
 
     function clearLootboxesUserData(): void {
@@ -111,14 +85,13 @@ export const useLootboxesStore = defineStore("lootboxes", () => {
         pageContentByGroup,
         getRedeemableSpinInfo,
 
-        loadMockWheel,
-        loadMockSegmentsWheel,
-        loadRedeemableSpinInto,
-
         updateLootboxList,
         clearLootboxesUserData,
-        loadPageContentFormCMS,
-        loadPageContentFormCMSBySlug,
+
+        setMockSectionsWheelConfigs,
+        setMockSectionsWheelSegmentConfigs,
+        setPageContentByGroup,
+        setRedeemableSpinInfo,
     };
 });
 
