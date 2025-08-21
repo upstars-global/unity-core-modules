@@ -4,7 +4,7 @@ import { computed, ref } from "vue";
 
 import { log } from "../../controllers/Logger";
 import {
-    type ILevelCard,
+    ILevelCard,
     ILevels,
     IStatus,
     IUserLevelInfo,
@@ -25,7 +25,7 @@ const getIndex = (id: string | undefined): number | undefined => {
     return Number(stringIndex);
 };
 export const useLevelsStore = defineStore("levelsStore", () => {
-    const levelCards = ref<Record<string, ILevelCard>>({});
+    const levelCards = ref<Record<Level, ILevelCard>>({});
     const levels = ref<ILevels[]>([]);
     const groups = ref<IStatus[]>([]);
     const rewards = ref<Rewards>();

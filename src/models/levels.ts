@@ -83,5 +83,6 @@ export type LevelConfig = {
 }
 export interface IVipProgramConfig {
     rewardCards: Record<Level, Reward[]>,
-    levelsConfig: Record<Level, LevelConfig>
+    levelsConfig: Record<Level, LevelConfig>,
+    levelCards: Record<Level, ILevelCard>
 }
