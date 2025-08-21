@@ -68,3 +68,15 @@ export type Reward = {
     }
 
 export type Rewards = Record<Level, Reward[]>;
+
+export type LevelConfig = {
+    image: {
+        src: string,
+        srcRetina: string
+    },
+    saveTarget: number
+}
+export interface IVipProgramConfig {
+    rewardCards: Record<Level, Reward[]>,
+    levelsConfig: Record<Level, LevelConfig>
+}

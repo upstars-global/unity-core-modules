@@ -3,7 +3,15 @@ import { defineStore, type Pinia } from "pinia";
 import { computed, ref } from "vue";
 
 import { log } from "../../controllers/Logger";
-import { type ILevels, IStatus, type IUserLevelInfo, type Rewards } from "../../models/levels";
+import {
+    type ILevels,
+    IStatus,
+    type IUserLevelInfo,
+    IVipProgramConfig,
+    Level,
+    LevelConfig,
+    type Rewards,
+} from "../../models/levels";
 import { loadAllStatuses } from "../../services/api/requests/statuses";
 
 const getIndex = (id: string | undefined): number | undefined => {
@@ -19,7 +27,7 @@ export const useLevelsStore = defineStore("levelsStore", () => {
     const levels = ref<ILevels[]>([]);
     const groups = ref<IStatus[]>([]);
     const rewards = ref<Rewards>();
-    const levelsSaveTarget = ref<Record<string, number>>();
+    const levelsConfig = ref<Record<Level, LevelConfig>>();
 
     const getLevelsData = computed<IUserLevelInfo[]>(() => {
         return levels.value
@@ -95,16 +103,16 @@ export const useLevelsStore = defineStore("levelsStore", () => {
         }
     }
 
-    function setConfigData(data: {levelsSaveTarget: Record<string, number>, rewardCards: Rewards}) {
+    function setConfigData(data: IVipProgramConfig) {
         rewards.value = data.rewardCards;
-        levelsSaveTarget.value = data.levelsSaveTarget;
+        levelsConfig.value = data.levelsConfig;
     }
 
     return {
         levels,
         groups,
         rewards,
-        levelsSaveTarget,
+        levelsConfig,
         getLevelsData,
         getLevels,
         getLevelsById,
