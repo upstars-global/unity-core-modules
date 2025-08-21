@@ -13,9 +13,11 @@ import {
     loadGamesJackpots as loadGamesJackpotsReq,
     loadLastGames as loadLastGamesReq,
 } from "../../services/api/requests/games";
+import { useGamesProviders } from "../games/gamesProviders";
 import { useRootStore } from "../root";
 import { useUserInfo } from "../user/userInfo";
 import { findGameBySeoTittleAndProducer } from "./helpers/games";
+import { filterDisabledProviders } from "./helpers/games";
 
 
 interface ISearchCachedGameKey {
@@ -49,12 +51,14 @@ export const useGamesCommon = defineStore("gamesCommon", () => {
     const getGamesCategories = computed(() => gamesCategories.value);
     const menuGameCategories = ref<Record<string, SlugCategoriesGames[]>>({});
     const defaultMenuGameCategories = ref<Record<string, SlugCategoriesGames[]>>(CONFIG_DEFAULT_COLLECTIONS_MENU_SLUGS);
+    const { disabledGamesProviders } = storeToRefs(useGamesProviders());
 
     const getRecentGames = computed(() => {
-        const tempGames: IGame[] = [];
+        let tempGames = [];
         for (const [ id, game ] of Object.entries(recentGames.value)) {
             tempGames.push(processGame(game, id));
         }
+        tempGames = filterDisabledProviders(tempGames, disabledGamesProviders.value);
 
         return tempGames.sort(({ last_activity_at: lastActivityItem }, { last_activity_at: lastActivityNextItem }) => {
             return new Date(lastActivityNextItem).getTime() - new Date(lastActivityItem).getTime();
@@ -160,6 +164,7 @@ export const useGamesCommon = defineStore("gamesCommon", () => {
             gamesCategories.value = data.map((category) => {
                 return {
                     ...category,
+                    provider: category.id,
                     slug: category.id,
                     url: `/games/${category.id}`,
                     name: category.title,
