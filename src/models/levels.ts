@@ -52,6 +52,11 @@ export interface ILevels {
     };
 }
 
+export interface ILevelCard {
+    reward: string,
+    rewards: Record<string, string>
+}
+
 export type Reward = {
         id: string;
         image?: string;
