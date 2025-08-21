@@ -4,13 +4,14 @@ import { computed, ref } from "vue";
 
 import { log } from "../../controllers/Logger";
 import {
-    type ILevels,
+    type ILevelCard,
+    ILevels,
     IStatus,
-    type IUserLevelInfo,
+    IUserLevelInfo,
     IVipProgramConfig,
     Level,
     LevelConfig,
-    type Rewards,
+    Rewards,
 } from "../../models/levels";
 import { loadAllStatuses } from "../../services/api/requests/statuses";
 
@@ -24,6 +25,7 @@ const getIndex = (id: string | undefined): number | undefined => {
     return Number(stringIndex);
 };
 export const useLevelsStore = defineStore("levelsStore", () => {
+    const levelCards = ref<Record<string, ILevelCard>>({});
     const levels = ref<ILevels[]>([]);
     const groups = ref<IStatus[]>([]);
     const rewards = ref<Rewards>();
@@ -106,6 +108,7 @@ export const useLevelsStore = defineStore("levelsStore", () => {
     function setConfigData(data: IVipProgramConfig) {
         rewards.value = data.rewardCards;
         levelsConfig.value = data.levelsConfig;
+        levelCards.value = data.levelCards;
     }
 
     return {
@@ -113,6 +116,7 @@ export const useLevelsStore = defineStore("levelsStore", () => {
         groups,
         rewards,
         levelsConfig,
+        levelCards,
         getLevelsData,
         getLevels,
         getLevelsById,
