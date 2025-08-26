@@ -1,10 +1,10 @@
 import { log } from "../../../controllers/Logger";
-import { IStatuses } from "../DTO/statuses";
+import { IStatus } from "../../../models/levels";
 import { http } from "../http";
 
 export async function loadAllStatuses() {
     try {
-        const { data } = await http().get<IStatuses[]>("/api/info/statuses");
+        const { data } = await http().get<IStatus[]>("/api/info/statuses");
 
         return data;
     } catch (err) {
