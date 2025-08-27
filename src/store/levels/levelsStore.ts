@@ -30,6 +30,7 @@ export const useLevelsStore = defineStore("levelsStore", () => {
     const groups = ref<IStatuses[]>([]);
     const rewards = ref<Rewards>();
     const levelsConfig = ref<Record<Level, LevelConfig>>();
+    const levelBonusesCount = ref<Record<Level, number>>();
 
     const getLevelsData = computed<ILevel[]>(() => {
         return levels.value
@@ -98,6 +99,7 @@ export const useLevelsStore = defineStore("levelsStore", () => {
         rewards.value = data.rewardCards;
         levelsConfig.value = data.levelsConfig;
         levelCards.value = data.levelCards;
+        levelBonusesCount.value = data.levelBonusesCount;
     }
 
     return {

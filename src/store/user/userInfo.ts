@@ -95,6 +95,9 @@ export const useUserInfo = defineStore("userInfo", () => {
     const getUserSumsubVerified = computed(() => {
         return getUserInfo.value.sumsub_verified;
     });
+    const getUserVerified = computed(() => {
+        return getUserInfo.value.verified;
+    });
     const getUserSubscriptions = computed(() => {
         return subscriptions.value;
     });
@@ -381,6 +384,7 @@ export const useUserInfo = defineStore("userInfo", () => {
     return {
         getUserInfo,
         getUserSumsubVerified,
+        getUserVerified,
         checkUserState,
         info,
         isLogged,
