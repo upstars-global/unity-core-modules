@@ -42,6 +42,9 @@ export async function sendPostMessageToParent(
         };
         console.log("postMessage", JSON.stringify(message, null, 2));
         window.parent.postMessage(message, "*");
-        await wait(waitTime);
+
+        if (waitTime > 0) {
+            await wait(waitTime);
+        }
     }
 }
