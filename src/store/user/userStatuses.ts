@@ -1,6 +1,6 @@
 import { ALL_LEVELS, ID_GROUP_FOR_MULTI_ACC, TEST_GROUP_ID } from "@config/user-statuses";
-import { STATUSES, VIP_CLUB_STATUSES } from "@config/vip-clubs";
-import { getUserVipGroup } from "@helpers/user";
+import { VIP_CLUB_STATUSES } from "@config/vip-clubs";
+import { getUserIsDiamond, getUserVipGroup } from "@helpers/user";
 import type { ILevel } from "@types/levels";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
@@ -48,7 +48,7 @@ export const useUserStatuses = defineStore("userStatuses", () => {
         return getUserGroups.value.includes(ID_GROUP_FOR_MULTI_ACC);
     });
 
-    const userVipGroup = computed<number | undefined>(() => {
+    const userVipGroup = computed<string | undefined>(() => {
         return getUserVipGroup(getUserGroups.value);
     });
 
@@ -63,7 +63,7 @@ export const useUserStatuses = defineStore("userStatuses", () => {
     });
 
     const isDiamond = computed<boolean>(() => {
-        return getUserGroups.value.includes(STATUSES.DIAMOND.id);
+        return getUserIsDiamond(userVipGroup.value);
     });
 
     const getUserManager = computed(() => {

@@ -35,7 +35,7 @@ export const useStatusCompPointsStore = defineStore("statusCompPointsStore", () 
     });
     const getStatusBalance = computed(() => {
         if (!compPoints.value?.persistent) {
-            return 4;
+            return 0;
         }
         return compPoints.value?.persistent.points;
     });
