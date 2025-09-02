@@ -11,6 +11,7 @@ import { useLootboxesStore } from "./lootboxes";
 export const useRocketLootboxesStore = defineStore("rocketLootboxes", () => {
     const lootboxesStore = useLootboxesStore();
     const { lootboxesList } = storeToRefs(lootboxesStore);
+    const { loadLootboxesList, loadPrizeOfLootbox } = lootboxesStore;
     const { currentStaticPage } = storeToRefs(useCMS());
 
     function isLootboxValid({ created_at, stage }: ILootbox) {
@@ -50,9 +51,18 @@ export const useRocketLootboxesStore = defineStore("rocketLootboxes", () => {
         return currentStaticPage.value?.meta.json.skin || {} as RocketLootboxSkin;
     });
 
+    function loadLootboxes() {
+        return loadLootboxesList();
+    }
+    function activateLootbox(id: number) {
+        return loadPrizeOfLootbox(id);
+    }
+
     return {
         lootboxes,
         notUsedLootboxes,
+        loadLootboxes,
+        activateLootbox,
         skin,
     };
 });

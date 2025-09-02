@@ -14,7 +14,7 @@ import { loadCMSPagesReq, loadCMSSnippetsReq, loadMetaSEOReq, loadPageContentFro
 import { useMultilangStore } from "../store/multilang";
 
 interface ISeoMeta {
-    json?: string;
+    json: string;
     metaDescription: string;
     metaTitle: string;
     metaKeywords?: string;
@@ -78,11 +78,9 @@ export const useCMS = defineStore("CMS", () => {
         }
 
         const data = await loadCMSSnippetsReq(getUserLocale.value);
-
         if (data) {
             snippets.value = data;
         }
-
         return data;
     }
 
@@ -168,7 +166,6 @@ export const useCMS = defineStore("CMS", () => {
             }
 
             const blocks = data.blocks;
-
             if (blocks) {
                 meta = {
                     metaTitle: blocks.title,
@@ -178,15 +175,15 @@ export const useCMS = defineStore("CMS", () => {
                 };
             } else {
                 const metaDataSSRPrepare = metaDataSSR(getUserLocale.value);
-
                 meta = {
                     metaTitle: metaDataSSRPrepare?.title,
                     metaDescription: metaDataSSRPrepare?.description,
                     content: metaDataSSRPrepare?.content,
+                    json: blocks.json,
                 };
             }
 
-            meta = replaceCurrentYearPlaceholder(meta) as ISeoMeta;
+            meta = replaceCurrentYearPlaceholder(meta);
             const pageContent = replaceCurrentYearPlaceholder(new CurrentPage(data));
 
             setSeoMeta({ meta, url });
