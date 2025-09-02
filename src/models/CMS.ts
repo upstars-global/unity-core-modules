@@ -23,7 +23,7 @@ export interface ICurrentPageMeta {
     metaTitle: string;
     json: string;
     mainContent: string;
-    blocks?: Record<string, unknown>;
+    blocks: Record<string, unknown>;
 }
 
 export interface ICurrentPage {
@@ -53,7 +53,7 @@ export class CurrentPage implements ICurrentPage {
     slug: string;
     title: string;
     contentMain: string;
-    json: Record<string, unknown>;
+    json: object;
     meta: ICurrentPageMeta;
 
     constructor(data: IPageItemCMS) {
@@ -61,14 +61,14 @@ export class CurrentPage implements ICurrentPage {
         this.content = data.content;
         this.slug = data.path;
         this.title = data.title;
-        this.contentMain = data.blocks?.["content-main"] || "";
+        this.contentMain = data.blocks["content-main"];
         this.json = JSON.parse(data.blocks?.json || "{}");
         this.meta = {
-            metaDescription: data.blocks?.description || "",
-            metaKeywords: data.blocks?.keywords || "",
-            metaTitle: data.blocks?.title || "",
-            json: JSON.parse(data.blocks?.json || "{}"),
-            mainContent: data.blocks?.["content-main"] || "",
+            metaDescription: data.blocks.description,
+            metaKeywords: data.blocks.keywords,
+            metaTitle: data.blocks.title,
+            json: data.blocks.json && JSON.parse(data.blocks.json),
+            mainContent: data.blocks["content-main"],
         };
     }
 }
