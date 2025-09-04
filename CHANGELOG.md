@@ -1,3 +1,48 @@
+## [1.33.0](https://github.com/upstars-global/unity-core-modules/compare/v1.32.1...v1.33.0) (2025-09-02)
+
+### ⏪ Reverts
+
+* Revert "feat: refactor lootboxes store, unit tests for lootboxes, roc… ([#214](https://github.com/upstars-global/unity-core-modules/issues/214))
+ ([57d1ab3](https://github.com/upstars-global/unity-core-modules/commit/57d1ab386302c647c6eb4a2b0b1a3c23f44bd77a))
+
+, closes [#210](https://github.com/upstars-global/unity-core-modules/issues/)
+
+### 🚀 Features
+
+* refactor lootboxes store, unit tests for lootboxes, rocketLootboxes, CMS stores ([#210](https://github.com/upstars-global/unity-core-modules/issues/210))
+ ([5381e0e](https://github.com/upstars-global/unity-core-modules/commit/5381e0e746687331ad465dda92f21275c06c759a))
+
+
+
+    * feat(UN-345): CMS unit tests
+
+    * fix: CMS test
+
+    * feat: refactor lootboxes store wip
+
+    * feat: refactor lootboxes store
+
+    * feat: refactor lootboxes store
+
+    * feat: add lootboxes and rocketLootboxes stores tests
+* refactor lootboxes store, unit tests for lootboxes, rocketLootboxes, CMS stores ([#215](https://github.com/upstars-global/unity-core-modules/issues/215))
+ ([c055bf4](https://github.com/upstars-global/unity-core-modules/commit/c055bf41bb437dce76d1a6aec43b8fe9c0e9509e))
+
+, closes [#214](https://github.com/upstars-global/unity-core-modules/issues/)
+
+## [1.32.1](https://github.com/upstars-global/unity-core-modules/compare/v1.32.0...v1.32.1) (2025-08-27)
+
+### 🧪 Testing
+
+* add unit tests for bannerHelpers functions ([#211](https://github.com/upstars-global/unity-core-modules/issues/211))
+ ([2dec3a4](https://github.com/upstars-global/unity-core-modules/commit/2dec3a4a4cdc624dffcd2a10fa56d0236a0b8bcd))
+
+
+
+    test: add unit tests for achievementHelpers functions
+
+    Co-authored-by: d-tashchi <kabak133@gmail.com>
+
 ## [1.32.0](https://github.com/upstars-global/unity-core-modules/compare/v1.31.5...v1.32.0) (2025-08-20)
 
 ### 🚀 Features

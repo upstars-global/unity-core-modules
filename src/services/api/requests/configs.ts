@@ -4,6 +4,7 @@ import { type IStagByReferName, type ISurveyConfig } from "../../../models/confi
 import { type IBettingConfig } from "../../../models/configs";
 import { type IVipProgramConfig } from "../../../models/levels";
 import { type MainWidgetItem } from "../../../models/mainWidget";
+import { type IProvidersList } from "../../../models/providers";
 import { type IGiftModifyConfig } from "../DTO/gifts";
 import { type IVipAdventuresConfig } from "../DTO/vipAdventuresDTO";
 import { http } from "../http";
@@ -47,7 +48,10 @@ const loadVipProgramConfigReq = () => loadConfig<IVipProgramConfig>(
     "/api/fe/config/vip-program-config",
     "LOAD_VIP_PROGRAM_REWARDS_CONFIG_ERROR",
 );
-const loadDisabledProvidersConfigReq = () => loadConfig<string[]>("/api/fe/config/providers-config", "LOAD_PROFIDERS_CONFIG_ERROR");
+const loadDisabledProvidersConfigReq = () => loadConfig<IProvidersList>(
+    "/api/fe/config/providers-config",
+    "LOAD_PROVIDERS_CONFIG_ERROR",
+);
 
 export {
     loadAdditionalDepositGiftsConfigReq,
