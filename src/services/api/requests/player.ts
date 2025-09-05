@@ -1,6 +1,7 @@
 import { v4 as uuid } from "uuid";
 
 import { log } from "../../../controllers/Logger";
+import { IAuthProvider, IUserAuthProvider } from "../../../models/authProviders";
 import type { IUserInfo } from "../../../models/user";
 import { IPlayerPayment } from "../DTO/cashbox";
 import { BettingPlayerSettingsDTO, IPlayerStats, ISubscriptions, IUserAccount, IUserSettings } from "../DTO/playerDTO";
@@ -143,6 +144,36 @@ export async function confirmEmailResendReg(dataForConfirm) {
         return await http().post("/api/users/confirmation", dataForConfirm);
     } catch (err) {
         log.error("CONFIRM_EMAIL_RESEND_ERROR", err);
+        throw err;
+    }
+}
+
+export async function getAuthProvidersReq() {
+    try {
+        const { data } = await http().get<IAuthProvider[]>("/api/info/auth_providers");
+        return data;
+    } catch (err) {
+        log.error("GET_AUTH_PROVIDERS_ERROR", err);
+        throw err;
+    }
+}
+
+export async function getUserAuthProvidersReq() {
+    try {
+        const { data } = await http().get<IUserAuthProvider[]>("/api/auth_providers");
+        return data;
+    } catch (err) {
+        log.error("GET_USER_AUTH_PROVIDERS_ERROR", err);
+        throw err;
+    }
+}
+
+export async function disconnectAuthProviderReq(id: number) {
+    try {
+        const data = await http().delete(`/api/auth_providers/${id}`);
+        return data;
+    } catch (err) {
+        log.error("DISCONNECT_AUTH_PROVIDER_ERROR", err);
         throw err;
     }
 }
