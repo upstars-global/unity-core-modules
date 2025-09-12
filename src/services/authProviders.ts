@@ -22,7 +22,9 @@ export async function loadUserAuthProviders() {
 export async function disconnectAuthProvider(id: number) {
     const { clearState } = useAuthProvidersStore();
 
-    await disconnectAuthProviderReq(id);
+    const data = await disconnectAuthProviderReq(id);
 
-    clearState();
+    if (data?.status === 200) {
+        clearState();
+    }
 }

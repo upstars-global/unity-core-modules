@@ -154,7 +154,6 @@ export async function getAuthProvidersReq() {
         return data;
     } catch (err) {
         log.error("GET_AUTH_PROVIDERS_ERROR", err);
-        throw err;
     }
 }
 
@@ -164,7 +163,6 @@ export async function getUserAuthProvidersReq() {
         return data;
     } catch (err) {
         log.error("GET_USER_AUTH_PROVIDERS_ERROR", err);
-        throw err;
     }
 }
 
@@ -174,7 +172,6 @@ export async function disconnectAuthProviderReq(id: number) {
         return data;
     } catch (err) {
         log.error("DISCONNECT_AUTH_PROVIDER_ERROR", err);
-        throw err;
     }
 }
 
