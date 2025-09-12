@@ -1,3 +1,14 @@
+## [1.34.1](https://github.com/upstars-global/unity-core-modules/compare/v1.34.0...v1.34.1) (2025-09-12)
+
+### 🧪 Testing
+
+* add unit test for multilang
+ ([3322ad1](https://github.com/upstars-global/unity-core-modules/commit/3322ad116851643406ee0248e5621d30be9d5f33))
+
+
+
+    add unit test for multilang
+
 ## [1.33.0](https://github.com/upstars-global/unity-core-modules/compare/v1.32.1...v1.33.0) (2025-09-02)
 
 ### ⏪ Reverts
