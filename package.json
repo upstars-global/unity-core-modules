@@ -12,7 +12,8 @@
     "test:coverage": "vitest --coverage",
     "lint": "eslint --max-warnings=8",
     "lint:tsc": "tsc --noEmit",
-    "prepare": "husky"
+    "prepare": "husky",
+    "ci": "find . -type d -name \"node_modules\" -prune -exec rm -rf {} + && yarn cache clean && yarn"
   },
   "lint-staged": {
     "**/*": "eslint --fix"
