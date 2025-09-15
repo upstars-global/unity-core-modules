@@ -32,6 +32,16 @@ export async function loadLastGames(): Promise<IPlayedGame[]> {
     }
 }
 
+export async function loadRandomGame(): Promise<IGame> {
+    try {
+        const { data } = await http().get<IGame>("/api/games/random");
+        return data;
+    } catch (error) {
+        log.error("LOAD_RANDOM_GAME_ERROR", error);
+        return {} as IGame;
+    }
+}
+
 export async function loadGamesCategories(): Promise<IGameCollection[]> {
     try {
         const { data } = await http().get<IGameCollection[]>("/api/games/collections");
