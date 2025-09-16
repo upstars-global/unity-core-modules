@@ -2,6 +2,7 @@ import { getGameImagePath } from "@helpers/gameImage";
 import { SlugCategoriesGames } from "@theme/configs/categoryesGames";
 import featureFlags from "@theme/configs/featureFlags";
 
+import { log } from "../controllers/Logger";
 import type { IGame } from "../models/game";
 import { loadRandomGame } from "../services/api/requests/games";
 import { useGamesProviders } from "../store/games/gamesProviders";
@@ -65,15 +66,19 @@ export async function getRandomGame(): Promise<IGame | undefined> {
     const randomGame = await loadRandomGame();
     randomGameCounter++;
 
-    const isValidRandomGame = filterDisabledProviders([ randomGame ], disabledGamesProviders);
+    const isValidRandomGame = filterDisabledProviders([ randomGame ], disabledGamesProviders)?.length;
 
-    if (isValidRandomGame.length) {
+    if (isValidRandomGame) {
         randomGameCounter = 0;
         return randomGame;
     }
 
     if (randomGameCounter <= 10) {
         return getRandomGame();
+    }
+
+    if (randomGameCounter > 10) {
+        log.error("LOAD_RANDOM_GAME_ERROR", "Repeated 10 times, didn`t find an acceptable random game");
     }
 
     randomGameCounter = 0;
