@@ -1,4 +1,4 @@
-import { ID_GROUP_FOR_MULTI_ACC, TEST_GROUP_ID, VIP_STATUSES } from "@config/user-statuses";
+import { ID_GROUP_FOR_MULTI_ACC, SOCIAL_NETOWORK_AUTH_GROUPS, TEST_GROUP_ID, VIP_STATUSES } from "@config/user-statuses";
 import { STATUSES, VIP_CLUB_STATUSES } from "@config/vip-clubs";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
@@ -55,14 +55,16 @@ export const useUserStatuses = defineStore("userStatuses", () => {
         return getUserGroups.value.includes(STATUSES.DIAMOND.id);
     });
 
+    const isRegisteredViaSocialNetwork = computed<boolean>(() => {
+        return (SOCIAL_NETOWORK_AUTH_GROUPS || []).some((status: number) => getUserGroups.value.includes(status));
+    });
+
     const userVipStatus = computed<string>(() => {
         const statusGroup = VIP_STATUSES.find((status) => getUserGroups.value.includes(status));
 
-        // @ts-expect-error Type 'undefined' cannot be used as an index type
         return VIP_CLUB_STATUSES[statusGroup];
     });
 
-    // @ts-expect-error No overload matches this call.
     const userVipGroup = computed<number>(() => {
         return VIP_STATUSES.find((status) => getUserGroups.value.includes(status));
     });
@@ -101,6 +103,7 @@ export const useUserStatuses = defineStore("userStatuses", () => {
         getUserManager,
         userVipStatus,
         userVipGroup,
+        isRegisteredViaSocialNetwork,
 
         addUserToGroup,
         loadUserManager,
