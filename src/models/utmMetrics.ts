@@ -4,4 +4,5 @@ export interface IUtmMetrics {
     utm_campaign: string;
     utm_content: string;
     utm_term: string;
+    sub_id: string;
 }
