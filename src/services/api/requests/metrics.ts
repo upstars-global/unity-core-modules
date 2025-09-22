@@ -1,6 +1,5 @@
-import { getUtmParamsFromCookies } from "@front/core/controllers/utmParams"; // TODO: change import
-
 import { log } from "../../../controllers/Logger";
+import { getUtmParamsFromCookies } from "../../../controllers/utmParams";
 import { getErrorMessage } from "../../../helpers/formErrorMessageHelper";
 import { concatValues } from "../../../helpers/objectsHelpers";
 import type { IUtmMetrics } from "../../../models/utmMetrics";
