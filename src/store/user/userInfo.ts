@@ -9,7 +9,7 @@ import { useUserTermsAcceptingPopup } from "../../controllers/userTermsAccepting
 import { EnumContextFields, EnumFormFields } from "../../models/common";
 import { Currencies } from "../../models/enums/currencies";
 import { BettingPlayerSettings } from "../../models/player";
-import type { IUserData } from "../../models/user";
+import type { IUserData, IUserStatus } from "../../models/user";
 import { EventBus as bus } from "../../plugins/EventBus";
 import type { IPlayerStats, ISubscriptions, IUserSettings } from "../../services/api/DTO/playerDTO";
 import {
@@ -155,9 +155,12 @@ export const useUserInfo = defineStore("userInfo", () => {
         isLoadedUsedData.value = true;
     }
 
-    // @ts-expect-error Parameter 'userGroup' implicitly has an 'any' type.
-    function addUserGroup(userGroup) {
+    function addUserGroup(userGroup: IUserStatus) {
         info.value.statuses.push(userGroup);
+    }
+
+    function setUserStatuses(userGroups: IUserStatus[]) {
+        info.value.statuses = userGroups;
     }
 
     function clearUserData() {
@@ -174,11 +177,10 @@ export const useUserInfo = defineStore("userInfo", () => {
         freshchatRestoreIdLoaded.value = status;
     }
 
-    // @ts-expect-error Parameter 'newStatus' implicitly has an 'any' type.
-    function addUserStatuses(newStatus) {
+    function addUserStatuses(newStatus: IUserStatus) {
         info.value.statuses = [
-            info.value.statuses.filter(({ id }) => {
-                return Number(id) !== newStatus.id;
+            ...info.value.statuses.filter(({ id }) => {
+                return Number(id) !== Number(newStatus.id);
             }),
             newStatus,
         ];
@@ -409,6 +411,7 @@ export const useUserInfo = defineStore("userInfo", () => {
         addUserGroup,
         clearUserData,
         addUserStatuses,
+        setUserStatuses,
 
         putUserSubscription,
         loadUserSettings,
