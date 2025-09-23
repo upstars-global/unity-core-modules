@@ -1,4 +1,10 @@
-import { ID_GROUP_FOR_MULTI_ACC, SOCIAL_NETOWORK_AUTH_GROUPS, TEST_GROUP_ID, VIP_STATUSES } from "@config/user-statuses";
+import {
+    ID_GROUP_FOR_MULTI_ACC,
+    PASSWORD_SET_GROUP_ID,
+    SOCIAL_NETOWORK_AUTH_GROUPS,
+    TEST_GROUP_ID,
+    VIP_STATUSES,
+} from "@config/user-statuses";
 import { STATUSES, VIP_CLUB_STATUSES } from "@config/vip-clubs";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
@@ -59,6 +65,10 @@ export const useUserStatuses = defineStore("userStatuses", () => {
         return (SOCIAL_NETOWORK_AUTH_GROUPS || []).some((status: number) => getUserGroups.value.includes(status));
     });
 
+    const isSetPasswordGroup = computed(() => {
+        return getUserGroups.value.includes(PASSWORD_SET_GROUP_ID);
+    });
+
     const userVipStatus = computed<string>(() => {
         const statusGroup = VIP_STATUSES.find((status) => getUserGroups.value.includes(status));
 
@@ -104,6 +114,7 @@ export const useUserStatuses = defineStore("userStatuses", () => {
         userVipStatus,
         userVipGroup,
         isRegisteredViaSocialNetwork,
+        isSetPasswordGroup,
 
         addUserToGroup,
         loadUserManager,
