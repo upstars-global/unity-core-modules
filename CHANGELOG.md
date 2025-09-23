@@ -1,3 +1,25 @@
+## [1.34.2](https://github.com/upstars-global/unity-core-modules/compare/v1.34.1...v1.34.2) (2025-09-22)
+
+### 🔨 Refactoring
+
+* UN-1449: refactor minor UTM params ([#224](https://github.com/upstars-global/unity-core-modules/issues/224))
+ ([374c13f](https://github.com/upstars-global/unity-core-modules/commit/374c13f567a958182c0f5688c61b5637ad5de191))
+
+
+
+    done
+
+## [1.34.1](https://github.com/upstars-global/unity-core-modules/compare/v1.34.0...v1.34.1) (2025-09-12)
+
+### 🧪 Testing
+
+* add unit test for multilang
+ ([3322ad1](https://github.com/upstars-global/unity-core-modules/commit/3322ad116851643406ee0248e5621d30be9d5f33))
+
+
+
+    add unit test for multilang
+
 ## [1.33.0](https://github.com/upstars-global/unity-core-modules/compare/v1.32.1...v1.33.0) (2025-09-02)
 
 ### ⏪ Reverts
