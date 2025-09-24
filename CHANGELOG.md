@@ -1,3 +1,20 @@
+## [1.35.0](https://github.com/upstars-global/unity-core-modules/compare/v1.34.2...v1.35.0) (2025-09-24)
+
+### 🚀 Features
+
+* UN-1598: new random game logic ([#223](https://github.com/upstars-global/unity-core-modules/issues/223))
+ ([b4aee7f](https://github.com/upstars-global/unity-core-modules/commit/b4aee7f0833a2c4102d769deecb7f5a922c892c4))
+
+
+
+    * new random game logic
+
+    * done
+
+    * fix minor
+
+    * remove test data
+
 ## [1.34.2](https://github.com/upstars-global/unity-core-modules/compare/v1.34.1...v1.34.2) (2025-09-22)
 
 ### 🔨 Refactoring
