@@ -1,3 +1,10 @@
+## [1.35.1](https://github.com/upstars-global/unity-core-modules/compare/v1.35.0...v1.35.1) (2025-09-25)
+
+### 🐛 Bug Fixes
+
+* mapping levels for new vip program levels ([#226](https://github.com/upstars-global/unity-core-modules/issues/226))
+ ([038d25d](https://github.com/upstars-global/unity-core-modules/commit/038d25d8a25df077777f6304cc8a144fa23c55fa))
+
 ## [1.35.0](https://github.com/upstars-global/unity-core-modules/compare/v1.34.2...v1.35.0) (2025-09-24)
 
 ### 🚀 Features
