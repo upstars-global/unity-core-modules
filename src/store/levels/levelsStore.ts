@@ -54,6 +54,9 @@ export const useLevelsStore = defineStore("levelsStore", () => {
         return (someLevel: IUserLevelInfo) => {
             const config = mockLevels[someLevel.id];
 
+            if (!config) {
+                return someLevel;
+            }
             return {
                 ...someLevel,
                 image: config.image,
