@@ -8,8 +8,8 @@ import { GameMode } from "../../models/enums/gamesConsts";
 import type { IRedeemableCards } from "../../services/api/DTO/compPoints";
 import { exchangeCompPointRateBySlug, loadCompPointRateBySlug } from "../../services/api/requests/compPoints";
 import { loadFilteredGames } from "../../services/api/requests/games";
+import { loadLotteryStatuses } from "../../services/lotteries";
 import { useCMS } from "../CMS";
-import { useLotteriesStore } from "../lotteries";
 import { useUserInfo } from "../user/userInfo";
 import { useStatusCompPointsStore } from "./statusCompPointsStore";
 
@@ -36,7 +36,6 @@ export const useRedeemableCompPointsStore = defineStore("redeemableCompPointsSto
     const { currentStaticPage } = storeToRefs(useCMS());
     const { getChargeableBalance } = storeToRefs(useStatusCompPointsStore());
     const { loadUserCompPoints } = useStatusCompPointsStore();
-    const { loadLotteryStatuses } = useLotteriesStore();
     const pageSlug: string = "rocket-mart";
 
     const getTabsAvailable = computed(() => {
