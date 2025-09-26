@@ -28,7 +28,7 @@ export const useLevelsStore = defineStore("levelsStore", () => {
     const levelCards = ref<Record<Level, ILevelCard>>({});
     const levels = ref<ILevel[]>([]);
     const groups = ref<IStatuses[]>([]);
-    const rewards = ref<Rewards>();
+    const rewards = ref<Rewards>({} as Rewards);
     const levelsConfig = ref<Record<Level, LevelConfig>>();
     const levelBonusesCount = ref<Record<Level, number>>();
 
@@ -96,7 +96,18 @@ export const useLevelsStore = defineStore("levelsStore", () => {
     }
 
     function setConfigData(data: IVipProgramConfig) {
-        rewards.value = data.rewardCards;
+        rewards.value = Object
+            .entries(data.levelRewards)
+            .reduce((acc, [ level, rewardIds ]) => {
+                acc[level as Level] = rewardIds
+                    .map((id) => {
+                        return data.rewardCards[id] && { ...data.rewardCards[id], id };
+                    })
+                    .filter(Boolean);
+
+                return acc;
+            }, {} as Rewards);
+
         levelsConfig.value = data.levelsConfig;
         levelCards.value = data.levelCards;
         levelBonusesCount.value = data.levelBonusesCount;
