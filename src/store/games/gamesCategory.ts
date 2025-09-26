@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 import { ref, toRefs } from "vue";
 
 import { log } from "../../controllers/Logger";
-import { getRandomGame, processGameForNewAPI } from "../../helpers/gameHelpers";
+import { processGameForNewAPI } from "../../helpers/gameHelpers";
 import type { ICollectionItem, IGame } from "../../models/game";
 import type { ICollectionRecord, IGameFilter } from "../../services/api/DTO/gamesDTO";
 import { loadGamesCategory as loadGamesCategoryReq } from "../../services/api/requests/games";
@@ -11,7 +11,6 @@ import { useConfigStore } from "../configStore";
 import { useGamesProviders } from "../games/gamesProviders";
 import { useMultilangStore } from "../multilang";
 import { useRootStore } from "../root";
-import { useUserInfo } from "../user/userInfo";
 import { useGamesCommon } from "./gamesStore";
 import { defaultCollection } from "./helpers/games";
 import { filterDisabledProviders } from "./helpers/games";
@@ -21,7 +20,6 @@ const DEFAULT_COLLECTION_NAME = "default";
 export const useGamesCategory = defineStore("gamesCategory", () => {
     const collections = ref<ICollectionRecord>({});
     const { getUserGeo } = toRefs(useMultilangStore());
-    const { getIsLogged, getUserCurrency } = storeToRefs(useUserInfo());
     const { gamesPageLimit } = storeToRefs(useConfigStore());
     const { disabledGamesProviders } = storeToRefs(useGamesProviders());
 
@@ -119,21 +117,6 @@ export const useGamesCategory = defineStore("gamesCategory", () => {
         }
     }
 
-    function getRandomGameByCategory(slugCategory: string) {
-        const gamesCollection = getCollection(slugCategory, 100);
-        const isLogged = getIsLogged.value;
-        const userCurrency = getUserCurrency.value;
-
-        const filteredGames = gamesCollection.filter((game) => {
-            if (isLogged) {
-                return game.real?.[userCurrency];
-            }
-            return true;
-        });
-
-        return getRandomGame(filteredGames, !isLogged);
-    }
-
     return {
         collections,
 
@@ -141,7 +124,6 @@ export const useGamesCategory = defineStore("gamesCategory", () => {
         getCollection,
         getCollectionFullData,
         getCollectionPagination,
-        getRandomGameByCategory,
         isLoaded,
 
         loadGamesCategory,
