@@ -10,20 +10,24 @@ export interface ILevelCard {
     rewards: Record<string, string>
 }
 
-export type Reward = {
-        id: string;
-        image?: string;
-        eventLink?: string;
-        bonusLink?: string;
-        bonus?: boolean;
-        variables?: Record<string, Record<Currencies, string>>;
-        details?: {
-            conditions?: Array<{
-                id: string;
-                link?: string;
-            }>;
-        };
-    }
+export type RewardConfig = {
+    level: Level;
+    image?: string;
+    eventLink?: string;
+    bonusLink?: string;
+    bonus?: boolean;
+    variables?: Record<string, Record<Currencies, string>>;
+    details?: {
+        conditions?: Array<{
+            id: string;
+            link?: string;
+        }>;
+    };
+}
+
+export type Reward = RewardConfig & {
+    id: string;
+}
 
 export type Rewards = Record<Level, Reward[]>;
 
@@ -35,7 +39,8 @@ export type LevelConfig = {
     saveTarget: number
 }
 export interface IVipProgramConfig {
-    rewardCards: Record<Level, Reward[]>,
+    rewardCards: Record<string, RewardConfig>,
+    levelRewards: Record<Level, string[]>,
     levelsConfig: Record<Level, LevelConfig>,
     levelCards: Record<Level, ILevelCard>,
     levelBonusesCount: Record<Level, number>,
