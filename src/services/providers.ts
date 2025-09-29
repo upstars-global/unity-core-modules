@@ -8,12 +8,12 @@ export async function loadDisabledGamesProviders(): Promise<void> {
     const data = await loadDisabledProvidersConfigReq();
 
     if (data) {
-        const first10Props: IDisabledGamesProvider = {};
+        const first20Props: IDisabledGamesProvider = {};
 
-        Object.keys(data).slice(0, 10).forEach((key) => {
-            first10Props[key] = data[key];
+        Object.keys(data).slice(0, 20).forEach((key) => {
+            first20Props[key] = data[key];
         });
 
-        setDisabledGamesProviders(first10Props as IDisabledGamesProvider);
+        setDisabledGamesProviders(first20Props as IDisabledGamesProvider);
     }
 }
