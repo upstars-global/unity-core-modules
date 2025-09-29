@@ -1,3 +1,10 @@
+## [1.36.0](https://github.com/upstars-global/unity-core-modules/compare/v1.35.1...v1.36.0) (2025-09-29)
+
+### 🚀 Features
+
+* refactor & tests of lotteries store ([#222](https://github.com/upstars-global/unity-core-modules/issues/222))
+ ([0b9b713](https://github.com/upstars-global/unity-core-modules/commit/0b9b713eed3b009ca243c72bb2a2539fe358cf1b))
+
 ## [1.35.1](https://github.com/upstars-global/unity-core-modules/compare/v1.35.0...v1.35.1) (2025-09-25)
 
 ### 🐛 Bug Fixes
