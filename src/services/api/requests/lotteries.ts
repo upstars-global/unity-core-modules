@@ -1,5 +1,3 @@
-import type { AxiosError } from "axios";
-
 import { log } from "../../../controllers/Logger";
 import { ILotteriesItem, ILotteriesList, ILotteriesStatusesItem, ILotteriesStatusesList } from "../DTO/lotteriesDTO";
 import { http } from "../http";
@@ -10,7 +8,6 @@ export async function loadLotteriesListReq() {
         return data;
     } catch (err: unknown) {
         log.error("LOAD_LOTTERIES_LIST_ERROR", err);
-        throw (err as AxiosError).response;
     }
 }
 
@@ -20,7 +17,6 @@ export async function loadLotteriesStatusesReq() {
         return data;
     } catch (err: unknown) {
         log.error("LOAD_LOTTERY_STATUSES_ERROR", err);
-        throw (err as AxiosError).response;
     }
 }
 
@@ -30,7 +26,6 @@ export async function getLotteryByIDReq(id: number) {
         return data;
     } catch (err: unknown) {
         log.error("LOAD_LOTTERY_BY_SLUG_ERROR", err);
-        throw (err as AxiosError).response;
     }
 }
 
@@ -40,6 +35,5 @@ export async function getLotteryStatusByIDReq(id: number) {
         return data;
     } catch (err: unknown) {
         log.error("SET_LOTTERY_STATUS_BY_ID_ERROR", err);
-        throw (err as AxiosError).response;
     }
 }
