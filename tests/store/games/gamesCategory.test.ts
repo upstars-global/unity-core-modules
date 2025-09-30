@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 
 import { log } from "../../../src/controllers/Logger";
-import { getRandomGame, processGameForNewAPI } from "../../../src/helpers/gameHelpers";
+import { processGameForNewAPI } from "../../../src/helpers/gameHelpers";
 import type { ICollectionItem, IGame, IGamesProvider } from "../../../src/models/game";
 import { loadGamesCategory as loadGamesCategoryReq } from "../../../src/services/api/requests/games";
 import { useGamesCategory } from "../../../src/store/games/gamesCategory";
@@ -143,41 +143,6 @@ describe("store/games/gamesCategory", () => {
             await store.loadGamesCategory("slots");
 
             expect(log.error).toHaveBeenCalledWith("LOAD_GAMES_CATEGORY_ERROR", error);
-        });
-    });
-
-    describe("getRandomGameByCategory", () => {
-        const games = [
-            { name: "Game 1", real: { USD: 1 }, categories: [] },
-            { name: "Game 2", real: { EUR: 1 }, categories: [] },
-            { name: "Game 3", real: { USD: 1 }, categories: [ "live" ] },
-        ];
-
-        beforeEach(() => {
-            const store = useGamesCategory();
-            store.collections.slots = { data: games as IGame[] } as ICollectionItem;
-            vi.mocked(getRandomGame).mockImplementation((arr) => arr[0]);
-        });
-
-        it("should filter by user currency when logged in", () => {
-            const store = useGamesCategory();
-            mockIsLogged.value = true;
-            mockUserCurrency.value = "USD";
-
-            const randomGame = store.getRandomGameByCategory("slots");
-
-            const expectedGamesToFilter = [ games[0], games[2] ];
-            expect(getRandomGame).toHaveBeenCalledWith(expectedGamesToFilter, false);
-            expect(randomGame.name).toBe("Game 1");
-        });
-
-        it("should filter by demo availability when not logged in", () => {
-            const store = useGamesCategory();
-            mockIsLogged.value = false;
-
-            const randomGame = store.getRandomGameByCategory("slots");
-            expect(getRandomGame).toHaveBeenCalledWith(expect.any(Array), true);
-            expect(randomGame.name).toBe("Game 1");
         });
     });
 

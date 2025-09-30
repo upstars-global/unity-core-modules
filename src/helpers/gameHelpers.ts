@@ -2,8 +2,11 @@ import { getGameImagePath } from "@helpers/gameImage";
 import { SlugCategoriesGames } from "@theme/configs/categoryesGames";
 import featureFlags from "@theme/configs/featureFlags";
 
+import { log } from "../controllers/Logger";
 import type { IGame } from "../models/game";
-import { random } from "./random";
+import { loadRandomGame } from "../services/api/requests/games";
+import { useGamesProviders } from "../store/games/gamesProviders";
+import { filterDisabledProviders } from "../store/games/helpers/games";
 
 interface IGameBadge {
     [key: string]: string;
@@ -56,15 +59,29 @@ export interface IParamsUrlGame {
     producer: string;
 }
 
-export function getRandomGame(allGames: IGameItem[], demoMustBeRequired: boolean) {
-    const randomIndex = random(0, Math.floor(allGames.length - 1));
-    const randomGame = allGames[randomIndex];
+let randomGameCounter = 0;
+export async function getRandomGame(): Promise<IGame | undefined> {
+    const { disabledGamesProviders } = useGamesProviders();
 
-    if (demoMustBeRequired && !randomGame.has_demo_mode) {
-        return getRandomGame(allGames, demoMustBeRequired);
+    const randomGame = await loadRandomGame();
+    randomGameCounter++;
+
+    const isValidRandomGame = filterDisabledProviders([ randomGame ], disabledGamesProviders)?.length;
+
+    if (isValidRandomGame) {
+        randomGameCounter = 0;
+        return randomGame;
     }
 
-    return randomGame;
+    if (randomGameCounter <= 10) {
+        return getRandomGame();
+    }
+
+    if (randomGameCounter > 10) {
+        log.error("LOAD_RANDOM_GAME_ERROR", "Repeated 10 times, didn`t find an acceptable random game");
+    }
+
+    randomGameCounter = 0;
 }
 
 export function processGame(game, gameKey): IGameItem {
