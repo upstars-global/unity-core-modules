@@ -11,3 +11,4 @@ cli/.env.cli
 *.tmp
 
 .vscode
+dependencygraph.svg
