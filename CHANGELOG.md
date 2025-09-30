@@ -1,3 +1,34 @@
+## [1.36.0](https://github.com/upstars-global/unity-core-modules/compare/v1.35.1...v1.36.0) (2025-09-29)
+
+### 🚀 Features
+
+* refactor & tests of lotteries store ([#222](https://github.com/upstars-global/unity-core-modules/issues/222))
+ ([0b9b713](https://github.com/upstars-global/unity-core-modules/commit/0b9b713eed3b009ca243c72bb2a2539fe358cf1b))
+
+## [1.35.1](https://github.com/upstars-global/unity-core-modules/compare/v1.35.0...v1.35.1) (2025-09-25)
+
+### 🐛 Bug Fixes
+
+* mapping levels for new vip program levels ([#226](https://github.com/upstars-global/unity-core-modules/issues/226))
+ ([038d25d](https://github.com/upstars-global/unity-core-modules/commit/038d25d8a25df077777f6304cc8a144fa23c55fa))
+
+## [1.35.0](https://github.com/upstars-global/unity-core-modules/compare/v1.34.2...v1.35.0) (2025-09-24)
+
+### 🚀 Features
+
+* UN-1598: new random game logic ([#223](https://github.com/upstars-global/unity-core-modules/issues/223))
+ ([b4aee7f](https://github.com/upstars-global/unity-core-modules/commit/b4aee7f0833a2c4102d769deecb7f5a922c892c4))
+
+
+
+    * new random game logic
+
+    * done
+
+    * fix minor
+
+    * remove test data
+
 ## [1.34.2](https://github.com/upstars-global/unity-core-modules/compare/v1.34.1...v1.34.2) (2025-09-22)
 
 ### 🔨 Refactoring
