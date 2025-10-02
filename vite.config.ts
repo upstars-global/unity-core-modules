@@ -25,6 +25,7 @@ export default defineConfig({
     plugins: [],
     test: {
         reporters: process.env.GITHUB_ACTIONS ? [ "dot", "github-actions" ] : [ "dot" ],
+        setupFiles: "./tests/vitest.setup.ts",
         coverage: {
             provider: "v8",
             reporter: [ "text", "json-summary", "json" ],
