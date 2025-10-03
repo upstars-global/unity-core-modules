@@ -1,3 +1,46 @@
+## [1.37.0](https://github.com/upstars-global/unity-core-modules/compare/v1.36.1...v1.37.0) (2025-10-02)
+
+### 🚀 Features
+
+* Vip program ([#230](https://github.com/upstars-global/unity-core-modules/issues/230))
+ ([e334acb](https://github.com/upstars-global/unity-core-modules/commit/e334acb9ad55dea753e8334ea0f4e3753db2c909))
+
+, closes [#225](https://github.com/upstars-global/unity-core-modules/issues/) [#227](https://github.com/upstars-global/unity-core-modules/issues/)
+
+    * UN-1405 vip-program
+
+    * UN-1405 vip-program
+
+    * feat: load vip-program rewards config
+
+    * fix: add rewards export to levelsStore
+
+    * fix: rewards interface
+
+    * UN-1405 vip-program
+
+    * UN-1405 vip-program
+
+    * added levelCards
+
+    * UN-1527 vip-program
+
+    * UN-1527 vip-program
+
+    * UN-1533 refactor vip computeds and level interfaces
+
+    * Revert "UN-1533 refactor vip computeds and level interfaces"
+
+    This reverts commit 01cfadc042c71c96808cc18a737e5213f9bf117b.
+
+    * UN-1533 refactor vip computeds and level interfaces
+
+    * add levelBonusesCount, getUserVerified
+
+    * add levelBonusesCount, getUserVerified
+
+    * fix
+
 ## [1.36.0](https://github.com/upstars-global/unity-core-modules/compare/v1.35.1...v1.36.0) (2025-09-29)
 
 ### 🚀 Features

@@ -1,10 +1,18 @@
-import { LEVELS } from "@config/levels";
+import { mapLevelItem } from "@helpers/lootBoxes";
+import { ILevel } from "@types/levels";
 import { defineStore, type Pinia } from "pinia";
 import { computed, ref } from "vue";
 
 import { log } from "../../controllers/Logger";
-import type { IGroup, ILevels, IUserLevelInfo } from "../../models/levels";
-import { http } from "../../services/api/http";
+import {
+    ILevelCard,
+    IVipProgramConfig,
+    Level,
+    LevelConfig,
+    Rewards,
+} from "../../models/levels";
+import { IStatuses } from "../../services/api/DTO/statuses";
+import { loadAllStatuses } from "../../services/api/requests/statuses";
 
 const getIndex = (id: string | undefined): number | undefined => {
     if (!id) {
@@ -15,16 +23,21 @@ const getIndex = (id: string | undefined): number | undefined => {
 
     return Number(stringIndex);
 };
-export const useLevelsStore = defineStore("levelsStore", () => {
-    const levels = ref<IUserLevelInfo[]>([]);
-    const groups = ref<IGroup[]>([]);
 
-    const getLevelsData = computed<IUserLevelInfo[]>(() => {
+export const useLevelsStore = defineStore("levelsStore", () => {
+    const levelCards = ref<Record<Level, ILevelCard>>({});
+    const levels = ref<ILevel[]>([]);
+    const groups = ref<IStatuses[]>([]);
+    const rewards = ref<Rewards>({} as Rewards);
+    const levelsConfig = ref<Record<Level, LevelConfig>>();
+    const levelBonusesCount = ref<Record<Level, number>>();
+
+    const getLevelsData = computed<ILevel[]>(() => {
         return levels.value
-            .filter((item: IUserLevelInfo) => {
+            .filter((item: ILevel) => {
                 return item.status;
             })
-            .sort((current: IUserLevelInfo, next: IUserLevelInfo) => {
+            .sort((current: ILevel, next: ILevel) => {
                 const currentIndex = getIndex(current.id);
                 const nextIndex = getIndex(next.id);
 
@@ -36,70 +49,83 @@ export const useLevelsStore = defineStore("levelsStore", () => {
             });
     });
 
-    function getLevelsById(id: string): IUserLevelInfo | Record<string, unknown> {
-        return levels.value.find((el: IUserLevelInfo) => {
+    const getLevels = computed(() => {
+        return levels.value;
+    });
+
+    function getLevelsById(id: string): ILevel {
+        return levels.value.find((el: ILevel) => {
             return el.id === id;
         }) || {};
     }
 
-    function getLevelImageById(level: IUserLevelInfo): string {
-        const item = getLevelsData.value.find((el: IUserLevelInfo) => {
+    function getLevelImageById(level: ILevel): string {
+        const item = getLevelsData.value.find((el: ILevel) => {
             return el.id === level.id;
         });
 
         return item ? item.image : "";
     }
 
-    function createLevelData(mockLevels: ILevels): (someLevel: IUserLevelInfo) => IUserLevelInfo {
-        return (someLevel: IUserLevelInfo) => {
-            const config = mockLevels[someLevel.id];
+    function setLevelsData(data: IStatuses[]) {
+        const levelsList: ILevel[] = [];
+        const groupsList: IStatuses[] = [];
 
-            if (!config) {
-                return someLevel;
+        for (const item of data) {
+            if (item.status) {
+                levelsList.push(mapLevelItem(item));
+            } else {
+                groupsList.push(item);
             }
-            return {
-                ...someLevel,
-                image: config.image,
-
-                gift_descriptions: config.gift_descriptions,
-            };
-        };
-    }
-
-    function setLevelsData(data) {
-        // Защита от дурака
-        levels.value = data
-            .filter(({ status }) => {
-                return status;
-            })
-            .map(createLevelData(LEVELS));
-
-        groups.value = data.filter(({ status }) => {
-            return !status;
-        });
-    }
-
-    async function loadLevelsData({ reload }: { reload?: boolean } = {}): Promise<IGroup[]> {
-        if (!reload && levels.value.length) {
-            return levels.value;
         }
+
+        levels.value = levelsList;
+        groups.value = groupsList;
+    }
+
+    async function loadLevelsData(): Promise<IStatuses[]> {
         try {
-            const { data } = await http().get("/api/info/statuses");
-            setLevelsData(data);
-            return data;
+            const statuses = await loadAllStatuses();
+            setLevelsData(statuses);
+
+            return statuses;
         } catch (err) {
             log.error("LOAD_LEVELS_DATA_ERROR", err);
             throw err;
         }
     }
 
+    function setConfigData(data: IVipProgramConfig) {
+        rewards.value = Object
+            .entries(data.levelRewards)
+            .reduce((acc, [ level, rewardIds ]) => {
+                acc[level as Level] = rewardIds
+                    .map((id) => {
+                        return data.rewardCards[id] && { ...data.rewardCards[id], id };
+                    })
+                    .filter(Boolean);
+
+                return acc;
+            }, {} as Rewards);
+
+        levelsConfig.value = data.levelsConfig;
+        levelCards.value = data.levelCards;
+        levelBonusesCount.value = data.levelBonusesCount;
+    }
+
     return {
+        levels,
         groups,
+        rewards,
+        levelsConfig,
+        levelBonusesCount,
+        levelCards,
         getLevelsData,
+        getLevels,
         getLevelsById,
         getLevelImageById,
-        createLevelData,
         loadLevelsData,
+        setConfigData,
     };
 });
 

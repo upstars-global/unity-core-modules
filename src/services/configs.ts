@@ -1,11 +1,11 @@
-import { type IBettingConfig } from "../models/configs";
 import { useCommon } from "../store/common";
 import { useConfigStore } from "../store/configStore";
+import { useLevelsStore } from "../store/levels/levelsStore";
 import {
     loadBettingConfigReq,
     loadCurrencyConfigReq,
     loadExcludedPromoStagsReq,
-    loadMainWidgetConfigReq,
+    loadMainWidgetConfigReq, loadVipProgramConfigReq,
 } from "./api/requests/configs";
 
 export async function loadExcludedPromoStags() {
@@ -50,6 +50,17 @@ export async function loadBettingConfig() {
     const config = await loadBettingConfigReq();
 
     if (config) {
-        configStore.setBettingConfig(config as IBettingConfig);
+        configStore.setBettingConfig(config);
     }
 }
+
+export async function loadVipProgramConfig() {
+    const levelsStore = useLevelsStore();
+
+    const data = await loadVipProgramConfigReq();
+
+    if (data) {
+        levelsStore.setConfigData(data);
+    }
+}
+

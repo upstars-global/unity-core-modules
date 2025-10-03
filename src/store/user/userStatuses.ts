@@ -1,9 +1,10 @@
-import { ID_GROUP_FOR_MULTI_ACC, TEST_GROUP_ID, VIP_STATUSES } from "@config/user-statuses";
-import { STATUSES, VIP_CLUB_STATUSES } from "@config/vip-clubs";
+import { ALL_LEVELS, ID_GROUP_FOR_MULTI_ACC, TEST_GROUP_ID } from "@config/user-statuses";
+import { VIP_CLUB_STATUSES } from "@config/vip-clubs";
+import { getUserIsDiamond, getUserVipGroup } from "@helpers/user";
+import type { ILevel } from "@types/levels";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
-import type { IUserLevelInfo } from "../../models/levels";
 import type { IUserStatus, UserGroup } from "../../models/user";
 import { IVipManager } from "../../models/vipManagers";
 import { loadManagersConfigReq } from "../../services/api/requests/configs";
@@ -17,17 +18,17 @@ export const useUserStatuses = defineStore("userStatuses", () => {
 
     const userManager = ref<IVipManager>();
 
-    const getUserLevelInfo = computed<IUserLevelInfo | Record<string, unknown>>(() => {
+    const getUserLevelInfo = computed<ILevel>(() => {
         const levelsStore = useLevelsStore();
         const { id } = getUserInfo.value?.statuses?.find((group) => {
             return !Number(group.id);
-        }) || {} as IUserLevelInfo;
+        }) || {} as IUserStatus;
 
         if (!id) {
-            return {} as IUserLevelInfo;
+            return {} as ILevel;
         }
 
-        return levelsStore.getLevelsById(id) as IUserLevelInfo;
+        return levelsStore.getLevelsById(id);
     });
 
     const getUserStatuses = computed<IUserStatus[]>(() => {
@@ -47,24 +48,22 @@ export const useUserStatuses = defineStore("userStatuses", () => {
         return getUserGroups.value.includes(ID_GROUP_FOR_MULTI_ACC);
     });
 
-    const isVip = computed<boolean>(() => {
-        return VIP_STATUSES.some((status) => getUserGroups.value.includes(status));
+    const userVipGroup = computed<string | undefined>(() => {
+        return getUserVipGroup(getUserGroups.value);
+    });
+
+    const isVip = computed<boolean>(() => Boolean(userVipGroup.value));
+
+    const userVipStatus = computed<string | null>(() => {
+        return userVipGroup.value ? VIP_CLUB_STATUSES[userVipGroup.value] : null;
+    });
+
+    const getUserLevelId = computed(() => {
+        return ALL_LEVELS.find((level) => getUserGroups.value.includes(level));
     });
 
     const isDiamond = computed<boolean>(() => {
-        return getUserGroups.value.includes(STATUSES.DIAMOND.id);
-    });
-
-    const userVipStatus = computed<string>(() => {
-        const statusGroup = VIP_STATUSES.find((status) => getUserGroups.value.includes(status));
-
-        // @ts-expect-error Type 'undefined' cannot be used as an index type
-        return VIP_CLUB_STATUSES[statusGroup];
-    });
-
-    // @ts-expect-error No overload matches this call.
-    const userVipGroup = computed<number>(() => {
-        return VIP_STATUSES.find((status) => getUserGroups.value.includes(status));
+        return getUserIsDiamond(userVipGroup.value);
     });
 
     const getUserManager = computed(() => {
@@ -101,6 +100,7 @@ export const useUserStatuses = defineStore("userStatuses", () => {
         getUserManager,
         userVipStatus,
         userVipGroup,
+        getUserLevelId,
 
         addUserToGroup,
         loadUserManager,
