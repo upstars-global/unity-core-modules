@@ -33,6 +33,12 @@ export const useStatusCompPointsStore = defineStore("statusCompPointsStore", () 
         }
         return compPoints.value.chargeable.points;
     });
+    const getStatusBalance = computed(() => {
+        if (!compPoints.value?.persistent) {
+            return 0;
+        }
+        return compPoints.value?.persistent.points;
+    });
 
     const getCompPointsRate = computed<IRate | Record<string, unknown>>(() => {
         const currency: string = getUserCurrency.value;
@@ -83,6 +89,7 @@ export const useStatusCompPointsStore = defineStore("statusCompPointsStore", () 
         updateCompPoints,
         getCompPoints,
         loadRatesMoney,
+        getStatusBalance,
         loadUserCompPoints,
         clearState,
     };

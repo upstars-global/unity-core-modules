@@ -6,7 +6,7 @@ import { computed } from "vue";
 
 import { betSunCompletedInTour, containAchievIdInUserStatuses } from "../helpers/achievementHelpers";
 import { STATUS_PROMO } from "../models/enums/tournaments";
-import type { IGroup } from "../models/levels";
+import type { IStatus } from "../models/levels";
 import { useCashboxStore } from "./cashboxStore";
 import { useLevelsStore } from "./levels/levelsStore";
 import { useTournamentsStore } from "./tournaments/tournamentsStore";
@@ -14,7 +14,7 @@ import { useUserStatuses } from "./user/userStatuses";
 
 const defaultDepDateStartCount = "2022-03-29T00:00:00Z";
 
-type IAchievement = IGroup | {
+type IAchievement = IStatus | {
     frontend_identifier: string | number;
     status: string;
     money_budget_cents: string

@@ -1,3 +1,77 @@
+## [1.38.0](https://github.com/upstars-global/unity-core-modules/compare/v1.37.1...v1.38.0) (2025-10-06)
+
+### 🚀 Features
+
+* remove axios usage ([#229](https://github.com/upstars-global/unity-core-modules/issues/229))
+ ([8352b2a](https://github.com/upstars-global/unity-core-modules/commit/8352b2a4dc371ebb6d4d138ad3d85ff3f72e8a0b))
+
+## [1.37.1](https://github.com/upstars-global/unity-core-modules/compare/v1.37.0...v1.37.1) (2025-10-06)
+
+### ⏪ Reverts
+
+* Revert "test: context & winners stores unit tests ([#232](https://github.com/upstars-global/unity-core-modules/issues/232))" ([#234](https://github.com/upstars-global/unity-core-modules/issues/234))
+ ([e3b80a9](https://github.com/upstars-global/unity-core-modules/commit/e3b80a960a666a3b0f2411f0b6ed6cbf2f775c12))
+
+
+
+    This reverts commit 3a59714e429fed4531d2d0c9886ad5326e43c273.
+
+### 🧪 Testing
+
+* context & winners stores unit tests ([#232](https://github.com/upstars-global/unity-core-modules/issues/232))
+ ([3a59714](https://github.com/upstars-global/unity-core-modules/commit/3a59714e429fed4531d2d0c9886ad5326e43c273))
+
+
+
+    * feat: add winners store tests
+
+    * test: add context store test
+* context & winners stores unit tests ([#235](https://github.com/upstars-global/unity-core-modules/issues/235))
+ ([92b15a4](https://github.com/upstars-global/unity-core-modules/commit/92b15a482523c85ca3c1cfa31631f99e0de70551))
+
+## [1.37.0](https://github.com/upstars-global/unity-core-modules/compare/v1.36.1...v1.37.0) (2025-10-02)
+
+### 🚀 Features
+
+* Vip program ([#230](https://github.com/upstars-global/unity-core-modules/issues/230))
+ ([e334acb](https://github.com/upstars-global/unity-core-modules/commit/e334acb9ad55dea753e8334ea0f4e3753db2c909))
+
+, closes [#225](https://github.com/upstars-global/unity-core-modules/issues/) [#227](https://github.com/upstars-global/unity-core-modules/issues/)
+
+    * UN-1405 vip-program
+
+    * UN-1405 vip-program
+
+    * feat: load vip-program rewards config
+
+    * fix: add rewards export to levelsStore
+
+    * fix: rewards interface
+
+    * UN-1405 vip-program
+
+    * UN-1405 vip-program
+
+    * added levelCards
+
+    * UN-1527 vip-program
+
+    * UN-1527 vip-program
+
+    * UN-1533 refactor vip computeds and level interfaces
+
+    * Revert "UN-1533 refactor vip computeds and level interfaces"
+
+    This reverts commit 01cfadc042c71c96808cc18a737e5213f9bf117b.
+
+    * UN-1533 refactor vip computeds and level interfaces
+
+    * add levelBonusesCount, getUserVerified
+
+    * add levelBonusesCount, getUserVerified
+
+    * fix
+
 ## [1.36.0](https://github.com/upstars-global/unity-core-modules/compare/v1.35.1...v1.36.0) (2025-09-29)
 
 ### 🚀 Features
