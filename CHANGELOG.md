@@ -1,3 +1,27 @@
+## [1.37.1](https://github.com/upstars-global/unity-core-modules/compare/v1.37.0...v1.37.1) (2025-10-06)
+
+### ⏪ Reverts
+
+* Revert "test: context & winners stores unit tests ([#232](https://github.com/upstars-global/unity-core-modules/issues/232))" ([#234](https://github.com/upstars-global/unity-core-modules/issues/234))
+ ([e3b80a9](https://github.com/upstars-global/unity-core-modules/commit/e3b80a960a666a3b0f2411f0b6ed6cbf2f775c12))
+
+
+
+    This reverts commit 3a59714e429fed4531d2d0c9886ad5326e43c273.
+
+### 🧪 Testing
+
+* context & winners stores unit tests ([#232](https://github.com/upstars-global/unity-core-modules/issues/232))
+ ([3a59714](https://github.com/upstars-global/unity-core-modules/commit/3a59714e429fed4531d2d0c9886ad5326e43c273))
+
+
+
+    * feat: add winners store tests
+
+    * test: add context store test
+* context & winners stores unit tests ([#235](https://github.com/upstars-global/unity-core-modules/issues/235))
+ ([92b15a4](https://github.com/upstars-global/unity-core-modules/commit/92b15a482523c85ca3c1cfa31631f99e0de70551))
+
 ## [1.37.0](https://github.com/upstars-global/unity-core-modules/compare/v1.36.1...v1.37.0) (2025-10-02)
 
 ### 🚀 Features
