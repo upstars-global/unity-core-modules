@@ -1,3 +1,10 @@
+## [1.38.0](https://github.com/upstars-global/unity-core-modules/compare/v1.37.1...v1.38.0) (2025-10-06)
+
+### 🚀 Features
+
+* remove axios usage ([#229](https://github.com/upstars-global/unity-core-modules/issues/229))
+ ([8352b2a](https://github.com/upstars-global/unity-core-modules/commit/8352b2a4dc371ebb6d4d138ad3d85ff3f72e8a0b))
+
 ## [1.37.1](https://github.com/upstars-global/unity-core-modules/compare/v1.37.0...v1.37.1) (2025-10-06)
 
 ### ⏪ Reverts
