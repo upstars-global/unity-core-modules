@@ -1,5 +1,3 @@
-import type { AxiosError } from "axios";
-
 import { log } from "../../../controllers/Logger";
 import { IAuthData, IToken } from "../DTO/websocketDTO";
 import { http } from "../http";
@@ -11,7 +9,7 @@ export async function loadWebsocketTokenReq() {
         return data;
     } catch (err) {
         log.error("LOAD_BET_WEBSOCKET_TOKEN", err);
-        throw (err as AxiosError).response;
+        throw err;
     }
 }
 
@@ -27,6 +25,6 @@ export async function loadWebsocketAuthorizeReq(client: string, locale: string) 
         return data.channels;
     } catch (err) {
         log.error("LOAD_BET_WEBSOCKET_AUTHORIZE", err);
-        throw (err as AxiosError).response;
+        throw err;
     }
 }
