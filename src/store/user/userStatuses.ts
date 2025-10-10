@@ -1,4 +1,10 @@
-import { ALL_LEVELS, ID_GROUP_FOR_MULTI_ACC, TEST_GROUP_ID } from "@config/user-statuses";
+import {
+    ALL_LEVELS,
+    ID_GROUP_FOR_MULTI_ACC,
+    PASSWORD_SET_GROUP_ID,
+    SOCIAL_NETOWORK_AUTH_GROUPS,
+    TEST_GROUP_ID,
+} from "@config/user-statuses";
 import { VIP_CLUB_STATUSES } from "@config/vip-clubs";
 import { getUserIsDiamond, getUserVipGroup } from "@helpers/user";
 import type { ILevel } from "@types/levels";
@@ -66,6 +72,14 @@ export const useUserStatuses = defineStore("userStatuses", () => {
         return getUserIsDiamond(userVipGroup.value);
     });
 
+    const isRegisteredViaSocialNetwork = computed<boolean>(() => {
+        return (SOCIAL_NETOWORK_AUTH_GROUPS || []).some((status: number) => getUserGroups.value.includes(status));
+    });
+
+    const isSetPasswordGroup = computed(() => {
+        return getUserGroups.value.includes(PASSWORD_SET_GROUP_ID);
+    });
+
     const getUserManager = computed(() => {
         return userManager.value;
     });
@@ -100,6 +114,8 @@ export const useUserStatuses = defineStore("userStatuses", () => {
         getUserManager,
         userVipStatus,
         userVipGroup,
+        isRegisteredViaSocialNetwork,
+        isSetPasswordGroup,
         getUserLevelId,
 
         addUserToGroup,
