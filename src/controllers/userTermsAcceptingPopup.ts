@@ -5,15 +5,20 @@ const supportPopup = defineAsyncComponent(() => {
 import Modal from "@plugins/Modal";
 import { computed, defineAsyncComponent } from "vue";
 
+import { useMultilangStore } from "../store/multilang";
 import { useUserInfo } from "../store/user/userInfo";
 import { useUserStatuses } from "../store/user/userStatuses";
 
 export function useUserTermsAcceptingPopup() {
     const userInfoStore = useUserInfo();
+    const multilangStore = useMultilangStore();
 
     const isUserTermsAccepted = computed(() => {
-        const userData = userInfoStore.getUserInfo;
-        return userData.auth_fields_missed?.includes("terms_acceptance");
+        return userInfoStore.getUserInfo.auth_fields_missed?.includes("terms_acceptance");
+    });
+
+    const isUserCountryFieldMissing = computed(() => {
+        return userInfoStore.getUserInfo.auth_fields_missed?.includes("country");
     });
 
     function runShowingTermsPopup() {
@@ -21,8 +26,13 @@ export function useUserTermsAcceptingPopup() {
 
         if (isUserTermsAccepted.value) {
             if (userStatusesStore.isRegisteredViaSocialNetwork) {
+                const country = multilangStore.getUserGeo;
+
                 userInfoStore.updateAuthDetailsProviders({
-                    user: { terms_acceptance: true },
+                    user: {
+                        terms_acceptance: true,
+                        ...(isUserCountryFieldMissing.value ? { country } : {}),
+                    },
                 });
             } else {
                 showAcceptTermsPopup();

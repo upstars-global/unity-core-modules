@@ -2,7 +2,7 @@ import { v4 as uuid } from "uuid";
 
 import { log } from "../../../controllers/Logger";
 import { IAuthProvider, IUserAuthProvider } from "../../../models/authProviders";
-import type { IUserInfo } from "../../../models/user";
+import { type IUserInfo } from "../../../models/user";
 import { IPlayerPayment } from "../DTO/cashbox";
 import { BettingPlayerSettingsDTO, IPlayerStats, ISubscriptions, IUserAccount, IUserSettings } from "../DTO/playerDTO";
 import { http } from "../http";
@@ -175,12 +175,11 @@ export async function disconnectAuthProviderReq(id: number) {
     }
 }
 
-export async function updateAuthDetailsProvidersReq(data) {
+export async function updateAuthDetailsProvidersReq(data: Record<string, unknown>) {
     try {
-        return await http().post("/api/auth_providers/update_details", data);
+        return await http().post<IUserInfo>("/api/auth_providers/update_details", data);
     } catch (err) {
         log.error("UPDATE_AUTH_DETAILS_PROVIDERS_ERROR", err);
-        throw err;
     }
 }
 
