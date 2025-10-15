@@ -1,3 +1,4 @@
+import { type ICurrentUserQuestsStatus } from "src/models/quest";
 
 import { log } from "../../../controllers/Logger";
 import { IPlayer, IPlayerConfirmation, IPlayersList, ITournament, ITournamentsList } from "../DTO/tournamentsDTO";
@@ -55,7 +56,7 @@ export async function loadUserStatusesReq(id: number): Promise<IPlayer> {
     }
 }
 
-export async function loadQuestDataReq(questList: ITournament[]) {
+export async function loadQuestDataReq(questList: ITournament[]): Promise<ICurrentUserQuestsStatus[] | void> {
     try {
         const statuses = await Promise.allSettled(
             questList.map((questItem) => {
@@ -69,7 +70,7 @@ export async function loadQuestDataReq(questList: ITournament[]) {
             }
 
             return {};
-        });
+        }) as ICurrentUserQuestsStatus[];
     } catch (err) {
         log.error("LOAD_QUESTS_DATA_ERROR", err);
     }
