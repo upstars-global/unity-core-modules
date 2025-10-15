@@ -14,25 +14,25 @@ import { useUserInfo } from "../user/userInfo";
 import { useStatusCompPointsStore } from "./statusCompPointsStore";
 
 export function checkHasAvailableCards(list: IRedeemableCards[], isLogged: boolean, balance: number, currency: string) {
-    if (!isLogged || !balance || !list) {
+    if (!isLogged || !balance || !list.length) {
         return false;
     }
 
     return list.some((card) => {
-        let points = card.rate?.points;
+        let points: number | undefined = card.rate?.points;
 
         if (card.type === CompPointRatesTypes.MONEY) {
             points = card.rates.find((item) => item.currency === currency)?.points ||
                 card.rates.find((item) => item.currency === Currencies.EUR)?.points;
         }
 
-        return balance >= points;
+        return points !== undefined && balance >= points;
     });
 }
 
 export const useRedeemableCompPointsStore = defineStore("redeemableCompPointsStore", () => {
     const { getIsLogged, getUserCurrency } = storeToRefs(useUserInfo());
-    const rates = ref<Record<string, unknown>>({});
+    const rates = ref<Record<string, IRedeemableCards[]>>({});
     const { currentStaticPage } = storeToRefs(useCMS());
     const { getChargeableBalance } = storeToRefs(useStatusCompPointsStore());
     const { loadUserCompPoints } = useStatusCompPointsStore();
@@ -44,7 +44,7 @@ export const useRedeemableCompPointsStore = defineStore("redeemableCompPointsSto
         return types.reduce((obj, key) => {
             obj[key] =
                 checkHasAvailableCards(
-                    getRates.value[key],
+                    getRates.value ? getRates.value[key] : [],
                     getIsLogged.value,
                     getChargeableBalance.value,
                     getUserCurrency.value,
@@ -60,14 +60,14 @@ export const useRedeemableCompPointsStore = defineStore("redeemableCompPointsSto
         return currentStaticPage.value.meta.json.viewImages || {};
     });
     const getPromos = computed(() => {
-        if (!currentStaticPage.value?.meta.json || !currentStaticPage.value.slug === pageSlug) {
+        if (!currentStaticPage.value?.meta.json || currentStaticPage.value.slug !== pageSlug) {
             return;
         }
 
         return currentStaticPage.value.meta.json.promo || null;
     });
     const getGameTitles = computed(() => {
-        if (!currentStaticPage.value?.meta.json || !currentStaticPage.value.slug === pageSlug) {
+        if (!currentStaticPage.value?.meta.json || currentStaticPage.value.slug !== pageSlug) {
             return;
         }
 
@@ -75,12 +75,12 @@ export const useRedeemableCompPointsStore = defineStore("redeemableCompPointsSto
     });
     const getMaxWin = computed(() => {
         if (!currentStaticPage.value?.meta.json ||
-            !currentStaticPage.value.slug === pageSlug ||
+            currentStaticPage.value.slug !== pageSlug ||
             !currentStaticPage.value.meta.json.maxWin) {
             return "";
         }
 
-        const maxWinByUserCurrency = currentStaticPage.value.meta.json.maxWin[getUserCurrency.value];
+        const maxWinByUserCurrency = currentStaticPage.value.meta.json.maxWin[getUserCurrency.value as Currencies];
         const data = {
             maxMin: maxWinByUserCurrency || currentStaticPage.value.meta.json.maxWin[Currencies.EUR],
             currency: maxWinByUserCurrency ? getUserCurrency.value : Currencies.EUR,
@@ -89,22 +89,22 @@ export const useRedeemableCompPointsStore = defineStore("redeemableCompPointsSto
         return `${data.maxMin} ${data.currency}`;
     });
     const getFreeSpinsWager = computed(() => {
-        if (!currentStaticPage.value?.meta.json || !currentStaticPage.value.slug === pageSlug) {
+        if (!currentStaticPage.value?.meta.json || currentStaticPage.value.slug !== pageSlug) {
             return {};
         }
 
         return currentStaticPage.value.meta.json.freeSpinsWager || {};
     });
     const getSpinRate = computed(() => {
-        if (!currentStaticPage.value?.meta.json || !currentStaticPage.value.slug === pageSlug) {
+        if (!currentStaticPage.value?.meta.json || currentStaticPage.value.slug !== pageSlug) {
             return {};
         }
 
         return currentStaticPage.value.meta.json.spinRate || {};
     });
     const getMockCards = computed(() => {
-        if (!currentStaticPage.value?.meta.json || !currentStaticPage.value.slug === pageSlug) {
-            return;
+        if (!currentStaticPage.value?.meta.json || currentStaticPage.value.slug !== pageSlug) {
+            return null;
         }
 
         return currentStaticPage.value.meta.json.cards || null;
@@ -122,7 +122,7 @@ export const useRedeemableCompPointsStore = defineStore("redeemableCompPointsSto
         };
     }
 
-    async function exchangeBySlug(payload, slug: CompPointRatesTypes) {
+    async function exchangeBySlug(payload: Record<string, unknown>, slug: CompPointRatesTypes) {
         await exchangeCompPointRateBySlug(
             slug,
             {
@@ -145,11 +145,12 @@ export const useRedeemableCompPointsStore = defineStore("redeemableCompPointsSto
         if (!game) {
             return null;
         }
+
         return {
             name: routeNames.gameItem,
             params: {
-                name: game?.seo_title || "",
-                producer: game?.provider || "",
+                name: game.seo_title || "",
+                producer: game.provider || "",
             },
             query: { mode: getIsLogged.value ? GameMode.Real : GameMode.Demo },
         };

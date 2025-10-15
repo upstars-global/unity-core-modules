@@ -18,7 +18,7 @@ import { useUserInfo } from "../user/userInfo";
 
 export const useStatusCompPointsStore = defineStore("statusCompPointsStore", () => {
     const { getUserCurrency } = storeToRefs(useUserInfo());
-    const compPoints = ref<ICompPoints>();
+    const compPoints = ref<ICompPoints | null>(null);
 
     const ratesMoney = ref<IExchangeMoneyRateList>([]);
     const getUserCompPoints = computed<number | undefined>(() => {
@@ -70,11 +70,22 @@ export const useStatusCompPointsStore = defineStore("statusCompPointsStore", () 
 
     async function loadRatesMoney() {
         const ratesResponse = await loadRatesMoneyReq();
+
+        if (!ratesResponse) {
+            return;
+        }
+
         setRatesMoney(ratesResponse);
     }
 
     async function loadUserCompPoints() {
-        updateCompPoints(await loadUserCompPointsReq());
+        const data = await loadUserCompPointsReq();
+
+        if (!data) {
+            return;
+        }
+
+        updateCompPoints(data);
     }
 
     function clearState() {
