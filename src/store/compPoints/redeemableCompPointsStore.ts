@@ -1,14 +1,9 @@
-import { routeNames } from "@router/routeNames";
-import { defineStore, type Pinia, storeToRefs } from "pinia";
+import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
 import { CompPointRatesTypes, CompPointsTypes } from "../../models/enums/compPoints";
 import { Currencies } from "../../models/enums/currencies";
-import { GameMode } from "../../models/enums/gamesConsts";
-import type { IRedeemableCards } from "../../services/api/DTO/compPoints";
-import { exchangeCompPointRateBySlug, loadCompPointRateBySlug } from "../../services/api/requests/compPoints";
-import { loadFilteredGames } from "../../services/api/requests/games";
-import { loadLotteryStatuses } from "../../services/lotteries";
+import { type IRedeemableCards } from "../../services/api/DTO/compPoints";
 import { useCMS } from "../CMS";
 import { useUserInfo } from "../user/userInfo";
 import { useStatusCompPointsStore } from "./statusCompPointsStore";
@@ -31,12 +26,11 @@ export function checkHasAvailableCards(list: IRedeemableCards[], isLogged: boole
 }
 
 export const useRedeemableCompPointsStore = defineStore("redeemableCompPointsStore", () => {
-    const { getIsLogged, getUserCurrency } = storeToRefs(useUserInfo());
+    const pageSlug: string = "rocket-mart";
     const rates = ref<Record<string, IRedeemableCards[]>>({});
+    const { getIsLogged, getUserCurrency } = storeToRefs(useUserInfo());
     const { currentStaticPage } = storeToRefs(useCMS());
     const { getChargeableBalance } = storeToRefs(useStatusCompPointsStore());
-    const { loadUserCompPoints } = useStatusCompPointsStore();
-    const pageSlug: string = "rocket-mart";
 
     const getTabsAvailable = computed(() => {
         const types = Object.keys(CompPointsTypes);
@@ -111,75 +105,22 @@ export const useRedeemableCompPointsStore = defineStore("redeemableCompPointsSto
     });
     const getRates = computed(() => (getIsLogged.value ? rates.value : getMockCards.value));
 
-    async function loadRates() {
-        const [ money, lootBoxes, freeSpins, lotteries ] =
-            (await Promise.all(Object.values(CompPointRatesTypes).map((key) => loadCompPointRateBySlug(key))));
 
-        rates.value = {
-            MONEY_REWARD: money,
-            FREE_SPINS: freeSpins.length ? freeSpins : getMockCards.value?.FREE_SPINS || [],
-            SPECIAL_REWARDS: [ ...lootBoxes, ...lotteries ],
-        };
-    }
-
-    async function exchangeBySlug(payload: Record<string, unknown>, slug: CompPointRatesTypes) {
-        await exchangeCompPointRateBySlug(
-            slug,
-            {
-                exchange: {
-                    ...payload,
-                    currency: getUserCurrency.value,
-                },
-            },
-        );
-        if (slug === CompPointRatesTypes.LOTTERIES) {
-            await loadLotteryStatuses();
-        } else {
-            await loadUserCompPoints();
-        }
-    }
-
-    async function getGameInfo(gameIds: string[]) {
-        const [ game ] = Object.values(await loadFilteredGames({ game_ids: gameIds }));
-
-        if (!game) {
-            return null;
-        }
-
-        return {
-            name: routeNames.gameItem,
-            params: {
-                name: game.seo_title || "",
-                producer: game.provider || "",
-            },
-            query: { mode: getIsLogged.value ? GameMode.Real : GameMode.Demo },
-        };
+    function setRates(ratesData: Record<string, IRedeemableCards[]>) {
+        rates.value = ratesData;
     }
 
     return {
         rates,
         getRates,
+        setRates,
         getTabsAvailable,
         getViewImages,
         getPromos,
         getGameTitles,
         getMaxWin,
         getFreeSpinsWager,
-        exchangeBySlug,
-        loadRates,
-        getGameInfo,
         getSpinRate,
+        getMockCards,
     };
 });
-
-export function useRedeemableCompPointsFetchService(pinia?: Pinia) {
-    useRedeemableCompPointsStore(pinia);
-
-    function loadRedeemableCompPoints() {
-        return Promise.resolve();
-    }
-
-    return {
-        loadRedeemableCompPoints,
-    };
-}
