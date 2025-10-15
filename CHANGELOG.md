@@ -1,3 +1,14 @@
+## [1.39.0](https://github.com/upstars-global/unity-core-modules/compare/v1.38.0...v1.39.0) (2025-10-15)
+
+### 🚀 Features
+
+* refactor questsStore, add tests for promoHelpers, questsStore, questHelpers  ([#231](https://github.com/upstars-global/unity-core-modules/issues/231))
+ ([e521c14](https://github.com/upstars-global/unity-core-modules/commit/e521c1437ecd818cf52f45739d81145e697c261e))
+
+
+
+    feat: refactor questsStore, add tests for questStore, promoHelpers, questHelpers
+
 ## [1.38.0](https://github.com/upstars-global/unity-core-modules/compare/v1.37.1...v1.38.0) (2025-10-06)
 
 ### 🚀 Features
