@@ -1,5 +1,6 @@
 import { storeToRefs } from "pinia";
 
+import { ensureStoreData } from "../helpers/ensureStoreData";
 import { CompPointRatesTypes } from "../models/enums/compPoints";
 import { useLootboxesStore } from "../store/lootboxes";
 import { useUserInfo } from "../store/user/userInfo";
@@ -32,7 +33,9 @@ export function loadPrizeOfLootbox(id: number) {
 
 export async function loadMockWheel() {
     const lootboxesStore = useLootboxesStore();
-    const fileMockSectionsWheel = await loadMockLootboxWheelConfigs();
+    const fileMockSectionsWheel = await ensureStoreData(
+        lootboxesStore.mockSectionsWheelConfigs, loadMockLootboxWheelConfigs,
+    );
 
     if (fileMockSectionsWheel) {
         lootboxesStore.setMockSectionsWheelConfigs(fileMockSectionsWheel);
@@ -41,7 +44,10 @@ export async function loadMockWheel() {
 
 export async function loadMockSegmentsWheel() {
     const lootboxesStore = useLootboxesStore();
-    const fileMockSectionsWheel = await loadMockLootboxWheelSegmentsConfigs();
+    const fileMockSectionsWheel = await ensureStoreData(
+        lootboxesStore.mockSectionsWheelSegmentConfigs,
+        loadMockLootboxWheelSegmentsConfigs,
+    );
 
     if (fileMockSectionsWheel) {
         lootboxesStore.setMockSectionsWheelSegmentConfigs(fileMockSectionsWheel);
