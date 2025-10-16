@@ -1,6 +1,7 @@
 export async function ensureStoreData<T>(
     value: T,
     fetcher: () => Promise<T>,
+    reload?: boolean,
 ): Promise<T> {
     const isEmptyObject =
         typeof value === "object" &&
@@ -14,7 +15,7 @@ export async function ensureStoreData<T>(
         !isEmptyObject &&
         (!Array.isArray(value) || value.length > 0);
 
-    if (hasData) {
+    if (hasData && !reload) {
         return value;
     }
 
