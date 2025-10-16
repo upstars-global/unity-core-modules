@@ -6,7 +6,7 @@ import { IPlayerPayment } from "../DTO/cashbox";
 import { BettingPlayerSettingsDTO, IPlayerStats, ISubscriptions, IUserAccount, IUserSettings } from "../DTO/playerDTO";
 import { http } from "../http";
 
-export async function addPlayerToGroup(groupForAdding: string | number) {
+export async function addPlayerToGroup(groupForAdding: string | number, groupForRemoving?: string | number) {
     try {
         const { data } = await http().post<void>(
             "/api/player/groups",
@@ -14,8 +14,10 @@ export async function addPlayerToGroup(groupForAdding: string | number) {
                 groups:
                     {
                         add: [ groupForAdding ],
+                        remove: groupForRemoving ? [ groupForRemoving ] : [],
                     },
             });
+
         return data;
     } catch (err) {
         log.error("ADD_PLAYER_TO_GROUP_ERROR", err);
