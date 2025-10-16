@@ -38,7 +38,7 @@ export const useRedeemableCompPointsStore = defineStore("redeemableCompPointsSto
         return types.reduce((obj, key) => {
             obj[key] =
                 checkHasAvailableCards(
-                    getRates.value ? getRates.value[key] : [],
+                    (getRates.value && getRates.value[key]) || [],
                     getIsLogged.value,
                     getChargeableBalance.value,
                     getUserCurrency.value,
