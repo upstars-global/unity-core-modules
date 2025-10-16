@@ -8,8 +8,8 @@ import { useCMS } from "../CMS";
 import { useUserInfo } from "../user/userInfo";
 import { useStatusCompPointsStore } from "./statusCompPointsStore";
 
-export function checkHasAvailableCards(list: IRedeemableCards[], isLogged: boolean, balance: number, currency: string) {
-    if (!isLogged || !balance || !list.length) {
+export function checkHasAvailableCards(list: IRedeemableCards[] | undefined, isLogged: boolean, balance: number, currency: string) {
+    if (!isLogged || !balance || !list) {
         return false;
     }
 
@@ -38,7 +38,7 @@ export const useRedeemableCompPointsStore = defineStore("redeemableCompPointsSto
         return types.reduce((obj, key) => {
             obj[key] =
                 checkHasAvailableCards(
-                    (getRates.value && getRates.value[key]) || [],
+                    getRates.value?.[key],
                     getIsLogged.value,
                     getChargeableBalance.value,
                     getUserCurrency.value,
