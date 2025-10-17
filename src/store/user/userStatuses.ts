@@ -8,7 +8,7 @@ import { computed, ref } from "vue";
 import type { IUserStatus, UserGroup } from "../../models/user";
 import { IVipManager } from "../../models/vipManagers";
 import { loadManagersConfigReq } from "../../services/api/requests/configs";
-import { addPlayerToGroup } from "../../services/api/requests/player";
+import { changePlayerGroup, type IPlayerGroup } from "../../services/api/requests/player";
 import { useLevelsStore } from "../levels/levelsStore";
 import { useUserInfo } from "./userInfo";
 
@@ -70,11 +70,14 @@ export const useUserStatuses = defineStore("userStatuses", () => {
         return userManager.value;
     });
 
-    async function addUserToGroup(groupForAdding: string | number) {
-        if (!getUserGroups.value.includes(groupForAdding)) {
-            await addPlayerToGroup(groupForAdding);
+    async function changeUserToGroup(groupForAdding?: IPlayerGroup, groupForRemoving?: IPlayerGroup) {
+        await changePlayerGroup(groupForAdding, groupForRemoving);
+
+        if (!getUserGroups.value.includes(groupForAdding) && groupForAdding) {
             userStore.addUserGroup({ id: groupForAdding, name: "" });
         }
+
+        userStore.removeUserGroup({ id: groupForRemoving, name: "" });
     }
 
     async function loadUserManager() {
@@ -102,7 +105,7 @@ export const useUserStatuses = defineStore("userStatuses", () => {
         userVipGroup,
         getUserLevelId,
 
-        addUserToGroup,
+        changeUserToGroup,
         loadUserManager,
         clearUserManager,
     };
