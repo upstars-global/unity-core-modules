@@ -1,9 +1,9 @@
 import { LIMIT_TYPE_COOLING_OFF, LIMIT_TYPE_DEPOSIT } from "@modules/Limits/limitConstants";
 import { defineStore, storeToRefs } from "pinia";
-import { type Currencies } from "src/models/enums/currencies";
 import { computed, ref } from "vue";
 
 import { log } from "../../controllers/Logger";
+import { type Currencies } from "../../models/enums/currencies";
 import { http } from "../../services/api/http";
 import { useCommon } from "../common";
 import { useUserInfo } from "./userInfo";

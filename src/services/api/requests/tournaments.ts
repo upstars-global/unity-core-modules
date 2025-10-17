@@ -1,6 +1,5 @@
-import { type ICurrentUserQuestsStatus } from "src/models/quest";
-
 import { log } from "../../../controllers/Logger";
+import { type ICurrentUserQuestsStatus } from "../../../models/quest";
 import { IPlayer, IPlayerConfirmation, IPlayersList, ITournament, ITournamentsList } from "../DTO/tournamentsDTO";
 import { http } from "../http";
 

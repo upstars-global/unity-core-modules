@@ -55,12 +55,10 @@ export async function loadBettingConfig() {
 }
 
 export async function loadVipProgramConfig() {
-    const levelsStore = useLevelsStore();
+    const configStore = useConfigStore();
+    const config = await loadVipProgramConfigReq();
 
-    const data = await loadVipProgramConfigReq();
-
-    if (data) {
-        levelsStore.setConfigData(data);
+    if (config) {
+        configStore.setVipProgramConfig(config);
     }
 }
-
