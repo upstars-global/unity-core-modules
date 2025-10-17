@@ -1,8 +1,7 @@
-import { useStatusCompPointsStore } from "src/store/compPoints/statusCompPointsStore";
-
 import { CompPointRatesTypes } from "../models/enums/compPoints";
 import { GameMode } from "../models/enums/gamesConsts";
 import { useRedeemableCompPointsStore } from "../store/compPoints/redeemableCompPointsStore";
+import { useStatusCompPointsStore } from "../store/compPoints/statusCompPointsStore";
 import { useUserInfo } from "../store/user/userInfo";
 import { IExchange } from "./api/DTO/compPoints";
 import {
