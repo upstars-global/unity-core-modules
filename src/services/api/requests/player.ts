@@ -23,7 +23,6 @@ export async function changePlayerGroup(groupForAdding?: IPlayerGroup, groupForR
         return data;
     } catch (err) {
         log.error("ADD_PLAYER_TO_GROUP_ERROR", err);
-        throw err;
     }
 }
 
