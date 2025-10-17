@@ -6,7 +6,7 @@ import { IPlayerPayment } from "../DTO/cashbox";
 import { BettingPlayerSettingsDTO, IPlayerStats, ISubscriptions, IUserAccount, IUserSettings } from "../DTO/playerDTO";
 import { http } from "../http";
 
-type IPlayerGroup = string | number | null;
+export type IPlayerGroup = string | number | null;
 
 export async function changePlayerGroup(groupForAdding?: IPlayerGroup, groupForRemoving?: IPlayerGroup) {
     try {
