@@ -9,6 +9,5 @@ export async function loadAllStatuses() {
         return data;
     } catch (err) {
         log.error("LOAD_LEVELS_DATA_ERROR", err);
-        throw err;
     }
 }

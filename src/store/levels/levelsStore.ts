@@ -1,18 +1,9 @@
 import { mapLevelItem } from "@helpers/lootBoxes";
-import { ILevel } from "@types/levels";
-import { defineStore, type Pinia } from "pinia";
+import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
-import { log } from "../../controllers/Logger";
-import {
-    ILevelCard,
-    IVipProgramConfig,
-    Level,
-    LevelConfig,
-    Rewards,
-} from "../../models/levels";
+import { ILevel } from "../../models/levels";
 import { IStatuses } from "../../services/api/DTO/statuses";
-import { loadAllStatuses } from "../../services/api/requests/statuses";
 
 const getIndex = (id: string | undefined): number | undefined => {
     if (!id) {
@@ -25,12 +16,8 @@ const getIndex = (id: string | undefined): number | undefined => {
 };
 
 export const useLevelsStore = defineStore("levelsStore", () => {
-    const levelCards = ref<Record<Level, ILevelCard>>({});
     const levels = ref<ILevel[]>([]);
     const groups = ref<IStatuses[]>([]);
-    const rewards = ref<Rewards>({} as Rewards);
-    const levelsConfig = ref<Record<Level, LevelConfig>>();
-    const levelBonusesCount = ref<Record<Level, number>>();
 
     const getLevelsData = computed<ILevel[]>(() => {
         return levels.value
@@ -56,11 +43,11 @@ export const useLevelsStore = defineStore("levelsStore", () => {
     function getLevelsById(id: string): ILevel {
         return levels.value.find((el: ILevel) => {
             return el.id === id;
-        }) || {};
+        }) || {} as ILevel;
     }
 
     function getLevelImageById(level: ILevel): string {
-        const item = getLevelsData.value.find((el: ILevel) => {
+        const item = getLevelsData.value.find((el) => {
             return el.id === level.id;
         });
 
@@ -83,57 +70,13 @@ export const useLevelsStore = defineStore("levelsStore", () => {
         groups.value = groupsList;
     }
 
-    async function loadLevelsData(): Promise<IStatuses[]> {
-        try {
-            const statuses = await loadAllStatuses();
-            setLevelsData(statuses);
-
-            return statuses;
-        } catch (err) {
-            log.error("LOAD_LEVELS_DATA_ERROR", err);
-            throw err;
-        }
-    }
-
-    function setConfigData(data: IVipProgramConfig) {
-        rewards.value = Object
-            .entries(data.levelRewards)
-            .reduce((acc, [ level, rewardIds ]) => {
-                acc[level as Level] = rewardIds
-                    .map((id) => {
-                        return data.rewardCards[id] && { ...data.rewardCards[id], id };
-                    })
-                    .filter(Boolean);
-
-                return acc;
-            }, {} as Rewards);
-
-        levelsConfig.value = data.levelsConfig;
-        levelCards.value = data.levelCards;
-        levelBonusesCount.value = data.levelBonusesCount;
-    }
-
     return {
         levels,
         groups,
-        rewards,
-        levelsConfig,
-        levelBonusesCount,
-        levelCards,
         getLevelsData,
         getLevels,
         getLevelsById,
         getLevelImageById,
-        loadLevelsData,
-        setConfigData,
+        setLevelsData,
     };
 });
-
-
-export function useLevelsFetchService(pinia?: Pinia) {
-    const { loadLevelsData } = useLevelsStore(pinia);
-
-    return {
-        loadLevelsData,
-    };
-}
