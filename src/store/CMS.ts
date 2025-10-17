@@ -5,13 +5,14 @@ import { computed, ref } from "vue";
 
 import { enableCategoriesPage } from "../consts/cms";
 import { log } from "../controllers/Logger";
+import { ensureStoreData } from "../helpers/ensureStoreData";
 import type { TemplateType } from "../helpers/replaceStringHelper";
 import replaceStringHelper from "../helpers/replaceStringHelper";
 import { prepareMapStaticPages } from "../helpers/staticPages";
 import { CurrentPage, type ICurrentPage, type IPageCMSPrepare } from "../models/CMS";
 import type { ISnippetItemCMS } from "../services/api/DTO/CMS";
 import { loadCMSPagesReq, loadCMSSnippetsReq, loadMetaSEOReq, loadPageContentFromCmsReq } from "../services/api/requests/CMS";
-import { useMultilangStore } from "../store/multilang";
+import { useMultilangStore } from "./multilang";
 
 interface ISeoMeta {
     json?: string;
@@ -35,13 +36,16 @@ export const useCMS = defineStore("CMS", () => {
     const { getUserLocale } = storeToRefs(useMultilangStore());
 
     async function loadStaticPages({ reload } = { reload: false }) {
-        if (staticPages.value.length && !reload) {
-            return staticPages.value;
-        }
-
-        const pages = await loadCMSPagesReq(getUserLocale.value);
+        const pages = await ensureStoreData(
+            staticPages.value,
+            async () => {
+                const data = await loadCMSPagesReq(getUserLocale.value);
+                return prepareMapStaticPages(data);
+            },
+            reload,
+        );
         if (pages) {
-            staticPages.value = prepareMapStaticPages(pages);
+            staticPages.value = pages;
         }
         return pages;
     }
@@ -73,11 +77,11 @@ export const useCMS = defineStore("CMS", () => {
     });
 
     async function loadCMSSnippets({ reload = false } = {}) {
-        if (!reload && snippets.value.length) {
-            return snippets.value;
-        }
-
-        const data = await loadCMSSnippetsReq(getUserLocale.value);
+        const data = await ensureStoreData(
+            snippets.value,
+            async () => await loadCMSSnippetsReq(getUserLocale.value),
+            reload,
+        );
 
         if (data) {
             snippets.value = data;

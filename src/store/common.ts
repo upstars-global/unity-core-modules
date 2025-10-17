@@ -4,6 +4,7 @@ import { defineStore, type Pinia, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
 import { isValidCurrency } from "../helpers/currencyOfCountry";
+import { ensureStoreData } from "../helpers/ensureStoreData";
 import { getUserAgentPlatform, type IPlatformState } from "../helpers/userAgentPlatform";
 import { CurrencyData } from "../models/cashbox";
 import type { IPlayerFieldsInfo } from "../models/common";
@@ -89,11 +90,7 @@ export const useCommon = defineStore("common", () => {
     const countries = ref<ICountries[]>([]);
 
     async function loadCountries({ reload } = { reload: false }) {
-        if (!reload && countries.value.length) {
-            return countries.value;
-        }
-
-        const data = await loadCountriesReq();
+        const data = await ensureStoreData(countries.value, loadCountriesReq, reload);
         if (data) {
             countries.value = data;
         }
@@ -128,9 +125,16 @@ export const useCommon = defineStore("common", () => {
     }
 
     async function loadCurrencies() {
-        const data = await loadCurrenciesReq();
+        const data = await ensureStoreData(
+            currencies.value,
+            async () => {
+                const currenciesList = await loadCurrenciesReq();
+                return currenciesList?.filter(({ code }) => enableCurrencies.value.includes(code));
+            },
+        );
+
         if (data) {
-            currencies.value = data.filter(({ code }) => enableCurrencies.value.includes(code));
+            currencies.value = data;
         }
     }
 
@@ -153,13 +157,13 @@ export const useCommon = defineStore("common", () => {
     const infoProject = ref<IProjectInfo>();
 
     async function loadProjectInfo(): Promise<void> {
-        infoProject.value = await loadProjectInfoReq();
+        infoProject.value = await ensureStoreData(infoProject.value, loadProjectInfoReq);
     }
 
     const cryptoExchangeRates = ref<ICryptoExchangeRates>();
 
     async function loadCryptoExchangeRates(): Promise<void> {
-        cryptoExchangeRates.value = await loadCryptoExchangeRatesReq();
+        cryptoExchangeRates.value = await ensureStoreData(cryptoExchangeRates.value, loadCryptoExchangeRatesReq);
     }
 
     function setCurrencyConfig(data: CurrencyData) {

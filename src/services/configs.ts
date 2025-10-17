@@ -1,3 +1,4 @@
+import { ensureStoreData } from "../helpers/ensureStoreData";
 import { useCommon } from "../store/common";
 import { useConfigStore } from "../store/configStore";
 import { useLevelsStore } from "../store/levels/levelsStore";
@@ -25,11 +26,7 @@ export async function loadExcludedPromoStags() {
 export async function loadCurrencyConfig() {
     const commonStore = useCommon();
 
-    if (commonStore.currencyConfig) {
-        return commonStore.currencyConfig;
-    }
-
-    const data = await loadCurrencyConfigReq();
+    const data = await ensureStoreData(commonStore.currencyConfig.value, loadCurrencyConfigReq);
 
     if (data) {
         commonStore.setCurrencyConfig(data);

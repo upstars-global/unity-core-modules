@@ -1,6 +1,7 @@
 import { defineStore, Pinia, storeToRefs } from "pinia";
 import { ref } from "vue";
 
+import { ensureStoreData } from "../helpers/ensureStoreData";
 import { loadManagePagesConfigReq } from "../services/api/requests/managePages";
 import { useUserStatuses } from "./user/userStatuses";
 
@@ -10,10 +11,7 @@ export const useManagePages = defineStore("managePages", () => {
 
 
     async function loadPagesConfig() {
-        if (pageConfiguration.value) {
-            return;
-        }
-        pageConfiguration.value = await loadManagePagesConfigReq();
+        pageConfiguration.value = await ensureStoreData(pageConfiguration.value, loadManagePagesConfigReq);
     }
 
     function isEnablePageBySlug(slug: string) {

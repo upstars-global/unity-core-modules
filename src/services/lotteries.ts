@@ -1,20 +1,21 @@
 import { storeToRefs } from "pinia";
 
+import { ensureStoreData } from "../helpers/ensureStoreData";
+import { useLotteriesStore } from "../store/lotteries";
 import {
     getLotteryByIDReq,
     getLotteryStatusByIDReq,
     loadLotteriesListReq,
     loadLotteriesStatusesReq,
-} from "../services/api/requests/lotteries";
-import { useLotteriesStore } from "../store/lotteries";
+} from "./api/requests/lotteries";
 
 export async function loadLotteriesList() {
-    const { setLotteriesList } = useLotteriesStore();
+    const lotteriesStore = useLotteriesStore();
 
-    const data = await loadLotteriesListReq();
+    const data = await ensureStoreData(lotteriesStore.lotteriesList.value, loadLotteriesListReq);
 
     if (data) {
-        setLotteriesList(data);
+        lotteriesStore.setLotteriesList(data);
     }
 }
 
