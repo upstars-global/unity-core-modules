@@ -1,9 +1,9 @@
 import { defineStore } from "pinia";
-import { IVipProgramConfigDTO } from "src/services/api/DTO/levels";
 import { ref, shallowRef } from "vue";
 
 import { type IBettingConfig } from "../models/configs";
-import { IVipProgramConfig, Level, Rewards } from "../models/levels";
+import type { IVipProgramConfig, Level, Rewards } from "../models/levels";
+import { type IVipProgramConfigDTO } from "../services/api/DTO/levels";
 
 export const useConfigStore = defineStore("configStore", () => {
     const gamesPageLimit = ref<number>(40);
