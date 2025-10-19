@@ -77,7 +77,9 @@ export const useUserStatuses = defineStore("userStatuses", () => {
             userStore.addUserGroup({ id: groupForAdding, name: "" });
         }
 
-        userStore.removeUserGroup({ id: groupForRemoving, name: "" });
+        if (getUserGroups.value.includes(groupForAdding) && groupForRemoving) {
+            userStore.removeUserGroup({ id: groupForRemoving, name: "" });
+        }
     }
 
     async function loadUserManager() {

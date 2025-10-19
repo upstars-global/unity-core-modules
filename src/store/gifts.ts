@@ -19,6 +19,7 @@ export const useGiftsStore = defineStore("giftsStore", () => {
     const modifyGiftsConfig = ref<IGiftModifyConfig[]>([]);
     const additionalGifts = ref({});
     const depositGiftsAll = ref<IGiftDeposit[]>([]);
+    const activeDepositGift = ref<IGiftDeposit | null>(null);
     const registrationGiftsAll = ref<IGiftDeposit[]>([]);
     const fsGiftsAll = ref<IGiftFreeSpins[]>([] as IGiftFreeSpins[]);
 
@@ -134,6 +135,10 @@ export const useGiftsStore = defineStore("giftsStore", () => {
         depositGiftsAll.value = value;
     }
 
+    function setActiveDepositGift(value: IGiftDeposit | null) {
+        activeDepositGift.value = value;
+    }
+
     function setRegistrationGiftsAll(value: IGiftDeposit[]) {
         registrationGiftsAll.value = value;
     }
@@ -162,12 +167,14 @@ export const useGiftsStore = defineStore("giftsStore", () => {
         setGifts,
         setAdditionalGifts,
         setDepositGiftsAll,
+        setActiveDepositGift,
         setRegistrationGiftsAll,
         setFSGiftsAll,
 
         registrationGiftsAll,
         depositGiftsAll,
         depositGifts,
+        activeDepositGift,
 
         fsGiftsAll,
         fsGifts,
