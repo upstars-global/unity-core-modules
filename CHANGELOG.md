@@ -1,3 +1,24 @@
+## [1.40.0](https://github.com/upstars-global/unity-core-modules/compare/v1.39.0...v1.40.0) (2025-10-20)
+
+### 🚀 Features
+
+* **UN-1506:** Social registration via Google (MVP Logic) ([#220](https://github.com/upstars-global/unity-core-modules/issues/220))
+ ([0728035](https://github.com/upstars-global/unity-core-modules/commit/0728035c19af275088b4cfc4054729138e4b2845))
+
+
+
+    * feat: UN-1506
+
+    * fix
+
+    * feat: accept terms for social regs
+
+    * feat: add check for user group who set password
+
+    * fix(UN-1749): accept country filed when registered via social media
+
+    * fix: imports for another product
+
 ## [1.39.0](https://github.com/upstars-global/unity-core-modules/compare/v1.38.0...v1.39.0) (2025-10-15)
 
 ### 🚀 Features
