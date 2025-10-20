@@ -9,7 +9,7 @@ import { useUserTermsAcceptingPopup } from "../../controllers/userTermsAccepting
 import { EnumContextFields, EnumFormFields } from "../../models/common";
 import { Currencies } from "../../models/enums/currencies";
 import { BettingPlayerSettings } from "../../models/player";
-import type { IUserData, IUserStatus } from "../../models/user";
+import type { IUserData, IUserInfo, IUserStatus } from "../../models/user";
 import { EventBus as bus } from "../../plugins/EventBus";
 import type { IPlayerStats, ISubscriptions, IUserSettings } from "../../services/api/DTO/playerDTO";
 import {
@@ -317,9 +317,14 @@ export const useUserInfo = defineStore("userInfo", () => {
         return await confirmEmailResendReg(dataForConfirm);
     }
 
-    // @ts-expect-error Parameter 'data' implicitly has an 'any' type.
-    async function updateAuthDetailsProviders(data) {
-        return await updateAuthDetailsProvidersReq(data);
+    async function updateAuthDetailsProviders(data: { user: Record<string, unknown> }) {
+        const response = await updateAuthDetailsProvidersReq(data);
+
+        if (response?.status === 201) {
+            setUserData(response.data);
+        }
+
+        return response;
     }
 
     async function loadFreshChatRestoreId(project: string) {
