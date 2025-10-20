@@ -26,8 +26,8 @@ export async function loadExcludedPromoStags() {
 export async function loadCurrencyConfig() {
     const commonStore = useCommon();
 
-    if (isExistData(commonStore.currencyConfig.value)) {
-        return commonStore.currencyConfig.value;
+    if (isExistData(commonStore.currencyConfig)) {
+        return commonStore.currencyConfig;
     }
 
     const data = await loadCurrencyConfigReq();

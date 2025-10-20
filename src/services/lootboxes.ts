@@ -45,7 +45,7 @@ export async function loadMockWheel() {
 
 export async function loadMockSegmentsWheel() {
     const lootboxesStore = useLootboxesStore();
-    if (isExistData(lootboxesStore.mockSectionsWheelSegmentConfigs.value)) {
+    if (isExistData(lootboxesStore.mockSectionsWheelSegmentConfigs)) {
         return;
     }
 

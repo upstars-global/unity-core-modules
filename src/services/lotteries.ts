@@ -12,7 +12,7 @@ import {
 export async function loadLotteriesList() {
     const lotteriesStore = useLotteriesStore();
 
-    if (isExistData(lotteriesStore.lotteriesList.value)) {
+    if (isExistData(lotteriesStore.lotteriesList)) {
         return;
     }
 

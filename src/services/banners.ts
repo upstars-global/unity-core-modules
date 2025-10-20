@@ -9,7 +9,7 @@ export async function loadBanners() {
     const bannersStore = useBannerStore();
     const { getUserLocale } = storeToRefs(useMultilangStore());
 
-    if (isExistData(bannersStore.banners.value)) {
+    if (isExistData(bannersStore.banners)) {
         return;
     }
 
