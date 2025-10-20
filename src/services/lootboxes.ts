@@ -33,7 +33,7 @@ export function loadPrizeOfLootbox(id: number) {
 
 export async function loadMockWheel() {
     const lootboxesStore = useLootboxesStore();
-    if (lootboxesStore.mockSectionsWheelConfigs.value) {
+    if (lootboxesStore.mockSectionsWheelConfigs) {
         return;
     }
     const fileMockSectionsWheel = await loadMockLootboxWheelConfigs();
