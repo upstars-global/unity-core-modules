@@ -5,7 +5,7 @@ import { computed, ref } from "vue";
 
 import { enableCategoriesPage } from "../consts/cms";
 import { log } from "../controllers/Logger";
-import { ensureStoreData } from "../helpers/ensureStoreData";
+import { isExistData } from "../helpers/isExistData";
 import type { TemplateType } from "../helpers/replaceStringHelper";
 import replaceStringHelper from "../helpers/replaceStringHelper";
 import { prepareMapStaticPages } from "../helpers/staticPages";
@@ -36,16 +36,13 @@ export const useCMS = defineStore("CMS", () => {
     const { getUserLocale } = storeToRefs(useMultilangStore());
 
     async function loadStaticPages({ reload } = { reload: false }) {
-        const pages = await ensureStoreData(
-            staticPages.value,
-            async () => {
-                const data = await loadCMSPagesReq(getUserLocale.value);
-                return prepareMapStaticPages(data);
-            },
-            reload,
-        );
+        if (isExistData(staticPages.value) && !reload) {
+            return staticPages.value;
+        }
+
+        const pages = await loadCMSPagesReq(getUserLocale.value);
         if (pages) {
-            staticPages.value = pages;
+            staticPages.value = prepareMapStaticPages(pages);
         }
         return pages;
     }
@@ -77,11 +74,11 @@ export const useCMS = defineStore("CMS", () => {
     });
 
     async function loadCMSSnippets({ reload = false } = {}) {
-        const data = await ensureStoreData(
-            snippets.value,
-            async () => await loadCMSSnippetsReq(getUserLocale.value),
-            reload,
-        );
+        if (!reload && isExistData(snippets.value)) {
+            return snippets.value;
+        }
+
+        const data = await loadCMSSnippetsReq(getUserLocale.value);
 
         if (data) {
             snippets.value = data;

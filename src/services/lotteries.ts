@@ -1,6 +1,6 @@
 import { storeToRefs } from "pinia";
 
-import { ensureStoreData } from "../helpers/ensureStoreData";
+import { isExistData } from "../helpers/isExistData";
 import { useLotteriesStore } from "../store/lotteries";
 import {
     getLotteryByIDReq,
@@ -12,7 +12,11 @@ import {
 export async function loadLotteriesList() {
     const lotteriesStore = useLotteriesStore();
 
-    const data = await ensureStoreData(lotteriesStore.lotteriesList.value, loadLotteriesListReq);
+    if (isExistData(lotteriesStore.lotteriesList.value)) {
+        return;
+    }
+
+    const data = await loadLotteriesListReq();
 
     if (data) {
         lotteriesStore.setLotteriesList(data);

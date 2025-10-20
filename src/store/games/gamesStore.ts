@@ -4,7 +4,7 @@ import { computed, ref } from "vue";
 
 import { log } from "../../controllers/Logger";
 import { currencyView } from "../../helpers/currencyHelper";
-import { ensureStoreData } from "../../helpers/ensureStoreData";
+import { isExistData } from "../../helpers/ensureStoreData";
 import { processGame } from "../../helpers/gameHelpers";
 import type { IGame, IGamesProvider } from "../../models/game";
 import {
@@ -159,20 +159,19 @@ export const useGamesCommon = defineStore("gamesCommon", () => {
 
     async function loadGamesCategories(): Promise<void> {
         try {
-            gamesCategories.value = await ensureStoreData(
-                gamesCategories.value,
-                async () => {
-                    const data = await loadGamesCategoriesReq();
-                    return data.map((category) => {
-                        return {
-                            ...category,
-                            provider: category.id,
-                            slug: category.id,
-                            url: `/games/${category.id}`,
-                            name: category.title,
-                        };
-                    });
-                });
+            if (isExistData(gamesCategories.value)) {
+                return;
+            }
+            const data = await loadGamesCategoriesReq();
+            gamesCategories.value = data.map((category) => {
+                return {
+                    ...category,
+                    provider: category.id,
+                    slug: category.id,
+                    url: `/games/${category.id}`,
+                    name: category.title,
+                };
+            });
         } catch (error) {
             log.error("LOAD_GAMES_CATEGORIES", error);
         }

@@ -1,4 +1,4 @@
-import { ensureStoreData } from "../helpers/ensureStoreData";
+import { isExistData } from "../helpers/isExistData";
 import { useCommon } from "../store/common";
 import { useConfigStore } from "../store/configStore";
 import { useLevelsStore } from "../store/levels/levelsStore";
@@ -26,7 +26,11 @@ export async function loadExcludedPromoStags() {
 export async function loadCurrencyConfig() {
     const commonStore = useCommon();
 
-    const data = await ensureStoreData(commonStore.currencyConfig.value, loadCurrencyConfigReq);
+    if (isExistData(commonStore.currencyConfig.value)) {
+        return commonStore.currencyConfig.value;
+    }
+
+    const data = await loadCurrencyConfigReq();
 
     if (data) {
         commonStore.setCurrencyConfig(data);
