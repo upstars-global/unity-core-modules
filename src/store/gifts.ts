@@ -2,9 +2,10 @@ import {
     LOOTBOX_TYPE_GIFTS,
     STATUSES_LOST_GIFT,
 } from "@src/config/gift";
-import { defineStore } from "pinia";
+import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
+import { currencyView } from "../helpers/currencyHelper";
 import type { GiftAllItem, IGift, IGiftDeposit, IGiftFreeSpins, IGiftModifyConfig } from "../services/api/DTO/gifts";
 import { useUserInfo } from "./user/userInfo";
 import { useUserStatuses } from "./user/userStatuses";
@@ -111,6 +112,29 @@ export const useGiftsStore = defineStore("giftsStore", () => {
         return giftsAll.value.length;
     });
 
+    const activeDepositGiftMinDep = computed(() => {
+        const { getUserCurrency } = storeToRefs(useUserInfo());
+        const { getSubunitsToUnitsByCode } = useUserInfo();
+
+        if (!activeDepositGift.value?.id) {
+            return 0;
+        }
+
+        const attr = activeDepositGift.value.bonuses[0].conditions.find((item) => {
+            return item.field === "amount" && item.type === "min";
+        });
+
+        if (attr) {
+            const valueAttr = attr.value.find((item) => {
+                return item.currency === getUserCurrency.value;
+            });
+
+            return currencyView(valueAttr.amount_cents, valueAttr.currency, null, getSubunitsToUnitsByCode(valueAttr.currency));
+        }
+
+        return 0;
+    });
+
     function setGiftsLoading(value: boolean): void {
         isLoadingGiftData.value = value;
     }
@@ -175,6 +199,7 @@ export const useGiftsStore = defineStore("giftsStore", () => {
         depositGiftsAll,
         depositGifts,
         activeDepositGift,
+        activeDepositGiftMinDep,
 
         fsGiftsAll,
         fsGifts,
