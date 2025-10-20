@@ -4,8 +4,8 @@ import { computed, ref } from "vue";
 
 import { log } from "../../controllers/Logger";
 import { currencyView } from "../../helpers/currencyHelper";
-import { isExistData } from "../../helpers/ensureStoreData";
 import { processGame } from "../../helpers/gameHelpers";
+import { isExistData } from "../../helpers/isExistData";
 import type { IGame, IGamesProvider } from "../../models/game";
 import {
     loadFilteredGames as loadFilteredGamesReq,

@@ -1,6 +1,6 @@
 import { storeToRefs } from "pinia";
-import { isExistData } from "unity-core-modules/src/helpers/ensureStoreData";
 
+import { isExistData } from "../helpers/isExistData";
 import type { IDisabledGamesProvider } from "../models/game";
 import { useGamesProviders } from "../store/games/gamesProviders";
 import { loadDisabledProvidersConfigReq } from "./api/requests/configs";

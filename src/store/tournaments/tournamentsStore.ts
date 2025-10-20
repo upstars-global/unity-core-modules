@@ -4,7 +4,7 @@ import { computed, ref } from "vue";
 
 import { log } from "../../controllers/Logger";
 import { isAchievement } from "../../helpers/achievementHelpers";
-import { isExistData } from "../../helpers/ensureStoreData";
+import { isExistData } from "../../helpers/isExistData";
 import { parseJson } from "../../helpers/parseJson";
 import { promoFilterAndSettings, statusForTournament } from "../../helpers/promoHelpers";
 import { isQuest } from "../../helpers/questHelpers";
