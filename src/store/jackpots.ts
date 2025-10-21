@@ -1,6 +1,7 @@
 import { defineStore, type Pinia } from "pinia";
 import { computed, ref } from "vue";
 
+import { isExistData } from "../helpers/isExistData";
 import type { IJackpotItem } from "../services/api/DTO/jackpot";
 import { loadJackpotsList } from "../services/api/requests/jackpots";
 
@@ -13,6 +14,9 @@ export const useJackpots = defineStore("jackpots", () => {
     });
 
     async function loadJackpots(): Promise<IJackpotItem[] | void> {
+        if (isExistData(jackpotsList.value)) {
+            return jackpotsList.value;
+        }
         const data = await loadJackpotsList();
         jackpotsList.value = data;
 

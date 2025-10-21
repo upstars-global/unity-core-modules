@@ -5,13 +5,14 @@ import { computed, ref } from "vue";
 
 import { enableCategoriesPage } from "../consts/cms";
 import { log } from "../controllers/Logger";
+import { isExistData } from "../helpers/isExistData";
 import type { TemplateType } from "../helpers/replaceStringHelper";
 import replaceStringHelper from "../helpers/replaceStringHelper";
 import { prepareMapStaticPages } from "../helpers/staticPages";
 import { CurrentPage, type ICurrentPage, type IPageCMSPrepare } from "../models/CMS";
 import type { ISnippetItemCMS } from "../services/api/DTO/CMS";
 import { loadCMSPagesReq, loadCMSSnippetsReq, loadMetaSEOReq, loadPageContentFromCmsReq } from "../services/api/requests/CMS";
-import { useMultilangStore } from "../store/multilang";
+import { useMultilangStore } from "./multilang";
 
 interface ISeoMeta {
     json?: string;
@@ -35,7 +36,7 @@ export const useCMS = defineStore("CMS", () => {
     const { getUserLocale } = storeToRefs(useMultilangStore());
 
     async function loadStaticPages({ reload } = { reload: false }) {
-        if (staticPages.value.length && !reload) {
+        if (isExistData(staticPages.value) && !reload) {
             return staticPages.value;
         }
 
@@ -73,7 +74,7 @@ export const useCMS = defineStore("CMS", () => {
     });
 
     async function loadCMSSnippets({ reload = false } = {}) {
-        if (!reload && snippets.value.length) {
+        if (!reload && isExistData(snippets.value)) {
             return snippets.value;
         }
 
