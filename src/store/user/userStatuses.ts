@@ -82,11 +82,11 @@ export const useUserStatuses = defineStore("userStatuses", () => {
         await changePlayerGroup(groupForAdding, groupForRemoving);
 
         if (!getUserGroups.value.includes(groupForAdding) && groupForAdding) {
-            userStore.addUserGroup({ id: groupForAdding, name: "" });
+            userStore.addUserGroup({ id: groupForAdding, name: groupForAdding });
         }
 
         if (getUserGroups.value.includes(groupForAdding) && groupForRemoving) {
-            userStore.removeUserGroup({ id: groupForRemoving, name: "" });
+            userStore.removeUserGroup({ id: groupForRemoving, name: groupForRemoving });
         }
     }
 
