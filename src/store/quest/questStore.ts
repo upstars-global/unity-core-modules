@@ -1,16 +1,14 @@
 import getQuestConfig, { DEFAULT_QUEST_SIZE } from "@config/quest";
-import { defineStore, storeToRefs } from "pinia";
+import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
 import { promoFilterAndSettings } from "../../helpers/promoHelpers";
-import { findNextLevelData, getCurrentLevelData, isQuest, questSizeById, questSlugById } from "../../helpers/questHelpers";
+import { findNextLevelData, getCurrentLevelData, questSizeById, questSlugById } from "../../helpers/questHelpers";
 import { PromoType } from "../../models/enums/tournaments";
 import type { ICurrentUserQuestsStatus, IQuestData, IQuestItem, IUserStatusQuest } from "../../models/quest";
-import type { ITournamentsList } from "../../services/api/DTO/tournamentsDTO";
-import { loadQuestDataReq } from "../../services/api/requests/tournaments";
-import { useUserInfo } from "../user/userInfo";
+import { type ITournament } from "../../services/api/DTO/tournamentsDTO";
 
-function promoFilterAndSettingsOneItem(item, type) {
+function promoFilterAndSettingsOneItem(item: IQuestData, type: PromoType) {
     const [ result ] = promoFilterAndSettings([ item ], type);
     return result;
 }
@@ -19,7 +17,6 @@ export const useQuestStore = defineStore("questStore", () => {
     const userStatusQuest = ref<IUserStatusQuest>({} as IUserStatusQuest);
     const questsList = ref<IQuestItem[]>([]);
     const currentUserQuestsStatuses = ref<ICurrentUserQuestsStatus[]>([]);
-    const { getIsLogged } = storeToRefs(useUserInfo());
     const questData = ref<IQuestData | null>(null);
 
     const getQuestData = computed(() => {
@@ -31,14 +28,14 @@ export const useQuestStore = defineStore("questStore", () => {
     });
 
     const getCurrentUserBets = computed(() => {
-        return Number(userStatusQuest.value?.bets);
+        return Number(userStatusQuest.value?.bets || 0);
     });
 
     const getUserBetsInQuestById = computed(() => {
         return (id: number) => {
             let userStatusInQuest = null;
 
-            if (currentUserQuestsStatuses.value) {
+            if (currentUserQuestsStatuses.value.length) {
                 userStatusInQuest = currentUserQuestsStatuses.value.find(({ tournament_id: tourId }) => {
                     return tourId === id;
                 });
@@ -61,7 +58,7 @@ export const useQuestStore = defineStore("questStore", () => {
     });
 
     const getListQuestsLevelPoint = computed(() => {
-        const result = {};
+        const result = {} as Record<number, never[] | [string, unknown]>;
 
         if (getQuestsList.value) {
             getQuestsList.value.forEach((questItem) => {
@@ -73,7 +70,7 @@ export const useQuestStore = defineStore("questStore", () => {
                 }
 
                 const questSize = questItem.questSize;
-                // @ts-expect-error Element implicitly has an 'any' type
+
                 result[questItem.id] = getCurrentLevelData(questSize, defaultCurrency, userBets);
             });
         }
@@ -103,7 +100,6 @@ export const useQuestStore = defineStore("questStore", () => {
             return [];
         }
         const defaultCurrency = quest?.currency;
-        // @ts-expect-error Element implicitly has an 'any' type
         const currentLevelData = getListQuestsLevelPoint.value[id]?.[1];
         const userBetsInTargetQuest = getUserBetsInQuestById.value(id);
 
@@ -154,10 +150,8 @@ export const useQuestStore = defineStore("questStore", () => {
         }
     }
 
-    function setQuestsList(newList: IQuestItem[] = []) {
-        let newQuestsList = [] as IQuestItem[];
-
-        newQuestsList = [
+    function setQuestsList(newList: ITournament[] = []) {
+        questsList.value = [
             ...questsList.value.filter(({ id }) => {
                 return !newList.some(({ id: newID }) => {
                     return newID === id;
@@ -165,13 +159,12 @@ export const useQuestStore = defineStore("questStore", () => {
             }),
             ...newList,
         ].map((quest) => {
-            quest.questSize = questSizeById(quest.frontend_identifier) || DEFAULT_QUEST_SIZE;
-            quest.questSlug = questSlugById(quest.frontend_identifier);
-
-            return quest;
+            return {
+                ...quest,
+                questSize: questSizeById(quest.frontend_identifier) || DEFAULT_QUEST_SIZE,
+                questSlug: questSlugById(quest.frontend_identifier),
+            };
         });
-
-        questsList.value = newQuestsList;
     }
 
     function setCurrentQuestFromList(slug: string, priorityId?: number | null) {
@@ -180,29 +173,16 @@ export const useQuestStore = defineStore("questStore", () => {
         }) || {} as IQuestData;
     }
 
-    async function loadQuestsData(tournamentsList: ITournamentsList) {
-        const filteredQuestsList = tournamentsList.filter(({ frontend_identifier: frontId }) => {
-            return isQuest(frontId);
-        });
-
-        // @ts-expect-error missing properties
-        setQuestsList(filteredQuestsList);
-
-        if (getIsLogged.value) {
-            // @ts-expect-error missing properties
-            const statuses = await loadQuestDataReq(filteredQuestsList) || [];
-
-            setNewStatusesUserQuest(statuses);
-        }
-    }
 
     function updateStatusInQuest(promoList: ICurrentUserQuestsStatus[]) {
-        if (!getQuestData.value) {
+        const quest = getQuestData.value;
+
+        if (!quest) {
             return;
         }
 
         promoList.forEach((promoData) => {
-            if (getQuestData.value.id === promoData.tournament_id) {
+            if (quest.id === promoData.tournament_id) {
                 setNewStatusesUserQuest([ promoData ]);
             }
         });
@@ -223,7 +203,8 @@ export const useQuestStore = defineStore("questStore", () => {
         clearQuestUserData,
         setCurrentQuestFromList,
 
-        loadQuestsData,
         updateStatusInQuest,
+        setQuestsList,
+        setNewStatusesUserQuest,
     };
 });

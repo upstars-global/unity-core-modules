@@ -1,6 +1,6 @@
 {
   "name": "unity-core-modules",
-  "version": "1.38.0",
+  "version": "1.41.0",
   "description": "",
   "type": "module",
   "repository": {
@@ -12,7 +12,10 @@
     "test:coverage": "vitest --coverage",
     "lint": "eslint --max-warnings=8",
     "lint:tsc": "tsc --noEmit",
-    "prepare": "husky"
+    "prepare": "husky",
+    "ci": "find . -type d -name \"node_modules\" -prune -exec rm -rf {} + && yarn cache clean && yarn",
+    "depcruise:test": "depcruise src --include-only '^src'",
+    "depcruise:svg": "depcruise --include-only '^src' --output-type dot src | dot -T svg > dependencygraph.svg"
   },
   "lint-staged": {
     "**/*": "eslint --fix"
@@ -43,6 +46,7 @@
     "@types/uuid": "^9.0.8",
     "@vitest/coverage-v8": "^3.2.4",
     "conventional-changelog-conventionalcommits": "^8.0.0",
+    "dependency-cruiser": "^17.0.1",
     "eslint": "^9.34.0",
     "eslint-config-frontera": "upstars-global/eslint-config-frontera#v2.0.1",
     "eslint-plugin-simple-import-sort": "^12.1.1",
