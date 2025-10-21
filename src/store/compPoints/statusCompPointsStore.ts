@@ -3,24 +3,18 @@ import { computed, ref } from "vue";
 
 import type {
     ICompPoints,
-    IExchange,
     IExchangeMoneyRate,
     IExchangeMoneyRateList,
     IRate,
 } from "../../services/api/DTO/compPoints";
-import {
-    exchangeToMoney as exchangeToMoneyReq,
-    loadRatesMoney as loadRatesMoneyReq,
-    loadUserCompPoints as loadUserCompPointsReq,
-} from "../../services/api/requests/compPoints";
 import { useCommon } from "../common";
 import { useUserInfo } from "../user/userInfo";
 
 export const useStatusCompPointsStore = defineStore("statusCompPointsStore", () => {
     const { getUserCurrency } = storeToRefs(useUserInfo());
-    const compPoints = ref<ICompPoints>();
-
+    const compPoints = ref<ICompPoints | null>(null);
     const ratesMoney = ref<IExchangeMoneyRateList>([]);
+
     const getUserCompPoints = computed<number | undefined>(() => {
         return compPoints.value?.chargeable?.points;
     });
@@ -63,20 +57,6 @@ export const useStatusCompPointsStore = defineStore("statusCompPointsStore", () 
         compPoints.value = data;
     }
 
-    async function exchangeToMoney({ points, group, currency }: IExchange) {
-        await exchangeToMoneyReq({ points, group, currency });
-        await loadUserCompPoints();
-    }
-
-    async function loadRatesMoney() {
-        const ratesResponse = await loadRatesMoneyReq();
-        setRatesMoney(ratesResponse);
-    }
-
-    async function loadUserCompPoints() {
-        updateCompPoints(await loadUserCompPointsReq());
-    }
-
     function clearState() {
         compPoints.value = null;
     }
@@ -85,12 +65,10 @@ export const useStatusCompPointsStore = defineStore("statusCompPointsStore", () 
         getUserCompPoints,
         getCompPointsRate,
         getChargeableBalance,
-        exchangeToMoney,
         updateCompPoints,
         getCompPoints,
-        loadRatesMoney,
+        setRatesMoney,
         getStatusBalance,
-        loadUserCompPoints,
         clearState,
     };
 });
