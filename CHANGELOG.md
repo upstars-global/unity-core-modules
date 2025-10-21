@@ -1,3 +1,10 @@
+## [1.41.1](https://github.com/upstars-global/unity-core-modules/compare/v1.41.0...v1.41.1) (2025-10-21)
+
+### 🧪 Testing
+
+* cover useManagePages store with tests ([#240](https://github.com/upstars-global/unity-core-modules/issues/240))
+ ([deec804](https://github.com/upstars-global/unity-core-modules/commit/deec8040627e8605d6759f51908b8ffb7442a134))
+
 ## [1.41.0](https://github.com/upstars-global/unity-core-modules/compare/v1.40.0...v1.41.0) (2025-10-21)
 
 ### 🚀 Features
