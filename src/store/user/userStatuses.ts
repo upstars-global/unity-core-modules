@@ -1,4 +1,8 @@
-import { ALL_LEVELS, ID_GROUP_FOR_MULTI_ACC, TEST_GROUP_ID } from "@config/user-statuses";
+import {
+    ALL_LEVELS,
+    ID_GROUP_FOR_MULTI_ACC,
+    TEST_GROUP_ID,
+} from "@config/user-statuses";
 import { VIP_CLUB_STATUSES } from "@config/vip-clubs";
 import { getUserIsDiamond, getUserVipGroup } from "@helpers/user";
 import type { ILevel } from "@types/levels";
@@ -15,8 +19,8 @@ import { useUserInfo } from "./userInfo";
 export const useUserStatuses = defineStore("userStatuses", () => {
     const userStore = useUserInfo();
     const { getUserInfo } = storeToRefs(userStore);
-
     const userManager = ref<IVipManager>();
+    const socialNetworkAuthGroups = ref<number[]>([]);
 
     const getUserLevelInfo = computed<ILevel>(() => {
         const levelsStore = useLevelsStore();
@@ -66,6 +70,10 @@ export const useUserStatuses = defineStore("userStatuses", () => {
         return getUserIsDiamond(userVipGroup.value);
     });
 
+    const isRegisteredViaSocialNetwork = computed<boolean>(() => {
+        return socialNetworkAuthGroups.value.some((status: number) => getUserGroups.value.includes(status));
+    });
+
     const getUserManager = computed(() => {
         return userManager.value;
     });
@@ -89,6 +97,10 @@ export const useUserStatuses = defineStore("userStatuses", () => {
         userManager.value = null;
     }
 
+    function setSocialNetworkAuthGroups(groups: number[]) {
+        socialNetworkAuthGroups.value = groups;
+    }
+
     return {
         getUserLevelInfo,
         getUserStatuses,
@@ -100,8 +112,9 @@ export const useUserStatuses = defineStore("userStatuses", () => {
         getUserManager,
         userVipStatus,
         userVipGroup,
+        isRegisteredViaSocialNetwork,
         getUserLevelId,
-
+        setSocialNetworkAuthGroups,
         addUserToGroup,
         loadUserManager,
         clearUserManager,
