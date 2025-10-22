@@ -1,3 +1,10 @@
+## [1.41.2](https://github.com/upstars-global/unity-core-modules/compare/v1.41.1...v1.41.2) (2025-10-22)
+
+### 🧪 Testing
+
+* cover notices store with tests ([#241](https://github.com/upstars-global/unity-core-modules/issues/241))
+ ([80191d0](https://github.com/upstars-global/unity-core-modules/commit/80191d0e1241cdb6a15e7cca68ca106e23d54547))
+
 ## [1.41.1](https://github.com/upstars-global/unity-core-modules/compare/v1.41.0...v1.41.1) (2025-10-21)
 
 ### 🧪 Testing
