@@ -1,3 +1,61 @@
+## [1.41.2](https://github.com/upstars-global/unity-core-modules/compare/v1.41.1...v1.41.2) (2025-10-22)
+
+### 🧪 Testing
+
+* cover notices store with tests ([#241](https://github.com/upstars-global/unity-core-modules/issues/241))
+ ([80191d0](https://github.com/upstars-global/unity-core-modules/commit/80191d0e1241cdb6a15e7cca68ca106e23d54547))
+
+## [1.41.1](https://github.com/upstars-global/unity-core-modules/compare/v1.41.0...v1.41.1) (2025-10-21)
+
+### 🧪 Testing
+
+* cover useManagePages store with tests ([#240](https://github.com/upstars-global/unity-core-modules/issues/240))
+ ([deec804](https://github.com/upstars-global/unity-core-modules/commit/deec8040627e8605d6759f51908b8ffb7442a134))
+
+## [1.41.0](https://github.com/upstars-global/unity-core-modules/compare/v1.40.0...v1.41.0) (2025-10-21)
+
+### 🚀 Features
+
+* **UN-364:** refactor redeemableCompPointsStore & statusCompPointsStore and cover them with tests  ([#236](https://github.com/upstars-global/unity-core-modules/issues/236))
+ ([462a1b6](https://github.com/upstars-global/unity-core-modules/commit/462a1b61698e2922aa57aaebe496b5a480af88e3))
+
+
+
+    * fix: types
+
+    * refactor: move requests from redeemableCompPointsStore to service
+
+    * refactor: move requests from statusCompPointsStore to service
+
+    * test: redeemableCompPointsStore
+
+    * test: statusCompPointsStore
+
+    * fix: checkHasAvailableCards
+
+    * fix: import
+
+## [1.40.0](https://github.com/upstars-global/unity-core-modules/compare/v1.39.0...v1.40.0) (2025-10-20)
+
+### 🚀 Features
+
+* **UN-1506:** Social registration via Google (MVP Logic) ([#220](https://github.com/upstars-global/unity-core-modules/issues/220))
+ ([0728035](https://github.com/upstars-global/unity-core-modules/commit/0728035c19af275088b4cfc4054729138e4b2845))
+
+
+
+    * feat: UN-1506
+
+    * fix
+
+    * feat: accept terms for social regs
+
+    * feat: add check for user group who set password
+
+    * fix(UN-1749): accept country filed when registered via social media
+
+    * fix: imports for another product
+
 ## [1.39.0](https://github.com/upstars-global/unity-core-modules/compare/v1.38.0...v1.39.0) (2025-10-15)
 
 ### 🚀 Features
