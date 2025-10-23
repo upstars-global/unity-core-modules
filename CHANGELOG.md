@@ -1,3 +1,16 @@
+## [1.42.0](https://github.com/upstars-global/unity-core-modules/compare/v1.41.2...v1.42.0) (2025-10-23)
+
+### 🚀 Features
+
+* move requests from levelsStore to service and cover it with tests ([#239](https://github.com/upstars-global/unity-core-modules/issues/239))
+ ([d9f6dc3](https://github.com/upstars-global/unity-core-modules/commit/d9f6dc343c9718b20ba00ec984b02eb3fb4b1b6e))
+
+
+
+    * refactor: move requests from levelsStore to service and cover it with tests
+
+    * fix: paths
+
 ## [1.41.2](https://github.com/upstars-global/unity-core-modules/compare/v1.41.1...v1.41.2) (2025-10-22)
 
 ### 🧪 Testing
