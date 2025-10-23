@@ -39,9 +39,17 @@ export type LevelConfig = {
     saveTarget: number
 }
 export interface IVipProgramConfig {
-    rewardCards: Record<string, RewardConfig>,
-    levelRewards: Record<Level, string[]>,
+    rewards: Rewards,
     levelsConfig: Record<Level, LevelConfig>,
     levelCards: Record<Level, ILevelCard>,
     levelBonusesCount: Record<Level, number>,
+}
+export interface ILevel {
+    name: string;
+    status: boolean;
+    id: string;
+    levelNumber: number;
+    min: number;
+    max: number;
+    image: string;
 }
