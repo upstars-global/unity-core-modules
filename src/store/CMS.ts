@@ -33,6 +33,10 @@ export const useCMS = defineStore("CMS", () => {
     const staticPages = ref<IPageCMSPrepare[]>([]);
     const snippets = ref<ISnippetItemCMS[]>([]);
     const { getUserLocale } = storeToRefs(useMultilangStore());
+    const currentStaticPage = ref<ICurrentPage | null>();
+    const contentCurrentPage = ref<string>("");
+    const seoMeta = ref<Record<string, ISeoMeta>>({});
+    const pagesContent = ref<Record<string, ICurrentPage>>({});
 
     async function loadStaticPages({ reload } = { reload: false }) {
         if (staticPages.value.length && !reload) {
@@ -96,10 +100,6 @@ export const useCMS = defineStore("CMS", () => {
         return replaceCurrentYearPlaceholder(template);
     });
 
-    const currentStaticPage = ref<ICurrentPage | null>();
-    const contentCurrentPage = ref<string>("");
-    const seoMeta = ref<Record<string, ISeoMeta>>({});
-    const pagesContent = ref<Record<string, ICurrentPage>>({});
 
     function setSeoMeta({ meta, url }: { meta: ISeoMeta, url: string }) {
         if (meta && meta.metaTitle) {
@@ -119,11 +119,12 @@ export const useCMS = defineStore("CMS", () => {
 
         try {
             const data = await loadPageContentFromCmsReq(slug, getUserLocale.value);
+
             if (!data) {
                 return `${slug} page is not found`;
             }
 
-            const page: ICurrentPage = replaceCurrentYearPlaceholder(new CurrentPage(data));
+            const page = replaceCurrentYearPlaceholder(new CurrentPage(data)) as ICurrentPage;
 
             currentStaticPage.value = page;
 
@@ -151,11 +152,13 @@ export const useCMS = defineStore("CMS", () => {
 
         let meta = seoMeta.value[url];
         currentStaticPage.value = pagesContent.value[url];
+
         if (meta) {
             return Promise.resolve(meta);
         }
 
         const slugPage = url.replace(/\/$/, "");
+
         if (!hasStaticPageInCMS(slugPage)) {
             return `${slugPage} page is not StaticPages`;
         }
