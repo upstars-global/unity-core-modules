@@ -6,6 +6,7 @@ import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
 import { currencyView } from "../helpers/currencyHelper";
+import { Currencies } from "../models/enums/currencies";
 import type { GiftAllItem, IGift, IGiftDeposit, IGiftFreeSpins, IGiftModifyConfig } from "../services/api/DTO/gifts";
 import { useUserInfo } from "./user/userInfo";
 import { useUserStatuses } from "./user/userStatuses";
@@ -129,7 +130,14 @@ export const useGiftsStore = defineStore("giftsStore", () => {
                 return item.currency === getUserCurrency.value;
             });
 
-            return currencyView(valueAttr.amount_cents, valueAttr.currency, null, getSubunitsToUnitsByCode(valueAttr.currency));
+            if (valueAttr) {
+                return currencyView(
+                    valueAttr.amount_cents,
+                    valueAttr.currency,
+                    null,
+                    getSubunitsToUnitsByCode(valueAttr.currency as Currencies),
+                );
+            }
         }
 
         return 0;
@@ -159,7 +167,7 @@ export const useGiftsStore = defineStore("giftsStore", () => {
         depositGiftsAll.value = value;
     }
 
-    function setActiveDepositGift(value: IGiftDeposit | null) {
+    function setActiveDepositGift(value: IGiftDeposit) {
         activeDepositGift.value = value;
     }
 

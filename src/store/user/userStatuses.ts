@@ -81,12 +81,14 @@ export const useUserStatuses = defineStore("userStatuses", () => {
     async function changeUserToGroup(groupForAdding?: IPlayerGroup, groupForRemoving?: IPlayerGroup) {
         await changePlayerGroup(groupForAdding, groupForRemoving);
 
-        if (!getUserGroups.value.includes(groupForAdding) && groupForAdding) {
-            userStore.addUserGroup({ id: groupForAdding, name: groupForAdding });
-        }
+        if (groupForAdding) {
+            if (!getUserGroups.value.includes(groupForAdding)) {
+                userStore.addUserGroup({ id: groupForAdding, name: groupForAdding });
+            }
 
-        if (getUserGroups.value.includes(groupForAdding) && groupForRemoving) {
-            userStore.removeUserGroup({ id: groupForRemoving, name: groupForRemoving });
+            if (getUserGroups.value.includes(groupForAdding) && groupForRemoving) {
+                userStore.removeUserGroup({ id: groupForRemoving, name: groupForRemoving });
+            }
         }
     }
 
