@@ -33,7 +33,7 @@ function resolveUrlFromRoute(route: { path: string; name?: string; meta?: { meta
 }
 
 function normalizeUrl(url: string): string {
-    return url.replace(/\/$/, "");
+    return url.replace(/^\/+|\/+$/g, "");
 }
 
 export const useCMS = defineStore("CMS", () => {
@@ -43,8 +43,8 @@ export const useCMS = defineStore("CMS", () => {
     const currentStaticPage = ref<ICurrentPage | null>();
     const contentCurrentPage = ref<string>("");
     const seoMeta = ref<Record<string, ICurrentPageMeta>>({});
-    const pagesContent = ref<Record<string, ICurrentPage>>({});
     const seoCurrentDescription = ref<string>("");
+    const inflight = new Map<string, ReturnType<typeof loadPageContentFromCmsReq>>();
 
     async function loadStaticPages({ reload } = { reload: false }) {
         if (staticPages.value.length && !reload) {
@@ -114,9 +114,6 @@ export const useCMS = defineStore("CMS", () => {
             seoMeta.value = { ...seoMeta.value, [url]: meta };
         }
     }
-    function setPageContent({ content, url }: {content: ICurrentPage, url: string}) {
-        pagesContent.value = { ...pagesContent.value, [url]: content };
-    }
 
     function ensureStaticIfReady(slug: string): string | void {
         if (staticPages.value.length && !hasStaticPageInCMS(slug)) {
@@ -124,6 +121,21 @@ export const useCMS = defineStore("CMS", () => {
         }
 
         return;
+    }
+
+    async function fetchCmsPageOnce(slug: string, locale?: string): ReturnType<typeof loadPageContentFromCmsReq> {
+        const existingPromise = inflight.get(slug);
+
+        if (existingPromise) {
+            return existingPromise;
+        }
+
+        const promise = loadPageContentFromCmsReq(slug, locale)
+            .finally(() => inflight.delete(slug));
+
+        inflight.set(slug, promise);
+
+        return promise;
     }
 
     async function loadCurrentStaticPage(slug: string) {
@@ -134,7 +146,8 @@ export const useCMS = defineStore("CMS", () => {
         }
 
         try {
-            const data = await loadPageContentFromCmsReq(slug, getUserLocale.value);
+            const data = await fetchCmsPageOnce(slug, getUserLocale.value);
+
             if (!data) {
                 return `${slug} page is not found`;
             }
@@ -144,9 +157,7 @@ export const useCMS = defineStore("CMS", () => {
             currentStaticPage.value = page;
             contentCurrentPage.value = data.content;
 
-            const urlKey = normalizeUrl(data.path || slug);
-
-            setPageContent({ content: page, url: urlKey });
+            setSeoMeta({ meta: page.meta, url: data.path });
 
             return page;
         } catch (err) {
@@ -170,10 +181,10 @@ export const useCMS = defineStore("CMS", () => {
         }
 
         try {
-            const data = await loadPageContentFromCmsReq(url, getUserLocale.value);
+            const data = await fetchCmsPageOnce(slug, getUserLocale.value);
 
             if (!data) {
-                return `${url} page data is not found`;
+                return `${slug} page data is not found`;
             }
 
             const blocks = data.blocks;

@@ -249,7 +249,7 @@ describe("useCMS store", () => {
 
             const result = await store.loadMetaSEO({ path: "/b", name: "other" });
 
-            expect(result).toBe("/b page is not StaticPages");
+            expect(result).toBe("b page is not StaticPages");
         });
 
         it("returns not found if API returns null", async () => {
@@ -260,7 +260,7 @@ describe("useCMS store", () => {
 
             const result = await store.loadMetaSEO({ path: "/a", name: "other" });
 
-            expect(result).toBe("/a page data is not found");
+            expect(result).toBe("a page data is not found");
         });
 
         it("sets meta and pageContent if blocks exist", async () => {
