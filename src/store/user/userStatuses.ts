@@ -12,7 +12,7 @@ import { computed, ref } from "vue";
 import type { IUserStatus, UserGroup } from "../../models/user";
 import { IVipManager } from "../../models/vipManagers";
 import { loadManagersConfigReq } from "../../services/api/requests/configs";
-import { addPlayerToGroup } from "../../services/api/requests/player";
+import { changePlayerGroup, type IPlayerGroup } from "../../services/api/requests/player";
 import { useLevelsStore } from "../levels/levelsStore";
 import { useUserInfo } from "./userInfo";
 
@@ -78,10 +78,17 @@ export const useUserStatuses = defineStore("userStatuses", () => {
         return userManager.value;
     });
 
-    async function addUserToGroup(groupForAdding: string | number) {
-        if (!getUserGroups.value.includes(groupForAdding)) {
-            await addPlayerToGroup(groupForAdding);
-            userStore.addUserGroup({ id: groupForAdding, name: "" });
+    async function changeUserToGroup(groupForAdding?: IPlayerGroup, groupForRemoving?: IPlayerGroup) {
+        await changePlayerGroup(groupForAdding, groupForRemoving);
+
+        if (groupForAdding) {
+            if (!getUserGroups.value.includes(groupForAdding)) {
+                userStore.addUserGroup({ id: groupForAdding, name: groupForAdding });
+            }
+
+            if (getUserGroups.value.includes(groupForAdding) && groupForRemoving) {
+                userStore.removeUserGroup({ id: groupForRemoving, name: groupForRemoving });
+            }
         }
     }
 
@@ -114,8 +121,8 @@ export const useUserStatuses = defineStore("userStatuses", () => {
         userVipGroup,
         isRegisteredViaSocialNetwork,
         getUserLevelId,
+        changeUserToGroup,
         setSocialNetworkAuthGroups,
-        addUserToGroup,
         loadUserManager,
         clearUserManager,
     };

@@ -1,6 +1,6 @@
 export interface IUserStatus {
-    name: string;
-    id: string;
+    name: string | number;
+    id: string | number;
 }
 
 export interface IUserInfo {

@@ -2,9 +2,11 @@ import {
     LOOTBOX_TYPE_GIFTS,
     STATUSES_LOST_GIFT,
 } from "@src/config/gift";
-import { defineStore } from "pinia";
+import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
+import { currencyView } from "../helpers/currencyHelper";
+import { Currencies } from "../models/enums/currencies";
 import type { GiftAllItem, IGift, IGiftDeposit, IGiftFreeSpins, IGiftModifyConfig } from "../services/api/DTO/gifts";
 import { useUserInfo } from "./user/userInfo";
 import { useUserStatuses } from "./user/userStatuses";
@@ -19,6 +21,7 @@ export const useGiftsStore = defineStore("giftsStore", () => {
     const modifyGiftsConfig = ref<IGiftModifyConfig[]>([]);
     const additionalGifts = ref({});
     const depositGiftsAll = ref<IGiftDeposit[]>([]);
+    const activeDepositGift = ref<IGiftDeposit | null>(null);
     const registrationGiftsAll = ref<IGiftDeposit[]>([]);
     const fsGiftsAll = ref<IGiftFreeSpins[]>([] as IGiftFreeSpins[]);
 
@@ -110,6 +113,36 @@ export const useGiftsStore = defineStore("giftsStore", () => {
         return giftsAll.value.length;
     });
 
+    const activeDepositGiftMinDep = computed(() => {
+        const { getUserCurrency } = storeToRefs(useUserInfo());
+        const { getSubunitsToUnitsByCode } = useUserInfo();
+
+        if (!activeDepositGift.value?.id) {
+            return 0;
+        }
+
+        const attr = activeDepositGift.value.bonuses[0].conditions.find((item) => {
+            return item.field === "amount" && item.type === "min";
+        });
+
+        if (attr) {
+            const valueAttr = attr.value.find((item) => {
+                return item.currency === getUserCurrency.value;
+            });
+
+            if (valueAttr) {
+                return currencyView(
+                    valueAttr.amount_cents,
+                    valueAttr.currency,
+                    null,
+                    getSubunitsToUnitsByCode(valueAttr.currency as Currencies),
+                );
+            }
+        }
+
+        return 0;
+    });
+
     function setGiftsLoading(value: boolean): void {
         isLoadingGiftData.value = value;
     }
@@ -132,6 +165,10 @@ export const useGiftsStore = defineStore("giftsStore", () => {
 
     function setDepositGiftsAll(value: IGiftDeposit[]) {
         depositGiftsAll.value = value;
+    }
+
+    function setActiveDepositGift(value: IGiftDeposit) {
+        activeDepositGift.value = value;
     }
 
     function setRegistrationGiftsAll(value: IGiftDeposit[]) {
@@ -162,12 +199,15 @@ export const useGiftsStore = defineStore("giftsStore", () => {
         setGifts,
         setAdditionalGifts,
         setDepositGiftsAll,
+        setActiveDepositGift,
         setRegistrationGiftsAll,
         setFSGiftsAll,
 
         registrationGiftsAll,
         depositGiftsAll,
         depositGifts,
+        activeDepositGift,
+        activeDepositGiftMinDep,
 
         fsGiftsAll,
         fsGifts,
