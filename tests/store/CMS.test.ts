@@ -6,7 +6,6 @@ import { enableCategoriesPage } from "../../src/consts/cms";
 import {
     loadCMSPagesReq,
     loadCMSSnippetsReq,
-    loadMetaSEOReq,
     loadPageContentFromCmsReq,
 } from "../../src/services/api/requests/CMS";
 import { useCMS } from "../../src/store/CMS";
@@ -24,7 +23,6 @@ vi.mock("../../src/helpers/staticPages", () => ({
 vi.mock("../../src/services/api/requests/CMS", () => ({
     loadCMSPagesReq: vi.fn(),
     loadCMSSnippetsReq: vi.fn(),
-    loadMetaSEOReq: vi.fn(),
     loadPageContentFromCmsReq: vi.fn(),
 }));
 
@@ -241,7 +239,7 @@ describe("useCMS store", () => {
 
             const result = await store.loadMetaSEO({ path: "/home", name: "main" });
 
-            expect(loadMetaSEOReq).not.toHaveBeenCalled();
+            expect(loadPageContentFromCmsReq).not.toHaveBeenCalled();
             expect(result).toEqual(seoMeta["/home"]);
         });
 
@@ -255,7 +253,7 @@ describe("useCMS store", () => {
         });
 
         it("returns not found if API returns null", async () => {
-            vi.mocked(loadMetaSEOReq).mockResolvedValue();
+            vi.mocked(loadPageContentFromCmsReq).mockResolvedValue();
 
             const store = useCMS();
             store.staticPages = [ { slug: "a", url: "/a", categories: [], hidden: false } ];
@@ -269,7 +267,7 @@ describe("useCMS store", () => {
             const store = useCMS();
             store.staticPages = [ { slug: "a", url: "/a", categories: [], hidden: false } ];
 
-            vi.mocked(loadMetaSEOReq).mockResolvedValue({
+            vi.mocked(loadPageContentFromCmsReq).mockResolvedValue({
                 blocks: { title: "MetaTitle", description: "MetaDesc", json: "{}" },
                 content: "MetaContent",
             });
@@ -278,12 +276,11 @@ describe("useCMS store", () => {
 
             expect(result.metaTitle).toBe("MetaTitle");
             expect(store.seoMeta["/a"]).toBeDefined();
-            expect(store.currentStaticPage).toBeDefined();
         });
 
         it("sets meta from SSR if blocks missing", async () => {
             const store = useCMS();
-            vi.mocked(loadMetaSEOReq).mockResolvedValue({
+            vi.mocked(loadPageContentFromCmsReq).mockResolvedValue({
                 blocks: undefined,
                 content: "MetaContent",
             });

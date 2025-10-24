@@ -30,22 +30,12 @@ export async function loadAllFilesFromCMSReq(locale: string): Promise<IFileCMS[]
     }
 }
 
-export async function loadPageContentFromCmsReq(slugPage: string, locale?: string): Promise<IPageItemCMS | void> { // TODO: rename
+export async function loadPageContentFromCmsReq(slugPage: string, locale?: string): Promise<IPageItemCMS | void> {
     try {
         const { data } = await http({ locale }).get<IPageItemCMS>(`/api/cms/pages/${ slugPage }?l=${ locale }`);
         return data;
     } catch (err) {
         log.error("LOAD_PAGE_CONTENT_FORM_CMS_REQ_ERROR", err);
-        throw err;
-    }
-}
-
-export async function loadMetaSEOReq(url: string, locale: string): Promise<IPageItemCMS | void> {
-    try {
-        const { data } = await http({ locale }).get<IPageItemCMS>(`/api/cms/pages${ url }?l=${ locale }`);
-        return data;
-    } catch (err) {
-        log.error("LOAD_SEO_META_REQ_ERROR", err);
         throw err;
     }
 }
