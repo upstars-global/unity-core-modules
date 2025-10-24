@@ -146,7 +146,6 @@ export const useCMS = defineStore("CMS", () => {
 
             const urlKey = normalizeUrl(data.path || slug);
 
-            setSeoMeta({ meta: page.meta, url: urlKey });
             setPageContent({ content: page, url: urlKey });
 
             return page;
