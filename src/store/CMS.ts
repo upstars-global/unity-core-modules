@@ -115,8 +115,12 @@ export const useCMS = defineStore("CMS", () => {
         }
     }
 
-    function setPageContent({ content, url }: { content: ICurrentPage, url: string }) {
-        contentCurrentPage.value[url] = content;
+    function setPageContent({ page, url }: { page: ICurrentPage, url: string }) {
+        contentCurrentPage.value[url] = page;
+    }
+
+    function setCurrentStaticPage(page: ICurrentPage | null) {
+        currentStaticPage.value = page;
     }
 
     function ensureStaticIfReady(slug: string): string | void {
@@ -144,7 +148,7 @@ export const useCMS = defineStore("CMS", () => {
         return promise;
     }
 
-    async function loadCurrentStaticPage(slug: string, reload: boolean = false) {
+    async function loadCurrentStaticPage(slug: string) {
         const staticErr = ensureStaticIfReady(slug);
 
         if (staticErr) {
@@ -153,8 +157,8 @@ export const useCMS = defineStore("CMS", () => {
 
         const cached = contentCurrentPage.value[slug];
 
-        if (cached && !reload) {
-            currentStaticPage.value = cached;
+        if (cached) {
+            setCurrentStaticPage(cached);
 
             return cached;
         }
@@ -168,9 +172,8 @@ export const useCMS = defineStore("CMS", () => {
 
             const page = replaceCurrentYearPlaceholder<ICurrentPage>(new CurrentPage(data));
 
-            currentStaticPage.value = page;
-
-            setPageContent({ content: page, url: slug });
+            setCurrentStaticPage(page);
+            setPageContent({ page, url: slug });
 
             return page;
         } catch (err) {
@@ -189,10 +192,13 @@ export const useCMS = defineStore("CMS", () => {
             return staticErr;
         }
 
-        const cached = seoMeta.value[url];
+        const cachedMeta = seoMeta.value[url];
+        const cachedPage = contentCurrentPage.value[slug];
 
-        if (cached) {
-            return cached;
+        if (cachedMeta && cachedPage) {
+            setCurrentStaticPage(cachedPage);
+
+            return;
         }
 
         try {
@@ -222,8 +228,11 @@ export const useCMS = defineStore("CMS", () => {
             }
 
             meta = replaceCurrentYearPlaceholder<ICurrentPageMeta>(meta);
+            const page = replaceCurrentYearPlaceholder<ICurrentPage>(new CurrentPage(data));
 
             setSeoMeta({ meta, url });
+            setPageContent({ page, url: slug });
+            setCurrentStaticPage(page);
 
             return meta;
         } catch (err) {

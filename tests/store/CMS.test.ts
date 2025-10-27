@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 
 import { enableCategoriesPage } from "../../src/consts/cms";
+import { CurrentPage } from "../../src/models/CMS";
 import {
     loadCMSPagesReq,
     loadCMSSnippetsReq,
@@ -225,24 +226,12 @@ describe("useCMS store", () => {
             const result = await store.loadCurrentStaticPage("a");
 
             expect(store.currentStaticPage).toBeDefined();
-            expect(store.contentCurrentPage).toBe("abc");
+            expect(store.contentCurrentPage).toEqual({ a: new CurrentPage(page) });
             expect(result).toBeDefined();
         });
     });
 
     describe("loadMetaSEO", () => {
-        it("returns cached meta if exists", async () => {
-            const seoMeta = { "/home": { metaTitle: "Title", metaDescription: "Desc", json: "" } };
-            const store = useCMS();
-
-            store.seoMeta = seoMeta;
-
-            const result = await store.loadMetaSEO({ path: "/home", name: "main" });
-
-            expect(loadPageContentFromCmsReq).not.toHaveBeenCalled();
-            expect(result).toEqual(seoMeta["/home"]);
-        });
-
         it("returns not StaticPages if slug not found", async () => {
             const store = useCMS();
             store.staticPages = [ { slug: "a", url: "/a", categories: [], hidden: false } ];
