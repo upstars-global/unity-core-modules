@@ -41,7 +41,7 @@ export const useCMS = defineStore("CMS", () => {
     const snippets = ref<ISnippetItemCMS[]>([]);
     const { getUserLocale } = storeToRefs(useMultilangStore());
     const currentStaticPage = ref<ICurrentPage | null>();
-    const contentCurrentPage = ref<string>("");
+    const contentCurrentPage = ref<Record<string, ICurrentPage>>({});
     const seoMeta = ref<Record<string, ICurrentPageMeta>>({});
     const seoCurrentDescription = ref<string>("");
     const inflight = new Map<string, ReturnType<typeof loadPageContentFromCmsReq>>();
@@ -115,6 +115,10 @@ export const useCMS = defineStore("CMS", () => {
         }
     }
 
+    function setPageContent({ content, url }: { content: ICurrentPage, url: string }) {
+        contentCurrentPage.value[url] = content;
+    }
+
     function ensureStaticIfReady(slug: string): string | void {
         if (staticPages.value.length && !hasStaticPageInCMS(slug)) {
             return `${slug} page is not StaticPages`;
@@ -131,18 +135,28 @@ export const useCMS = defineStore("CMS", () => {
         }
 
         const promise = loadPageContentFromCmsReq(slug, locale)
-            .finally(() => inflight.delete(slug));
+            .finally(() => {
+                setTimeout(() => inflight.delete(slug), 150);
+            });
 
         inflight.set(slug, promise);
 
         return promise;
     }
 
-    async function loadCurrentStaticPage(slug: string) {
+    async function loadCurrentStaticPage(slug: string, reload: boolean = false) {
         const staticErr = ensureStaticIfReady(slug);
 
         if (staticErr) {
             return staticErr;
+        }
+
+        const cached = contentCurrentPage.value[slug];
+
+        if (cached && !reload) {
+            currentStaticPage.value = cached;
+
+            return cached;
         }
 
         try {
@@ -155,9 +169,8 @@ export const useCMS = defineStore("CMS", () => {
             const page = replaceCurrentYearPlaceholder<ICurrentPage>(new CurrentPage(data));
 
             currentStaticPage.value = page;
-            contentCurrentPage.value = data.content;
 
-            setSeoMeta({ meta: page.meta, url: data.path });
+            setPageContent({ content: page, url: slug });
 
             return page;
         } catch (err) {
@@ -171,11 +184,13 @@ export const useCMS = defineStore("CMS", () => {
         const slug = normalizeUrl(url);
 
         const staticErr = ensureStaticIfReady(slug);
+
         if (staticErr) {
             return staticErr;
         }
 
         const cached = seoMeta.value[url];
+
         if (cached) {
             return cached;
         }
@@ -236,7 +251,6 @@ export const useCMS = defineStore("CMS", () => {
         loadCMSSnippets,
         loadCurrentStaticPage,
         currentStaticPage,
-        contentCurrentPage,
 
         setSeoMeta,
         seoMeta,
