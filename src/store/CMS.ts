@@ -149,6 +149,8 @@ export const useCMS = defineStore("CMS", () => {
     }
 
     async function loadCurrentStaticPage(slug: string) {
+        currentStaticPage.value = null;
+
         const staticErr = ensureStaticIfReady(slug);
 
         if (staticErr) {
