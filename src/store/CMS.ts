@@ -251,6 +251,7 @@ export const useCMS = defineStore("CMS", () => {
         loadCMSSnippets,
         loadCurrentStaticPage,
         currentStaticPage,
+        contentCurrentPage,
 
         setSeoMeta,
         seoMeta,
