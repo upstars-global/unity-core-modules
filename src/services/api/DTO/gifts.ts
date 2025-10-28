@@ -54,6 +54,15 @@ export interface IGiftDeposit {
             ];
             attributes: [];
             result_bonus: [];
+            boxes?: [
+                {
+                    bonuses: [
+                        {
+                            conditions: [];
+                        }
+                    ];
+                }
+            ];
         }
     ];
     group_key?: string;

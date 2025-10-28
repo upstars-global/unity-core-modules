@@ -121,7 +121,17 @@ export const useGiftsStore = defineStore("giftsStore", () => {
             return 0;
         }
 
-        const attr = activeDepositGift.value.bonuses[0].conditions.find((item) => {
+        const isLootbox = activeDepositGift.value.bonuses[0]?.type === "random" && activeDepositGift.value.bonuses[0].boxes;
+        let bonuses = null;
+
+        if (isLootbox) {
+            const boxes = activeDepositGift.value.bonuses[0].boxes;
+            bonuses = boxes?.[boxes.length - 1].bonuses[0];
+        } else {
+            bonuses = activeDepositGift.value.bonuses[0];
+        }
+
+        const attr = bonuses?.conditions.find((item) => {
             return item.field === "amount" && item.type === "min";
         });
 
