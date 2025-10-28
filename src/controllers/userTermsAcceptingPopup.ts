@@ -21,23 +21,26 @@ export function useUserTermsAcceptingPopup() {
         return userInfoStore.getUserInfo.auth_fields_missed?.includes("country");
     });
 
-    function runShowingTermsPopup() {
+    function runShowingTermsPopup(force: boolean = false) {
+        if (!isUserTermsAccepted.value) {
+            return;
+        }
+
         const userStatusesStore = useUserStatuses();
 
-        if (isUserTermsAccepted.value) {
-            if (userStatusesStore.isRegisteredViaSocialNetwork) {
-                const country = multilangStore.getUserGeo;
-
-                userInfoStore.updateAuthDetailsProviders({
-                    user: {
-                        terms_acceptance: true,
-                        ...(isUserCountryFieldMissing.value ? { country } : {}),
-                    },
-                });
-            } else {
-                showAcceptTermsPopup();
-            }
+        if (!userStatusesStore.isRegisteredViaSocialNetwork || force) {
+            showAcceptTermsPopup();
+            return;
         }
+
+        const country = multilangStore.getUserGeo;
+
+        userInfoStore.updateAuthDetailsProviders({
+            user: {
+                terms_acceptance: true,
+                ...(isUserCountryFieldMissing.value ? { country } : {}),
+            },
+        });
     }
 
     function showAcceptTermsPopup() {
@@ -46,6 +49,7 @@ export function useUserTermsAcceptingPopup() {
             component: supportPopup,
             mobileFriendly: true,
             blockCloseOverlay: true,
+            fullScreenMobile: true,
         });
     }
 
