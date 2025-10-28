@@ -45,7 +45,7 @@ export const useGiftsStore = defineStore("giftsStore", () => {
 
     const depositGifts = computed<IGiftDeposit[]>(() => {
         const localGifts = depositGiftsAll.value.filter((gift) => {
-            return gift.bonuses?.[0]?.type && !LOOTBOX_TYPE_GIFTS.includes(gift.bonuses[0].type);
+            return gift.bonuses?.[0]?.type && !LOOTBOX_TYPE_GIFTS?.includes(gift.bonuses[0].type);
         });
 
         if (additionalGift.value) {
