@@ -26,23 +26,13 @@ type JsonFields = {
     [key: string]: unknown;
 }
 
-interface ISeoMeta {
-    json?: string;
-    metaDescription: string;
-    metaTitle: string;
-    metaKeywords?: string;
-    content?: string;
-}
-
 export interface ICurrentPageMeta {
-    metaDescription?: string;
-    metaKeywords?: string;
-    metaTitle?: string;
-    json?: string;
-    mainContent?: string;
-    blocks?: string;
-    content?: string;
-
+    metaDescription: string;
+    metaKeywords: string;
+    metaTitle: string;
+    json: JsonFields;
+    mainContent: string;
+    blocks?: Record<string, unknown>;
 }
 
 export interface ICurrentPage {
@@ -51,7 +41,7 @@ export interface ICurrentPage {
     slug: string;
     title: string;
     meta: ICurrentPageMeta;
-    json: JsonFields;
+    json: Record<string, unknown>
 }
 
 export interface IStaticPage {
@@ -72,7 +62,7 @@ export class CurrentPage implements ICurrentPage {
     slug: string;
     title: string;
     contentMain: string;
-    json: JsonFields;
+    json: Record<string, unknown>;
     meta: ICurrentPageMeta;
 
     constructor(data: IPageItemCMS) {
