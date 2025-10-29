@@ -1,5 +1,6 @@
 import {
     ALL_LEVELS,
+    ID_CASHBOX_ONBOARD_DONE,
     ID_GROUP_FOR_MULTI_ACC,
     TEST_GROUP_ID,
 } from "@config/user-statuses";
@@ -78,6 +79,10 @@ export const useUserStatuses = defineStore("userStatuses", () => {
         return userManager.value;
     });
 
+    const isCashboxOnboardDone = computed(() => {
+        return getUserGroups.value.includes(ID_CASHBOX_ONBOARD_DONE);
+    });
+
     async function changeUserToGroup(groupForAdding?: IPlayerGroup, groupForRemoving?: IPlayerGroup) {
         await changePlayerGroup(groupForAdding, groupForRemoving);
 
@@ -116,6 +121,7 @@ export const useUserStatuses = defineStore("userStatuses", () => {
         isMultiAccount,
         isVip,
         isDiamond,
+        isCashboxOnboardDone,
         getUserManager,
         userVipStatus,
         userVipGroup,
