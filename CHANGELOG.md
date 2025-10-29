@@ -1,3 +1,14 @@
+## [1.42.1](https://github.com/upstars-global/unity-core-modules/compare/v1.42.0...v1.42.1) (2025-10-29)
+
+### ⏪ Reverts
+
+* Revert "fix(UN-1791) ([#243](https://github.com/upstars-global/unity-core-modules/issues/243))" ([#245](https://github.com/upstars-global/unity-core-modules/issues/245))
+ ([d6b0cf8](https://github.com/upstars-global/unity-core-modules/commit/d6b0cf89aa104ee8cf21baf9e622c32db7d1c3a3))
+
+
+
+    This reverts commit 2bae7157d1fee2649fabc4a456aabc9193747f8e.
+
 ## [1.42.0](https://github.com/upstars-global/unity-core-modules/compare/v1.41.2...v1.42.0) (2025-10-23)
 
 ### 🚀 Features
