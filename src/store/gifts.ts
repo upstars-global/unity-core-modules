@@ -113,6 +113,15 @@ export const useGiftsStore = defineStore("giftsStore", () => {
         return giftsAll.value.length;
     });
 
+
+    const activeDepositGiftGroupID = computed(() => {
+        if (activeDepositGift.value) {
+            return getDepositGiftGroupID(activeDepositGift.value);
+        }
+
+        return null;
+    });
+
     const activeDepositGiftMinDep = computed(() => {
         const { getUserCurrency } = storeToRefs(useUserInfo());
         const { getSubunitsToUnitsByCode } = useUserInfo();
@@ -153,6 +162,41 @@ export const useGiftsStore = defineStore("giftsStore", () => {
         return 0;
     });
 
+    const giftMatchInUserGroup = computed(() => {
+        return depositGifts.value.find((gift: IGiftDeposit) => {
+            // @ts-expect-error No overload matches this call.
+            if (userStatuses.getUserGroups.includes(getDepositGiftGroupID(gift))) {
+                return gift;
+            }
+        });
+    });
+
+    const giftMatchInUserGroupID = computed(() => {
+        if (giftMatchInUserGroup.value) {
+            return getDepositGiftGroupID(giftMatchInUserGroup.value);
+        }
+
+        return null;
+    });
+
+    function getDepositGiftGroupID(gift: IGiftDeposit) {
+        const conditionId = gift?.bonuses?.[0]?.conditions?.find((condition) => condition.field === "groups")?.value?.[0];
+        return conditionId || null;
+    };
+
+    function setActiveDepositGift(value: IGiftDeposit | null) {
+        activeDepositGift.value = value;
+    }
+
+    async function resetActiveDepositGift() {
+        if (activeDepositGiftGroupID.value) {
+            // @ts-expect-error No overload matches this call.
+            await userStatuses.changeUserToGroup(null, activeDepositGiftGroupID.value);
+            setActiveDepositGift(null);
+        }
+    }
+
+
     function setGiftsLoading(value: boolean): void {
         isLoadingGiftData.value = value;
     }
@@ -175,10 +219,6 @@ export const useGiftsStore = defineStore("giftsStore", () => {
 
     function setDepositGiftsAll(value: IGiftDeposit[]) {
         depositGiftsAll.value = value;
-    }
-
-    function setActiveDepositGift(value: IGiftDeposit) {
-        activeDepositGift.value = value;
     }
 
     function setRegistrationGiftsAll(value: IGiftDeposit[]) {
@@ -209,15 +249,12 @@ export const useGiftsStore = defineStore("giftsStore", () => {
         setGifts,
         setAdditionalGifts,
         setDepositGiftsAll,
-        setActiveDepositGift,
         setRegistrationGiftsAll,
         setFSGiftsAll,
 
         registrationGiftsAll,
         depositGiftsAll,
         depositGifts,
-        activeDepositGift,
-        activeDepositGiftMinDep,
 
         fsGiftsAll,
         fsGifts,
@@ -232,5 +269,14 @@ export const useGiftsStore = defineStore("giftsStore", () => {
 
         isLoadingGiftData,
         setGiftsLoading,
+
+        activeDepositGift,
+        activeDepositGiftGroupID,
+        activeDepositGiftMinDep,
+        giftMatchInUserGroup,
+        giftMatchInUserGroupID,
+        getDepositGiftGroupID,
+        setActiveDepositGift,
+        resetActiveDepositGift,
     };
 });
