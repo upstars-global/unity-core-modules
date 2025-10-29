@@ -22,7 +22,7 @@ export const useManagePages = defineStore("managePages", () => {
             return isUserTester.value;
         }
 
-        return pageConfiguration.value ? pageConfiguration.value[slug] : false;
+        return (pageConfiguration.value && pageConfiguration.value[slug]) || false;
     }
 
     return {

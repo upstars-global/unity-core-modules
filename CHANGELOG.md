@@ -1,3 +1,50 @@
+## [1.42.2](https://github.com/upstars-global/unity-core-modules/compare/v1.42.1...v1.42.2) (2025-10-29)
+
+### 🐛 Bug Fixes
+
+* **UN-1791:** execute cms store request once and cache response  ([#246](https://github.com/upstars-global/unity-core-modules/issues/246))
+ ([96f0bca](https://github.com/upstars-global/unity-core-modules/commit/96f0bcadfc095909783f0988c49d8bdeb53474ed))
+
+, closes [#243](https://github.com/upstars-global/unity-core-modules/issues/) [#245](https://github.com/upstars-global/unity-core-modules/issues/)
+
+## [1.42.1](https://github.com/upstars-global/unity-core-modules/compare/v1.42.0...v1.42.1) (2025-10-29)
+
+### ⏪ Reverts
+
+* Revert "fix(UN-1791) ([#243](https://github.com/upstars-global/unity-core-modules/issues/243))" ([#245](https://github.com/upstars-global/unity-core-modules/issues/245))
+ ([d6b0cf8](https://github.com/upstars-global/unity-core-modules/commit/d6b0cf89aa104ee8cf21baf9e622c32db7d1c3a3))
+
+
+
+    This reverts commit 2bae7157d1fee2649fabc4a456aabc9193747f8e.
+
+## [1.42.0](https://github.com/upstars-global/unity-core-modules/compare/v1.41.2...v1.42.0) (2025-10-23)
+
+### 🚀 Features
+
+* move requests from levelsStore to service and cover it with tests ([#239](https://github.com/upstars-global/unity-core-modules/issues/239))
+ ([d9f6dc3](https://github.com/upstars-global/unity-core-modules/commit/d9f6dc343c9718b20ba00ec984b02eb3fb4b1b6e))
+
+
+
+    * refactor: move requests from levelsStore to service and cover it with tests
+
+    * fix: paths
+
+## [1.41.2](https://github.com/upstars-global/unity-core-modules/compare/v1.41.1...v1.41.2) (2025-10-22)
+
+### 🧪 Testing
+
+* cover notices store with tests ([#241](https://github.com/upstars-global/unity-core-modules/issues/241))
+ ([80191d0](https://github.com/upstars-global/unity-core-modules/commit/80191d0e1241cdb6a15e7cca68ca106e23d54547))
+
+## [1.41.1](https://github.com/upstars-global/unity-core-modules/compare/v1.41.0...v1.41.1) (2025-10-21)
+
+### 🧪 Testing
+
+* cover useManagePages store with tests ([#240](https://github.com/upstars-global/unity-core-modules/issues/240))
+ ([deec804](https://github.com/upstars-global/unity-core-modules/commit/deec8040627e8605d6759f51908b8ffb7442a134))
+
 ## [1.41.0](https://github.com/upstars-global/unity-core-modules/compare/v1.40.0...v1.41.0) (2025-10-21)
 
 ### 🚀 Features

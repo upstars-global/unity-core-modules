@@ -45,7 +45,7 @@ export interface INotificationContent {
 
 export interface INotification {
     id: string | number;
-    type: WSNotificationName;
+    type: WSNotificationName | WSBettingNotificationName;
     identifier?: number;
     title?: TranslateResult | string | undefined;
     text?: TranslateResult | string | undefined;
