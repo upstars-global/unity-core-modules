@@ -1,3 +1,12 @@
+## [1.42.2](https://github.com/upstars-global/unity-core-modules/compare/v1.42.1...v1.42.2) (2025-10-29)
+
+### 🐛 Bug Fixes
+
+* **UN-1791:** execute cms store request once and cache response  ([#246](https://github.com/upstars-global/unity-core-modules/issues/246))
+ ([96f0bca](https://github.com/upstars-global/unity-core-modules/commit/96f0bcadfc095909783f0988c49d8bdeb53474ed))
+
+, closes [#243](https://github.com/upstars-global/unity-core-modules/issues/) [#245](https://github.com/upstars-global/unity-core-modules/issues/)
+
 ## [1.42.1](https://github.com/upstars-global/unity-core-modules/compare/v1.42.0...v1.42.1) (2025-10-29)
 
 ### ⏪ Reverts
