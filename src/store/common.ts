@@ -4,7 +4,6 @@ import { defineStore, type Pinia, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
 import { isValidCurrency } from "../helpers/currencyOfCountry";
-import { isExistData } from "../helpers/isExistData";
 import { getUserAgentPlatform, type IPlatformState } from "../helpers/userAgentPlatform";
 import { CurrencyData } from "../models/cashbox";
 import type { IPlayerFieldsInfo } from "../models/common";
@@ -90,12 +89,11 @@ export const useCommon = defineStore("common", () => {
     const countries = ref<ICountries[]>([]);
 
     async function loadCountries({ reload } = { reload: false }) {
-        if (!reload && isExistData(countries.value)) {
+        if (!reload && countries.value.length) {
             return countries.value;
         }
 
         const data = await loadCountriesReq();
-
         if (data) {
             countries.value = data;
         }
@@ -130,10 +128,6 @@ export const useCommon = defineStore("common", () => {
     }
 
     async function loadCurrencies() {
-        if (isExistData(currencies.value)) {
-            return;
-        }
-
         const data = await loadCurrenciesReq();
         if (data) {
             currencies.value = data.filter(({ code }) => enableCurrencies.value.includes(code));
@@ -159,18 +153,12 @@ export const useCommon = defineStore("common", () => {
     const infoProject = ref<IProjectInfo>();
 
     async function loadProjectInfo(): Promise<void> {
-        if (isExistData(infoProject.value)) {
-            return;
-        }
         infoProject.value = await loadProjectInfoReq();
     }
 
     const cryptoExchangeRates = ref<ICryptoExchangeRates>();
 
     async function loadCryptoExchangeRates(): Promise<void> {
-        if (isExistData(cryptoExchangeRates.value)) {
-            return;
-        }
         cryptoExchangeRates.value = await loadCryptoExchangeRatesReq();
     }
 

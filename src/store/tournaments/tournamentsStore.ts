@@ -4,7 +4,6 @@ import { computed, ref } from "vue";
 
 import { log } from "../../controllers/Logger";
 import { isAchievement } from "../../helpers/achievementHelpers";
-import { isExistData } from "../../helpers/isExistData";
 import { parseJson } from "../../helpers/parseJson";
 import { promoFilterAndSettings, statusForTournament } from "../../helpers/promoHelpers";
 import { isQuest } from "../../helpers/questHelpers";
@@ -138,10 +137,6 @@ export const useTournamentsStore = defineStore("tournamentsStore", () => {
     });
 
     async function loadTournaments(): Promise<ITournamentsList> {
-        if (isExistData(tournamentsList.value)) {
-            return tournamentsList.value;
-        }
-
         const tournamentsResponse = await loadTournamentsListReq();
         tournamentsList.value = tournamentsResponse
             .filter(({ frontend_identifier }) => frontend_identifier !== "nonvisible");

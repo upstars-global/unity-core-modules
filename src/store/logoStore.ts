@@ -3,7 +3,6 @@ import logoMob from "@theme/images/BrandImages/logo-mob.svg";
 import { defineStore, type Pinia, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
-import { isExistData } from "../helpers/isExistData";
 import { ILogoConfig } from "../services/api/DTO/logo";
 import { loadLogoConfigReq } from "../services/api/requests/logo";
 import { useRootStore } from "./root";
@@ -24,7 +23,7 @@ export const useLogoStore = defineStore("logoStore", () => {
         return getIsLogged.value && isMobile.value ? getMobileLogoSrc.value : getFullLogoSrc.value;
     });
     async function loadLogoConfig() {
-        if (isExistData(logoConfig.value)) {
+        if (logoConfig.value) {
             return;
         }
         logoConfig.value = await loadLogoConfigReq();
