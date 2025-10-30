@@ -1,3 +1,14 @@
+## [1.43.0](https://github.com/upstars-global/unity-core-modules/compare/v1.42.2...v1.43.0) (2025-10-30)
+
+### 🚀 Features
+
+* Un 113 ([#238](https://github.com/upstars-global/unity-core-modules/issues/238))
+ ([55b1b5c](https://github.com/upstars-global/unity-core-modules/commit/55b1b5c79fef968df792ee6e2d62a66bd9c594a9))
+
+
+
+    * UN-113 WIP ensureStoreData
+
 ## [1.42.2](https://github.com/upstars-global/unity-core-modules/compare/v1.42.1...v1.42.2) (2025-10-29)
 
 ### 🐛 Bug Fixes
