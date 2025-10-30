@@ -40,9 +40,29 @@ export interface IGiftDeposit {
         {
             title: string;
             type: string;
-            conditions: [];
+            conditions: [
+                {
+                    field: string;
+                    type: string;
+                    value: [
+                        {
+                            currency: string;
+                            amount_cents: number;
+                        }
+                    ];
+                }
+            ];
             attributes: [];
             result_bonus: [];
+            boxes?: [
+                {
+                    bonuses: [
+                        {
+                            conditions: [];
+                        }
+                    ];
+                }
+            ];
         }
     ];
     group_key?: string;
