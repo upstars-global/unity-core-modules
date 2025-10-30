@@ -52,7 +52,6 @@ export const useLotteriesStore = defineStore("lotteriesStore", () => {
     }
 
     return {
-        lotteriesList,
         lotteriesStatuses,
         setLotteriesStatuses,
         currentLottery,

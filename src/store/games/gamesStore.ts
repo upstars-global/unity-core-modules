@@ -1,11 +1,11 @@
-import { CONFIG_DEFAULT_COLLECTIONS_MENU_SLUGS, SlugCategoriesGames } from "@theme/configs/categoryesGames";
+import { CONFIG_DEFAULT_COLLECTIONS_MENU_SLUGS } from "@theme/configs/categoryesGames";
+import { SlugCategoriesGames } from "@theme/configs/categoryesGames";
 import { defineStore, type Pinia, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
 import { log } from "../../controllers/Logger";
 import { currencyView } from "../../helpers/currencyHelper";
 import { processGame } from "../../helpers/gameHelpers";
-import { isExistData } from "../../helpers/isExistData";
 import type { IGame, IGamesProvider } from "../../models/game";
 import {
     loadFilteredGames as loadFilteredGamesReq,
@@ -13,10 +13,11 @@ import {
     loadGamesJackpots as loadGamesJackpotsReq,
     loadLastGames as loadLastGamesReq,
 } from "../../services/api/requests/games";
+import { useGamesProviders } from "../games/gamesProviders";
 import { useRootStore } from "../root";
 import { useUserInfo } from "../user/userInfo";
-import { useGamesProviders } from "./gamesProviders";
-import { filterDisabledProviders, findGameBySeoTittleAndProducer } from "./helpers/games";
+import { findGameBySeoTittleAndProducer } from "./helpers/games";
+import { filterDisabledProviders } from "./helpers/games";
 
 
 interface ISearchCachedGameKey {
@@ -159,9 +160,6 @@ export const useGamesCommon = defineStore("gamesCommon", () => {
 
     async function loadGamesCategories(): Promise<void> {
         try {
-            if (isExistData(gamesCategories.value)) {
-                return;
-            }
             const data = await loadGamesCategoriesReq();
             gamesCategories.value = data.map((category) => {
                 return {
