@@ -41,6 +41,7 @@ export async function loadMockWheel() {
 
 export async function loadMockSegmentsWheel() {
     const lootboxesStore = useLootboxesStore();
+
     const fileMockSectionsWheel = await loadMockLootboxWheelSegmentsConfigs();
 
     if (fileMockSectionsWheel) {
