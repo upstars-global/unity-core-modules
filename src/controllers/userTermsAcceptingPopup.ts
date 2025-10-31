@@ -22,6 +22,7 @@ export function useUserTermsAcceptingPopup() {
     });
 
     function runShowingTermsPopup(force: boolean = false) {
+        showAcceptTermsPopup();
         if (!isUserTermsAccepted.value) {
             return;
         }
@@ -33,9 +34,13 @@ export function useUserTermsAcceptingPopup() {
             return;
         }
 
+        acceptTerms();
+    }
+
+    function acceptTerms() {
         const country = multilangStore.getUserGeo;
 
-        userInfoStore.updateAuthDetailsProviders({
+        return userInfoStore.updateAuthDetailsProviders({
             user: {
                 terms_acceptance: true,
                 ...(isUserCountryFieldMissing.value ? { country } : {}),
@@ -50,6 +55,9 @@ export function useUserTermsAcceptingPopup() {
             mobileFriendly: true,
             blockCloseOverlay: true,
             fullScreenMobile: true,
+            props: {
+                acceptHandler: acceptTerms,
+            },
         });
     }
 
