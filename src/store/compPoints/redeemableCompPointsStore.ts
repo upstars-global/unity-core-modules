@@ -1,3 +1,4 @@
+import { CoinShopPageSlug } from "@config/compPoints";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
@@ -26,7 +27,6 @@ export function checkHasAvailableCards(list: IRedeemableCards[] | undefined, isL
 }
 
 export const useRedeemableCompPointsStore = defineStore("redeemableCompPointsStore", () => {
-    const pageSlug: string = "rocket-mart";
     const rates = ref<Record<string, IRedeemableCards[]>>({});
     const { getIsLogged, getUserCurrency } = storeToRefs(useUserInfo());
     const { currentStaticPage } = storeToRefs(useCMS());
@@ -46,35 +46,27 @@ export const useRedeemableCompPointsStore = defineStore("redeemableCompPointsSto
             return obj;
         }, {} as Record<string, boolean>);
     });
+    const getPageContent = computed(() => {
+        return currentStaticPage.value?.meta.json || currentStaticPage.value?.slug === CoinShopPageSlug ?
+            currentStaticPage.value?.meta.json
+            : {};
+    });
     const getViewImages = computed(() => {
-        if (!currentStaticPage.value?.meta.json) {
-            return {};
-        }
-
-        return currentStaticPage.value.meta.json.viewImages || {};
+        return getPageContent.value?.viewImages || {};
     });
     const getPromos = computed(() => {
-        if (!currentStaticPage.value?.meta.json || currentStaticPage.value.slug !== pageSlug) {
-            return;
-        }
-
-        return currentStaticPage.value.meta.json.promo || null;
+        return getPageContent.value?.promo || null;
     });
     const getGameTitles = computed(() => {
-        if (!currentStaticPage.value?.meta.json || currentStaticPage.value.slug !== pageSlug) {
-            return;
-        }
-
-        return currentStaticPage.value.meta.json.gamesTitles || {};
+        return getPageContent.value?.gamesTitles || {};
     });
     const getMaxWin = computed(() => {
-        if (!currentStaticPage.value?.meta.json ||
-            currentStaticPage.value.slug !== pageSlug ||
-            !currentStaticPage.value.meta.json.maxWin) {
+        if (!getPageContent.value) {
             return "";
         }
 
-        const maxWinByUserCurrency = currentStaticPage.value.meta.json.maxWin[getUserCurrency.value as Currencies];
+        const maxWin = getPageContent.value?.maxWin;
+        const maxWinByUserCurrency = maxWin[getUserCurrency.value as Currencies];
         const data = {
             maxMin: maxWinByUserCurrency || currentStaticPage.value.meta.json.maxWin[Currencies.EUR],
             currency: maxWinByUserCurrency ? getUserCurrency.value : Currencies.EUR,
@@ -83,25 +75,13 @@ export const useRedeemableCompPointsStore = defineStore("redeemableCompPointsSto
         return `${data.maxMin} ${data.currency}`;
     });
     const getFreeSpinsWager = computed(() => {
-        if (!currentStaticPage.value?.meta.json || currentStaticPage.value.slug !== pageSlug) {
-            return {};
-        }
-
-        return currentStaticPage.value.meta.json.freeSpinsWager || {};
+        return getPageContent.value?.freeSpinsWager || {};
     });
     const getSpinRate = computed(() => {
-        if (!currentStaticPage.value?.meta.json || currentStaticPage.value.slug !== pageSlug) {
-            return {};
-        }
-
-        return currentStaticPage.value.meta.json.spinRate || {};
+        return getPageContent.value?.spinRate || {};
     });
     const getMockCards = computed(() => {
-        if (!currentStaticPage.value?.meta.json || currentStaticPage.value.slug !== pageSlug) {
-            return null;
-        }
-
-        return currentStaticPage.value.meta.json.cards || null;
+        return getPageContent.value?.cards || null;
     });
     const getRates = computed(() => (getIsLogged.value ? rates.value : getMockCards.value));
 
