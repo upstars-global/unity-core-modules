@@ -19,15 +19,8 @@ function findGameBySeoTittleAndProducerWithDuplicate(
     const rootStore = useRootStore();
     return gamesCollection
         .filter((game: IGame) => {
-            if (game.devices.length > 1) {
-                return true;
-            }
-
-            if (game.devices[0] === "mobile") {
-                return rootStore.isMobile;
-            }
-
-            return true;
+            return game.devices.length > 1 ||
+                game.devices.includes(rootStore.isMobile ? "mobile" : "desktop");
         })
         .find(({ seo_title: seoTitleItem, provider: providerItem }) => {
             return producer === providerItem && seoTitleItem === seoTitle;
