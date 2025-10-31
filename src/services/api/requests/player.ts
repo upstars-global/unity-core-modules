@@ -2,6 +2,7 @@ import { v4 as uuid } from "uuid";
 
 import { log } from "../../../controllers/Logger";
 import { IAuthProvider, IUserAuthProvider } from "../../../models/authProviders";
+import { CurrencyCode, IPaymentHistoryPayload, PaymentType } from "../../../models/cashbox";
 import { type IUserInfo } from "../../../models/user";
 import { IPlayerPayment } from "../DTO/cashbox";
 import { BettingPlayerSettingsDTO, IPlayerStats, ISubscriptions, IUserAccount, IUserSettings } from "../DTO/playerDTO";
@@ -24,16 +25,39 @@ export async function addPlayerToGroup(groupForAdding: string | number) {
     }
 }
 
-export async function loadPlayerPayments() {
+const PAYMENTS_PAGE_SIZE = 20;
+
+interface LoadPlayerPaymentsParams {
+    type?: string;
+    currency?: string;
+    page?: number;
+}
+
+export async function loadPlayerPayments({ type = "", currency = "", page = 1 }: LoadPlayerPaymentsParams = {}) {
     try {
-        const { data } = await http().get<IPlayerPayment[]>(
-            "/api/player/payments");
-        return data as IPlayerPayment[];
+        const filter: Record<string, string> = {};
+        if (currency) {
+            filter.currency = currency;
+        }
+        if (type) {
+            filter.type = type;
+        }
+
+        const payload = {
+            page,
+            page_size: PAYMENTS_PAGE_SIZE,
+            ...(Object.keys(filter).length && { filter }),
+        };
+        const { data } = await http().post<IPlayerPayment[]>(
+            "/api/player/payments/with_pages", payload);
+        return data?.data as IPlayerPayment[];
     } catch (err) {
         log.error("LOAD_PAYMENTS_HISTORY_ERROR", err);
         throw err;
     }
 }
+
+export { PAYMENTS_PAGE_SIZE };
 
 export async function cancelWithdrawRequestByID(id: number) {
     try {

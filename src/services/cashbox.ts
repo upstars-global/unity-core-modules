@@ -5,7 +5,7 @@ import {
 import { storeToRefs } from "pinia";
 
 import { log } from "../controllers/Logger";
-import type { ICoinspaidAddresses } from "../models/cashbox";
+import { ICoinspaidAddresses, IPaymentHistoryPayload, PaymentType } from "../models/cashbox";
 import { Currencies } from "../models/enums/currencies";
 import { IPayloadMethodFields } from "../models/PaymentsLib";
 import { EventBus } from "../plugins/EventBus";
@@ -14,7 +14,7 @@ import { useCommon } from "../store/common";
 import { useUserBalance } from "../store/user/userBalance";
 import { useUserInfo } from "../store/user/userInfo";
 import { ActionsTransaction } from "./api/DTO/cashbox";
-import { cancelWithdrawRequestByID, loadPlayerPayments } from "./api/requests/player";
+import { cancelWithdrawRequestByID, loadPlayerPayments, PAYMENTS_PAGE_SIZE } from "./api/requests/player";
 import { usePaymentsAPI } from "./paymentsAPI";
 
 export function useCashBoxService() {
@@ -25,11 +25,11 @@ export function useCashBoxService() {
         historyPayouts,
         paymentSystems,
         payoutSystems,
+        currentPage,
     } = storeToRefs(useCashboxStore());
     const { isExistPaymentsAPI, getPaymentMethods, resetCache, getPaymentMethodFields } = usePaymentsAPI();
 
-
-    async function loadUserCoinspaidAddresses(): Promise<ICoinspaidAddresses> { // TODO: maybe remove?!
+    async function loadUserCoinspaidAddresses(): Promise<ICoinspaidAddresses> {
         if (!isExistPaymentsAPI()) {
             return;
         }
@@ -67,25 +67,26 @@ export function useCashBoxService() {
         }
     }
 
-    async function loadPlayerPaymentsHistory({ reload = false }: { reload: boolean } = {}): Promise<void> {
-        if (!paymentHistory.value.length || reload) {
-            paymentHistory.value = await loadPlayerPayments();
+    async function loadPlayerPaymentsHistory({ type = "", currency = "", page = 1 } = {}): Promise<void> {
+        const newPayments = await loadPlayerPayments({ type, currency, page });
 
-            historyDeposits.value = paymentHistory.value.filter((item) => {
-                return item.action === ActionsTransaction.DEPOSIT;
-            });
-            historyPayouts.value = paymentHistory.value.filter((item) => {
-                return item.action === ActionsTransaction.CASHOUT;
-            });
-        }
+        currentPage.value[type] = page;
+        paymentHistory.value = page === 1 ? newPayments : [ ...paymentHistory.value, ...newPayments ];
+
+        historyDeposits.value = paymentHistory.value.filter((item) => item.action === ActionsTransaction.DEPOSIT);
+        historyPayouts.value = paymentHistory.value.filter((item) => item.action === ActionsTransaction.CASHOUT);
+    }
+
+    async function loadMorePayments({ type = "", currency = "" } = {}): Promise<void> {
+        await loadPlayerPaymentsHistory({ type, currency, page: currentPage.value[type] + 1 });
     }
 
     async function removeWithdrawRequestById(id: number): Promise<void> {
         const { loadUserBalance } = useUserBalance();
 
         await cancelWithdrawRequestByID(id);
-        loadPlayerPaymentsHistory({ reload: true });
-        loadUserBalance();
+        await loadPlayerPaymentsHistory();
+        await loadUserBalance();
     }
 
     async function getPaymentsApiMethods(currencyCode: Currencies, counter = 0) {
@@ -131,8 +132,10 @@ export function useCashBoxService() {
     return {
         loadUserCoinspaidAddresses,
         loadPlayerPaymentsHistory,
+        loadMorePayments,
         removeWithdrawRequestById,
         getPaymentsApiMethods,
         loadPaymentMethods,
+        PAYMENTS_PAGE_SIZE,
     };
 }

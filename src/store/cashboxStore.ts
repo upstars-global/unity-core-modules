@@ -37,6 +37,12 @@ export const useCashboxStore = defineStore("cashboxStore", () => {
     const payoutSystems = ref<IPaymentsMethod[]>([]);
     const coinspaidAddresses = ref<ICoinspaidAddresses>();
 
+    const currentPage = ref<Record<string, number>>({
+        "": 1,
+        "deposit": 1,
+        "cashout": 1,
+    });
+
     const getWithdrawRequests = computed<IPlayerPayment[]>(() => {
         return historyPayouts.value.filter((item) => {
             return item.recallable;
@@ -82,6 +88,7 @@ export const useCashboxStore = defineStore("cashboxStore", () => {
         paymentSystems,
         payoutSystems,
         coinspaidAddresses,
+        currentPage,
         getPaymentSystems,
         getPayoutSystems,
         getSavedMethodsByType,
