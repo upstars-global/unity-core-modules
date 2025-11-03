@@ -22,7 +22,6 @@ export function useUserTermsAcceptingPopup() {
     });
 
     function runShowingTermsPopup(force: boolean = false) {
-        showAcceptTermsPopup();
         if (!isUserTermsAccepted.value) {
             return;
         }
