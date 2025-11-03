@@ -2,11 +2,17 @@ import { v4 as uuid } from "uuid";
 
 import { log } from "../../../controllers/Logger";
 import { IAuthProvider, IUserAuthProvider } from "../../../models/authProviders";
-import { CurrencyCode, IPaymentHistoryPayload, PaymentType } from "../../../models/cashbox";
 import { type IUserInfo } from "../../../models/user";
 import { IPlayerPayment } from "../DTO/cashbox";
 import { BettingPlayerSettingsDTO, IPlayerStats, ISubscriptions, IUserAccount, IUserSettings } from "../DTO/playerDTO";
 import { http } from "../http";
+
+export interface LoadPlayerPaymentsParams {
+    type?: string;
+    currency?: string;
+    page?: number;
+    pageSize?: number;
+}
 
 export async function addPlayerToGroup(groupForAdding: string | number) {
     try {
@@ -25,42 +31,39 @@ export async function addPlayerToGroup(groupForAdding: string | number) {
     }
 }
 
-const PAYMENTS_PAGE_SIZE = 20;
-
-interface LoadPlayerPaymentsParams {
-    type?: string;
-    currency?: string;
-    page?: number;
-    pageSize?: number;
+export interface PlayerPaymentsResponse {
+    items: IPlayerPayment[];
+    pagination: {
+        page: number;
+        per_page: number;
+        total_count: number;
+    };
 }
 
 export async function loadPlayerPayments(
-    { type = "", currency = "", page = 1, pageSize = PAYMENTS_PAGE_SIZE }: LoadPlayerPaymentsParams = {},
-) {
+    { type = "", currency = "", page = 1, pageSize = 20 }: LoadPlayerPaymentsParams = {},
+): Promise<PlayerPaymentsResponse> {
     try {
-        const filter: Record<string, string> = {};
-        if (currency) {
-            filter.currency = currency;
-        }
-        if (type) {
-            filter.type = type;
-        }
-
+        const filter = {
+            ...(currency && { currency }),
+            ...(type && { type }),
+        };
         const payload = {
             page,
             page_size: pageSize,
             ...(Object.keys(filter).length && { filter }),
         };
-        const { data } = await http().post<IPlayerPayment[]>(
+        const { data } = await http().post(
             "/api/player/payments/with_pages", payload);
-        return data?.data as IPlayerPayment[];
+        return {
+            items: data?.data || [],
+            pagination: data?.pagination || { page: 1, per_page: pageSize, total_count: 0 },
+        };
     } catch (err) {
         log.error("LOAD_PAYMENTS_HISTORY_ERROR", err);
         throw err;
     }
 }
-
-export { PAYMENTS_PAGE_SIZE };
 
 export async function cancelWithdrawRequestByID(id: number) {
     try {
