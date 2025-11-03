@@ -17,6 +17,14 @@ import { ActionsTransaction } from "./api/DTO/cashbox";
 import { cancelWithdrawRequestByID, loadPlayerPayments, PAYMENTS_PAGE_SIZE } from "./api/requests/player";
 import { usePaymentsAPI } from "./paymentsAPI";
 
+interface LoadPaymentsHistoryParams {
+    type?: string;
+    currency?: string;
+    page?: number;
+    pageSize?: number;
+    updateStore?: boolean;
+}
+
 export function useCashBoxService() {
     const {
         coinspaidAddresses,
@@ -67,14 +75,21 @@ export function useCashBoxService() {
         }
     }
 
-    async function loadPlayerPaymentsHistory({ type = "", currency = "", page = 1 } = {}): Promise<void> {
-        const newPayments = await loadPlayerPayments({ type, currency, page });
+    async function loadPlayerPaymentsHistory(
+        { type = "", currency = "", page = 1, pageSize = undefined, updateStore = true }: LoadPaymentsHistoryParams = {},
+    ) {
+        const newPayments = await loadPlayerPayments({ type, currency, page, pageSize });
+
+        if (!updateStore) {
+            return newPayments;
+        }
 
         currentPage.value[type] = page;
         paymentHistory.value = page === 1 ? newPayments : [ ...paymentHistory.value, ...newPayments ];
-
         historyDeposits.value = paymentHistory.value.filter((item) => item.action === ActionsTransaction.DEPOSIT);
         historyPayouts.value = paymentHistory.value.filter((item) => item.action === ActionsTransaction.CASHOUT);
+
+        return newPayments;
     }
 
     async function loadMorePayments({ type = "", currency = "" } = {}): Promise<void> {

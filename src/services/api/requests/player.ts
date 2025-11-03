@@ -31,9 +31,12 @@ interface LoadPlayerPaymentsParams {
     type?: string;
     currency?: string;
     page?: number;
+    pageSize?: number;
 }
 
-export async function loadPlayerPayments({ type = "", currency = "", page = 1 }: LoadPlayerPaymentsParams = {}) {
+export async function loadPlayerPayments(
+    { type = "", currency = "", page = 1, pageSize = PAYMENTS_PAGE_SIZE }: LoadPlayerPaymentsParams = {},
+) {
     try {
         const filter: Record<string, string> = {};
         if (currency) {
@@ -45,7 +48,7 @@ export async function loadPlayerPayments({ type = "", currency = "", page = 1 }:
 
         const payload = {
             page,
-            page_size: PAYMENTS_PAGE_SIZE,
+            page_size: pageSize,
             ...(Object.keys(filter).length && { filter }),
         };
         const { data } = await http().post<IPlayerPayment[]>(
