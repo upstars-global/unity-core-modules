@@ -25,6 +25,7 @@ export function useCashBoxService() {
         historyPayouts,
         paymentSystems,
         payoutSystems,
+        hasMorePages,
     } = storeToRefs(useCashboxStore());
     const { isExistPaymentsAPI, getPaymentMethods, resetCache, getPaymentMethodFields } = usePaymentsAPI();
 
@@ -68,9 +69,9 @@ export function useCashBoxService() {
     }
 
     async function loadPlayerPaymentsHistory(
-        { type = "", page = 1 }: { type?: string; page?: number } = {},
+        { type = "", page = 1, pageSize }: { type?: string; page?: number; pageSize?: number } = {},
     ): Promise<{ hasMore: boolean }> {
-        const { items, pagination } = await loadPlayerPayments({ type, page });
+        const { items, pagination } = await loadPlayerPayments({ type, page, pageSize });
         const isFirstPage = page === 1;
 
         if (type === ActionsTransaction.DEPOSIT) {
@@ -79,16 +80,13 @@ export function useCashBoxService() {
             historyPayouts.value = isFirstPage ? items : [ ...historyPayouts.value, ...items ];
         } else {
             paymentHistory.value = isFirstPage ? items : [ ...paymentHistory.value, ...items ];
-            historyDeposits.value = paymentHistory.value.filter((item) => {
-                return item.action === ActionsTransaction.DEPOSIT;
-            });
-            historyPayouts.value = paymentHistory.value.filter((item) => {
-                return item.action === ActionsTransaction.CASHOUT;
-            });
+            historyDeposits.value = paymentHistory.value.filter((item) => item.action === ActionsTransaction.DEPOSIT);
+            historyPayouts.value = paymentHistory.value.filter((item) => item.action === ActionsTransaction.CASHOUT);
         }
 
-        const totalLoaded = pagination.page * pagination.per_page;
-        return { hasMore: totalLoaded < pagination.total_count };
+        const hasMore = pagination.page * pagination.per_page < pagination.total_count;
+        hasMorePages.value[type] = hasMore;
+        return { hasMore };
     }
 
     async function removeWithdrawRequestById(id: number): Promise<void> {

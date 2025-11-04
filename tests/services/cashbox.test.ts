@@ -159,6 +159,7 @@ describe("useCashBoxService", () => {
                 historyPayouts: ref([]),
                 paymentSystems: ref([]),
                 payoutSystems: ref(),
+                hasMorePages: ref({}),
             });
         });
 
@@ -304,6 +305,7 @@ describe("useCashBoxService", () => {
                 historyPayouts: ref([]),
                 paymentSystems: ref([]),
                 payoutSystems: ref(),
+                hasMorePages: ref({}),
             });
         });
         it("calls cancelWithdrawRequestByID and reloads user balance", async () => {
