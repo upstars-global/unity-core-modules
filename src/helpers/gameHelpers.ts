@@ -5,8 +5,7 @@ import featureFlags from "@theme/configs/featureFlags";
 import { log } from "../controllers/Logger";
 import type { IGame } from "../models/game";
 import { loadRandomGame } from "../services/api/requests/games";
-import { useGamesProviders } from "../store/games/gamesProviders";
-import { filterDisabledProviders } from "../store/games/helpers/games";
+import { filterGames } from "../store/games/helpers/games";
 
 interface IGameBadge {
     [key: string]: string;
@@ -61,12 +60,10 @@ export interface IParamsUrlGame {
 
 let randomGameCounter = 0;
 export async function getRandomGame(): Promise<IGame | undefined> {
-    const { disabledGamesProviders } = useGamesProviders();
-
     const randomGame = await loadRandomGame();
     randomGameCounter++;
 
-    const isValidRandomGame = filterDisabledProviders([ randomGame ], disabledGamesProviders)?.length;
+    const isValidRandomGame = filterGames([ randomGame ])?.length;
 
     if (isValidRandomGame) {
         randomGameCounter = 0;
