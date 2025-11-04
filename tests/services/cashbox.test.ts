@@ -144,7 +144,7 @@ vi.mock("../../src/services/api/requests/player", () => ({
     cancelWithdrawRequestByID: vi.fn(),
     loadPlayerPayments: vi.fn(() => Promise.resolve({
         items: [ playerPaymentTemplate ],
-        pagination: { page: 1, per_page: 20, total_count: 1 },
+        pagination: { page: 1, per_page: 50, total_count: 1 },
     })),
 }));
 

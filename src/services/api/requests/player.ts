@@ -41,7 +41,7 @@ export interface PlayerPaymentsResponse {
 }
 
 export async function loadPlayerPayments(
-    { type = "", currency = "", page = 1, pageSize = 20 }: LoadPlayerPaymentsParams = {},
+    { type = "", currency = "", page = 1, pageSize = 50 }: LoadPlayerPaymentsParams = {},
 ): Promise<PlayerPaymentsResponse> {
     try {
         const filter = {
