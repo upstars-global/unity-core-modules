@@ -155,6 +155,8 @@ export const useGiftsStore = defineStore("giftsStore", () => {
                     valueAttr.currency,
                     null,
                     getSubunitsToUnitsByCode(valueAttr.currency as Currencies),
+                    8,
+                    false,
                 );
             }
         }
