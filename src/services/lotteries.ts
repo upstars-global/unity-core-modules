@@ -1,20 +1,25 @@
 import { storeToRefs } from "pinia";
 
+import { isExistData } from "../helpers/isExistData";
+import { useLotteriesStore } from "../store/lotteries";
 import {
     getLotteryByIDReq,
     getLotteryStatusByIDReq,
     loadLotteriesListReq,
     loadLotteriesStatusesReq,
-} from "../services/api/requests/lotteries";
-import { useLotteriesStore } from "../store/lotteries";
+} from "./api/requests/lotteries";
 
 export async function loadLotteriesList() {
-    const { setLotteriesList } = useLotteriesStore();
+    const lotteriesStore = useLotteriesStore();
+
+    if (isExistData(lotteriesStore.lotteriesList)) {
+        return;
+    }
 
     const data = await loadLotteriesListReq();
 
     if (data) {
-        setLotteriesList(data);
+        lotteriesStore.setLotteriesList(data);
     }
 }
 
