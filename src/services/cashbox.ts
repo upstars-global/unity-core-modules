@@ -69,8 +69,9 @@ export function useCashBoxService() {
     }
 
     async function loadPlayerPaymentsHistory(
-        { type = "", page = 1, pageSize = 20 }: { type?: string; page?: number; pageSize?: number } = {},
+        payload: { type?: string; page?: number; pageSize?: number } = {},
     ): Promise<{ hasMore: boolean }> {
+        const { type = "", page = 1, pageSize = 20 } = payload;
         const { items, pagination } = await loadPlayerPayments({ type, page, pageSize });
         const isFirstPage = page === 1;
 
