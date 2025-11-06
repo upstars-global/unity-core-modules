@@ -1,3 +1,10 @@
+## [1.44.2](https://github.com/upstars-global/unity-core-modules/compare/v1.44.1...v1.44.2) (2025-11-06)
+
+### 🐛 Bug Fixes
+
+* UN-1874 fix disabled provider config ([#254](https://github.com/upstars-global/unity-core-modules/issues/254))
+ ([1f52704](https://github.com/upstars-global/unity-core-modules/commit/1f527041a35e6a4912d4f89b27e205e3c657e48c))
+
 ## [1.44.1](https://github.com/upstars-global/unity-core-modules/compare/v1.44.0...v1.44.1) (2025-11-06)
 
 ### ⏪ Reverts
