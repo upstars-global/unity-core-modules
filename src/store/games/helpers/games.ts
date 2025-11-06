@@ -3,34 +3,17 @@ import { storeToRefs } from "pinia";
 
 import type { ICollectionItem, IDisabledGamesProvider, IGame, IGamesProvider } from "../../../models/game";
 import { GameDisableGeoStatus } from "../../../models/game";
-import { useRootStore } from "../../../store/root";
 import { useCommon } from "../../common";
 import { useContextStore } from "../../context";
 
-type IFindGameParams = {
-    producer: string;
-    seoTitle: string;
-};
-
-function findGameBySeoTittleAndProducerWithDuplicate(
-    gamesCollection: IGame[],
-    { producer, seoTitle }: IFindGameParams,
-): IGame | undefined {
-    const rootStore = useRootStore();
-    return gamesCollection
-        .filter((game: IGame) => {
-            return game.devices.length > 1 ||
-                game.devices.includes(rootStore.isMobile ? "mobile" : "desktop");
-        })
-        .find(({ seo_title: seoTitleItem, provider: providerItem }) => {
-            return producer === providerItem && seoTitleItem === seoTitle;
-        });
+// tslint:disable-next-line:max-line-length
+function findGameBySeoTittleAndProducerWithDuplicate(gamesCollection: IGame[], { producer, seoTitle }): IGame | undefined {
+    return gamesCollection.find(({ seo_title: seoTitleItem, provider: providerItem }) => {
+        return producer === providerItem && seoTitleItem === seoTitle;
+    });
 }
 
-export function findGameBySeoTittleAndProducer(
-    gamesCollection: IGame[],
-    { producer, seoTitle }: IFindGameParams,
-): IGame | undefined {
+export function findGameBySeoTittleAndProducer(gamesCollection: IGame[], { producer, seoTitle }): IGame | undefined {
     return findGameBySeoTittleAndProducerWithDuplicate(gamesCollection, { producer, seoTitle });
 }
 
