@@ -1,3 +1,32 @@
+## [1.44.1](https://github.com/upstars-global/unity-core-modules/compare/v1.44.0...v1.44.1) (2025-11-06)
+
+### ⏪ Reverts
+
+* Revert "[#242](https://github.com/upstars-global/unity-core-modules/issues/242)" ([#252](https://github.com/upstars-global/unity-core-modules/issues/252))
+ ([eb29c91](https://github.com/upstars-global/unity-core-modules/commit/eb29c9190502ce0152c01f368c6334f531bb110f))
+
+
+
+### 🐛 Bug Fixes
+
+* filter games devices by user device ([#242](https://github.com/upstars-global/unity-core-modules/issues/242))
+ ([5d39f00](https://github.com/upstars-global/unity-core-modules/commit/5d39f00cddedaf8ea5bb9d21e0b65c7985597fb8))
+
+
+
+    * fix: filter games by device
+
+    * fix: game orientation detection
+* **UN-1797:** filter games devices by user device ([#253](https://github.com/upstars-global/unity-core-modules/issues/253))
+ ([2aaf465](https://github.com/upstars-global/unity-core-modules/commit/2aaf465930abb837d3e77ab9b1ece7bfb238a76d))
+
+## [1.44.0](https://github.com/upstars-global/unity-core-modules/compare/v1.43.1...v1.44.0) (2025-11-05)
+
+### 🚀 Features
+
+* Un 113 ([#248](https://github.com/upstars-global/unity-core-modules/issues/248))
+ ([86fcfae](https://github.com/upstars-global/unity-core-modules/commit/86fcfae6bc41701b30cd237c91ad92ed1d8b1fd9))
+
 ## [1.43.1](https://github.com/upstars-global/unity-core-modules/compare/v1.43.0...v1.43.1) (2025-10-30)
 
 ### ⏪ Reverts
