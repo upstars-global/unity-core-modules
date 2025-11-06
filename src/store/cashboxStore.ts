@@ -43,6 +43,17 @@ export const useCashboxStore = defineStore("cashboxStore", () => {
         "cashout": true,
     });
 
+    function resetHistory() {
+        paymentHistory.value = [];
+        historyDeposits.value = [];
+        historyPayouts.value = [];
+        hasMorePages.value = {
+            "": true,
+            "deposit": true,
+            "cashout": true,
+        };
+    }
+
     const getWithdrawRequests = computed<IPlayerPayment[]>(() => {
         return historyPayouts.value.filter((item) => {
             return item.recallable;
@@ -92,5 +103,6 @@ export const useCashboxStore = defineStore("cashboxStore", () => {
         getPaymentSystems,
         getPayoutSystems,
         getSavedMethodsByType,
+        resetHistory,
     };
 });
