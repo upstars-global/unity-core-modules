@@ -48,11 +48,13 @@ export async function loadPlayerPayments(
             ...(currency && { currency }),
             ...(type && { type }),
         };
+        console.log("params: ", type, currency, page, pageSize);
         const payload = {
             page,
             page_size: pageSize,
             ...(Object.keys(filter).length && { filter }),
         };
+        console.log("payload: ", payload);
         const { data } = await http().post(
             "/api/player/payments/with_pages", payload);
         return {
