@@ -1,3 +1,10 @@
+## [1.44.0](https://github.com/upstars-global/unity-core-modules/compare/v1.43.1...v1.44.0) (2025-11-05)
+
+### 🚀 Features
+
+* Un 113 ([#248](https://github.com/upstars-global/unity-core-modules/issues/248))
+ ([86fcfae](https://github.com/upstars-global/unity-core-modules/commit/86fcfae6bc41701b30cd237c91ad92ed1d8b1fd9))
+
 ## [1.43.1](https://github.com/upstars-global/unity-core-modules/compare/v1.43.0...v1.43.1) (2025-10-30)
 
 ### ⏪ Reverts
