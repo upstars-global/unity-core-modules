@@ -9,7 +9,7 @@ export async function loadDisabledGamesProviders(): Promise<void> {
     const gamesProviders = useGamesProviders();
     const { disabledGamesProviders } = storeToRefs(gamesProviders);
 
-    if (isExistData(disabledGamesProviders)) {
+    if (isExistData(disabledGamesProviders.value)) {
         return;
     }
 
