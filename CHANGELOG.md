@@ -1,3 +1,34 @@
+## [1.45.0](https://github.com/upstars-global/unity-core-modules/compare/v1.44.2...v1.45.0) (2025-11-07)
+
+### 🚀 Features
+
+* **UN-1804:** Replace payment endpoint with pagination ([#250](https://github.com/upstars-global/unity-core-modules/issues/250))
+ ([fdc5530](https://github.com/upstars-global/unity-core-modules/commit/fdc5530a3b862e2d5b25fff3315133b1f44fc263))
+
+
+
+    * UN-1804 WIP
+
+    * UN-1804 WIP
+
+    * UN-1804
+
+    * UN-1804
+
+    * UN-1804
+
+    * UN-1804 correct pagination size
+
+    * UN-1804 default 50 size
+
+    * UN-1804 logs
+
+    * UN-1804 change to 20
+
+    * UN-1804
+
+    * UN-1804
+
 ## [1.44.2](https://github.com/upstars-global/unity-core-modules/compare/v1.44.1...v1.44.2) (2025-11-06)
 
 ### 🐛 Bug Fixes
