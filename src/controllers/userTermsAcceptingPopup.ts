@@ -7,33 +7,33 @@ import { computed, defineAsyncComponent } from "vue";
 
 import { useMultilangStore } from "../store/multilang";
 import { useUserInfo } from "../store/user/userInfo";
-import { useUserStatuses } from "../store/user/userStatuses";
 
 export function useUserTermsAcceptingPopup() {
     const userInfoStore = useUserInfo();
     const multilangStore = useMultilangStore();
 
+
     const isUserTermsAccepted = computed(() => {
         return userInfoStore.getUserInfo.auth_fields_missed?.includes("terms_acceptance");
-    });
+    }); // can be renamed after refactoring king
+
+    const isUserTermsNotAccepted = isUserTermsAccepted; // for naming consistency
 
     const isUserCountryFieldMissing = computed(() => {
         return userInfoStore.getUserInfo.auth_fields_missed?.includes("country");
     });
 
-    function runShowingTermsPopup(force: boolean = false) {
-        if (!isUserTermsAccepted.value) {
+    function runShowingTermsPopup(autoAccept: boolean = false) {
+        if (!isUserTermsNotAccepted.value) {
             return;
         }
 
-        const userStatusesStore = useUserStatuses();
-
-        if (!userStatusesStore.isRegisteredViaSocialNetwork || force) {
-            showAcceptTermsPopup();
+        if (autoAccept) {
+            acceptTerms();
             return;
         }
 
-        acceptTerms();
+        showAcceptTermsPopup();
     }
 
     function acceptTerms() {
@@ -61,8 +61,10 @@ export function useUserTermsAcceptingPopup() {
     }
 
     return {
-        isUserTermsAccepted,
+        isUserTermsNotAccepted, // for naming consistency
+        isUserTermsAccepted, // can be removed after refactoring king
         runShowingTermsPopup,
         showAcceptTermsPopup,
+        acceptTerms,
     };
 }

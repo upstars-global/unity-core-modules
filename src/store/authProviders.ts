@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
-import { IAuthProvider, IUserAuthProvider } from "../models/authProviders";
+import type { IAuthProvider, IUserAuthProvider } from "../models/authProviders";
 
 const AUTH_PROVIDERS_MAP: Record<string, string> = {
     google_oauth2: "google",
@@ -10,13 +10,18 @@ const AUTH_PROVIDERS_MAP: Record<string, string> = {
 export const useAuthProvidersStore = defineStore("authProviders", () => {
     const authProviders = ref<IAuthProvider[]>([]);
     const userAuthProviders = ref<IUserAuthProvider[]>([]);
+    const userAuthProvidersLoaded = ref<boolean>(false);
 
-    const setAuthProviders = (providers: IAuthProvider[]) => {
+    function setAuthProviders(providers: IAuthProvider[]) {
         authProviders.value = providers;
     };
 
-    const setUserAuthProviders = (providers: IUserAuthProvider[]) => {
+    function setUserAuthProviders(providers: IUserAuthProvider[]) {
         userAuthProviders.value = providers;
+    };
+
+    function setUserAuthProvidersLoadedStatus(status: boolean) {
+        userAuthProvidersLoaded.value = status;
     };
 
     const clearState = () => {
@@ -38,6 +43,8 @@ export const useAuthProvidersStore = defineStore("authProviders", () => {
 
     return {
         authProviders,
+        userAuthProvidersLoaded,
+        setUserAuthProvidersLoadedStatus,
         userAuthProviders,
         setAuthProviders,
         setUserAuthProviders,
