@@ -182,7 +182,10 @@ export const useGiftsStore = defineStore("giftsStore", () => {
     });
 
     function getDepositGiftGroupID(gift: IGiftDeposit) {
-        const conditionId = gift?.bonuses?.[0]?.conditions?.find((condition) => condition.field === "groups")?.value?.[0];
+        const conditionId = gift?.bonuses?.[0]?.conditions
+            ?.find((condition) => condition.field === "groups")
+            ?.value?.find((item) => String(item).includes("pick:"));
+
         return conditionId || null;
     };
 
