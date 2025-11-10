@@ -1,3 +1,10 @@
+## [1.46.1](https://github.com/upstars-global/unity-core-modules/compare/v1.46.0...v1.46.1) (2025-11-10)
+
+### 🐛 Bug Fixes
+
+* add filter for getDepositGiftGroupID ([#255](https://github.com/upstars-global/unity-core-modules/issues/255))
+ ([9a068df](https://github.com/upstars-global/unity-core-modules/commit/9a068df9afaaffb8a286db0f33edc21c63ebb667))
+
 ## [1.46.0](https://github.com/upstars-global/unity-core-modules/compare/v1.45.0...v1.46.0) (2025-11-10)
 
 ### 🚀 Features
