@@ -142,7 +142,10 @@ vi.mock("../../src/services/paymentsAPI", () => ({
 }));
 vi.mock("../../src/services/api/requests/player", () => ({
     cancelWithdrawRequestByID: vi.fn(),
-    loadPlayerPayments: vi.fn(() => Promise.resolve([ playerPaymentTemplate ])),
+    loadPlayerPayments: vi.fn(() => Promise.resolve({
+        items: [ playerPaymentTemplate ],
+        pagination: { page: 1, per_page: 50, total_count: 1 },
+    })),
 }));
 
 describe("useCashBoxService", () => {
@@ -156,6 +159,7 @@ describe("useCashBoxService", () => {
                 historyPayouts: ref([]),
                 paymentSystems: ref([]),
                 payoutSystems: ref(),
+                hasMorePages: ref({}),
             });
         });
 
@@ -301,6 +305,7 @@ describe("useCashBoxService", () => {
                 historyPayouts: ref([]),
                 paymentSystems: ref([]),
                 payoutSystems: ref(),
+                hasMorePages: ref({}),
             });
         });
         it("calls cancelWithdrawRequestByID and reloads user balance", async () => {
@@ -339,44 +344,106 @@ describe("useCashBoxService", () => {
                 { ...playerPaymentTemplate, action: ActionsTransaction.CASHOUT },
             ];
 
-            (playerRequests.loadPlayerPayments as vi.Mock).mockResolvedValue(mockPayments);
+            (playerRequests.loadPlayerPayments as vi.Mock).mockResolvedValue({
+                items: mockPayments,
+                pagination: { page: 1, per_page: 20, total_count: 2 },
+            });
             const service = useCashBoxService();
             const store = useCashboxStore();
-            await service.loadPlayerPaymentsHistory();
+            const result = await service.loadPlayerPaymentsHistory();
 
             expect(store.paymentHistory).toEqual(mockPayments);
             expect(store.historyDeposits).toEqual([ mockPayments[0] ]);
             expect(store.historyPayouts).toEqual([ mockPayments[1] ]);
+            expect(result.hasMore).toBe(false);
         });
 
-        it("does not reload when history exists and reload=false", async () => {
+        it("always loads even when history exists", async () => {
             const existing = [ { ...playerPaymentTemplate, action: ActionsTransaction.DEPOSIT } ];
-            const store = useCashboxStore();
-            store.paymentHistory = existing;
-            const loadSpy = vi.spyOn(playerRequests, "loadPlayerPayments");
+            const { paymentHistory } = storeToRefs(useCashboxStore());
+            paymentHistory.value = existing;
+            const mockPayments = [
+                { ...playerPaymentTemplate, action: ActionsTransaction.CASHOUT },
+            ];
+            vi.spyOn(playerRequests, "loadPlayerPayments").mockResolvedValue({
+                items: mockPayments,
+                pagination: { page: 1, per_page: 20, total_count: 1 },
+            });
             const service = useCashBoxService();
 
-            await service.loadPlayerPaymentsHistory();
+            const result = await service.loadPlayerPaymentsHistory();
 
-            expect(loadSpy).not.toHaveBeenCalled();
-            expect(store.paymentHistory).toEqual(existing);
+            expect(paymentHistory.value).toEqual(mockPayments);
+            expect(result.hasMore).toBe(false);
         });
 
-        it("forces reload when reload=true", async () => {
+        it("loads page > 1 and appends to existing data", async () => {
             const initial = [ { ...playerPaymentTemplate, action: ActionsTransaction.CASHOUT } ];
-            const { paymentHistory, historyDeposits, historyPayouts } = storeToRefs(useCashboxStore());
+            const { paymentHistory } = storeToRefs(useCashboxStore());
             paymentHistory.value = initial;
             const mockPayments = [
                 { ...playerPaymentTemplate, action: ActionsTransaction.DEPOSIT },
             ];
-            vi.spyOn(playerRequests, "loadPlayerPayments").mockResolvedValue(mockPayments);
+            vi.spyOn(playerRequests, "loadPlayerPayments").mockResolvedValue({
+                items: mockPayments,
+                pagination: { page: 2, per_page: 20, total_count: 50 },
+            });
             const service = useCashBoxService();
 
-            await service.loadPlayerPaymentsHistory({ reload: true });
+            const result = await service.loadPlayerPaymentsHistory({ page: 2 });
 
-            expect(paymentHistory.value).toEqual(mockPayments);
-            expect(historyDeposits.value).toEqual(mockPayments.filter((p) => p.action === ActionsTransaction.DEPOSIT));
-            expect(historyPayouts.value).toEqual(mockPayments.filter((p) => p.action === ActionsTransaction.CASHOUT));
+            expect(paymentHistory.value).toEqual([ ...initial, ...mockPayments ]);
+            expect(result.hasMore).toBe(true);
+        });
+
+        it("correctly calculates hasMore for real-world scenario (page 1 of 65 total)", async () => {
+            const mockPayments = Array(20).fill(null).map((_, i) => ({
+                ...playerPaymentTemplate,
+                id: 13420270 - i,
+            }));
+            vi.spyOn(playerRequests, "loadPlayerPayments").mockResolvedValue({
+                items: mockPayments,
+                pagination: { page: 1, per_page: 20, total_count: 65 },
+            });
+            const service = useCashBoxService();
+
+            const result = await service.loadPlayerPaymentsHistory({ page: 1 });
+
+            expect(result.hasMore).toBe(true); // 20 < 65
+        });
+
+        it("correctly calculates hasMore when reaching last page", async () => {
+            const mockPayments = Array(5).fill(null).map((_, i) => ({
+                ...playerPaymentTemplate,
+                id: i,
+            }));
+            vi.spyOn(playerRequests, "loadPlayerPayments").mockResolvedValue({
+                items: mockPayments,
+                pagination: { page: 4, per_page: 20, total_count: 65 },
+            });
+            const service = useCashBoxService();
+
+            const result = await service.loadPlayerPaymentsHistory({ page: 4 });
+
+            expect(result.hasMore).toBe(false); // 4 * 20 = 80 >= 65
+        });
+
+        it("loads specific type (deposits only)", async () => {
+            const mockPayments = [
+                { ...playerPaymentTemplate, action: ActionsTransaction.DEPOSIT, id: 1 },
+                { ...playerPaymentTemplate, action: ActionsTransaction.DEPOSIT, id: 2 },
+            ];
+            const { historyDeposits } = storeToRefs(useCashboxStore());
+            vi.spyOn(playerRequests, "loadPlayerPayments").mockResolvedValue({
+                items: mockPayments,
+                pagination: { page: 1, per_page: 20, total_count: 2 },
+            });
+            const service = useCashBoxService();
+
+            const result = await service.loadPlayerPaymentsHistory({ type: ActionsTransaction.DEPOSIT });
+
+            expect(historyDeposits.value).toEqual(mockPayments);
+            expect(result.hasMore).toBe(false);
         });
     });
 });

@@ -20,7 +20,7 @@ const SYMBOL_SATOSHI_BY_CURRENCY = {
     [CODE_BTC]: SYMBOL_MICRO,
 };
 
-export const currencyView = (value, currency, toCeil, subUntil = 1, maxFractionDigits = 8) => {
+export const currencyView = (value, currency, toCeil, subUntil = 1, maxFractionDigits = 8, transformCrypto = true) => {
     let normalizeValue = Number(value);
     if (isNaN(normalizeValue)) {
         return `${value} ${currency || ""}`;
@@ -29,8 +29,13 @@ export const currencyView = (value, currency, toCeil, subUntil = 1, maxFractionD
     normalizeValue = (toCeil) ? Math.ceil(normalizeValue / subUntil) : (normalizeValue / subUntil);
 
     if (currency) {
-        const countCurrency = COUNT_SATOSHI_BY_CURRENCY[currency] || 1;
-        const prefixCurrency = SYMBOL_SATOSHI_BY_CURRENCY[currency] || "";
+        let countCurrency = 1;
+        let prefixCurrency = "";
+
+        if (transformCrypto) {
+            countCurrency = COUNT_SATOSHI_BY_CURRENCY[currency] || 1;
+            prefixCurrency = SYMBOL_SATOSHI_BY_CURRENCY[currency] || "";
+        }
 
         return `${(normalizeValue / countCurrency).toLocaleString(
             undefined,

@@ -1,3 +1,52 @@
+## [1.46.0](https://github.com/upstars-global/unity-core-modules/compare/v1.45.0...v1.46.0) (2025-11-10)
+
+### 🚀 Features
+
+* add choosing bonus cashbox
+ ([6a5063e](https://github.com/upstars-global/unity-core-modules/commit/6a5063e1aa96746231a34810edd0c96163089f55))
+
+
+
+    https://upstars.atlassian.net/browse/UN-1733
+
+## [1.45.0](https://github.com/upstars-global/unity-core-modules/compare/v1.44.2...v1.45.0) (2025-11-07)
+
+### 🚀 Features
+
+* **UN-1804:** Replace payment endpoint with pagination ([#250](https://github.com/upstars-global/unity-core-modules/issues/250))
+ ([fdc5530](https://github.com/upstars-global/unity-core-modules/commit/fdc5530a3b862e2d5b25fff3315133b1f44fc263))
+
+
+
+    * UN-1804 WIP
+
+    * UN-1804 WIP
+
+    * UN-1804
+
+    * UN-1804
+
+    * UN-1804
+
+    * UN-1804 correct pagination size
+
+    * UN-1804 default 50 size
+
+    * UN-1804 logs
+
+    * UN-1804 change to 20
+
+    * UN-1804
+
+    * UN-1804
+
+## [1.44.2](https://github.com/upstars-global/unity-core-modules/compare/v1.44.1...v1.44.2) (2025-11-06)
+
+### 🐛 Bug Fixes
+
+* UN-1874 fix disabled provider config ([#254](https://github.com/upstars-global/unity-core-modules/issues/254))
+ ([1f52704](https://github.com/upstars-global/unity-core-modules/commit/1f527041a35e6a4912d4f89b27e205e3c657e48c))
+
 ## [1.44.1](https://github.com/upstars-global/unity-core-modules/compare/v1.44.0...v1.44.1) (2025-11-06)
 
 ### ⏪ Reverts

@@ -158,6 +158,14 @@ export const useUserInfo = defineStore("userInfo", () => {
         info.value.statuses.push(userGroup);
     }
 
+    function removeUserGroup(userGroup: IUserStatus) {
+        const indexCurrentGroup = info.value.statuses.findIndex((status) => status.id === userGroup.id);
+
+        if (indexCurrentGroup >= 0) {
+            info.value.statuses.splice(indexCurrentGroup, 1);
+        }
+    }
+
     function setUserStatuses(userGroups: IUserStatus[]) {
         info.value.statuses = userGroups;
     }
@@ -179,7 +187,7 @@ export const useUserInfo = defineStore("userInfo", () => {
     function addUserStatuses(newStatus: IUserStatus) {
         info.value.statuses = [
             ...info.value.statuses.filter(({ id }) => {
-                return Number(id) !== Number(newStatus.id);
+                return id !== newStatus.id;
             }),
             newStatus,
         ];
@@ -411,6 +419,7 @@ export const useUserInfo = defineStore("userInfo", () => {
         toggleUserIsLogged,
         setUserData,
         addUserGroup,
+        removeUserGroup,
         clearUserData,
         addUserStatuses,
         setUserStatuses,
