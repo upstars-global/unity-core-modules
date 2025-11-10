@@ -1,3 +1,88 @@
+## [1.46.1](https://github.com/upstars-global/unity-core-modules/compare/v1.46.0...v1.46.1) (2025-11-10)
+
+### 🐛 Bug Fixes
+
+* add filter for getDepositGiftGroupID ([#255](https://github.com/upstars-global/unity-core-modules/issues/255))
+ ([9a068df](https://github.com/upstars-global/unity-core-modules/commit/9a068df9afaaffb8a286db0f33edc21c63ebb667))
+
+## [1.46.0](https://github.com/upstars-global/unity-core-modules/compare/v1.45.0...v1.46.0) (2025-11-10)
+
+### 🚀 Features
+
+* add choosing bonus cashbox
+ ([6a5063e](https://github.com/upstars-global/unity-core-modules/commit/6a5063e1aa96746231a34810edd0c96163089f55))
+
+
+
+    https://upstars.atlassian.net/browse/UN-1733
+
+## [1.45.0](https://github.com/upstars-global/unity-core-modules/compare/v1.44.2...v1.45.0) (2025-11-07)
+
+### 🚀 Features
+
+* **UN-1804:** Replace payment endpoint with pagination ([#250](https://github.com/upstars-global/unity-core-modules/issues/250))
+ ([fdc5530](https://github.com/upstars-global/unity-core-modules/commit/fdc5530a3b862e2d5b25fff3315133b1f44fc263))
+
+
+
+    * UN-1804 WIP
+
+    * UN-1804 WIP
+
+    * UN-1804
+
+    * UN-1804
+
+    * UN-1804
+
+    * UN-1804 correct pagination size
+
+    * UN-1804 default 50 size
+
+    * UN-1804 logs
+
+    * UN-1804 change to 20
+
+    * UN-1804
+
+    * UN-1804
+
+## [1.44.2](https://github.com/upstars-global/unity-core-modules/compare/v1.44.1...v1.44.2) (2025-11-06)
+
+### 🐛 Bug Fixes
+
+* UN-1874 fix disabled provider config ([#254](https://github.com/upstars-global/unity-core-modules/issues/254))
+ ([1f52704](https://github.com/upstars-global/unity-core-modules/commit/1f527041a35e6a4912d4f89b27e205e3c657e48c))
+
+## [1.44.1](https://github.com/upstars-global/unity-core-modules/compare/v1.44.0...v1.44.1) (2025-11-06)
+
+### ⏪ Reverts
+
+* Revert "[#242](https://github.com/upstars-global/unity-core-modules/issues/242)" ([#252](https://github.com/upstars-global/unity-core-modules/issues/252))
+ ([eb29c91](https://github.com/upstars-global/unity-core-modules/commit/eb29c9190502ce0152c01f368c6334f531bb110f))
+
+
+
+### 🐛 Bug Fixes
+
+* filter games devices by user device ([#242](https://github.com/upstars-global/unity-core-modules/issues/242))
+ ([5d39f00](https://github.com/upstars-global/unity-core-modules/commit/5d39f00cddedaf8ea5bb9d21e0b65c7985597fb8))
+
+
+
+    * fix: filter games by device
+
+    * fix: game orientation detection
+* **UN-1797:** filter games devices by user device ([#253](https://github.com/upstars-global/unity-core-modules/issues/253))
+ ([2aaf465](https://github.com/upstars-global/unity-core-modules/commit/2aaf465930abb837d3e77ab9b1ece7bfb238a76d))
+
+## [1.44.0](https://github.com/upstars-global/unity-core-modules/compare/v1.43.1...v1.44.0) (2025-11-05)
+
+### 🚀 Features
+
+* Un 113 ([#248](https://github.com/upstars-global/unity-core-modules/issues/248))
+ ([86fcfae](https://github.com/upstars-global/unity-core-modules/commit/86fcfae6bc41701b30cd237c91ad92ed1d8b1fd9))
+
 ## [1.43.1](https://github.com/upstars-global/unity-core-modules/compare/v1.43.0...v1.43.1) (2025-10-30)
 
 ### ⏪ Reverts

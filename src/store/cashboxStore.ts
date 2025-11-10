@@ -37,6 +37,23 @@ export const useCashboxStore = defineStore("cashboxStore", () => {
     const payoutSystems = ref<IPaymentsMethod[]>([]);
     const coinspaidAddresses = ref<ICoinspaidAddresses>();
 
+    const hasMorePages = ref<Record<string, boolean>>({
+        "": true,
+        "deposit": true,
+        "cashout": true,
+    });
+
+    function resetHistory() {
+        paymentHistory.value = [];
+        historyDeposits.value = [];
+        historyPayouts.value = [];
+        hasMorePages.value = {
+            "": true,
+            "deposit": true,
+            "cashout": true,
+        };
+    }
+
     const getWithdrawRequests = computed<IPlayerPayment[]>(() => {
         return historyPayouts.value.filter((item) => {
             return item.recallable;
@@ -82,8 +99,10 @@ export const useCashboxStore = defineStore("cashboxStore", () => {
         paymentSystems,
         payoutSystems,
         coinspaidAddresses,
+        hasMorePages,
         getPaymentSystems,
         getPayoutSystems,
         getSavedMethodsByType,
+        resetHistory,
     };
 });

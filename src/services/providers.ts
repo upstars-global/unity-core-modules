@@ -1,9 +1,17 @@
+import { storeToRefs } from "pinia";
+
+import { isExistData } from "../helpers/isExistData";
 import type { IDisabledGamesProvider } from "../models/game";
-import { loadDisabledProvidersConfigReq } from "../services/api/requests/configs";
 import { useGamesProviders } from "../store/games/gamesProviders";
+import { loadDisabledProvidersConfigReq } from "./api/requests/configs";
 
 export async function loadDisabledGamesProviders(): Promise<void> {
-    const { setDisabledGamesProviders } = useGamesProviders();
+    const gamesProviders = useGamesProviders();
+    const { disabledGamesProviders } = storeToRefs(gamesProviders);
+
+    if (isExistData(disabledGamesProviders.value)) {
+        return;
+    }
 
     const data = await loadDisabledProvidersConfigReq();
 
@@ -14,6 +22,6 @@ export async function loadDisabledGamesProviders(): Promise<void> {
             first20Props[key] = data[key];
         });
 
-        setDisabledGamesProviders(first20Props as IDisabledGamesProvider);
+        gamesProviders.setDisabledGamesProviders(first20Props as IDisabledGamesProvider);
     }
 }
