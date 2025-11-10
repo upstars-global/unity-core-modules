@@ -1,3 +1,14 @@
+## [1.46.0](https://github.com/upstars-global/unity-core-modules/compare/v1.45.0...v1.46.0) (2025-11-10)
+
+### 🚀 Features
+
+* add choosing bonus cashbox
+ ([6a5063e](https://github.com/upstars-global/unity-core-modules/commit/6a5063e1aa96746231a34810edd0c96163089f55))
+
+
+
+    https://upstars.atlassian.net/browse/UN-1733
+
 ## [1.45.0](https://github.com/upstars-global/unity-core-modules/compare/v1.44.2...v1.45.0) (2025-11-07)
 
 ### 🚀 Features
