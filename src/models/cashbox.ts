@@ -18,4 +18,17 @@ export type CurrencyConfig = {
   steps: Step[];
 };
 
+export type PaymentType = "deposit" | "cashout";
+
 export type CurrencyData = Record<CurrencyCode, CurrencyConfig>;
+
+export interface IPaymentHistoryPayload {
+  page_size?: number,
+  page?: number,
+  filter?: {
+    currency?: CurrencyCode
+    type?: PaymentType
+    from?: string,
+    to?: string
+  }
+}
