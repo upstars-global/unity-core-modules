@@ -15,7 +15,7 @@ import { loadFilteredGames } from "./api/requests/games";
 import { loadLotteryStatuses } from "./lotteries";
 
 
-function sortRates(list: IRedeemableCards[]) {
+export function sortRates(list: IRedeemableCards[]) {
     return list.sort((prev, next) => {
         return prev.rates ? prev.rates[0].points - next.rates[0].points : prev.rate.points - next.rate.points;
     });
@@ -46,9 +46,9 @@ export async function loadRates() {
             (await Promise.all(Object.values(CompPointRatesTypes).map((key) => loadCompPointRateBySlug(key))));
 
     redeemableCompPointsStore.setRates({
-        MONEY_REWARD: sortRates(money),
-        FREE_SPINS: freeSpins.length ? sortRates(freeSpins) : redeemableCompPointsStore.getMockCards?.FREE_SPINS || [],
-        SPECIAL_REWARDS: sortRates([ ...lootBoxes, ...lotteries ]),
+        MONEY_REWARD: money,
+        FREE_SPINS: freeSpins.length ? freeSpins : redeemableCompPointsStore.getMockCards?.FREE_SPINS || [],
+        SPECIAL_REWARDS: [ ...lootBoxes, ...lotteries ],
     });
 }
 
