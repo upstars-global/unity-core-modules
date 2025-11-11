@@ -44,7 +44,7 @@ export interface IGiftDeposit {
                 {
                     field: string;
                     type: string;
-                    value: [
+                    value: string[] | [
                         {
                             currency: string;
                             amount_cents: number;
