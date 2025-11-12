@@ -1,3 +1,12 @@
+## [1.48.0](https://github.com/upstars-global/unity-core-modules/compare/v1.47.0...v1.48.0) (2025-11-12)
+
+### 🚀 Features
+
+* add log for /api/player/groups
+ ([57cca86](https://github.com/upstars-global/unity-core-modules/commit/57cca8621844029daf6798628d1600667aebc0e3))
+
+, closes [#256](https://github.com/upstars-global/unity-core-modules/issues/)
+
 ## [1.47.0](https://github.com/upstars-global/unity-core-modules/compare/v1.46.1...v1.47.0) (2025-11-12)
 
 ### 🚀 Features
