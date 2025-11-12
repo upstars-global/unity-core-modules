@@ -1,3 +1,22 @@
+## [1.47.0](https://github.com/upstars-global/unity-core-modules/compare/v1.46.1...v1.47.0) (2025-11-12)
+
+### 🚀 Features
+
+* Un 1776 ([#249](https://github.com/upstars-global/unity-core-modules/issues/249))
+ ([6bfc95b](https://github.com/upstars-global/unity-core-modules/commit/6bfc95b28c7aa4ac41bcc503de0e722bff18115c))
+
+
+
+    * UN-1776 mart for king
+
+    * UN-1776 mart for king
+
+    * UN-1874 UN-1871 add sort for comp point rates
+
+    * UN-1874 UN-1871 add sort for comp point rates
+
+    * UN-1776 disable rates sort
+
 ## [1.46.1](https://github.com/upstars-global/unity-core-modules/compare/v1.46.0...v1.46.1) (2025-11-10)
 
 ### 🐛 Bug Fixes
