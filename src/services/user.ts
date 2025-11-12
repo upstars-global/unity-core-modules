@@ -1,5 +1,6 @@
 import { ID_GROUP_FOR_PAIRED_ID, ID_GROUP_FOR_UNPAIRED_ID } from "@config/groupAB";
 
+import { log } from "../controllers/Logger";
 import type { IPlayerFieldsInfo } from "../models/common";
 import { useCommon } from "../store/common";
 import { useUserInfo } from "../store/user/userInfo";
@@ -18,7 +19,16 @@ export async function userSetToGroupForAbTest() {
     }
     const groupForAdding = userInfo.info.id % 2 ? ID_GROUP_FOR_UNPAIRED_ID : ID_GROUP_FOR_PAIRED_ID;
 
-    await changePlayerGroup(groupForAdding);
+    const result = await changePlayerGroup(groupForAdding);
+
+    if (!result) {
+        const addInfo = {
+            userID: userInfo.info.id,
+            groupForAdding: groupForAdding,
+            userGroups: userStatuses.getUserGroups,
+        };
+        log.error("ERROR_USER_SET_TO_GROUP_FOR_AB_TEST", addInfo);
+    }
 }
 
 export async function loadPlayerFieldsInfo({ reload } = { reload: false }): Promise<IPlayerFieldsInfo> {

@@ -15,7 +15,7 @@ export interface LoadPlayerPaymentsParams {
     pageSize?: number;
 }
 
-export async function changePlayerGroup(groupForAdding?: IPlayerGroup, groupForRemoving?: IPlayerGroup) {
+export async function changePlayerGroup(groupForAdding?: IPlayerGroup, groupForRemoving?: IPlayerGroup): Promise<void> {
     try {
         const { data } = await http().post<void>(
             "/api/player/groups",
@@ -29,7 +29,11 @@ export async function changePlayerGroup(groupForAdding?: IPlayerGroup, groupForR
 
         return data;
     } catch (err) {
-        log.error("ADD_PLAYER_TO_GROUP_ERROR", err);
+        const addInfo = {
+            groupForAdding,
+            groupForRemoving,
+        };
+        log.error("CHANGE_PLAYER_GROUP_ERROR", err, addInfo);
     }
 }
 
