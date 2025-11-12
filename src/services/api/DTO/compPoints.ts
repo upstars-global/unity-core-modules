@@ -44,4 +44,5 @@ export interface IRedeemableCards {
     };
     rates: IMoneyRate[];
     games: string[];
+    wager: number;
 }
