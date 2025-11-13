@@ -15,25 +15,28 @@ export interface LoadPlayerPaymentsParams {
     pageSize?: number;
 }
 
+let loadingChangePlayerGroup = false;
 export async function changePlayerGroup(groupForAdding?: IPlayerGroup, groupForRemoving?: IPlayerGroup): Promise<void> {
-    try {
-        const { data } = await http().post<void>(
-            "/api/player/groups",
-            {
-                groups:
-                    {
-                        add: groupForAdding ? [ groupForAdding ] : [],
-                        remove: groupForRemoving ? [ groupForRemoving ] : [],
-                    },
-            });
+    if (loadingChangePlayerGroup) {
+        return;
+    }
 
+    const bodyReq = {
+        groups: {
+            add: groupForAdding ? [ groupForAdding ] : [],
+            remove: groupForRemoving ? [ groupForRemoving ] : [],
+        },
+    };
+
+    try {
+        loadingChangePlayerGroup = true;
+
+        const { data } = await http().post<void>("/api/player/groups", bodyReq);
         return data;
     } catch (err) {
-        const addInfo = {
-            groupForAdding,
-            groupForRemoving,
-        };
-        log.error("CHANGE_PLAYER_GROUP_ERROR", err, addInfo);
+        log.error("CHANGE_PLAYER_GROUP_ERROR", bodyReq, err);
+    } finally {
+        loadingChangePlayerGroup = false;
     }
 }
 
