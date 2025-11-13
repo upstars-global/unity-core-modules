@@ -3,7 +3,7 @@ import { GameMode } from "../models/enums/gamesConsts";
 import { useRedeemableCompPointsStore } from "../store/compPoints/redeemableCompPointsStore";
 import { useStatusCompPointsStore } from "../store/compPoints/statusCompPointsStore";
 import { useUserInfo } from "../store/user/userInfo";
-import { IExchange } from "./api/DTO/compPoints";
+import { IExchange, IRedeemableCards } from "./api/DTO/compPoints";
 import {
     exchangeCompPointRateBySlug,
     exchangeToMoneyReq,
@@ -14,6 +14,12 @@ import {
 import { loadFilteredGames } from "./api/requests/games";
 import { loadLotteryStatuses } from "./lotteries";
 
+
+export function sortRates(list: IRedeemableCards[]) {
+    return list.sort((prev, next) => {
+        return prev.rates ? prev.rates[0].points - next.rates[0].points : prev.rate.points - next.rate.points;
+    });
+}
 export async function exchangeBySlug(payload: Record<string, unknown>, slug: CompPointRatesTypes) {
     const userInfoStore = useUserInfo();
 
