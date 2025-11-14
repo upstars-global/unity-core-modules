@@ -15,7 +15,7 @@ import { http } from "../../services/api/http";
 import { useConfigStore } from "../configStore";
 import { useRootStore } from "../root";
 import { useGamesCommon } from "./gamesStore";
-import { defaultCollection, filterProviders } from "./helpers/games";
+import { defaultCollection, filterGames, filterProviders } from "./helpers/games";
 
 
 export const useGamesProviders = defineStore("gamesProviders", () => {
@@ -75,7 +75,7 @@ export const useGamesProviders = defineStore("gamesProviders", () => {
         collections.value = {
             ...collections.value,
             [slug]: {
-                data: [ ...collectionData, ...propsGame.data ],
+                data: filterGames([ ...collectionData, ...propsGame.data ]),
                 pagination: data.pagination,
             },
         };
