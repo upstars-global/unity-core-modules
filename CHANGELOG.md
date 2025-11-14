@@ -1,3 +1,14 @@
+## [1.48.1](https://github.com/upstars-global/unity-core-modules/compare/v1.48.0...v1.48.1) (2025-11-14)
+
+### 🐛 Bug Fixes
+
+* 422 api/groups and minor refactor
+ ([24d92dd](https://github.com/upstars-global/unity-core-modules/commit/24d92dd6caa5204be7647b16484b734e68c3c8e5))
+
+
+
+    UN-1902: 422 по api/groups
+
 ## [1.48.0](https://github.com/upstars-global/unity-core-modules/compare/v1.47.0...v1.48.0) (2025-11-12)
 
 ### 🚀 Features
