@@ -1,8 +1,3 @@
-export interface IAuthProvider {
-    name: string;
-    url: string;
-}
-
 export interface IUserAuthProvider {
     id: number;
     type: string;
@@ -11,4 +6,15 @@ export interface IUserAuthProvider {
     social_network_account: string;
     confirmed_at: string;
     removable: boolean;
+}
+
+export const AUTH_PROVIDERS_MAP = {
+    google_oauth2: "google",
+} as const;
+
+export type AuthProviders = keyof typeof AUTH_PROVIDERS_MAP;
+
+export interface IAuthProvider {
+    name: AuthProviders;
+    url: string;
 }

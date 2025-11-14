@@ -1,11 +1,12 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
-import type { IAuthProvider, IUserAuthProvider } from "../models/authProviders";
-
-const AUTH_PROVIDERS_MAP: Record<string, string> = {
-    google_oauth2: "google",
-};
+import {
+    AUTH_PROVIDERS_MAP,
+    AuthProviders,
+    type IAuthProvider,
+    type IUserAuthProvider,
+} from "../models/authProviders";
 
 export const useAuthProvidersStore = defineStore("authProviders", () => {
     const authProviders = ref<IAuthProvider[]>([]);
@@ -31,7 +32,8 @@ export const useAuthProvidersStore = defineStore("authProviders", () => {
     const getProviderList = computed(() => {
         return authProviders.value.map((provider) => {
             const connectedProvider = userAuthProviders.value
-                .find((userAuthProvider) => userAuthProvider.type === AUTH_PROVIDERS_MAP[provider.name]);
+                .find((userAuthProvider) =>
+                    userAuthProvider.type === AUTH_PROVIDERS_MAP[provider.name as AuthProviders]);
 
             return {
                 ...provider,
