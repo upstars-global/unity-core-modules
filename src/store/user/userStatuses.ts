@@ -10,6 +10,7 @@ import type { ILevel } from "@types/levels";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
+import { log } from "../../controllers/Logger";
 import type { IUserStatus, UserGroup } from "../../models/user";
 import { IVipManager } from "../../models/vipManagers";
 import { loadManagersConfigReq } from "../../services/api/requests/configs";
@@ -84,6 +85,15 @@ export const useUserStatuses = defineStore("userStatuses", () => {
     });
 
     async function changeUserToGroup(groupForAdding?: IPlayerGroup, groupForRemoving?: IPlayerGroup) {
+        if (!groupForAdding && !groupForRemoving) {
+            log.error("CHANGE_PLAYER_GROUP_EMPTY_PARAMS", {
+                groupForAdding: String(groupForAdding),
+                groupForRemoving: String(groupForRemoving),
+            });
+
+            return;
+        }
+
         await changePlayerGroup(groupForAdding, groupForRemoving);
 
         if (groupForAdding) {
