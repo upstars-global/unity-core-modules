@@ -7,37 +7,44 @@ import { computed, defineAsyncComponent } from "vue";
 
 import { useMultilangStore } from "../store/multilang";
 import { useUserInfo } from "../store/user/userInfo";
-import { useUserStatuses } from "../store/user/userStatuses";
 
 export function useUserTermsAcceptingPopup() {
     const userInfoStore = useUserInfo();
     const multilangStore = useMultilangStore();
 
+
     const isUserTermsAccepted = computed(() => {
         return userInfoStore.getUserInfo.auth_fields_missed?.includes("terms_acceptance");
-    });
+    }); // can be renamed after refactoring king
+
+    const isUserTermsNotAccepted = isUserTermsAccepted; // for naming consistency
 
     const isUserCountryFieldMissing = computed(() => {
         return userInfoStore.getUserInfo.auth_fields_missed?.includes("country");
     });
 
-    function runShowingTermsPopup() {
-        const userStatusesStore = useUserStatuses();
-
-        if (isUserTermsAccepted.value) {
-            if (userStatusesStore.isRegisteredViaSocialNetwork) {
-                const country = multilangStore.getUserGeo;
-
-                userInfoStore.updateAuthDetailsProviders({
-                    user: {
-                        terms_acceptance: true,
-                        ...(isUserCountryFieldMissing.value ? { country } : {}),
-                    },
-                });
-            } else {
-                showAcceptTermsPopup();
-            }
+    function runShowingTermsPopup(autoAccept: boolean = false) {
+        if (!isUserTermsNotAccepted.value) {
+            return;
         }
+
+        if (autoAccept) {
+            acceptTerms();
+            return;
+        }
+
+        showAcceptTermsPopup();
+    }
+
+    function acceptTerms() {
+        const country = multilangStore.getUserGeo;
+
+        return userInfoStore.updateAuthDetailsProviders({
+            user: {
+                terms_acceptance: true,
+                ...(isUserCountryFieldMissing.value ? { country } : {}),
+            },
+        });
     }
 
     function showAcceptTermsPopup() {
@@ -46,12 +53,18 @@ export function useUserTermsAcceptingPopup() {
             component: supportPopup,
             mobileFriendly: true,
             blockCloseOverlay: true,
+            fullScreenMobile: true,
+            props: {
+                acceptHandler: acceptTerms,
+            },
         });
     }
 
     return {
-        isUserTermsAccepted,
+        isUserTermsNotAccepted, // for naming consistency
+        isUserTermsAccepted, // can be removed after refactoring king
         runShowingTermsPopup,
         showAcceptTermsPopup,
+        acceptTerms,
     };
 }

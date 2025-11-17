@@ -5,7 +5,6 @@ import { defineStore, type Pinia, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
 import { cioIdentifyUser } from "../../controllers/CustomerIO";
-import { useUserTermsAcceptingPopup } from "../../controllers/userTermsAcceptingPopup";
 import { EnumContextFields, EnumFormFields } from "../../models/common";
 import { Currencies } from "../../models/enums/currencies";
 import { BettingPlayerSettings } from "../../models/player";
@@ -218,7 +217,6 @@ export const useUserInfo = defineStore("userInfo", () => {
 
     async function loadUserProfile({ reload = false, route }: { reload?: boolean; route?: string } = {}) {
         const { checkToShowPopup } = usePopupNewProvider();
-        const { runShowingTermsPopup } = useUserTermsAcceptingPopup();
         const multilang = useMultilangStore();
 
         const profile = info.value;
@@ -233,8 +231,6 @@ export const useUserInfo = defineStore("userInfo", () => {
             if (response) {
                 setUserData(response.data);
 
-                runShowingTermsPopup();
-
                 const responseLang = response.data.language;
 
                 if (responseLang !== multilang.getUserLocale && response.data.id) {
@@ -247,6 +243,7 @@ export const useUserInfo = defineStore("userInfo", () => {
                     toggleUserIsLogged(false);
                     return;
                 }
+
                 toggleUserIsLogged(true);
 
                 bus.$emit("user.data.received");
