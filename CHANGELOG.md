@@ -1,3 +1,16 @@
+## [1.49.0](https://github.com/upstars-global/unity-core-modules/compare/v1.48.2...v1.49.0) (2025-11-17)
+
+### 🚀 Features
+
+* **UN-1775:** run terms popup in a main product ([#244](https://github.com/upstars-global/unity-core-modules/issues/244))
+ ([69acd24](https://github.com/upstars-global/unity-core-modules/commit/69acd24fa3d0e471cc0a8f29ff1a17af001b3629))
+
+
+
+    * feat(UN-1775): run terms popup in a main product
+
+    * fix: Pass the accept terms handler as a prop to the accept terms modal.
+
 ## [1.48.2](https://github.com/upstars-global/unity-core-modules/compare/v1.48.1...v1.48.2) (2025-11-14)
 
 ### 🐛 Bug Fixes
