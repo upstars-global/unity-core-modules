@@ -1,3 +1,14 @@
+## [1.48.2](https://github.com/upstars-global/unity-core-modules/compare/v1.48.1...v1.48.2) (2025-11-14)
+
+### 🐛 Bug Fixes
+
+* minor changeUserToGroup
+ ([ade8451](https://github.com/upstars-global/unity-core-modules/commit/ade8451973c0407facd72d6ad2eefe20faf33eb4))
+
+
+
+    UN-1902: fix 422 по api/groups
+
 ## [1.48.1](https://github.com/upstars-global/unity-core-modules/compare/v1.48.0...v1.48.1) (2025-11-14)
 
 ### 🐛 Bug Fixes
