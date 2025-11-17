@@ -7,28 +7,65 @@ import { IPlayerPayment } from "../DTO/cashbox";
 import { BettingPlayerSettingsDTO, IPlayerStats, ISubscriptions, IUserAccount, IUserSettings } from "../DTO/playerDTO";
 import { http } from "../http";
 
-export async function addPlayerToGroup(groupForAdding: string | number) {
+export type IPlayerGroup = string | number | null;
+export interface LoadPlayerPaymentsParams {
+    type?: string;
+    currency?: string;
+    page?: number;
+    pageSize?: number;
+}
+
+let loadingChangePlayerGroup = false;
+export async function changePlayerGroup(groupForAdding?: IPlayerGroup, groupForRemoving?: IPlayerGroup): Promise<void> {
+    if (loadingChangePlayerGroup) {
+        return;
+    }
+
+    const bodyReq = {
+        groups: {
+            add: groupForAdding ? [ groupForAdding ] : [],
+            remove: groupForRemoving ? [ groupForRemoving ] : [],
+        },
+    };
+
     try {
-        const { data } = await http().post<void>(
-            "/api/player/groups",
-            {
-                groups:
-                    {
-                        add: [ groupForAdding ],
-                    },
-            });
-        return data;
+        loadingChangePlayerGroup = true;
+        await http().post<void>("/api/player/groups", bodyReq);
     } catch (err) {
-        log.error("ADD_PLAYER_TO_GROUP_ERROR", err);
-        throw err;
+        log.error("CHANGE_PLAYER_GROUP_ERROR", bodyReq, err);
+    } finally {
+        loadingChangePlayerGroup = false;
     }
 }
 
-export async function loadPlayerPayments() {
+export interface PlayerPaymentsResponse {
+    items: IPlayerPayment[];
+    pagination: {
+        page: number;
+        per_page: number;
+        total_count: number;
+    };
+}
+
+export async function loadPlayerPayments(
+    { type = "", currency = "", page = 1, pageSize = 20 }: LoadPlayerPaymentsParams = {},
+): Promise<PlayerPaymentsResponse> {
     try {
-        const { data } = await http().get<IPlayerPayment[]>(
-            "/api/player/payments");
-        return data as IPlayerPayment[];
+        const filter = {
+            ...(currency && { currency }),
+            ...(type && { type }),
+        };
+        const payload = {
+            page,
+            page_size: pageSize,
+            ...(Object.keys(filter).length && { filter }),
+        };
+        const { data } = await http().post(
+            "/api/player/payments/with_pages", payload);
+        return {
+            items: data?.data || [],
+            pagination: data?.pagination || { page: 1, per_page: pageSize, total_count: 0 },
+        };
     } catch (err) {
         log.error("LOAD_PAYMENTS_HISTORY_ERROR", err);
         throw err;

@@ -11,8 +11,10 @@ export async function loadAuthProviders() {
 }
 
 export async function loadUserAuthProviders() {
-    const { setUserAuthProviders } = useAuthProvidersStore();
+    const { setUserAuthProviders, setUserAuthProvidersLoadedStatus } = useAuthProvidersStore();
     const data = await getUserAuthProvidersReq();
+
+    setUserAuthProvidersLoadedStatus(true);
 
     if (data) {
         setUserAuthProviders(data);

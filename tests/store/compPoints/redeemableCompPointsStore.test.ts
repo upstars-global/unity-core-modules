@@ -18,6 +18,9 @@ const mockCard = (overrides = {}): IRedeemableCards => ({
 });
 
 vi.mock("@router/routeNames", () => ({}));
+vi.mock("@config/compPoints", () => ({
+    CoinShopPageSlug: "test-slug",
+}));
 vi.mock("@theme/configs/meta", () => ({}));
 
 vi.mock("../../../src/store/user/userInfo", () => ({

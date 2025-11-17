@@ -1,5 +1,6 @@
 import {
     ALL_LEVELS,
+    ID_CASHBOX_ONBOARD_DONE,
     ID_GROUP_FOR_MULTI_ACC,
     TEST_GROUP_ID,
 } from "@config/user-statuses";
@@ -9,10 +10,11 @@ import type { ILevel } from "@types/levels";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
+import { log } from "../../controllers/Logger";
 import type { IUserStatus, UserGroup } from "../../models/user";
 import { IVipManager } from "../../models/vipManagers";
 import { loadManagersConfigReq } from "../../services/api/requests/configs";
-import { addPlayerToGroup } from "../../services/api/requests/player";
+import { changePlayerGroup, type IPlayerGroup } from "../../services/api/requests/player";
 import { useLevelsStore } from "../levels/levelsStore";
 import { useUserInfo } from "./userInfo";
 
@@ -78,11 +80,31 @@ export const useUserStatuses = defineStore("userStatuses", () => {
         return userManager.value;
     });
 
-    async function addUserToGroup(groupForAdding: string | number) {
-        if (!getUserGroups.value.includes(groupForAdding)) {
-            await addPlayerToGroup(groupForAdding);
-            userStore.addUserGroup({ id: groupForAdding, name: "" });
+    const isCashboxOnboardDone = computed(() => {
+        return getUserGroups.value.includes(ID_CASHBOX_ONBOARD_DONE);
+    });
+
+    async function changeUserToGroup(groupForAdding?: IPlayerGroup, groupForRemoving?: IPlayerGroup) {
+        if (!groupForAdding && !groupForRemoving) {
+            log.error("CHANGE_PLAYER_GROUP_EMPTY_PARAMS", {
+                groupForAdding: String(groupForAdding),
+                groupForRemoving: String(groupForRemoving),
+            });
+
+            return;
         }
+
+        if (groupForAdding) {
+            if (!getUserGroups.value.includes(groupForAdding)) {
+                userStore.addUserGroup({ id: groupForAdding, name: groupForAdding });
+            }
+
+            if (getUserGroups.value.includes(groupForAdding) && groupForRemoving) {
+                userStore.removeUserGroup({ id: groupForRemoving, name: groupForRemoving });
+            }
+        }
+
+        await changePlayerGroup(groupForAdding, groupForRemoving);
     }
 
     async function loadUserManager() {
@@ -109,13 +131,14 @@ export const useUserStatuses = defineStore("userStatuses", () => {
         isMultiAccount,
         isVip,
         isDiamond,
+        isCashboxOnboardDone,
         getUserManager,
         userVipStatus,
         userVipGroup,
         isRegisteredViaSocialNetwork,
         getUserLevelId,
+        changeUserToGroup,
         setSocialNetworkAuthGroups,
-        addUserToGroup,
         loadUserManager,
         clearUserManager,
     };

@@ -5,7 +5,6 @@ import { defineStore, type Pinia, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
 import { cioIdentifyUser } from "../../controllers/CustomerIO";
-import { useUserTermsAcceptingPopup } from "../../controllers/userTermsAcceptingPopup";
 import { EnumContextFields, EnumFormFields } from "../../models/common";
 import { Currencies } from "../../models/enums/currencies";
 import { BettingPlayerSettings } from "../../models/player";
@@ -159,6 +158,14 @@ export const useUserInfo = defineStore("userInfo", () => {
         info.value.statuses.push(userGroup);
     }
 
+    function removeUserGroup(userGroup: IUserStatus) {
+        const indexCurrentGroup = info.value.statuses.findIndex((status) => status.id === userGroup.id);
+
+        if (indexCurrentGroup >= 0) {
+            info.value.statuses.splice(indexCurrentGroup, 1);
+        }
+    }
+
     function setUserStatuses(userGroups: IUserStatus[]) {
         info.value.statuses = userGroups;
     }
@@ -180,7 +187,7 @@ export const useUserInfo = defineStore("userInfo", () => {
     function addUserStatuses(newStatus: IUserStatus) {
         info.value.statuses = [
             ...info.value.statuses.filter(({ id }) => {
-                return Number(id) !== Number(newStatus.id);
+                return id !== newStatus.id;
             }),
             newStatus,
         ];
@@ -210,7 +217,6 @@ export const useUserInfo = defineStore("userInfo", () => {
 
     async function loadUserProfile({ reload = false, route }: { reload?: boolean; route?: string } = {}) {
         const { checkToShowPopup } = usePopupNewProvider();
-        const { runShowingTermsPopup } = useUserTermsAcceptingPopup();
         const multilang = useMultilangStore();
 
         const profile = info.value;
@@ -225,8 +231,6 @@ export const useUserInfo = defineStore("userInfo", () => {
             if (response) {
                 setUserData(response.data);
 
-                runShowingTermsPopup();
-
                 const responseLang = response.data.language;
 
                 if (responseLang !== multilang.getUserLocale && response.data.id) {
@@ -239,6 +243,7 @@ export const useUserInfo = defineStore("userInfo", () => {
                     toggleUserIsLogged(false);
                     return;
                 }
+
                 toggleUserIsLogged(true);
 
                 bus.$emit("user.data.received");
@@ -414,6 +419,7 @@ export const useUserInfo = defineStore("userInfo", () => {
         toggleUserIsLogged,
         setUserData,
         addUserGroup,
+        removeUserGroup,
         clearUserData,
         addUserStatuses,
         setUserStatuses,

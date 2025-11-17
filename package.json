@@ -1,6 +1,6 @@
 {
   "name": "unity-core-modules",
-  "version": "1.43.1",
+  "version": "1.49.0",
   "description": "",
   "type": "module",
   "repository": {
@@ -38,7 +38,7 @@
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
-    "@octokit/auth-app": "^8.1.1",
+    "@octokit/auth-app": "^8.1.2",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/exec": "^7.1.0",
     "@semantic-release/git": "^10.0.1",
