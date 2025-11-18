@@ -15,7 +15,7 @@ vi.mock("../../src/store/cashboxStore", () => ({
 vi.mock("../../src/store/levels/levelsStore", () => ({
     useLevelsStore: vi.fn(() => ({
         groups: ref([]),
-        getLevelsData: [],
+        getLevelsData: ref([]),
     })),
 }));
 vi.mock("../../src/store/tournaments/tournamentsStore", () => ({
@@ -106,7 +106,7 @@ describe("useAchievements", () => {
         ];
         vi.mocked(useLevelsStore).mockReturnValue({
             groups: mockGroups,
-            getLevelsData: [],
+            getLevelsData: ref([]),
         });
         vi.mocked(useTournamentsStore).mockReturnValue({
             getAllTournamentsOnlyUser: mockTournaments,
@@ -126,7 +126,7 @@ describe("useAchievements", () => {
         ]);
         vi.mocked(useLevelsStore).mockReturnValue({
             groups: mockGroups,
-            getLevelsData: [],
+            getLevelsData: ref([]),
         });
         const store = useAchievements();
         expect(store.getAchievementsActive.length).toBe(0);
@@ -138,7 +138,7 @@ describe("useAchievements", () => {
         ]);
         vi.mocked(useLevelsStore).mockReturnValue({
             groups: mockGroups,
-            getLevelsData: [],
+            getLevelsData: ref([]),
         });
         const store = useAchievements();
         expect(store.getAchievementsActive.length).toBeGreaterThanOrEqual(0);
@@ -151,7 +151,7 @@ describe("useAchievements", () => {
         ]);
         vi.mocked(useLevelsStore).mockReturnValue({
             groups: mockGroups,
-            getLevelsData: [],
+            getLevelsData: ref([]),
         });
         const store = useAchievements();
         const history = store.getAchievementsHistory;

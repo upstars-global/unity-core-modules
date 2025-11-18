@@ -1,7 +1,7 @@
 import { ACHIEV_ID, defaultDepCount, TOURNAMENT_IDS_FOR_ACHIEV } from "@config/achievements";
 import featureFlags from "@theme/configs/featureFlags";
 import dayjs from "dayjs";
-import { defineStore } from "pinia";
+import { defineStore, storeToRefs } from "pinia";
 import { type IUserStatus } from "src/models/user";
 import { type IStatuses } from "src/services/api/DTO/statuses";
 import { computed } from "vue";
@@ -61,9 +61,9 @@ function showAchievByUserStatus(userStatuses: IUserStatus[]): number[] {
 
 export const useAchievements = defineStore("achievements", () => {
     const userStatuses = useUserStatuses();
-    const levelsStore = useLevelsStore();
     const tournamentsStore = useTournamentsStore();
-    const cashboxStore = useCashboxStore();
+    const { historyDeposits } = storeToRefs(useCashboxStore());
+    const { groups, getLevelsData } = storeToRefs(useLevelsStore());
 
     const getTournamentForAchiev = computed<IAchievement[]>(() => {
         return tournamentsStore.getAllTournamentsOnlyUser.filter((tour) => {
@@ -74,12 +74,12 @@ export const useAchievements = defineStore("achievements", () => {
     const getAchievementsAll = computed<IAchievement[]>(() => {
         // display/hide some achiev for user by status
         const arrayAchievId = showAchievByUserStatus(userStatuses.getUserStatuses);
-        levelsStore.getLevelsData.forEach((level) => {
+        getLevelsData.value.forEach((level) => {
             if (!arrayAchievId.includes(Number(level.id))) {
                 arrayAchievId.push(Number(level.id));
             }
         });
-        const achievByGroups = levelsStore.groups.value.map((itemGroup) => {
+        const achievByGroups = groups.value.map((itemGroup) => {
             return {
                 ...itemGroup,
                 id: Number(itemGroup.id),
@@ -96,7 +96,7 @@ export const useAchievements = defineStore("achievements", () => {
     });
 
     const getDepCountForAchiev = computed<number>(() => {
-        const countCompletedDeps = cashboxStore.historyDeposits.value.filter((itemDep) => {
+        const countCompletedDeps = historyDeposits.value.filter((itemDep) => {
             return dayjs(itemDep.finished_at).isAfter(dayjs(defaultDepDateStartCount)) &&
                 itemDep.success;
         });
