@@ -11,7 +11,7 @@ import { storeToRefs } from "pinia";
 import { referrerHelper } from "../helpers/referrerHelper";
 import { isServer } from "../helpers/ssrHelpers";
 import type { IStagByReferName } from "../models/configs";
-import { useCommon } from "../store/common";
+import { loadStagByReferName } from "../services/common";
 import { useMultilangStore } from "../store/multilang";
 import { CookieController } from "./CookieController";
 import { log } from "./Logger";
@@ -96,12 +96,12 @@ async function initStag(queryParams: URLSearchParams, path: string, referrer: st
         setStag(stagQuery);
     } else {
         const { getUserGeo } = storeToRefs(useMultilangStore());
-        const loadStagByReferName = await useCommon().loadStagByReferName();
+        const stagByReferName = await loadStagByReferName();
 
         const stagReferrer = getStagByReferrerName({
             referrer,
             path,
-            stagsByReferName: loadStagByReferName!,
+            stagsByReferName: stagByReferName!,
             country: getUserGeo.value,
         });
 
