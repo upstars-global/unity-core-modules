@@ -1,3 +1,10 @@
+## [1.49.1](https://github.com/upstars-global/unity-core-modules/compare/v1.49.0...v1.49.1) (2025-11-19)
+
+### 🧪 Testing
+
+* add log for 422 status code in changePlayerGroup
+ ([52aff57](https://github.com/upstars-global/unity-core-modules/commit/52aff573a85d908d53f8f32e2c7ee09f91569645))
+
 ## [1.49.0](https://github.com/upstars-global/unity-core-modules/compare/v1.48.2...v1.49.0) (2025-11-17)
 
 ### 🚀 Features
