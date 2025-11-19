@@ -1,3 +1,16 @@
+## [1.49.2](https://github.com/upstars-global/unity-core-modules/compare/v1.49.1...v1.49.2) (2025-11-19)
+
+### 🧪 Testing
+
+* achievements store tests ([#260](https://github.com/upstars-global/unity-core-modules/issues/260))
+ ([cc6fdb6](https://github.com/upstars-global/unity-core-modules/commit/cc6fdb63ba9626f7c45539fd054fcc8706c2bdc6))
+
+
+
+    * test: achievements store tests
+
+    * fix
+
 ## [1.49.1](https://github.com/upstars-global/unity-core-modules/compare/v1.49.0...v1.49.1) (2025-11-19)
 
 ### 🧪 Testing
