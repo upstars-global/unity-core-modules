@@ -8,6 +8,7 @@ import {
     IGameFilterResponse,
     IJackpots,
     IPlayedGame,
+    IRandomGameFilter,
     ResponseGamesByVersion,
 } from "../DTO/gamesDTO";
 import { http } from "../http";
@@ -32,9 +33,14 @@ export async function loadLastGames(): Promise<IPlayedGame[]> {
     }
 }
 
-export async function loadRandomGame(): Promise<IGame> {
+export async function loadRandomGame(config: IRandomGameFilter): Promise<IGame> {
     try {
-        const { data } = await http().get<IGame>("/api/games/random");
+        const query = Object.entries(config)
+            .filter(([ , value ]) => value !== undefined && value !== null)
+            .map(([ key, value ]) => `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`)
+            .join("&");
+
+        const { data } = await http().get<IGame>(`/api/games/random${ query ? `?${query}` : "" }`);
         return data;
     } catch (error) {
         log.error("LOAD_RANDOM_GAME_ERROR", error);

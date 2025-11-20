@@ -65,3 +65,8 @@ export type ResponseGamesByVersion<V extends AcceptGamesVersion> =
     V extends typeof AcceptsGamesVariants.onlyID ? number[] :
         V extends typeof AcceptsGamesVariants.fullData ? IGame[] :
             never;
+
+
+export interface IRandomGameFilter {
+    identifier?: string
+}

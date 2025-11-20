@@ -59,7 +59,7 @@ export interface IParamsUrlGame {
 }
 
 let randomGameCounter = 0;
-export async function getRandomGame(): Promise<IGame | undefined> {
+export async function getRandomGame(category?: string): Promise<IGame | undefined> {
     const randomGame = await loadRandomGame();
     randomGameCounter++;
 
@@ -71,7 +71,7 @@ export async function getRandomGame(): Promise<IGame | undefined> {
     }
 
     if (randomGameCounter <= 10) {
-        return getRandomGame();
+        return getRandomGame(category);
     }
 
     if (randomGameCounter > 10) {

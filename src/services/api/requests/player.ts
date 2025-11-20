@@ -30,7 +30,12 @@ export async function changePlayerGroup(groupForAdding?: IPlayerGroup, groupForR
 
     try {
         loadingChangePlayerGroup = true;
-        await http().post<void>("/api/player/groups", bodyReq);
+
+        const response = await http().post<void>("/api/player/groups", bodyReq);
+
+        if (response?.status === 422) {
+            throw response;
+        }
     } catch (err) {
         log.error("CHANGE_PLAYER_GROUP_ERROR", bodyReq, err);
     } finally {

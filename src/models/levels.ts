@@ -53,3 +53,11 @@ export interface ILevel {
     max: number;
     image: string;
 }
+
+export interface IGroup {
+    name: string;
+    conditions: ILevelConditions[];
+    status: boolean;
+    id: number | string;
+    writable: boolean;
+}
