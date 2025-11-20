@@ -1,3 +1,10 @@
+## [1.49.3](https://github.com/upstars-global/unity-core-modules/compare/v1.49.2...v1.49.3) (2025-11-20)
+
+### 🐛 Bug Fixes
+
+* UN-1930 fix get random game ([#264](https://github.com/upstars-global/unity-core-modules/issues/264))
+ ([b8ea9dd](https://github.com/upstars-global/unity-core-modules/commit/b8ea9dde5a674456bfb54c3d611851faf528e45e))
+
 ## [1.49.2](https://github.com/upstars-global/unity-core-modules/compare/v1.49.1...v1.49.2) (2025-11-19)
 
 ### 🧪 Testing
