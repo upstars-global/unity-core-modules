@@ -63,7 +63,7 @@ export const useAchievements = defineStore("achievements", () => {
     const userStatuses = useUserStatuses();
     const tournamentsStore = useTournamentsStore();
     const { historyDeposits } = storeToRefs(useCashboxStore());
-    const { groups, getLevelsData } = storeToRefs(useLevelsStore());
+    const { groups } = storeToRefs(useLevelsStore());
 
     const getTournamentForAchiev = computed<IAchievement[]>(() => {
         return tournamentsStore.getAllTournamentsOnlyUser.filter((tour) => {
