@@ -1,3 +1,24 @@
+## [1.50.0](https://github.com/upstars-global/unity-core-modules/compare/v1.49.5...v1.50.0) (2025-11-21)
+
+### 🚀 Features
+
+* UN-1502 add config for enabled games ([#251](https://github.com/upstars-global/unity-core-modules/issues/251))
+ ([ee56db0](https://github.com/upstars-global/unity-core-modules/commit/ee56db07985676cab741ee46bd276b2764963a2d))
+
+
+
+    * UN-1502 add config for enabled games
+
+    * UN-1502 add config for enabled games
+
+    * UN-1502 add config for enabled games
+
+    * UN-1502 delete slice for test
+
+    * UN-1502 fix
+
+    * UN-1502 fix test
+
 ## [1.49.5](https://github.com/upstars-global/unity-core-modules/compare/v1.49.4...v1.49.5) (2025-11-21)
 
 ### 🐛 Bug Fixes
