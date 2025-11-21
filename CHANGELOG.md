@@ -1,3 +1,14 @@
+## [1.49.5](https://github.com/upstars-global/unity-core-modules/compare/v1.49.4...v1.49.5) (2025-11-21)
+
+### 🐛 Bug Fixes
+
+* 422 по api/groups
+ ([50c4531](https://github.com/upstars-global/unity-core-modules/commit/50c4531616db7e4c4043cbcdce65701681da8b2c))
+
+
+
+    fix and refactor changeUserToGroup
+
 ## [1.49.4](https://github.com/upstars-global/unity-core-modules/compare/v1.49.3...v1.49.4) (2025-11-20)
 
 ### ⏪ Reverts
