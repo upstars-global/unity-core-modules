@@ -50,7 +50,7 @@ const loadVipProgramConfigReq = () => loadConfig<IVipProgramConfigDTO>(
     "LOAD_VIP_PROGRAM_REWARDS_CONFIG_ERROR",
 );
 const loadDisabledProvidersConfigReq = () => loadConfig<IProvidersList>(
-    "/api/fe/config/providers-config-test",
+    "/api/fe/config/providers-config",
     "LOAD_PROVIDERS_CONFIG_ERROR",
 );
 const loadEnabledGamesConfigReq = () => loadConfig<IEnabledGames>(
