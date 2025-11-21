@@ -1,3 +1,10 @@
+## [1.50.1](https://github.com/upstars-global/unity-core-modules/compare/v1.50.0...v1.50.1) (2025-11-21)
+
+### 🐛 Bug Fixes
+
+* change test config ([#268](https://github.com/upstars-global/unity-core-modules/issues/268))
+ ([067500f](https://github.com/upstars-global/unity-core-modules/commit/067500f05ef2f87c69a4fdbd69c3c0bea8d6ca98))
+
 ## [1.50.0](https://github.com/upstars-global/unity-core-modules/compare/v1.49.5...v1.50.0) (2025-11-21)
 
 ### 🚀 Features
