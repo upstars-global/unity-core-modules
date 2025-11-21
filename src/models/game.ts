@@ -50,6 +50,10 @@ export interface IDisabledGamesProvider {
     [key: string]: GameDisableGeoStatus.all | string[];
 }
 
+export interface IEnabledGames {
+    [key: string]: string[];
+}
+
 export type IGamesProviderCollection = Record<string, IGamesProvider>;
 
 export interface ICollectionItem {

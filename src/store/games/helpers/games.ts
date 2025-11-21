@@ -1,11 +1,15 @@
 import featureFlags from "@theme/configs/featureFlags";
 import { storeToRefs } from "pinia";
 
-import type { ICollectionItem, IDisabledGamesProvider, IGame, IGamesProvider } from "../../../models/game";
-import { GameDisableGeoStatus } from "../../../models/game";
+import { IGameItem } from "../../../helpers/gameHelpers";
+import type { ICollectionItem, IGame, IGamesProvider } from "../../../models/game";
+import { GameDisableGeoStatus, IEnabledGames } from "../../../models/game";
 import { useRootStore } from "../../../store/root";
 import { useCommon } from "../../common";
 import { useContextStore } from "../../context";
+import { useGamesProviders } from "../gamesProviders";
+import { useGamesCommon } from "../gamesStore";
+
 
 type IFindGameParams = {
     producer: string;
@@ -47,31 +51,91 @@ export function defaultCollection(): ICollectionItem {
     };
 }
 
-export function filterDisabledProviders(
-    data: (IGamesProvider | IGame)[], disabledGamesProviders: IDisabledGamesProvider,
-): (IGamesProvider | IGame)[] {
+function getCountryCode(): string | undefined {
+    const { currentIpInfo } = storeToRefs(useCommon());
+    return currentIpInfo.value?.country_code;
+}
+
+export function isProviderAllowed(
+    providerId: string,
+    disabledMap: Record<string, GameDisableGeoStatus | string[]> | undefined,
+    country?: string,
+): boolean {
+    if (!disabledMap) {
+        return true;
+    }
+    const rules = disabledMap[providerId];
+    if (!rules) {
+        return true;
+    }
+    if (rules === GameDisableGeoStatus.all) {
+        return false;
+    }
+    if (Array.isArray(rules)) {
+        return !rules.includes(String(country));
+    }
+    return true;
+}
+
+export function isGameAllowed(
+    identifier: string,
+    enabledMap: IEnabledGames | undefined,
+    country?: string,
+): boolean {
+    if (!enabledMap) {
+        return true;
+    }
+    const whitelist = enabledMap[identifier];
+    if (Array.isArray(whitelist)) {
+        return whitelist.includes(String(country));
+    }
+    return true;
+}
+
+export function filterProviders(
+    data: IGamesProvider[],
+): IGamesProvider[] {
     const { isBotUA } = storeToRefs(useContextStore());
-    const enableFilter = disabledGamesProviders && data && !featureFlags.enableAllProviders && !isBotUA.value;
+    const { disabledGamesProviders } = storeToRefs(useGamesProviders());
 
-    if (enableFilter) {
-        const { currentIpInfo } = storeToRefs(useCommon());
-        const hasData = Object.keys(disabledGamesProviders).length && Array.isArray(data);
-
-        if (hasData) {
-            return data.filter((dataItem: IGame | IGamesProvider) => {
-                const providerName = dataItem.provider;
-                const currentDisabledProviderOpts = disabledGamesProviders[providerName];
-
-                if (currentDisabledProviderOpts === GameDisableGeoStatus.all) {
-                    return false;
-                } else if (Array.isArray(currentDisabledProviderOpts)) {
-                    return !currentDisabledProviderOpts.includes(String(currentIpInfo.value?.country_code));
-                }
-
-                return true;
-            });
-        }
+    if (!Array.isArray(data) || featureFlags.enableAllProviders || isBotUA.value) {
+        return data;
     }
 
-    return data;
+    const disabledMap = disabledGamesProviders.value;
+    if (!disabledMap || Object.keys(disabledMap).length === 0) {
+        return data;
+    }
+
+    const country = getCountryCode();
+    return data.filter((item) => isProviderAllowed(item.provider, disabledMap, country));
+}
+
+export function filterGames<T extends IGame | IGameItem>(
+    data: T[],
+): T[] {
+    const { isBotUA } = storeToRefs(useContextStore());
+    const { disabledGamesProviders } = storeToRefs(useGamesProviders());
+    const { enabledGamesConfig } = storeToRefs(useGamesCommon());
+
+    if (!Array.isArray(data) || featureFlags.enableAllProviders || isBotUA.value) {
+        return data;
+    }
+
+    const disabledMap = disabledGamesProviders.value;
+    const enabledMap = enabledGamesConfig.value;
+    const hasConfigs =
+        Boolean(disabledMap && Object.keys(disabledMap).length) ||
+        Boolean(enabledMap && Object.keys(enabledMap).length);
+
+    if (!hasConfigs) {
+        return data;
+    }
+
+    const country = getCountryCode();
+    return data.filter(
+        (game) =>
+            isProviderAllowed(game.provider, disabledMap, country) &&
+            isGameAllowed(game.identifier, enabledMap as IEnabledGames | undefined, country),
+    );
 }

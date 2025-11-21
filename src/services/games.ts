@@ -2,6 +2,7 @@ import { SlugCategoriesGames } from "@theme/configs/categoryesGames";
 
 import { useGamesCommon } from "../store/games/gamesStore";
 import { useJackpots } from "../store/jackpots";
+import { loadEnabledGamesConfigReq } from "./api/requests/configs";
 import { loadCategoriesFileConfigRequest } from "./api/requests/games";
 
 export function getMenuCategoriesBySlug(slug: string): SlugCategoriesGames[] {
@@ -26,5 +27,14 @@ export async function loadCategoriesFileConfig() {
 
     if (data) {
         gamesStore.setMenuGameCategories(data);
+    }
+}
+
+export async function loadEnableGamesConfig() {
+    const gamesStore = useGamesCommon();
+    const data = await loadEnabledGamesConfigReq();
+
+    if (data) {
+        gamesStore.setEnableGamesConfig(data);
     }
 }
