@@ -34,7 +34,7 @@ export interface IGameItem extends IGame {
     gameSlug: string;
 }
 
-interface IGameItemFilter {
+export interface IGameItemFilter {
     uniq_seo_title: boolean;
     lines: null;
     ways: number;
