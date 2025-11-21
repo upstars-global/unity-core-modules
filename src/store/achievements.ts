@@ -74,11 +74,6 @@ export const useAchievements = defineStore("achievements", () => {
     const getAchievementsAll = computed<IAchievement[]>(() => {
         // display/hide some achiev for user by status
         const arrayAchievId = showAchievByUserStatus(userStatuses.getUserStatuses);
-        getLevelsData.value.forEach((level) => {
-            if (!arrayAchievId.includes(Number(level.id))) {
-                arrayAchievId.push(Number(level.id));
-            }
-        });
         const achievByGroups = groups.value.map((itemGroup) => {
             return {
                 ...itemGroup,
