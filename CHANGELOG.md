@@ -1,3 +1,21 @@
+## [1.49.5](https://github.com/upstars-global/unity-core-modules/compare/v1.49.4...v1.49.5) (2025-11-21)
+
+### 🐛 Bug Fixes
+
+* 422 по api/groups
+ ([50c4531](https://github.com/upstars-global/unity-core-modules/commit/50c4531616db7e4c4043cbcdce65701681da8b2c))
+
+
+
+    fix and refactor changeUserToGroup
+
+## [1.49.4](https://github.com/upstars-global/unity-core-modules/compare/v1.49.3...v1.49.4) (2025-11-20)
+
+### ⏪ Reverts
+
+* "test: achievements store tests ([#260](https://github.com/upstars-global/unity-core-modules/issues/260))" ([#265](https://github.com/upstars-global/unity-core-modules/issues/265))
+ ([a0bcfb3](https://github.com/upstars-global/unity-core-modules/commit/a0bcfb34bb085ec70406952a01c1c36a35a19eca))
+
 ## [1.49.3](https://github.com/upstars-global/unity-core-modules/compare/v1.49.2...v1.49.3) (2025-11-20)
 
 ### 🐛 Bug Fixes
