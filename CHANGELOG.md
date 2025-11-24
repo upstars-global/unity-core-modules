@@ -1,3 +1,12 @@
+## [1.50.2](https://github.com/upstars-global/unity-core-modules/compare/v1.50.1...v1.50.2) (2025-11-24)
+
+### 🧪 Testing
+
+* **UN-346:** achievements store types and tests ([#267](https://github.com/upstars-global/unity-core-modules/issues/267))
+ ([13dfaa8](https://github.com/upstars-global/unity-core-modules/commit/13dfaa8eed9d4669c39e2326ac1e5a0a7cdbac86))
+
+, closes [#260](https://github.com/upstars-global/unity-core-modules/issues/) [#265](https://github.com/upstars-global/unity-core-modules/issues/)
+
 ## [1.50.1](https://github.com/upstars-global/unity-core-modules/compare/v1.50.0...v1.50.1) (2025-11-21)
 
 ### 🐛 Bug Fixes
