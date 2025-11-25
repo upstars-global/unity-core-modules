@@ -1,3 +1,14 @@
+## [1.52.0](https://github.com/upstars-global/unity-core-modules/compare/v1.51.0...v1.52.0) (2025-11-25)
+
+### 🚀 Features
+
+* **UN-365:** refactor common store by moving requests to separate service file ([#263](https://github.com/upstars-global/unity-core-modules/issues/263))
+ ([8dc5ea5](https://github.com/upstars-global/unity-core-modules/commit/8dc5ea50bc141d2a44d5b904ebd0151de6d682c6))
+
+
+
+    feat: refactor common store by moving requests to separate service file
+
 ## [1.51.0](https://github.com/upstars-global/unity-core-modules/compare/v1.50.2...v1.51.0) (2025-11-25)
 
 ### 🚀 Features
