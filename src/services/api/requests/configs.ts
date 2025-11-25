@@ -2,6 +2,7 @@ import { log } from "../../../controllers/Logger";
 import { type CurrencyData } from "../../../models/cashbox";
 import { type IStagByReferName, type ISurveyConfig } from "../../../models/configs";
 import { type IBettingConfig } from "../../../models/configs";
+import { IEnabledGames } from "../../../models/game";
 import { type MainWidgetItem } from "../../../models/mainWidget";
 import { type IProvidersList } from "../../../models/providers";
 import { type IGiftModifyConfig } from "../DTO/gifts";
@@ -52,6 +53,10 @@ const loadDisabledProvidersConfigReq = () => loadConfig<IProvidersList>(
     "/api/fe/config/providers-config",
     "LOAD_PROVIDERS_CONFIG_ERROR",
 );
+const loadEnabledGamesConfigReq = () => loadConfig<IEnabledGames>(
+    "/api/fe/config/enable-games-config",
+    "LOAD_ENABLED_GAMES_CONFIG_ERROR",
+);
 
 export {
     loadAdditionalDepositGiftsConfigReq,
@@ -59,6 +64,7 @@ export {
     loadCurrencyConfigReq,
     loadDisabledBonusesConfigReq,
     loadDisabledProvidersConfigReq,
+    loadEnabledGamesConfigReq,
     loadExcludedPromoStagsReq,
     loadFooterPaymentsConfigReq,
     loadMainWidgetConfigReq,
@@ -67,5 +73,4 @@ export {
     loadStagByReferNameReq,
     loadSurveyConfigReq,
     loadVipAdventuresConfigReq,
-    loadVipProgramConfigReq,
-};
+    loadVipProgramConfigReq };

@@ -1,3 +1,76 @@
+## [1.51.0](https://github.com/upstars-global/unity-core-modules/compare/v1.50.2...v1.51.0) (2025-11-25)
+
+### 🚀 Features
+
+* **UN-1897:** fiat converter rates
+ ([88c5908](https://github.com/upstars-global/unity-core-modules/commit/88c59084f5cb40f1e6931b337f82ef213c88360c))
+
+
+
+    UN-1897 fix isCryptoCurrency
+
+## [1.50.2](https://github.com/upstars-global/unity-core-modules/compare/v1.50.1...v1.50.2) (2025-11-24)
+
+### 🧪 Testing
+
+* **UN-346:** achievements store types and tests ([#267](https://github.com/upstars-global/unity-core-modules/issues/267))
+ ([13dfaa8](https://github.com/upstars-global/unity-core-modules/commit/13dfaa8eed9d4669c39e2326ac1e5a0a7cdbac86))
+
+, closes [#260](https://github.com/upstars-global/unity-core-modules/issues/) [#265](https://github.com/upstars-global/unity-core-modules/issues/)
+
+## [1.50.1](https://github.com/upstars-global/unity-core-modules/compare/v1.50.0...v1.50.1) (2025-11-21)
+
+### 🐛 Bug Fixes
+
+* change test config ([#268](https://github.com/upstars-global/unity-core-modules/issues/268))
+ ([067500f](https://github.com/upstars-global/unity-core-modules/commit/067500f05ef2f87c69a4fdbd69c3c0bea8d6ca98))
+
+## [1.50.0](https://github.com/upstars-global/unity-core-modules/compare/v1.49.5...v1.50.0) (2025-11-21)
+
+### 🚀 Features
+
+* UN-1502 add config for enabled games ([#251](https://github.com/upstars-global/unity-core-modules/issues/251))
+ ([ee56db0](https://github.com/upstars-global/unity-core-modules/commit/ee56db07985676cab741ee46bd276b2764963a2d))
+
+
+
+    * UN-1502 add config for enabled games
+
+    * UN-1502 add config for enabled games
+
+    * UN-1502 add config for enabled games
+
+    * UN-1502 delete slice for test
+
+    * UN-1502 fix
+
+    * UN-1502 fix test
+
+## [1.49.5](https://github.com/upstars-global/unity-core-modules/compare/v1.49.4...v1.49.5) (2025-11-21)
+
+### 🐛 Bug Fixes
+
+* 422 по api/groups
+ ([50c4531](https://github.com/upstars-global/unity-core-modules/commit/50c4531616db7e4c4043cbcdce65701681da8b2c))
+
+
+
+    fix and refactor changeUserToGroup
+
+## [1.49.4](https://github.com/upstars-global/unity-core-modules/compare/v1.49.3...v1.49.4) (2025-11-20)
+
+### ⏪ Reverts
+
+* "test: achievements store tests ([#260](https://github.com/upstars-global/unity-core-modules/issues/260))" ([#265](https://github.com/upstars-global/unity-core-modules/issues/265))
+ ([a0bcfb3](https://github.com/upstars-global/unity-core-modules/commit/a0bcfb34bb085ec70406952a01c1c36a35a19eca))
+
+## [1.49.3](https://github.com/upstars-global/unity-core-modules/compare/v1.49.2...v1.49.3) (2025-11-20)
+
+### 🐛 Bug Fixes
+
+* UN-1930 fix get random game ([#264](https://github.com/upstars-global/unity-core-modules/issues/264))
+ ([b8ea9dd](https://github.com/upstars-global/unity-core-modules/commit/b8ea9dde5a674456bfb54c3d611851faf528e45e))
+
 ## [1.49.2](https://github.com/upstars-global/unity-core-modules/compare/v1.49.1...v1.49.2) (2025-11-19)
 
 ### 🧪 Testing

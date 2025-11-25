@@ -7,6 +7,7 @@ import { currencyView } from "../../helpers/currencyHelper";
 import { processGame } from "../../helpers/gameHelpers";
 import { isExistData } from "../../helpers/isExistData";
 import type { IGame, IGamesProvider } from "../../models/game";
+import { IEnabledGames } from "../../models/game";
 import {
     loadFilteredGames as loadFilteredGamesReq,
     loadGamesCategories as loadGamesCategoriesReq,
@@ -15,8 +16,7 @@ import {
 } from "../../services/api/requests/games";
 import { useRootStore } from "../root";
 import { useUserInfo } from "../user/userInfo";
-import { useGamesProviders } from "./gamesProviders";
-import { filterDisabledProviders, findGameBySeoTittleAndProducer } from "./helpers/games";
+import { filterGames, findGameBySeoTittleAndProducer } from "./helpers/games";
 
 
 interface ISearchCachedGameKey {
@@ -50,14 +50,14 @@ export const useGamesCommon = defineStore("gamesCommon", () => {
     const getGamesCategories = computed(() => gamesCategories.value);
     const menuGameCategories = ref<Record<string, SlugCategoriesGames[]>>({});
     const defaultMenuGameCategories = ref<Record<string, SlugCategoriesGames[]>>(CONFIG_DEFAULT_COLLECTIONS_MENU_SLUGS);
-    const { disabledGamesProviders } = storeToRefs(useGamesProviders());
+    const enabledGamesConfig = ref<IEnabledGames>({});
 
     const getRecentGames = computed(() => {
         let tempGames = [];
         for (const [ id, game ] of Object.entries(recentGames.value)) {
             tempGames.push(processGame(game, id));
         }
-        tempGames = filterDisabledProviders(tempGames, disabledGamesProviders.value);
+        tempGames = filterGames(tempGames);
 
         return tempGames.sort(({ last_activity_at: lastActivityItem }, { last_activity_at: lastActivityNextItem }) => {
             return new Date(lastActivityNextItem).getTime() - new Date(lastActivityItem).getTime();
@@ -181,6 +181,10 @@ export const useGamesCommon = defineStore("gamesCommon", () => {
         recentGames.value = {};
     }
 
+    function setEnableGamesConfig(list: IEnabledGames) {
+        enabledGamesConfig.value = list;
+    }
+
     return {
         gamesDataCached,
         games,
@@ -197,6 +201,7 @@ export const useGamesCommon = defineStore("gamesCommon", () => {
         getGameCategoryNameBySlug,
         getGamesJackpots,
         getJackpotTotalByCurrency,
+        enabledGamesConfig,
 
         setDefaultOptions,
         setMenuGameCategories,
@@ -207,6 +212,7 @@ export const useGamesCommon = defineStore("gamesCommon", () => {
         loadLastGames,
         loadGamesCategories,
         clearRecentGames,
+        setEnableGamesConfig,
     };
 });
 

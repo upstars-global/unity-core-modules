@@ -2,8 +2,9 @@ import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 
-import { processGameForNewAPI } from "../../../src/helpers/gameHelpers";
-import type { ICollectionItem, IGameItem, IGamesProvider } from "../../../src/models/game";
+import { IGameItemFilter, processGameForNewAPI } from "../../../src/helpers/gameHelpers";
+import type { ICollectionItem, IGamesProvider } from "../../../src/models/game";
+import { IEnabledGames } from "../../../src/models/game";
 import { http } from "../../../src/services/api/http";
 import { useGamesProviders } from "../../../src/store/games/gamesProviders";
 
@@ -14,6 +15,7 @@ vi.mock("../../../src/controllers/Logger", () => ({
     },
 }));
 vi.mock("../../../src/helpers/gameHelpers");
+vi.mock("../../../src/helpers/games");
 
 vi.mock("../../../src/store/root", () => ({
     useRootStore: () => ({
@@ -26,9 +28,11 @@ vi.mock("../../../src/store/configStore", () => ({
     }),
 }));
 const mockGamesCategories = ref<IGamesProvider[]>([]);
+const mockEnabledGamesConfig = ref<IEnabledGames>({});
 vi.mock("../../../src/store/games/gamesStore", () => ({
     useGamesCommon: () => ({
         getGamesCategories: mockGamesCategories,
+        enabledGamesConfig: mockEnabledGamesConfig,
     }),
 }));
 vi.mock("@theme/configs/games", () => ({
@@ -80,6 +84,7 @@ describe("store/games/gamesProviders", () => {
 
         it("loadData should fetch and set games for a provider", async () => {
             const store = useGamesProviders();
+
             const slug = "provider1";
             const mockGames = {
                 data: [
@@ -96,7 +101,7 @@ describe("store/games/gamesProviders", () => {
                 get: vi.fn(),
                 post: vi.fn().mockResolvedValue({ data: mockGames }),
             });
-            vi.mocked(processGameForNewAPI).mockImplementation((game) => game as IGameItem);
+            vi.mocked(processGameForNewAPI).mockImplementation((game) => game as IGameItemFilter);
 
             await store.loadData({ slug });
 

@@ -84,7 +84,7 @@ export const useUserStatuses = defineStore("userStatuses", () => {
         return getUserGroups.value.includes(ID_CASHBOX_ONBOARD_DONE);
     });
 
-    async function changeUserToGroup(groupForAdding?: IPlayerGroup, groupForRemoving?: IPlayerGroup) {
+    async function changeUserToGroup(groupForAdding?: IPlayerGroup, groupForRemoving?: IPlayerGroup): Promise<void> {
         if (!groupForAdding && !groupForRemoving) {
             log.error("CHANGE_PLAYER_GROUP_EMPTY_PARAMS", {
                 groupForAdding: String(groupForAdding),
@@ -94,17 +94,34 @@ export const useUserStatuses = defineStore("userStatuses", () => {
             return;
         }
 
-        if (groupForAdding) {
-            if (!getUserGroups.value.includes(groupForAdding)) {
-                userStore.addUserGroup({ id: groupForAdding, name: groupForAdding });
-            }
+        if (groupForAdding === groupForRemoving) {
+            log.error("CHANGE_PLAYER_GROUP_SAME_PARAMS", {
+                groupForAdding: String(groupForAdding),
+                groupForRemoving: String(groupForRemoving),
+            });
 
-            if (getUserGroups.value.includes(groupForAdding) && groupForRemoving) {
-                userStore.removeUserGroup({ id: groupForRemoving, name: groupForRemoving });
-            }
+            return;
         }
 
-        await changePlayerGroup(groupForAdding, groupForRemoving);
+        const allowedToAddGroup = groupForAdding && !getUserGroups.value.includes(groupForAdding);
+        const allowedToRemoveGroup = groupForRemoving && getUserGroups.value.includes(groupForRemoving);
+
+        if (!allowedToAddGroup && !allowedToRemoveGroup) {
+            return;
+        }
+
+        if (allowedToAddGroup) {
+            userStore.addUserGroup({ id: groupForAdding, name: groupForAdding });
+        }
+
+        if (allowedToRemoveGroup) {
+            userStore.removeUserGroup({ id: groupForRemoving, name: groupForRemoving });
+        }
+
+        await changePlayerGroup(
+            allowedToAddGroup ? groupForAdding : null,
+            allowedToRemoveGroup ? groupForRemoving : null,
+        );
     }
 
     async function loadUserManager() {

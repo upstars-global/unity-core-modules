@@ -18,7 +18,7 @@ export async function loadDisabledGamesProviders(): Promise<void> {
     if (data) {
         const first20Props: IDisabledGamesProvider = {};
 
-        Object.keys(data).slice(0, 20).forEach((key) => {
+        Object.keys(data).forEach((key) => {
             first20Props[key] = data[key];
         });
 

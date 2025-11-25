@@ -105,7 +105,7 @@ export const useCommon = defineStore("common", () => {
     });
 
     const isCryptoCurrency = (currency: Currencies): boolean => {
-        return !currencies.value.find(({ code }) => code === currency)?.fiat;
+        return Boolean(currencies.value.length) && !currencies.value.find(({ code }) => code === currency)?.fiat;
     };
 
     const getCurrencyFiat = computed(() => {

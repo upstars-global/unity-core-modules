@@ -5,8 +5,7 @@ import featureFlags from "@theme/configs/featureFlags";
 import { log } from "../controllers/Logger";
 import type { IGame } from "../models/game";
 import { loadRandomGame } from "../services/api/requests/games";
-import { useGamesProviders } from "../store/games/gamesProviders";
-import { filterDisabledProviders } from "../store/games/helpers/games";
+import { filterGames } from "../store/games/helpers/games";
 
 interface IGameBadge {
     [key: string]: string;
@@ -35,7 +34,7 @@ export interface IGameItem extends IGame {
     gameSlug: string;
 }
 
-interface IGameItemFilter {
+export interface IGameItemFilter {
     uniq_seo_title: boolean;
     lines: null;
     ways: number;
@@ -60,13 +59,11 @@ export interface IParamsUrlGame {
 }
 
 let randomGameCounter = 0;
-export async function getRandomGame(): Promise<IGame | undefined> {
-    const { disabledGamesProviders } = useGamesProviders();
-
-    const randomGame = await loadRandomGame();
+export async function getRandomGame(category?: string): Promise<IGame | undefined> {
+    const randomGame = await loadRandomGame({ identifier: category });
     randomGameCounter++;
 
-    const isValidRandomGame = filterDisabledProviders([ randomGame ], disabledGamesProviders)?.length;
+    const isValidRandomGame = filterGames([ randomGame ])?.length;
 
     if (isValidRandomGame) {
         randomGameCounter = 0;
@@ -74,7 +71,7 @@ export async function getRandomGame(): Promise<IGame | undefined> {
     }
 
     if (randomGameCounter <= 10) {
-        return getRandomGame();
+        return getRandomGame(category);
     }
 
     if (randomGameCounter > 10) {

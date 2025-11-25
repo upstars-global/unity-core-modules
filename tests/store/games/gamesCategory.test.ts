@@ -5,6 +5,7 @@ import { ref } from "vue";
 import { log } from "../../../src/controllers/Logger";
 import { processGameForNewAPI } from "../../../src/helpers/gameHelpers";
 import type { ICollectionItem, IGame, IGamesProvider } from "../../../src/models/game";
+import { IEnabledGames } from "../../../src/models/game";
 import { loadGamesCategory as loadGamesCategoryReq } from "../../../src/services/api/requests/games";
 import { useGamesCategory } from "../../../src/store/games/gamesCategory";
 
@@ -46,9 +47,11 @@ vi.mock("../../../src/store/root", () => ({
 }));
 
 const mockGamesCategories = ref<IGamesProvider[]>([]);
+const mockEnabledGamesConfig = ref<IEnabledGames>({});
 vi.mock("../../../src/store/games/gamesStore", () => ({
     useGamesCommon: () => ({
         gamesCategories: mockGamesCategories,
+        enabledGamesConfig: mockEnabledGamesConfig,
     }),
 }));
 
