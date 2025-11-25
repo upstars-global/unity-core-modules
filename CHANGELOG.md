@@ -1,3 +1,14 @@
+## [1.51.0](https://github.com/upstars-global/unity-core-modules/compare/v1.50.2...v1.51.0) (2025-11-25)
+
+### 🚀 Features
+
+* **UN-1897:** fiat converter rates
+ ([88c5908](https://github.com/upstars-global/unity-core-modules/commit/88c59084f5cb40f1e6931b337f82ef213c88360c))
+
+
+
+    UN-1897 fix isCryptoCurrency
+
 ## [1.50.2](https://github.com/upstars-global/unity-core-modules/compare/v1.50.1...v1.50.2) (2025-11-24)
 
 ### 🧪 Testing
