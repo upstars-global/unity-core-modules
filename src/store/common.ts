@@ -1,25 +1,17 @@
 import config from "@theme/configs/config";
 import { ENABLE_CURRENCIES } from "@theme/configs/currencies";
-import { defineStore, type Pinia, storeToRefs } from "pinia";
+import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
 import { isValidCurrency } from "../helpers/currencyOfCountry";
-import { isExistData } from "../helpers/isExistData";
 import { getUserAgentPlatform, type IPlatformState } from "../helpers/userAgentPlatform";
 import { CurrencyData } from "../models/cashbox";
-import type { IPlayerFieldsInfo } from "../models/common";
-import type { IStagByReferName, ISurveyConfig } from "../models/configs";
+import type { EnumContextFields, EnumFormFields, IPlayerFieldsInfo } from "../models/common";
+import type { IStagByReferName } from "../models/configs";
 import { Currencies } from "../models/enums/currencies";
 import type { MainWidgetItem } from "../models/mainWidget";
 import type { ICurrentIP } from "../services/api/DTO/current-ip";
 import type { ICountries, ICryptoExchangeRates, ICurrencies, IProjectInfo } from "../services/api/DTO/info";
-import { loadStagByReferNameReq, loadSurveyConfigReq } from "../services/api/requests/configs";
-import {
-    loadCountriesReq,
-    loadCryptoExchangeRatesReq,
-    loadCurrenciesReq,
-    loadProjectInfoReq,
-} from "../services/api/requests/info";
 import { useMultilangStore } from "./multilang";
 
 export interface ICommonStoreDefaultOptions {
@@ -37,6 +29,10 @@ export const useCommon = defineStore("common", () => {
     const excludedPromoStags = ref<string[]>([]);
     const currencyConfig = ref<null | CurrencyData>(null);
     const widgetsConfig = ref<MainWidgetItem[]>([]);
+    const stagsByReferName = ref<IStagByReferName>();
+    const countries = ref<ICountries[]>([]);
+    const infoProject = ref<IProjectInfo>();
+    const cryptoExchangeRates = ref<ICryptoExchangeRates>();
 
     if (typeof window !== "undefined") {
         getUserAgentPlatform().then((platformData) => {
@@ -56,49 +52,20 @@ export const useCommon = defineStore("common", () => {
         excludedPromoStags.value = data;
     }
 
-    // @ts-expect-error Parameters implicitly have an 'any' type.
-    function hasFieldsInContext(context, field) {
-        // @ts-expect-error Element implicitly has an 'any' type
+    function hasFieldsInContext(context: EnumContextFields, field: EnumFormFields) {
         return playerFieldsInfo.value?.contexts[context]?.includes(field);
     }
 
-    // @ts-expect-error Parameters implicitly have an 'any' type.
-    function getFieldsType(context, field) {
+    function getFieldsType(context: EnumContextFields, field: string) {
         return playerFieldsInfo.value?.fields?.find((fieldItem) => fieldItem.field === field);
     }
 
-    const stagsByReferName = ref<IStagByReferName>();
-
-    async function loadStagByReferName() {
-        if (stagsByReferName.value) {
-            return stagsByReferName.value;
-        }
-
-        const data = await loadStagByReferNameReq();
+    function setStagByReferName(data: IStagByReferName) {
         stagsByReferName.value = data;
-        return data;
     }
 
-    const surveyConfig = ref<ISurveyConfig>();
-
-    async function loadSurveyConfig() {
-        const data = await loadSurveyConfigReq();
-        surveyConfig.value = data;
-        return data;
-    }
-
-    const countries = ref<ICountries[]>([]);
-
-    async function loadCountries({ reload } = { reload: false }) {
-        if (!reload && isExistData(countries.value)) {
-            return countries.value;
-        }
-
-        const data = await loadCountriesReq();
-
-        if (data) {
-            countries.value = data;
-        }
+    function setCountries(data: ICountries[]) {
+        countries.value = data;
     }
 
     const getCountries = computed(() => {
@@ -129,15 +96,8 @@ export const useCommon = defineStore("common", () => {
         enableCurrencies.value = [ ...defaultOptions.enableCurrencies ];
     }
 
-    async function loadCurrencies() {
-        if (isExistData(currencies.value)) {
-            return;
-        }
-
-        const data = await loadCurrenciesReq();
-        if (data) {
-            currencies.value = data.filter(({ code }) => enableCurrencies.value.includes(code));
-        }
+    function setCurrencies(data: ICurrencies[]) {
+        currencies.value = data;
     }
 
     const getAllCurrencies = computed<ICurrencies[]>(() => {
@@ -156,31 +116,21 @@ export const useCommon = defineStore("common", () => {
         return currencies.value.filter(({ fiat }) => !fiat).map(({ code }) => code);
     });
 
-    const infoProject = ref<IProjectInfo>();
-
-    async function loadProjectInfo(): Promise<void> {
-        if (isExistData(infoProject.value)) {
-            return;
-        }
-        infoProject.value = await loadProjectInfoReq();
-    }
-
-    const cryptoExchangeRates = ref<ICryptoExchangeRates>();
-
-    async function loadCryptoExchangeRates(): Promise<void> {
-        if (isExistData(cryptoExchangeRates.value)) {
-            return;
-        }
-        cryptoExchangeRates.value = await loadCryptoExchangeRatesReq();
+    function setCryptoExchangeRates(data: ICryptoExchangeRates) {
+        cryptoExchangeRates.value = data;
     }
 
     function setCurrencyConfig(data: CurrencyData) {
         currencyConfig.value = data;
     }
 
-    const setMainWidgetConfig = (data: MainWidgetItem[]) => {
+    function setMainWidgetConfig(data: MainWidgetItem[]) {
         widgetsConfig.value = data;
-    };
+    }
+
+    function setProjectInfo(data: IProjectInfo) {
+        infoProject.value = data;
+    }
 
     return {
         isMobile,
@@ -193,18 +143,16 @@ export const useCommon = defineStore("common", () => {
         getFieldsType,
 
         stagsByReferName,
-        loadStagByReferName,
-
-        surveyConfig,
-        loadSurveyConfig,
+        setStagByReferName,
         currentIpInfo,
 
-        loadCountries,
+        countries,
+        setCountries,
         getCountries,
 
         setCurrentIpInfo,
-        loadCurrencies,
         currencies,
+        setCurrencies,
         enableCurrencies,
         getAllCurrencies,
         isCryptoCurrency,
@@ -212,11 +160,11 @@ export const useCommon = defineStore("common", () => {
         getCurrencyCrypto,
         getDefaultCurrency,
 
-        loadProjectInfo,
+        setProjectInfo,
         infoProject,
 
         cryptoExchangeRates,
-        loadCryptoExchangeRates,
+        setCryptoExchangeRates,
 
         excludedPromoStags,
         setExcludedPromoStags,
@@ -228,19 +176,3 @@ export const useCommon = defineStore("common", () => {
         setMainWidgetConfig,
     };
 });
-
-export function useCommonFetchService(pinia?: Pinia) {
-    const {
-        loadCountries,
-        loadCurrencies,
-        loadProjectInfo,
-        loadCryptoExchangeRates,
-    } = useCommon(pinia);
-
-    return {
-        loadCountries,
-        loadCurrencies,
-        loadProjectInfo,
-        loadCryptoExchangeRates,
-    };
-}

@@ -67,7 +67,8 @@ export interface IFieldConfig {
 export interface IPlayerFieldsInfo {
     "fields": IFieldConfig[];
     contexts: {
-        [key: EnumContextFields]: EnumFormFields[];
+        [K in EnumContextFields]: EnumFormFields[];
+    } & {
         payment_systems: Record<string, {
             base: {
                 "deposit": EnumFormFields
