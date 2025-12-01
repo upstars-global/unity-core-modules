@@ -1,27 +1,17 @@
-import { defineStore, type Pinia } from "pinia";
+import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
-import { isExistData } from "../helpers/isExistData";
+import { log } from "../controllers/Logger";
 import type { IJackpotItem } from "../services/api/DTO/jackpot";
-import { loadJackpotsList } from "../services/api/requests/jackpots";
 
 export const useJackpots = defineStore("jackpots", () => {
     const jackpotsList = ref<IJackpotItem[]>([]);
+
     const jackpotsActiveList = computed<IJackpotItem[]>(() => {
         return jackpotsList.value.filter((jackpotItem: IJackpotItem) => {
             return jackpotItem.state === "active";
         });
     });
-
-    async function loadJackpots(): Promise<IJackpotItem[] | void> {
-        if (isExistData(jackpotsList.value)) {
-            return jackpotsList.value;
-        }
-        const data = await loadJackpotsList();
-        jackpotsList.value = data;
-
-        return data;
-    }
 
     function updateJackpotItemInList({ data: jackpotItem }: {
         data: IJackpotItem
@@ -32,26 +22,18 @@ export const useJackpots = defineStore("jackpots", () => {
         try {
             jackpotsList.value.splice(indexJackpotInList, 1, jackpotItem);
         } catch (error) {
-            console.log(error);
+            log.error("UPDATE_JACKPOT_ITEM_IN_LIST_ERROR", error);
         }
+    }
+
+    function setJackpotsList(data: IJackpotItem[]): void {
+        jackpotsList.value = data;
     }
 
     return {
         jackpotsList,
         jackpotsActiveList,
-        loadJackpots,
         updateJackpotItemInList,
+        setJackpotsList,
     };
 });
-
-export function useJackpotsFetchService(pinia?: Pinia) {
-    const jackpotsStore = useJackpots(pinia);
-
-    function loadJackpots() {
-        return jackpotsStore.loadJackpots();
-    }
-
-    return {
-        loadJackpots,
-    };
-}
