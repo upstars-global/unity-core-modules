@@ -1,11 +1,19 @@
 import { ID_GROUP_FOR_PAIRED_ID, ID_GROUP_FOR_UNPAIRED_ID } from "@config/groupAB";
+import { storeToRefs } from "pinia";
 
 import { log } from "../controllers/Logger";
 import type { IPlayerFieldsInfo } from "../models/common";
+import type { IUserGameHistoryItem } from "../models/user";
 import { useCommon } from "../store/common";
+import { useUserDocuments } from "../store/user/userDocuments";
+import { userGamesHistory } from "../store/user/userGamesHistory";
 import { useUserInfo } from "../store/user/userInfo";
 import { useUserStatuses } from "../store/user/userStatuses";
+import { useUserVerificationSumsub } from "../store/user/userVerificationSumsub";
+import { http } from "./api/http";
+import { deleteDocument, loadDocuments, uploadDocuments } from "./api/requests/documents";
 import { loadBettingPlayerSettingsRequest, loadPlayerFieldsInfoRequest } from "./api/requests/player";
+import { getSumsubTokenReq } from "./api/requests/sumsub";
 
 export async function userSetToGroupForAbTest() {
     const userInfo = useUserInfo();
@@ -49,5 +57,71 @@ export async function loadBettingPlayerSettings() {
         }
     } catch (error) {
         log.error("LOAD_BETTING_PLAYER_SETTINGS_ERROR", error);
+    }
+}
+
+export async function loadSumsubToken(): Promise<string> {
+    const { setAccessToken } = useUserVerificationSumsub();
+    const response = await getSumsubTokenReq();
+
+    if (response?.access_token) {
+        setAccessToken(response.access_token);
+    }
+
+    return response?.access_token || "";
+}
+
+
+export async function loadUserDocs({ reload = false } = {}) {
+    const userDocumentsStore = useUserDocuments();
+    const { documents } = storeToRefs(userDocumentsStore);
+
+    try {
+        if (!reload && documents.value.length) {
+            return documents.value;
+        }
+
+        const data = await loadDocuments();
+
+        if (Array.isArray(data)) {
+            userDocumentsStore.setDocuments(data);
+
+            return data;
+        }
+    } catch (err) {
+        log.error("LOAD_USER_DOCS_ERROR", err);
+    }
+}
+
+export async function uploadUserDoc({ file, description }: { file: File, description: string }): Promise<void | Error> {
+    try {
+        await uploadDocuments(file, description);
+
+        loadUserDocs({ reload: true });
+    } catch (err) {
+        log.error("UPLOAD_USER_DOC", err);
+        throw err;
+    }
+}
+
+export async function deleteUserDoc(id: string): Promise<void> {
+    try {
+        await deleteDocument(id);
+
+        await loadUserDocs({ reload: true });
+    } catch (err) {
+        log.error("DELETE_USER_DOC", err);
+    }
+}
+
+export async function loadUserGameHistory() {
+    try {
+        const userGamesHistoryStore = userGamesHistory();
+
+        const { data } = await http().get<IUserGameHistoryItem[]>("/api/player/games");
+
+        userGamesHistoryStore.setGamesHistory(data);
+    } catch (err) {
+        log.error("LOAD_USER_GAMES_HISTORY", err);
     }
 }
