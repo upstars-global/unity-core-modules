@@ -154,6 +154,7 @@ export const useVipAdventures = defineStore("vipAdventures", () => {
         loadVipAdventuresConfig,
         loadVipProgress,
         vipAdventuresConfigFile,
+        vipAdventuresVariables,
 
         vipAdventuresDays,
         superDay,
