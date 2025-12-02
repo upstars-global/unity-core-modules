@@ -61,6 +61,7 @@ export function parseGiftAdventureTitle(title): {
 export const useVipAdventures = defineStore("vipAdventures", () => {
     const userStatuses = useUserStatuses();
     const vipAdventuresConfigFile = ref<IPrizeConfigItem[]>();
+    const vipAdventuresVariables = ref<Record<string, string|number>>({});
     const userVipStatusProgress = ref<IVipProgress>();
 
     const toDay = computed(() => {
@@ -142,6 +143,10 @@ export const useVipAdventures = defineStore("vipAdventures", () => {
         vipAdventuresConfigFile.value = userGroupForAdventure.value ?
             config.prizes[userGroupForAdventure.value] :
             Object.values(config.prizes)[0];
+
+        vipAdventuresVariables.value = userGroupForAdventure.value ?
+            config.variables[userGroupForAdventure.value] :
+            Object.values(config.variables)[0];
         return vipAdventuresConfigFile.value;
     }
 
