@@ -2,6 +2,7 @@ import { v4 as uuid } from "uuid";
 
 import { log } from "../../../controllers/Logger";
 import { IAuthProvider, IUserAuthProvider } from "../../../models/authProviders";
+import { type IPlayerFieldsInfo } from "../../../models/common";
 import { type IUserInfo } from "../../../models/user";
 import { IPlayerPayment } from "../DTO/cashbox";
 import { BettingPlayerSettingsDTO, IPlayerStats, ISubscriptions, IUserAccount, IUserSettings } from "../DTO/playerDTO";
@@ -287,7 +288,7 @@ export async function loadUserBettingBonuses() {
 
 export async function loadPlayerFieldsInfoRequest() {
     try {
-        const { data } = await http().get("/api/info/player_fields");
+        const { data } = await http().get<IPlayerFieldsInfo>("/api/info/player_fields");
 
         return data;
     } catch (err) {
