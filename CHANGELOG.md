@@ -1,3 +1,14 @@
+## [1.53.0](https://github.com/upstars-global/unity-core-modules/compare/v1.52.0...v1.53.0) (2025-12-03)
+
+### 🚀 Features
+
+* **UN-351:** refactor jackpots store and cover it with tests ([#269](https://github.com/upstars-global/unity-core-modules/issues/269))
+ ([e326eb1](https://github.com/upstars-global/unity-core-modules/commit/e326eb1cd0fa0b6a14f559f7429e70e54f6600d0))
+
+
+
+    feat: refactor jackpots store and cover it with tests
+
 ## [1.52.0](https://github.com/upstars-global/unity-core-modules/compare/v1.51.0...v1.52.0) (2025-11-25)
 
 ### 🚀 Features
