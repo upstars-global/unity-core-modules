@@ -88,12 +88,12 @@ export interface IUserGameHistoryItem {
 }
 
 export interface IUserSession {
-    "id": number;
-    "ip": string;
-    "country": string;
-    "user_agent": string;
-    "created_at": string;
-    "current": boolean;
+    id: number;
+    ip: string;
+    country: string;
+    user_agent: string;
+    created_at: string;
+    current: boolean;
 }
 
 export interface IDataForUpdatePass {

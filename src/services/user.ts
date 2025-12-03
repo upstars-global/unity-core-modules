@@ -4,7 +4,7 @@ import { storeToRefs } from "pinia";
 import { log } from "../controllers/Logger";
 import { isApiError } from "../helpers/apiErrors";
 import type { IPlayerFieldsInfo } from "../models/common";
-import type { IDataForUpdatePass, ITwoFactorAuthData, IUserGameHistoryItem, IUserSession } from "../models/user";
+import type { IDataForUpdatePass, ITwoFactorAuthData } from "../models/user";
 import { useCommon } from "../store/common";
 import { useGiftsStore } from "../store/gifts";
 import { useUserDocuments } from "../store/user/userDocuments";
@@ -13,11 +13,23 @@ import { useUserInfo } from "../store/user/userInfo";
 import { useUserSecurity } from "../store/user/userSecurity";
 import { useUserStatuses } from "../store/user/userStatuses";
 import { useUserVerificationSumsub } from "../store/user/userVerificationSumsub";
-import { type UserCouponStatuses } from "./api/DTO/couponePromoCodes";
-import { http } from "./api/http";
 import { activeCouponReq } from "./api/requests/couponePromoCodes";
 import { deleteDocument, loadDocuments, uploadDocuments } from "./api/requests/documents";
-import { loadBettingPlayerSettingsRequest, loadPlayerFieldsInfoRequest } from "./api/requests/player";
+import {
+    activateTwoFactorReq,
+    activateUserCouponReq,
+    closeUserSessionByIdReq,
+    deleteDepositBonusCodeReq,
+    deleteTwoFactorReq,
+    loadBettingPlayerSettingsRequest,
+    loadPlayerFieldsInfoRequest,
+    loadTwoFactorReq,
+    loadUserActiveSessionsReq,
+    loadUserGameHistoryReq,
+    setDepositBonusCodeReq,
+    updateBonusSettingsReq,
+    updateUserPasswordReq,
+} from "./api/requests/player";
 import { getSumsubTokenReq } from "./api/requests/sumsub";
 import { loadDepositGiftsData } from "./gifts";
 
@@ -126,7 +138,7 @@ export async function loadUserGameHistory() {
     try {
         const userGamesHistoryStore = userGamesHistory();
 
-        const { data } = await http().get<IUserGameHistoryItem[]>("/api/player/games");
+        const data = await loadUserGameHistoryReq();
 
         userGamesHistoryStore.setGamesHistory(data);
     } catch (err) {
@@ -139,9 +151,7 @@ export async function setDepositBonusCode(code: string) {
         const userStore = useUserInfo();
         const { depositGiftsAll } = storeToRefs(useGiftsStore());
 
-        await http().patch("/api/player/set_bonus_code", {
-            deposit_bonus_code: code,
-        });
+        await setDepositBonusCodeReq(code);
 
         userStore.loadUserProfile({ reload: true });
 
@@ -156,7 +166,7 @@ export async function setDepositBonusCode(code: string) {
 export async function deleteDepositBonusCode() {
     try {
         const userStore = useUserInfo();
-        await http().delete("/api/player/clear_bonus_code");
+        await deleteDepositBonusCodeReq();
         userStore.loadUserProfile({ reload: true });
         loadDepositGiftsData();
     } catch (err) {
@@ -167,7 +177,7 @@ export async function deleteDepositBonusCode() {
 export async function useBonuses(data: { can_issue: boolean }) {
     try {
         const userStore = useUserInfo();
-        await http().patch("/api/player/update_bonus_settings", data);
+        await updateBonusSettingsReq(data);
         userStore.loadUserProfile({ reload: true });
         return await loadDepositGiftsData();
     } catch (err) {
@@ -177,9 +187,7 @@ export async function useBonuses(data: { can_issue: boolean }) {
 
 export async function activateUserCoupon(code: string) {
     try {
-        const { data } = await http().post<{ status: UserCouponStatuses }>("/api/bonuses/coupon", {
-            coupon_code: code,
-        });
+        const data = await activateUserCouponReq(code);
 
         return data.status;
     } catch (err) {
@@ -194,7 +202,7 @@ export async function activateBettingCoupon(code: string) {
 export async function loadUserActiveSessions(): Promise<void> {
     try {
         const { setUserActiveSessions } = useUserSecurity();
-        const { data } = await http().get<IUserSession[]>("/api/player/sessions");
+        const data = await loadUserActiveSessionsReq();
 
         setUserActiveSessions(data);
     } catch (err) {
@@ -204,7 +212,7 @@ export async function loadUserActiveSessions(): Promise<void> {
 
 export async function closeUserSessionById(sessionId: number): Promise<void> {
     try {
-        await http().delete(`/api/player/sessions/${sessionId}`);
+        await closeUserSessionByIdReq(sessionId);
         const userSecurityStore = useUserSecurity();
         const { userActiveSessions } = storeToRefs(userSecurityStore);
 
@@ -222,12 +230,10 @@ export async function updateUserPassword(
     { current_password, password, password_confirmation }: IDataForUpdatePass,
 ): Promise<unknown> {
     try {
-        return await http().put("/api/users", {
-            user: {
-                current_password,
-                password,
-                password_confirmation,
-            },
+        return await updateUserPasswordReq({
+            current_password,
+            password,
+            password_confirmation,
         });
     } catch (err) {
         log.error("UPDATE_USER_PASSWORD", err);
@@ -238,7 +244,7 @@ export async function updateUserPassword(
 export async function loadTwoFactor(): Promise<ITwoFactorAuthData | null> {
     try {
         const { setTwoFactorData } = useUserSecurity();
-        const { data, status } = await http().get<ITwoFactorAuthData>("/api/player/two_factor");
+        const { data, status } = await loadTwoFactorReq();
         if (status === 204) {
             return null;
         }
@@ -257,14 +263,10 @@ export async function activateTwoFactor(code: string): Promise<ITwoFactorAuthDat
     const { twoFactorData } = storeToRefs(userSecurityStore);
 
     try {
-        const dataActive2FA = {
-            two_factor: {
-                otp_secret: twoFactorData.value.otp_secret,
-                authentication_code: code,
-            },
-        };
-
-        const { data } = await http().post<ITwoFactorAuthData>("/api/player/two_factor", dataActive2FA);
+        const data = await activateTwoFactorReq(
+            twoFactorData.value,
+            code,
+        );
 
         userSecurityStore.setTwoFactorData(data);
 
@@ -284,13 +286,7 @@ export async function deleteTwoFactor(code: string): Promise<unknown> {
     const { loadUserProfile } = useUserInfo();
 
     try {
-        const { data } = await http().delete("/api/player/two_factor", {
-            data: {
-                two_factor: {
-                    authentication_code: code,
-                },
-            },
-        });
+        const data = await deleteTwoFactorReq(code);
 
         loadUserProfile({ reload: true });
 
