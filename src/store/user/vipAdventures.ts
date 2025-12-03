@@ -61,7 +61,7 @@ export function parseGiftAdventureTitle(title): {
 export const useVipAdventures = defineStore("vipAdventures", () => {
     const userStatuses = useUserStatuses();
     const vipAdventuresConfigFile = ref<IPrizeConfigItem[]>();
-    const vipAdventuresVariables = ref<Record<string, number>>({});
+    const vipAdventuresVariables = ref<Record<string, Record<string, number>>>({});
     const userVipStatusProgress = ref<IVipProgress>();
 
     const toDay = computed(() => {
