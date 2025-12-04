@@ -23,6 +23,7 @@ export type RewardConfig = {
             link?: string;
         }>;
     };
+    isVIPManagerReward?: boolean
 }
 
 export type Reward = RewardConfig & {
