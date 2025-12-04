@@ -1,3 +1,10 @@
+## [1.53.1](https://github.com/upstars-global/unity-core-modules/compare/v1.53.0...v1.53.1) (2025-12-04)
+
+### 🔧 Maintenance
+
+* UN-1832 - update interface ([#270](https://github.com/upstars-global/unity-core-modules/issues/270))
+ ([8aff95a](https://github.com/upstars-global/unity-core-modules/commit/8aff95a0b128597d2292486c839dd0f058db3fe8))
+
 ## [1.53.0](https://github.com/upstars-global/unity-core-modules/compare/v1.52.0...v1.53.0) (2025-12-03)
 
 ### 🚀 Features
