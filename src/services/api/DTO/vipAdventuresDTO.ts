@@ -19,7 +19,7 @@ export interface IPrizeConfigItem {
 }
 
 export interface IVipAdventuresConfig {
-    variables: Record<string, Record<string, Record<string, number>>>;
+    variables: Record<string, Record<string, Record<Currencies, string>>>;
     prizes: Record<string, IPrizeConfigItem[]>;
 }
 
