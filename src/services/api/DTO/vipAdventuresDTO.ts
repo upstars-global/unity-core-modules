@@ -6,6 +6,10 @@ export interface IPrizeConfigItem {
         freespin?: number
         bonus?: string
     };
+    image?: {
+        src: string;
+        srcRetina: string;
+    };
     condition: {
         minDep: string;
         wager: string;
@@ -15,6 +19,7 @@ export interface IPrizeConfigItem {
 }
 
 export interface IVipAdventuresConfig {
+    variables: Record<string, Record<string, Record<Currencies, string>>>;
     prizes: Record<string, IPrizeConfigItem[]>;
 }
 
