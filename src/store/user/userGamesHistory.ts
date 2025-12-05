@@ -1,25 +1,19 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
-import { log } from "../../controllers/Logger";
-import { http } from "../../services/api/http";
+import type { IUserGameHistoryItem } from "../../models/user";
 
 export const userGamesHistory = defineStore(
     "userGamesHistory",
     () => {
-        const gamesHistory = ref([]);
+        const gamesHistory = ref<IUserGameHistoryItem[]>([]);
 
-        async function loadUserGameHistory() {
-            try {
-                const { data } = await http().get("/api/player/games");
-                gamesHistory.value = data;
-            } catch (err) {
-                log.error("LOAD_USER_GAMES_HISTORY", err);
-            }
+        function setGamesHistory(history: IUserGameHistoryItem[]) {
+            gamesHistory.value = history;
         }
 
         return {
             gamesHistory,
-            loadUserGameHistory,
+            setGamesHistory,
         };
     });

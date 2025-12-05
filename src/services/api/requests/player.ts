@@ -2,8 +2,16 @@ import { v4 as uuid } from "uuid";
 
 import { log } from "../../../controllers/Logger";
 import { IAuthProvider, IUserAuthProvider } from "../../../models/authProviders";
-import { type IUserInfo } from "../../../models/user";
+import { type IPlayerFieldsInfo } from "../../../models/common";
+import {
+    type IDataForUpdatePass,
+    type ITwoFactorAuthData,
+    type IUserGameHistoryItem,
+    type IUserInfo,
+    type IUserSession,
+} from "../../../models/user";
 import { IPlayerPayment } from "../DTO/cashbox";
+import { type UserCouponStatuses } from "../DTO/couponePromoCodes";
 import { BettingPlayerSettingsDTO, IPlayerStats, ISubscriptions, IUserAccount, IUserSettings } from "../DTO/playerDTO";
 import { http } from "../http";
 
@@ -287,7 +295,7 @@ export async function loadUserBettingBonuses() {
 
 export async function loadPlayerFieldsInfoRequest() {
     try {
-        const { data } = await http().get("/api/info/player_fields");
+        const { data } = await http().get<IPlayerFieldsInfo>("/api/info/player_fields");
 
         return data;
     } catch (err) {
@@ -303,5 +311,129 @@ export async function loadBettingPlayerSettingsRequest(): Promise<BettingPlayerS
         return data;
     } catch (err) {
         log.error("LOAD_BETTING_PLAYER_SETTINGS_REQUEST_ERROR", err);
+    }
+}
+
+export async function loadUserGameHistoryReq() {
+    try {
+        const { data } = await http().get<IUserGameHistoryItem[]>("/api/player/games");
+        return data;
+    } catch (err) {
+        log.error("LOAD_USER_GAME_HISTORY_REQ_ERROR", err);
+        throw err;
+    }
+}
+
+export async function setDepositBonusCodeReq(code: string) {
+    try {
+        await http().patch("/api/player/set_bonus_code", {
+            deposit_bonus_code: code,
+        });
+    } catch (err) {
+        log.error("SET_DEPOSIT_BONUS_CODE_REQ_ERROR", err);
+        throw err;
+    }
+}
+
+export async function deleteDepositBonusCodeReq() {
+    try {
+        await http().delete("/api/player/clear_bonus_code");
+    } catch (err) {
+        log.error("DELETE_DEPOSIT_BONUS_CODE_REQ_ERROR", err);
+        throw err;
+    }
+}
+
+export async function updateBonusSettingsReq(data: { can_issue: boolean }) {
+    try {
+        await http().patch("/api/player/update_bonus_settings", data);
+    } catch (err) {
+        log.error("UPDATE_BONUS_SETTINGS_REQ_ERROR", err);
+        throw err;
+    }
+}
+
+export async function activateUserCouponReq(code: string) {
+    try {
+        const { data } = await http().post<{ status: UserCouponStatuses }>("/api/bonuses/coupon", {
+            coupon_code: code,
+        });
+        return data;
+    } catch (err) {
+        log.error("ACTIVATE_USER_COUPON_REQ_ERROR", err);
+        throw err;
+    }
+}
+
+export async function loadUserActiveSessionsReq() {
+    try {
+        const { data } = await http().get<IUserSession[]>("/api/player/sessions");
+        return data;
+    } catch (err) {
+        log.error("LOAD_USER_ACTIVE_SESSIONS_REQ_ERROR", err);
+        throw err;
+    }
+}
+
+export async function closeUserSessionByIdReq(sessionId: number) {
+    try {
+        await http().delete(`/api/player/sessions/${sessionId}`);
+    } catch (err) {
+        log.error("CLOSE_USER_SESSION_BY_ID_REQ_ERROR", err);
+        throw err;
+    }
+}
+
+export async function updateUserPasswordReq(data: IDataForUpdatePass) {
+    try {
+        return await http().put("/api/users", {
+            user: data,
+        });
+    } catch (err) {
+        log.error("UPDATE_USER_PASSWORD_REQ_ERROR", err);
+        throw err;
+    }
+}
+
+export async function loadTwoFactorReq() {
+    try {
+        const { data, status } = await http().get<ITwoFactorAuthData>("/api/player/two_factor");
+        return { data, status };
+    } catch (err) {
+        log.error("LOAD_TWO_FACTOR_REQ_ERROR", err);
+        throw err;
+    }
+}
+
+export async function activateTwoFactorReq(twoFactor: ITwoFactorAuthData, code: string) {
+    try {
+        const payload = {
+            two_factor: {
+                otp_secret: twoFactor.otp_secret,
+                authentication_code: code,
+            },
+        };
+
+        const { data } = await http().post<ITwoFactorAuthData>("/api/player/two_factor", payload);
+        return data;
+    } catch (err) {
+        log.error("ACTIVATE_TWO_FACTOR_REQ_ERROR", err);
+        throw err;
+    }
+}
+
+export async function deleteTwoFactorReq(code: string) {
+    try {
+        const { data } = await http().delete("/api/player/two_factor", {
+            data: {
+                two_factor: {
+                    authentication_code: code,
+                },
+            },
+        });
+        return data;
+    } catch (err) {
+        log.error("DELETE_TWO_FACTOR_REQ_ERROR", err);
+        throw err;
     }
 }

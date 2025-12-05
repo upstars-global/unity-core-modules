@@ -1,6 +1,5 @@
-import { IRedeemableCards } from "src/services/api/DTO/compPoints";
-
 import type { IPageItemCMS, IPageItemConfig } from "../services/api/DTO/CMS";
+import { IRedeemableCards } from "../services/api/DTO/compPoints";
 import { Currencies } from "./enums/currencies";
 
 export interface IPageCMSPrepare extends IPageItemConfig {

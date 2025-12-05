@@ -72,3 +72,37 @@ export interface IUserFormData {
     captcha?: string;
     otp?: string;
 }
+
+export interface IUserGameHistoryItem {
+    bet_id: number;
+    bet_status: string;
+    created_at: string;
+    finished_at: string | null;
+    currency: string;
+    provider: string;
+    game: string;
+    title: string;
+    total_bets: number;
+    total_losses: number;
+    total_wins: number;
+}
+
+export interface IUserSession {
+    id: number;
+    ip: string;
+    country: string;
+    user_agent: string;
+    created_at: string;
+    current: boolean;
+}
+
+export interface IDataForUpdatePass {
+    current_password: string;
+    password: string;
+    password_confirmation: string;
+}
+
+export interface ITwoFactorAuthData {
+    otp_secret: string;
+    data: string;
+}
