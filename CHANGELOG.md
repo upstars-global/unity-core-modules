@@ -1,3 +1,22 @@
+## [1.54.0](https://github.com/upstars-global/unity-core-modules/compare/v1.53.1...v1.54.0) (2025-12-08)
+
+### 🚀 Features
+
+* **UN-1679:** vip adventures variables ([#272](https://github.com/upstars-global/unity-core-modules/issues/272))
+ ([8f1d54d](https://github.com/upstars-global/unity-core-modules/commit/8f1d54d4b6300c09ec59b01f738e07f15dbb3c33))
+
+
+
+    * UN-1679 vip adventure config variables
+
+    * UN-1679 export config
+
+    * UN-1679 update type
+
+    * UN-1679 update types
+
+    * fix: loadVipAdventuresConfig
+
 ## [1.53.1](https://github.com/upstars-global/unity-core-modules/compare/v1.53.0...v1.53.1) (2025-12-04)
 
 ### 🔧 Maintenance
