@@ -33,7 +33,7 @@ export async function loadAllFilesFromCMSReq(locale: string): Promise<IFileCMS[]
 export async function loadPageContentFromCmsReq(slugPage: string, locale?: string): Promise<IPageItemCMS | void> { // TODO: rename
     try {
         const { data } = await http({ locale }).get<IPageItemCMS>(`/api/cms/pages/${ slugPage }?l=${ locale }`);
-        log.error("LOAD_PAGE_CONTENT_FORM_CMS_REQ", data.blocks);
+        log.info("LOAD_PAGE_CONTENT_FORM_CMS_REQ", data.blocks);
         return data;
     } catch (err) {
         log.error("LOAD_PAGE_CONTENT_FORM_CMS_REQ_ERROR", err);
