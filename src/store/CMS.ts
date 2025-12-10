@@ -13,6 +13,7 @@ import { CurrentPage, type ICurrentPage, ICurrentPageMeta, type IPageCMSPrepare 
 import type { ISnippetItemCMS } from "../services/api/DTO/CMS";
 import { loadCMSPagesReq, loadCMSSnippetsReq, loadPageContentFromCmsReq } from "../services/api/requests/CMS";
 import { useMultilangStore } from "../store/multilang";
+import { SEO_CONFIG } from "./mockSEO";
 
 function replaceCurrentYearPlaceholder<T>(template: TemplateType): T {
     return replaceStringHelper({
@@ -43,7 +44,7 @@ export const useCMS = defineStore("CMS", () => {
     const { getUserLocale } = storeToRefs(useMultilangStore());
     const currentStaticPage = ref<ICurrentPage | null>();
     const contentCurrentPage = ref<Record<string, ICurrentPage>>({});
-    const seoMeta = ref<Record<string, ICurrentPageMeta>>({});
+    const seoMeta = ref<Record<string, ICurrentPageMeta>>(SEO_CONFIG);
     const seoCurrentDescription = ref<string>("");
     const inflight = new Map<string, ReturnType<typeof loadPageContentFromCmsReq>>();
 
@@ -126,7 +127,7 @@ export const useCMS = defineStore("CMS", () => {
 
     function ensureStaticIfReady(slug: string): string | void {
         if (staticPages.value.length && !hasStaticPageInCMS(slug)) {
-            return `${slug} page is not StaticPages`;
+            return `${ slug } page is not StaticPages`;
         }
 
         return;
@@ -170,7 +171,7 @@ export const useCMS = defineStore("CMS", () => {
             const data = await fetchCmsPageOnce(slug, getUserLocale.value);
 
             if (!data) {
-                return `${slug} page is not found`;
+                return `${ slug } page is not found`;
             }
 
             const page = replaceCurrentYearPlaceholder<ICurrentPage>(new CurrentPage(data));
@@ -186,6 +187,7 @@ export const useCMS = defineStore("CMS", () => {
     }
 
     async function loadMetaSEO(route: { path: string; name: string; meta?: { metaUrl: string } }) {
+        console.log("loadMetaSEO");
         const url = resolveUrlFromRoute(route);
         const slug = normalizeUrl(url);
 
@@ -208,7 +210,7 @@ export const useCMS = defineStore("CMS", () => {
             const data = await fetchCmsPageOnce(slug, getUserLocale.value);
 
             if (!data) {
-                return `${slug} page data is not found`;
+                return `${ slug } page data is not found`;
             }
 
             const blocks = data.blocks;
@@ -233,6 +235,7 @@ export const useCMS = defineStore("CMS", () => {
             meta = replaceCurrentYearPlaceholder<ICurrentPageMeta>(meta);
             const page = replaceCurrentYearPlaceholder<ICurrentPage>(new CurrentPage(data));
 
+            console.log({ meta, url });
             setSeoMeta({ meta, url });
             setPageContent({ page, url: slug });
             setCurrentStaticPage(page);
