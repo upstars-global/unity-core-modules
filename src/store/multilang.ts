@@ -7,6 +7,7 @@ import type { LocaleName, Locales } from "../services/api/DTO/multilang";
 
 export interface IDefaultLocaleByCountry {
     [key: string]: string;
+
     default: string;
 }
 
@@ -33,7 +34,8 @@ export const useMultilangStore = defineStore("multilang", () => {
     });
 
     const getUserLocale = computed(() => {
-        return getLocale() || locale.value || getDefaultLang.value;
+        // return getLocale() || locale.value || getDefaultLang.value;
+        return "no";
     });
 
     const getUserGeo = computed(() => {
