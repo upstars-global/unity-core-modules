@@ -5,7 +5,6 @@ import { computed, ref } from "vue";
 import { log } from "../../controllers/Logger";
 import { currencyView } from "../../helpers/currencyHelper";
 import { processGame } from "../../helpers/gameHelpers";
-import { isExistData } from "../../helpers/isExistData";
 import type { IGame, IGamesProvider } from "../../models/game";
 import { IEnabledGames } from "../../models/game";
 import {
@@ -159,9 +158,6 @@ export const useGamesCommon = defineStore("gamesCommon", () => {
 
     async function loadGamesCategories(): Promise<void> {
         try {
-            if (isExistData(gamesCategories.value)) {
-                return;
-            }
             const data = await loadGamesCategoriesReq();
             gamesCategories.value = data.map((category) => {
                 return {

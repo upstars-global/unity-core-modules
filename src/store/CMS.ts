@@ -5,7 +5,6 @@ import { computed, ref } from "vue";
 
 import { enableCategoriesPage } from "../consts/cms";
 import { log } from "../controllers/Logger";
-import { isExistData } from "../helpers/isExistData";
 import type { TemplateType } from "../helpers/replaceStringHelper";
 import replaceStringHelper from "../helpers/replaceStringHelper";
 import { prepareMapStaticPages } from "../helpers/staticPages";
@@ -48,7 +47,7 @@ export const useCMS = defineStore("CMS", () => {
     const inflight = new Map<string, ReturnType<typeof loadPageContentFromCmsReq>>();
 
     async function loadStaticPages({ reload } = { reload: false }) {
-        if (isExistData(staticPages.value) && !reload) {
+        if (!reload) {
             return staticPages.value;
         }
 
@@ -86,7 +85,7 @@ export const useCMS = defineStore("CMS", () => {
     });
 
     async function loadCMSSnippets({ reload = false } = {}) {
-        if (!reload && isExistData(snippets.value)) {
+        if (!reload) {
             return snippets.value;
         }
 

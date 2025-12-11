@@ -1,6 +1,5 @@
 import { storeToRefs } from "pinia";
 
-import { isExistData } from "../helpers/isExistData";
 import { isServer } from "../helpers/ssrHelpers";
 import { useCommon } from "../store/common";
 import { usePWA } from "../store/pwa";
@@ -80,7 +79,7 @@ export async function loadCountries({ reload } = { reload: false }) {
     const commonStore = useCommon();
     const { countries } = storeToRefs(commonStore);
 
-    if (!reload && isExistData(countries.value)) {
+    if (!reload) {
         return countries.value;
     }
 
@@ -93,11 +92,7 @@ export async function loadCountries({ reload } = { reload: false }) {
 
 export async function loadCurrencies() {
     const commonStore = useCommon();
-    const { currencies, enableCurrencies } = storeToRefs(commonStore);
-
-    if (isExistData(currencies.value)) {
-        return;
-    }
+    const { enableCurrencies } = storeToRefs(commonStore);
 
     const data = await loadCurrenciesReq();
 
@@ -110,12 +105,6 @@ export async function loadCurrencies() {
 
 export async function loadProjectInfo(): Promise<void> {
     const commonStore = useCommon();
-    const { infoProject } = storeToRefs(commonStore);
-
-    if (isExistData(infoProject.value)) {
-        return;
-    }
-
     const data = await loadProjectInfoReq();
 
     if (data) {
@@ -125,12 +114,6 @@ export async function loadProjectInfo(): Promise<void> {
 
 export async function loadCryptoExchangeRates(): Promise<void> {
     const commonStore = useCommon();
-    const { cryptoExchangeRates } = storeToRefs(commonStore);
-
-    if (isExistData(cryptoExchangeRates.value)) {
-        return;
-    }
-
     const data = await loadCryptoExchangeRatesReq();
 
     if (data) {

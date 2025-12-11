@@ -1,7 +1,5 @@
-import { isExistData } from "../helpers/isExistData";
 import { useCommon } from "../store/common";
 import { useConfigStore } from "../store/configStore";
-import { useLevelsStore } from "../store/levels/levelsStore";
 import {
     loadBettingConfigReq,
     loadCurrencyConfigReq,
@@ -25,10 +23,6 @@ export async function loadExcludedPromoStags() {
 
 export async function loadCurrencyConfig() {
     const commonStore = useCommon();
-
-    if (isExistData(commonStore.currencyConfig)) {
-        return commonStore.currencyConfig;
-    }
 
     const data = await loadCurrencyConfigReq();
 
