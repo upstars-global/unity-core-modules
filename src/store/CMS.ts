@@ -139,14 +139,6 @@ export const useCMS = defineStore("CMS", () => {
             return staticErr;
         }
 
-        const cached = contentCurrentPage.value[slug];
-
-        if (cached) {
-            setCurrentStaticPage(cached);
-
-            return cached;
-        }
-
         try {
             const data = await loadPageContentFromCmsReq(slug, getUserLocale.value);
 
@@ -174,15 +166,6 @@ export const useCMS = defineStore("CMS", () => {
 
         if (staticErr) {
             return staticErr;
-        }
-
-        const cachedMeta = seoMeta.value[url];
-        const cachedPage = contentCurrentPage.value[slug];
-
-        if (cachedMeta && cachedPage) {
-            setCurrentStaticPage(cachedPage);
-
-            return;
         }
 
         try {
