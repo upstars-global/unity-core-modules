@@ -1,3 +1,20 @@
+## [1.55.0](https://github.com/upstars-global/unity-core-modules/compare/v1.54.0...v1.55.0) (2025-12-15)
+
+### 🚀 Features
+
+* **UN-349:** move user stores requests to user service and cover them with tests ([#271](https://github.com/upstars-global/unity-core-modules/issues/271))
+ ([8e21e02](https://github.com/upstars-global/unity-core-modules/commit/8e21e02dd8da316036eac3d2efd3c1f5719458bb))
+
+
+
+    * feat: refactor user stores and cover them with tests
+
+    * refactor: move requests from userSecurity and userBonusesAndCoupon stores to user service
+
+    * fix: tests
+
+    * fix: review comments
+
 ## [1.54.0](https://github.com/upstars-global/unity-core-modules/compare/v1.53.1...v1.54.0) (2025-12-08)
 
 ### 🚀 Features
