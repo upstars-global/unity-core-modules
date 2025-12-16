@@ -44,4 +44,17 @@ export interface TransactionMetricInfo {
     amount: string,
     currency: string
 }
+
+export interface ICashboxPresets {
+    "userGroups": {
+      [userID: string]: {
+        [currency: string]: string[],
+      }
+    },
+
+    "global": {
+        [currency: string]: string[],
+    },
+}
+
 export default {};
