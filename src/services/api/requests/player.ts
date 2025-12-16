@@ -235,7 +235,7 @@ export async function updateAuthDetailsProvidersReq(data: Record<string, unknown
 
 export async function loadFreshChatRestoreIdReq(id: string, project: string) {
     try {
-        const { data } = await http().post("/restore-id/get", {
+        const { data } = await http().post<{data: { restoreId: string }}>("/restore-id/get", {
             data: {
                 internalId: String(id),
                 project,
@@ -286,7 +286,7 @@ export async function loadUserStatsReq() {
 
 export async function loadUserBettingBonuses() {
     try {
-        const { data } = await http().get("/api/v2/bonuses");
+        const { data } = await http().get<unknown[]>("/api/v2/bonuses");
         return data;
     } catch (err) {
         log.error("LOAD_USER_BETTING_BONUSES_ERROR", err);

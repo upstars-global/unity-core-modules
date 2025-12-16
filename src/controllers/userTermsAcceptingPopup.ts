@@ -5,6 +5,7 @@ const supportPopup = defineAsyncComponent(() => {
 import Modal from "@plugins/Modal";
 import { computed, defineAsyncComponent } from "vue";
 
+import { updateAuthDetailsProviders } from "../services/user";
 import { useMultilangStore } from "../store/multilang";
 import { useUserInfo } from "../store/user/userInfo";
 
@@ -39,7 +40,7 @@ export function useUserTermsAcceptingPopup() {
     function acceptTerms() {
         const country = multilangStore.getUserGeo;
 
-        return userInfoStore.updateAuthDetailsProviders({
+        return updateAuthDetailsProviders({
             user: {
                 terms_acceptance: true,
                 ...(isUserCountryFieldMissing.value ? { country } : {}),

@@ -1,12 +1,17 @@
 import { ID_GROUP_FOR_PAIRED_ID, ID_GROUP_FOR_UNPAIRED_ID } from "@config/groupAB";
+import { PROJECT } from "@theme/configs/constantsFreshChat";
+import { getStateByCounty } from "@theme/configs/stateFieldConfig";
 import { storeToRefs } from "pinia";
 
+import { cioIdentifyUser } from "../controllers/CustomerIO";
 import { log } from "../controllers/Logger";
 import { isApiError } from "../helpers/apiErrors";
-import type { IPlayerFieldsInfo } from "../models/common";
+import { EnumContextFields, EnumFormFields, type IPlayerFieldsInfo } from "../models/common";
 import type { IDataForUpdatePass, ITwoFactorAuthData } from "../models/user";
+import { EventBus as bus } from "../plugins/EventBus";
 import { useCommon } from "../store/common";
 import { useGiftsStore } from "../store/gifts";
+import { useMultilangStore } from "../store/multilang";
 import { useUserDocuments } from "../store/user/userDocuments";
 import { userGamesHistory } from "../store/user/userGamesHistory";
 import { useUserInfo } from "../store/user/userInfo";
@@ -19,14 +24,28 @@ import {
     activateTwoFactorReq,
     activateUserCouponReq,
     closeUserSessionByIdReq,
+    confirmEmailResendReg,
+    confirmPlayerReq,
     deleteDepositBonusCodeReq,
     deleteTwoFactorReq,
     loadBettingPlayerSettingsRequest,
+    loadFreshChatRestoreIdReq,
     loadPlayerFieldsInfoRequest,
     loadTwoFactorReq,
     loadUserActiveSessionsReq,
+    loadUserBettingBonuses,
     loadUserGameHistoryReq,
+    loadUserProfileReq,
+    loadUserSettingsReq,
+    loadUserStatsReq,
+    loadUserSubscriptionsReq,
+    putUserSubscriptionReq,
+    restorePasswordRequestReq,
+    restorePasswordRestoreReq,
+    sendFreshChatRestoreIdReq,
+    sendUserDataReq,
     setDepositBonusCodeReq,
+    updateAuthDetailsProvidersReq,
     updateBonusSettingsReq,
     updateUserPasswordReq,
 } from "./api/requests/player";
@@ -148,12 +167,11 @@ export async function loadUserGameHistory() {
 
 export async function setDepositBonusCode(code: string) {
     try {
-        const userStore = useUserInfo();
         const { depositGiftsAll } = storeToRefs(useGiftsStore());
 
         await setDepositBonusCodeReq(code);
 
-        userStore.loadUserProfile({ reload: true });
+        loadUserProfile({ reload: true });
 
         await loadDepositGiftsData();
 
@@ -165,9 +183,9 @@ export async function setDepositBonusCode(code: string) {
 
 export async function deleteDepositBonusCode() {
     try {
-        const userStore = useUserInfo();
         await deleteDepositBonusCodeReq();
-        userStore.loadUserProfile({ reload: true });
+
+        loadUserProfile({ reload: true });
         loadDepositGiftsData();
     } catch (err) {
         log.error("deleteDepositBonusCode", err);
@@ -176,9 +194,8 @@ export async function deleteDepositBonusCode() {
 
 export async function useBonuses(data: { can_issue: boolean }) {
     try {
-        const userStore = useUserInfo();
         await updateBonusSettingsReq(data);
-        userStore.loadUserProfile({ reload: true });
+        loadUserProfile({ reload: true });
         return await loadDepositGiftsData();
     } catch (err) {
         log.error("useBonuses", err);
@@ -258,7 +275,6 @@ export async function loadTwoFactor(): Promise<ITwoFactorAuthData | null> {
 }
 
 export async function activateTwoFactor(code: string): Promise<ITwoFactorAuthData> {
-    const { loadUserProfile } = useUserInfo();
     const userSecurityStore = useUserSecurity();
     const { twoFactorData } = storeToRefs(userSecurityStore);
 
@@ -283,8 +299,6 @@ export async function activateTwoFactor(code: string): Promise<ITwoFactorAuthDat
 }
 
 export async function deleteTwoFactor(code: string): Promise<unknown> {
-    const { loadUserProfile } = useUserInfo();
-
     try {
         const data = await deleteTwoFactorReq(code);
 
@@ -297,5 +311,227 @@ export async function deleteTwoFactor(code: string): Promise<unknown> {
             throw err.response?.data;
         }
         throw err;
+    }
+}
+
+export async function loadUserSubscriptions({ reload = false }) {
+    const userInfoStore = useUserInfo();
+    const { getUserInfo: info, getUserSubscriptions: subscriptions } = storeToRefs(userInfoStore);
+
+    if (!reload && subscriptions.value) {
+        return Promise.resolve(subscriptions.value);
+    }
+
+    const data = await loadUserSubscriptionsReq();
+
+    if (data) {
+        userInfoStore.setUserSubscriptions(data);
+        userInfoStore.setUserInfo({ ...info.value, subscriptions: data });
+    }
+
+    return data;
+}
+
+// @ts-expect-error Parameter 'data' implicitly has an 'any' type.
+export async function putUserSubscription(data) {
+    await putUserSubscriptionReq(data);
+
+    return loadUserSubscriptions({ reload: true });
+}
+
+export async function loadUserSettings() {
+    const userInfoStore = useUserInfo();
+    const data = await loadUserSettingsReq();
+
+    if (data) {
+        userInfoStore.setUserSettings(data);
+    }
+
+    return data;
+}
+
+// @ts-expect-error Parameter 'data' implicitly has an 'any' type.
+export async function restorePasswordRequest(payload) {
+    try {
+        return await restorePasswordRequestReq(payload);
+    } catch (err) {
+        // @ts-expect-error 'err' is of type 'unknown'.
+        throw err.response;
+    }
+}
+
+// @ts-expect-error Parameter 'data' implicitly has an 'any' type.
+export async function restorePasswordRestore(payload) {
+    return await restorePasswordRestoreReq(payload);
+}
+
+export async function confirmPlayer(token: string) {
+    return await confirmPlayerReq(token);
+}
+
+export async function confirmEmailResend(captcha: string) {
+    const userInfoStore = useUserInfo();
+    const { getUserInfo: info } = storeToRefs(userInfoStore);
+
+    const dataForConfirm = {
+        user: { email: info.value.email },
+    };
+
+    if (captcha) {
+        // @ts-expect-error Property 'captcha' does not exist on type '{ email: string; }'
+        dataForConfirm.user.captcha = captcha;
+    }
+
+    return await confirmEmailResendReg(dataForConfirm);
+}
+
+export async function sendFreshChatRestoreId(restoreId: string, project: string) {
+    const userInfoStore = useUserInfo();
+    const {
+        getUserInfo: info,
+        getFreshChatRestoreIdLoaded: freshchatRestoreIdLoaded,
+        getFreshChatRestoreId: freshchatRestoreId,
+    } = storeToRefs(userInfoStore);
+
+    // to prevent override restore id when it is not initialized yet
+    if (!freshchatRestoreIdLoaded.value || restoreId === freshchatRestoreId.value) {
+        return;
+    }
+
+    userInfoStore.setFreshChatRestoreId(restoreId);
+    userInfoStore.setFreshChatRestoreIdLoaded();
+
+    await sendFreshChatRestoreIdReq(info.value.user_id, restoreId, project);
+}
+
+export async function loadUserStats() {
+    const userInfoStore = useUserInfo();
+    const data = await loadUserStatsReq();
+
+    if (data) {
+        userInfoStore.setPlayerStats(data);
+    }
+
+    return data;
+}
+
+export async function loadUserBonuses() {
+    const userInfoStore = useUserInfo();
+    const data = await loadUserBettingBonuses();
+
+    if (data) {
+        userInfoStore.setBettingBonuses(data);
+    }
+    return data;
+}
+
+export async function updateAuthDetailsProviders(data: { user: Record<string, unknown> }) {
+    const userInfoStore = useUserInfo();
+    const response = await updateAuthDetailsProvidersReq(data);
+
+    if (response?.status === 201) {
+        userInfoStore.setUserData(response.data);
+    }
+
+    return response;
+}
+
+export async function loadFreshChatRestoreId(project: string) {
+    const userInfoStore = useUserInfo();
+    const {
+        getUserInfo: info,
+    } = storeToRefs(userInfoStore);
+
+    userInfoStore.setFreshChatRestoreIdLoaded(false);
+
+    const data = await loadFreshChatRestoreIdReq(info.value.user_id, project);
+
+    const restoreId = data?.data?.restoreId;
+
+    if (restoreId) {
+        userInfoStore.setFreshChatRestoreId(restoreId.trim());
+    }
+
+    userInfoStore.setFreshChatRestoreIdLoaded();
+}
+
+export async function sendUserData(data: Record<string, unknown>) {
+    const userInfoStore = useUserInfo();
+    const resp = await sendUserDataReq(data);
+
+    userInfoStore.setUserInfoSavedFlag();
+
+    await loadUserProfile({ reload: true });
+
+    return resp;
+}
+
+export async function checkUserState() {
+    const userInfoStore = useUserInfo();
+    const { getUserInfo } = storeToRefs(userInfoStore);
+    const useCommonStore = useCommon();
+
+    const stateFieldConfig = useCommonStore.getFieldsType(EnumContextFields.edition, EnumFormFields.state);
+    const userState = getUserInfo.value.state;
+    const userPostCode = getUserInfo.value.postal_code;
+
+    if (stateFieldConfig && !userState && userPostCode) {
+        const stateForEdit = getStateByCounty(getUserInfo.value.country as string, userPostCode);
+
+        if (stateForEdit) {
+            await sendUserData({
+                context: "edition",
+                player: { state: stateForEdit },
+            });
+        }
+    }
+}
+
+export async function loadUserProfile({ reload = false, route }: { reload?: boolean; route?: string } = {}) {
+    const multilang = useMultilangStore();
+    const userInfoStore = useUserInfo();
+    const { getUserInfo: info } = storeToRefs(userInfoStore);
+
+    const profile = info.value;
+
+    if (profile.id && !reload) {
+        cioIdentifyUser(profile);
+        return { data: profile };
+    }
+
+    info.value.dataIsLoaded = false;
+
+    try {
+        const response = await loadUserProfileReq();
+        if (response) {
+            userInfoStore.setUserData(response.data);
+
+            const responseLang = response.data.language;
+
+            if (responseLang !== multilang.getUserLocale && response.data.id) {
+                // @ts-expect-error 'route' does not exist in type '{ lang: string; }'
+                updateLocale({ lang: responseLang, route });
+            }
+
+            if (!response.data.id) {
+                userInfoStore.setFreshChatRestoreIdLoaded();
+                userInfoStore.toggleUserIsLogged(false);
+                return;
+            }
+
+            userInfoStore.toggleUserIsLogged(true);
+
+            bus.$emit("user.data.received");
+            bus.$emit("user.login", response.data);
+            cioIdentifyUser(response.data);
+
+            loadFreshChatRestoreId(PROJECT);
+            loadPlayerFieldsInfo({ reload: true }).then(checkUserState);
+        }
+
+        return response;
+    } finally {
+        info.value.dataIsLoaded = true;
+        info.value.dataUserLoadedOneTime = true;
     }
 }
