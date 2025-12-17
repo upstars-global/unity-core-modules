@@ -130,6 +130,31 @@ describe("useUserInfo store", () => {
         expect(store.getSettings).toEqual(settings);
     });
 
+    it("toggleUserIsLogged switches login flag", () => {
+        const store = useUserInfo();
+
+        expect(store.getIsLogged).toBe(false);
+
+        store.toggleUserIsLogged(true);
+        expect(store.getIsLogged).toBe(true);
+
+        store.toggleUserIsLogged(false);
+        expect(store.getIsLogged).toBe(false);
+    });
+
+    it("updateUserInfo merges partial payload without dropping existing data", () => {
+        const store = useUserInfo();
+
+        store.setUserData({ id: 5, email: "user@example.com", first_name: "John" });
+        store.updateUserInfo({ last_name: "Doe", dataIsLoaded: false });
+
+        expect(store.getUserInfo.id).toBe(5);
+        expect(store.getUserInfo.email).toBe("user@example.com");
+        expect(store.getUserInfo.first_name).toBe("John");
+        expect(store.getUserInfo.last_name).toBe("Doe");
+        expect(store.getDataIsLoaded).toBe(false);
+    });
+
     it("setPlayerStats updates stats state", () => {
         const store = useUserInfo();
         const stats: IPlayerStats = {

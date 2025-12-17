@@ -25,6 +25,7 @@ const useUserInfoMock = {
     setFreshChatRestoreIdLoaded: vi.fn((status: boolean = true) => {
         freshchatRestoreIdLoaded.value = status;
     }),
+    updateUserInfo: vi.fn(),
     toggleUserIsLogged: vi.fn(),
     setUserData: vi.fn(),
     setUserInfoSavedFlag: vi.fn(),
