@@ -499,7 +499,7 @@ export async function loadUserProfile({ reload = false, route }: { reload?: bool
         return { data: profile };
     }
 
-    info.value.dataIsLoaded = false;
+    userInfoStore.updateUserInfo({ dataIsLoaded: false });
 
     try {
         const response = await loadUserProfileReq();
@@ -531,7 +531,9 @@ export async function loadUserProfile({ reload = false, route }: { reload?: bool
 
         return response;
     } finally {
-        info.value.dataIsLoaded = true;
-        info.value.dataUserLoadedOneTime = true;
+        userInfoStore.updateUserInfo({
+            dataUserLoadedOneTime: true,
+            dataIsLoaded: true,
+        });
     }
 }

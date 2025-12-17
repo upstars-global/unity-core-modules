@@ -168,6 +168,13 @@ export const useUserInfo = defineStore("userInfo", () => {
         info.value.saved = flag;
     }
 
+    function updateUserInfo(data: Partial<IUserData>) {
+        info.value = {
+            ...info.value,
+            ...data,
+        };
+    }
+
     function setBettingBonuses(data: unknown[]) {
         bettingBonuses.value = data;
     }
@@ -186,6 +193,7 @@ export const useUserInfo = defineStore("userInfo", () => {
         getUserSumsubVerified,
         getUserVerified,
         info,
+        updateUserInfo,
         isLogged,
         getUserCurrency,
         isCryptoUserCurrency,

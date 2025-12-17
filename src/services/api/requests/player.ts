@@ -1,4 +1,5 @@
 import { v4 as uuid } from "uuid";
+import { I } from "vitest/dist/chunks/reporters.d.BFLkQcL6.js";
 
 import { log } from "../../../controllers/Logger";
 import { IAuthProvider, IUserAuthProvider } from "../../../models/authProviders";
@@ -10,6 +11,7 @@ import {
     type IUserInfo,
     type IUserSession,
 } from "../../../models/user";
+import { type IBettingBonus } from "../DTO/bets";
 import { IPlayerPayment } from "../DTO/cashbox";
 import { type UserCouponStatuses } from "../DTO/couponePromoCodes";
 import { BettingPlayerSettingsDTO, IPlayerStats, ISubscriptions, IUserAccount, IUserSettings } from "../DTO/playerDTO";
@@ -286,7 +288,7 @@ export async function loadUserStatsReq() {
 
 export async function loadUserBettingBonuses() {
     try {
-        const { data } = await http().get<unknown[]>("/api/v2/bonuses");
+        const { data } = await http().get<IBettingBonus[]>("/api/v2/bonuses");
         return data;
     } catch (err) {
         log.error("LOAD_USER_BETTING_BONUSES_ERROR", err);
