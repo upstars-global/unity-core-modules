@@ -46,15 +46,10 @@ export interface TransactionMetricInfo {
 }
 
 export interface ICashboxPresets {
-    "userGroups": {
-      [userID: string]: {
-        [currency: string]: string[],
-      }
+    userGroups: {
+      [userID: string]: Record<Currencies, string[]>,
     },
-
-    "global": {
-        [currency: string]: string[],
-    },
+    global: Record<Currencies, string[]>
 }
 
 export default {};
