@@ -228,15 +228,3 @@ export const useUserInfo = defineStore("userInfo", () => {
         setUserSettings,
     };
 });
-
-export function useUserInfoFetchService(pinia?: Pinia) {
-    useUserInfo(pinia);
-
-    function loadUserInfo() {
-        return Promise.resolve();
-    }
-
-    return {
-        loadUserInfo,
-    };
-}
