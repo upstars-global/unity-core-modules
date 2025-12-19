@@ -10,18 +10,15 @@ import type { ILevel } from "@types/levels";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
-import { log } from "../../controllers/Logger";
 import type { IUserStatus, UserGroup } from "../../models/user";
 import { IVipManager } from "../../models/vipManagers";
-import { loadManagersConfigReq } from "../../services/api/requests/configs";
-import { changePlayerGroup, type IPlayerGroup } from "../../services/api/requests/player";
 import { useLevelsStore } from "../levels/levelsStore";
 import { useUserInfo } from "./userInfo";
 
 export const useUserStatuses = defineStore("userStatuses", () => {
     const userStore = useUserInfo();
     const { getUserInfo } = storeToRefs(userStore);
-    const userManager = ref<IVipManager>();
+    const userManager = ref<IVipManager | null>(null);
     const socialNetworkAuthGroups = ref<number[]>([]);
 
     const getUserLevelInfo = computed<ILevel>(() => {
@@ -84,52 +81,8 @@ export const useUserStatuses = defineStore("userStatuses", () => {
         return getUserGroups.value.includes(ID_CASHBOX_ONBOARD_DONE);
     });
 
-    async function changeUserToGroup(groupForAdding?: IPlayerGroup, groupForRemoving?: IPlayerGroup): Promise<void> {
-        if (!groupForAdding && !groupForRemoving) {
-            log.error("CHANGE_PLAYER_GROUP_EMPTY_PARAMS", {
-                groupForAdding: String(groupForAdding),
-                groupForRemoving: String(groupForRemoving),
-            });
-
-            return;
-        }
-
-        if (groupForAdding === groupForRemoving) {
-            log.error("CHANGE_PLAYER_GROUP_SAME_PARAMS", {
-                groupForAdding: String(groupForAdding),
-                groupForRemoving: String(groupForRemoving),
-            });
-
-            return;
-        }
-
-        const allowedToAddGroup = groupForAdding && !getUserGroups.value.includes(groupForAdding);
-        const allowedToRemoveGroup = groupForRemoving && getUserGroups.value.includes(groupForRemoving);
-
-        if (!allowedToAddGroup && !allowedToRemoveGroup) {
-            return;
-        }
-
-        if (allowedToAddGroup) {
-            userStore.addUserGroup({ id: groupForAdding, name: groupForAdding });
-        }
-
-        if (allowedToRemoveGroup) {
-            userStore.removeUserGroup({ id: groupForRemoving, name: groupForRemoving });
-        }
-
-        await changePlayerGroup(
-            allowedToAddGroup ? groupForAdding : null,
-            allowedToRemoveGroup ? groupForRemoving : null,
-        );
-    }
-
-    async function loadUserManager() {
-        if (userManager.value) {
-            return getUserManager.value;
-        }
-        userManager.value = await loadManagersConfigReq(getUserGroups.value);
-        return userManager.value;
+    function setUserManager(manager: IVipManager) {
+        userManager.value = manager;
     }
 
     function clearUserManager() {
@@ -149,14 +102,14 @@ export const useUserStatuses = defineStore("userStatuses", () => {
         isVip,
         isDiamond,
         isCashboxOnboardDone,
+        userManager,
         getUserManager,
+        setUserManager,
         userVipStatus,
         userVipGroup,
         isRegisteredViaSocialNetwork,
         getUserLevelId,
-        changeUserToGroup,
         setSocialNetworkAuthGroups,
-        loadUserManager,
         clearUserManager,
     };
 });
