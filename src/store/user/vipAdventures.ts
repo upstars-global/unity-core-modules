@@ -147,9 +147,12 @@ export const useVipAdventures = defineStore("vipAdventures", () => {
                 config.prizes[userGroupForAdventure.value] :
                 Object.values(config.prizes)[0];
 
-            vipAdventuresVariables.value = userGroupForAdventure.value ?
-                config.variables[userGroupForAdventure.value] :
-                Object.values(config.variables)[0];
+
+            if (config.variables) {
+                vipAdventuresVariables.value = userGroupForAdventure.value ?
+                    config.variables[userGroupForAdventure.value] :
+                    Object.values(config.variables)[0];
+            }
         }
     }
 
