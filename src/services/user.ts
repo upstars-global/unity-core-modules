@@ -13,14 +13,17 @@ import { useUserInfo } from "../store/user/userInfo";
 import { useUserSecurity } from "../store/user/userSecurity";
 import { useUserStatuses } from "../store/user/userStatuses";
 import { useUserVerificationSumsub } from "../store/user/userVerificationSumsub";
+import { loadManagersConfigReq } from "./api/requests/configs";
 import { activeCouponReq } from "./api/requests/couponePromoCodes";
 import { deleteDocument, loadDocuments, uploadDocuments } from "./api/requests/documents";
 import {
     activateTwoFactorReq,
     activateUserCouponReq,
+    changePlayerGroup,
     closeUserSessionByIdReq,
     deleteDepositBonusCodeReq,
     deleteTwoFactorReq,
+    IPlayerGroup,
     loadBettingPlayerSettingsRequest,
     loadPlayerFieldsInfoRequest,
     loadTwoFactorReq,
@@ -298,4 +301,64 @@ export async function deleteTwoFactor(code: string): Promise<unknown> {
         }
         throw err;
     }
+}
+
+export async function changeUserToGroup(groupForAdding?: IPlayerGroup, groupForRemoving?: IPlayerGroup): Promise<void> {
+    const userStore = useUserInfo();
+    const { getUserGroups } = storeToRefs(useUserStatuses());
+
+    if (!groupForAdding && !groupForRemoving) {
+        log.error("CHANGE_PLAYER_GROUP_EMPTY_PARAMS", {
+            groupForAdding: String(groupForAdding),
+            groupForRemoving: String(groupForRemoving),
+        });
+
+        return;
+    }
+
+    if (groupForAdding === groupForRemoving) {
+        log.error("CHANGE_PLAYER_GROUP_SAME_PARAMS", {
+            groupForAdding: String(groupForAdding),
+            groupForRemoving: String(groupForRemoving),
+        });
+
+        return;
+    }
+
+    const allowedToAddGroup = groupForAdding && !getUserGroups.value.includes(groupForAdding);
+    const allowedToRemoveGroup = groupForRemoving && getUserGroups.value.includes(groupForRemoving);
+
+    if (!allowedToAddGroup && !allowedToRemoveGroup) {
+        return;
+    }
+
+    if (allowedToAddGroup) {
+        userStore.addUserGroup({ id: groupForAdding, name: groupForAdding });
+    }
+
+    if (allowedToRemoveGroup) {
+        userStore.removeUserGroup({ id: groupForRemoving, name: groupForRemoving });
+    }
+
+    await changePlayerGroup(
+        allowedToAddGroup ? groupForAdding : null,
+        allowedToRemoveGroup ? groupForRemoving : null,
+    );
+}
+
+export async function loadUserManager() {
+    const userStatusesStore = useUserStatuses();
+    const { getUserManager, getUserGroups } = storeToRefs(userStatusesStore);
+
+    if (getUserManager.value) {
+        return getUserManager.value;
+    }
+
+    const manager = await loadManagersConfigReq(getUserGroups.value);
+
+    if (manager) {
+        userStatusesStore.setUserManager(manager);
+    }
+
+    return getUserManager.value;
 }
