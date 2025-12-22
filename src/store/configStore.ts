@@ -19,7 +19,13 @@ export const useConfigStore = defineStore("configStore", () => {
     }
 
     function setVipProgramConfig(data: IVipProgramConfigDTO) {
-        const { levelRewards, levelBonusesCount, levelCards, levelsConfig, rewardCards } = data;
+        const { levelRewards,
+            levelBonusesCount,
+            levelCards,
+            levelsConfig,
+            rewardCards,
+            seasonInfo,
+        } = data;
 
         vipProgramConfig.value = {
             rewards: Object
@@ -36,6 +42,7 @@ export const useConfigStore = defineStore("configStore", () => {
             levelBonusesCount,
             levelCards,
             levelsConfig,
+            seasonInfo,
         };
     }
 

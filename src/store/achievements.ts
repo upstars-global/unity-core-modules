@@ -2,12 +2,12 @@ import { ACHIEV_ID, defaultDepCount, TOURNAMENT_IDS_FOR_ACHIEV } from "@config/a
 import featureFlags from "@theme/configs/featureFlags";
 import dayjs from "dayjs";
 import { defineStore, storeToRefs } from "pinia";
-import { type IUserStatus } from "src/models/user";
-import { type IStatuses } from "src/services/api/DTO/statuses";
 import { computed } from "vue";
 
 import { betSunCompletedInTour, containAchievIdInUserStatuses } from "../helpers/achievementHelpers";
 import { STATUS_PROMO } from "../models/enums/tournaments";
+import { type IUserStatus } from "../models/user";
+import { type IStatuses } from "../services/api/DTO/statuses";
 import { useCashboxStore } from "./cashboxStore";
 import { useLevelsStore } from "./levels/levelsStore";
 import { useTournamentsStore } from "./tournaments/tournamentsStore";
