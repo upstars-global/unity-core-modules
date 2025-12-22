@@ -1,3 +1,21 @@
+## [1.55.2](https://github.com/upstars-global/unity-core-modules/compare/v1.55.1...v1.55.2) (2025-12-22)
+
+### 🐛 Bug Fixes
+
+* UN-2060 check if variables exist in vip adventure config ([#282](https://github.com/upstars-global/unity-core-modules/issues/282))
+ ([5d4c4d8](https://github.com/upstars-global/unity-core-modules/commit/5d4c4d80bb2908d90e0335ec534d283f16c5265e))
+
+## [1.55.1](https://github.com/upstars-global/unity-core-modules/compare/v1.55.0...v1.55.1) (2025-12-19)
+
+### 🔧 Maintenance
+
+* UN-1967 add seasonInfo to vip config ([#276](https://github.com/upstars-global/unity-core-modules/issues/276))
+ ([0876880](https://github.com/upstars-global/unity-core-modules/commit/087688096591aa263faa02b48f9925cbd4b8f6e8))
+
+
+
+    chore: UN-1967 add seasonInfo to vip config
+
 ## [1.55.0](https://github.com/upstars-global/unity-core-modules/compare/v1.54.0...v1.55.0) (2025-12-15)
 
 ### 🚀 Features
