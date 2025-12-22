@@ -62,7 +62,6 @@ export const useCMS = defineStore("CMS", () => {
             throw new Error(`pages.length < 1, pages = ${pages}`);
         } catch (err) {
             log.error("STORE_LOAD_STATIC_PAGES_ERROR", err);
-            throw err;
         }
     }
 
