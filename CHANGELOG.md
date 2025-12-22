@@ -1,3 +1,10 @@
+## [1.55.2](https://github.com/upstars-global/unity-core-modules/compare/v1.55.1...v1.55.2) (2025-12-22)
+
+### 🐛 Bug Fixes
+
+* UN-2060 check if variables exist in vip adventure config ([#282](https://github.com/upstars-global/unity-core-modules/issues/282))
+ ([5d4c4d8](https://github.com/upstars-global/unity-core-modules/commit/5d4c4d80bb2908d90e0335ec534d283f16c5265e))
+
 ## [1.55.1](https://github.com/upstars-global/unity-core-modules/compare/v1.55.0...v1.55.1) (2025-12-19)
 
 ### 🔧 Maintenance
