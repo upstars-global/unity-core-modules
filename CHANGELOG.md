@@ -1,3 +1,10 @@
+## [1.56.0](https://github.com/upstars-global/unity-core-modules/compare/v1.55.3...v1.56.0) (2025-12-23)
+
+### 🚀 Features
+
+* UN-1995 add cashbox presets
+ ([8aba5c0](https://github.com/upstars-global/unity-core-modules/commit/8aba5c01c34b3c3d3e5d035866a1267dfb372d8e))
+
 ## [1.55.3](https://github.com/upstars-global/unity-core-modules/compare/v1.55.2...v1.55.3) (2025-12-23)
 
 ### 🐛 Bug Fixes
