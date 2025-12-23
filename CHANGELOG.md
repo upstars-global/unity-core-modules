@@ -1,3 +1,10 @@
+## [1.55.3](https://github.com/upstars-global/unity-core-modules/compare/v1.55.2...v1.55.3) (2025-12-23)
+
+### 🐛 Bug Fixes
+
+* UN-2049 modify loadStaticPages ([#280](https://github.com/upstars-global/unity-core-modules/issues/280))
+ ([e63e792](https://github.com/upstars-global/unity-core-modules/commit/e63e79217632933d7dd36cd63a061ccca77fbcec))
+
 ## [1.55.2](https://github.com/upstars-global/unity-core-modules/compare/v1.55.1...v1.55.2) (2025-12-22)
 
 ### 🐛 Bug Fixes
