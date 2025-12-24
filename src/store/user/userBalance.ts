@@ -12,6 +12,7 @@ import { useGiftsStore } from "../gifts";
 import { useSettings } from "../settings";
 import { useUserInfo } from "./userInfo";
 import { useUserLimits } from "./userLimits";
+
 const handleBets = "handle_bets";
 
 export const useUserBalance = defineStore("userBalance", () => {
