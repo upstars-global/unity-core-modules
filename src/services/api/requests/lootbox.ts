@@ -1,14 +1,13 @@
+import { FE_API_PREFIX } from "../../../consts/apiConfig";
 import { log } from "../../../controllers/Logger";
 import type { ILootbox } from "../../../models/lootboxes";
-import type { UserGroup } from "../../../models/user";
-import { IPageItemCMS } from "../DTO/CMS";
 import { ILootboxesFileConfig } from "../DTO/lootboxes";
 import { http } from "../http";
 
 export async function loadMockLootboxWheelConfigs():
     Promise<ILootboxesFileConfig | undefined> {
     try {
-        const { data } = await http().get<ILootboxesFileConfig>("/api/fe/config/wheel-config");
+        const { data } = await http().get<ILootboxesFileConfig>(`${ FE_API_PREFIX }/config/wheel-config`);
 
         return data;
     } catch (err) {
@@ -19,7 +18,7 @@ export async function loadMockLootboxWheelConfigs():
 export async function loadMockLootboxWheelSegmentsConfigs():
     Promise<Record<string, ILootboxesFileConfig> | undefined> {
     try {
-        const { data } = await http().get<Record<string, ILootboxesFileConfig>>("/api/fe/config/wheel-config-segments");
+        const { data } = await http().get<Record<string, ILootboxesFileConfig>>(`${ FE_API_PREFIX }/config/wheel-config-segments`);
 
         return data;
     } catch (err) {
@@ -39,7 +38,7 @@ export async function getLootboxesReq() {
 
 export async function activateLootboxReq(id: number) {
     try {
-        const { data } = await http().post(`/api/player/lootboxes/${id}/activation`);
+        const { data } = await http().post(`/api/player/lootboxes/${ id }/activation`);
 
         return data;
     } catch (err) {
@@ -49,7 +48,7 @@ export async function activateLootboxReq(id: number) {
 
 export async function loadBetBonusReq(type: string, id: string) {
     try {
-        const { data } = await http().get(`/api/v2/bonuses/${type}/${id}`);
+        const { data } = await http().get(`/api/v2/bonuses/${ type }/${ id }`);
         return data;
     } catch (err) {
         log.error("LOAD_BET_BONUS_ERROR", err);
