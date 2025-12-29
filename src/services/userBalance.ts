@@ -14,7 +14,7 @@ export function useUserBalanceService() {
         try {
             balance.value = await loadUserBalanceReq();
         } catch (err) {
-            log.error("LOAD_USER_BALANCE", err);
+            log.error("SERVICE_LOAD_USER_BALANCE_ERROR", err);
         }
     }
 
@@ -31,7 +31,7 @@ export function useUserBalanceService() {
                 loadUserBalance(),
             ]);
         } catch (err) {
-            log.error("SELECT_USER_WALLET", err);
+            log.error("SERVICE_SELECT_USER_WALLET_ERROR", err);
         }
     }
 
