@@ -1,3 +1,29 @@
+## [1.58.0](https://github.com/upstars-global/unity-core-modules/compare/v1.57.0...v1.58.0) (2025-12-30)
+
+### ⏪ Reverts
+
+* 1.57.0 ([#286](https://github.com/upstars-global/unity-core-modules/issues/286))
+ ([26063e1](https://github.com/upstars-global/unity-core-modules/commit/26063e16be1f3fdc8ef452f36389dff31bab7b23))
+
+, closes [#279](https://github.com/upstars-global/unity-core-modules/issues/)
+
+### 🚀 Features
+
+* enforce dependency cruise thresholds ([#289](https://github.com/upstars-global/unity-core-modules/issues/289))
+ ([a9a43b5](https://github.com/upstars-global/unity-core-modules/commit/a9a43b5ca574cfffbc650f78377ace0ebd2b59c2))
+
+
+
+    * feat: enforce dependency cruise thresholds
+
+    - Add `depcruise-threshold.mjs` script to validate `depcruise` results against defined error and warning limits.
+
+    - Integrate `depcruise:check` script into pre-commit and CI workflows.
+
+    - Update `package.json` with `depcruise:check` command definition.
+
+    * refactor: clean up logging in `depcruise-threshold.mjs` script
+
 ## [1.56.0](https://github.com/upstars-global/unity-core-modules/compare/v1.55.3...v1.56.0) (2025-12-23)
 
 ### 🚀 Features
