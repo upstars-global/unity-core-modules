@@ -1,17 +1,13 @@
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref, toRefs } from "vue";
 
-import { log } from "../../controllers/Logger";
 import { currencyView } from "../../helpers/currencyHelper";
-import { Currencies } from "../../models/enums/currencies";
 import type { IGift } from "../../services/api/DTO/gifts";
 import type { IUserAccount } from "../../services/api/DTO/playerDTO";
-import { loadUserBalanceReq, selectUserWalletReq } from "../../services/api/requests/player";
 import { useCommon } from "../common";
 import { useGiftsStore } from "../gifts";
 import { useSettings } from "../settings";
 import { useUserInfo } from "./userInfo";
-import { useUserLimits } from "./userLimits";
 
 const handleBets = "handle_bets";
 
@@ -35,30 +31,6 @@ export const useUserBalance = defineStore("userBalance", () => {
     const userWallets = computed<IUserAccount[]>(() => balance.value.filter((walletItem) => {
         return walletItem.active;
     }));
-
-    async function loadUserBalance() {
-        try {
-            balance.value = await loadUserBalanceReq();
-        } catch (err) {
-            log.error("LOAD_USER_BALANCE", err);
-        }
-    }
-
-    async function selectUserWallet(currency: Currencies) {
-        try {
-            const { loadUserLimits } = useUserLimits();
-            await selectUserWalletReq(currency);
-
-            return Promise.all([
-                userStore.loadUserProfile({ reload: true }),
-                loadUserLimits(),
-                loadUserBalance(),
-            ]);
-        } catch (err) {
-            // @ts-expect-error 'err' is of type 'unknown'.
-            return err.response.data;
-        }
-    }
 
     const getUserCashoutBalance = computed<number>(() => {
         const balanceSelectedCurrency = balance.value.find((item) => {
@@ -168,8 +140,6 @@ export const useUserBalance = defineStore("userBalance", () => {
         userCurrency,
         balance,
         userWallets,
-        loadUserBalance,
-        selectUserWallet,
 
         updateUserBalance,
 
