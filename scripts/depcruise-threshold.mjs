@@ -17,8 +17,6 @@ const res = spawnSync(
     { encoding: "utf8" },
 );
 
-console.log(Object.keys(res));
-console.log(res.status);
 if (res.error) {
     console.error(res.error);
     process.exit(2);
@@ -39,7 +37,7 @@ try {
 const errors = data?.summary.error;
 const warnings = data?.summary.warn;
 
-console.log(`depcruise: errors=${ errors } warnings=${ warnings } (maxErrors=${ maxErrors } maxWarnings=${ maxWarnings })`);
+console.log(`depcruise: errors=${ errors } (maxErrors=${ maxErrors })  warnings=${ warnings } (maxWarnings=${ maxWarnings })`);
 
 if (errors > maxErrors || warnings > maxWarnings) {
     console.error("depcruise thresholds exceeded");
