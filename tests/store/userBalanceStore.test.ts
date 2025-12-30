@@ -4,6 +4,13 @@ import { ref } from "vue";
 
 import { useUserBalance } from "../../src/store/user/userBalance";
 
+const STORE_BALANCE_USD = {
+    currency: "USD",
+    active: true,
+    amount_cents: 1000,
+    available_to_cashout_cents: 700,
+};
+
 vi.mock("../../src/store/user/userInfo", () => {
     return {
         useUserInfo: () => ({
@@ -70,12 +77,7 @@ describe("useUserBalance store", () => {
         const store = useUserBalance();
 
         store.balance = [
-            {
-                currency: "USD",
-                active: true,
-                amount_cents: 1000,
-                available_to_cashout_cents: 700,
-            },
+            STORE_BALANCE_USD,
             {
                 currency: "EUR",
                 active: false,
@@ -92,12 +94,7 @@ describe("useUserBalance store", () => {
         const store = useUserBalance();
 
         store.balance = [
-            {
-                currency: "USD",
-                active: true,
-                amount_cents: 1000,
-                available_to_cashout_cents: 700,
-            },
+            STORE_BALANCE_USD,
         ];
 
         expect(store.getUserCashoutBalance).toBe(700);
@@ -107,12 +104,7 @@ describe("useUserBalance store", () => {
         const store = useUserBalance();
 
         store.balance = [
-            {
-                currency: "USD",
-                active: true,
-                amount_cents: 1000,
-                available_to_cashout_cents: 700,
-            },
+            STORE_BALANCE_USD,
         ];
 
         expect(store.getUserCommonBalance).toBe(1000);
@@ -122,12 +114,7 @@ describe("useUserBalance store", () => {
         const store = useUserBalance();
 
         store.balance = [
-            {
-                currency: "USD",
-                active: true,
-                amount_cents: 1000,
-                available_to_cashout_cents: 700,
-            },
+            STORE_BALANCE_USD,
         ];
 
         expect(store.getUserBonusBalance).toBe(300);
@@ -137,12 +124,7 @@ describe("useUserBalance store", () => {
         const store = useUserBalance();
 
         store.balance = [
-            {
-                currency: "USD",
-                active: true,
-                amount_cents: 1000,
-                available_to_cashout_cents: 700,
-            },
+            STORE_BALANCE_USD,
         ];
 
         expect(store.getUserCommonBalanceNormalize).toBe("10 USD");
@@ -152,7 +134,9 @@ describe("useUserBalance store", () => {
     it("updates balance for a specific currency", () => {
         const store = useUserBalance();
 
-        store.balance = [ { currency: "USD", active: true, amount_cents: 1000 } ];
+        store.balance = [
+            STORE_BALANCE_USD,
+        ];
 
         store.updateUserBalance({
             data: { currency: "USD", active: true, amount_cents: 2000 },
@@ -164,7 +148,9 @@ describe("useUserBalance store", () => {
     it("clears store state", () => {
         const store = useUserBalance();
 
-        store.balance = [ { currency: "USD", active: true } ];
+        store.balance = [
+            STORE_BALANCE_USD,
+        ];
 
         store.clearState();
 
