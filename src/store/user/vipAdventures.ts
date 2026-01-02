@@ -99,7 +99,7 @@ export const useVipAdventures = defineStore("vipAdventures", () => {
         const lastCalendarDay = calendarConfig.value[calendarLength - 1];
         return {
             index: calendarConfig.value.length,
-            today: dayjs(lastCalendarDay.fullDate, formatDateVipAdv).isBefore(toDay.value),
+            today: dayjs(lastCalendarDay.fullDate, formatDateVipAdv).isBefore(toDay.value, "day"),
         };
     });
 
