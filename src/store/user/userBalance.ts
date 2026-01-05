@@ -7,6 +7,7 @@ import { Currencies } from "../../models/enums/currencies";
 import type { IGift } from "../../services/api/DTO/gifts";
 import type { IUserAccount } from "../../services/api/DTO/playerDTO";
 import { loadUserBalanceReq, selectUserWalletReq } from "../../services/api/requests/player";
+import { loadUserProfile } from "../../services/user";
 import { useCommon } from "../common";
 import { useGiftsStore } from "../gifts";
 import { useSettings } from "../settings";
@@ -50,7 +51,7 @@ export const useUserBalance = defineStore("userBalance", () => {
             await selectUserWalletReq(currency);
 
             return Promise.all([
-                userStore.loadUserProfile({ reload: true }),
+                loadUserProfile({ reload: true }),
                 loadUserLimits(),
                 loadUserBalance(),
             ]);
