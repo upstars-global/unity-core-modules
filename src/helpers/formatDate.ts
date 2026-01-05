@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import isToday from "dayjs/plugin/isToday";
 import quarterOfYear from "dayjs/plugin/quarterOfYear";
 import relativeTime from "dayjs/plugin/relativeTime";
 import utcPlugin from "dayjs/plugin/utc";
@@ -14,6 +15,7 @@ dayjs.extend(relativeTime);
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 dayjs.extend(quarterOfYear);
+dayjs.extend(isToday);
 
 export function formatDate(date, format = "YYYY/MM/DD HH:mm") {
     return dayjs(date).format(format);

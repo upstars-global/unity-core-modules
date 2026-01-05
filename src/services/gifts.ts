@@ -9,7 +9,7 @@ import { log } from "../controllers/Logger";
 import { useGiftsStore } from "../store/gifts";
 import type { IGift, IGiftDeposit, IGiftFreeSpins } from "./api/DTO/gifts";
 import {
-    loadAdditionalDepositGiftsConfigReq,
+    loadAdditionalDepositGiftsConfigReq, loadDailyBonusConfigReq,
     loadDisabledBonusesConfigReq,
     loadModifyGiftsConfigReq,
 } from "./api/requests/configs";
@@ -181,6 +181,17 @@ export async function activationBonus(id: number) {
         loadGiftsData();
     } catch (err) {
         log.error("ACTIVATION_BONUS", err);
+    }
+}
+
+export async function loadDailyBonusConfig() {
+    try {
+        const giftsStore = useGiftsStore();
+        const data = await loadDailyBonusConfigReq();
+
+        giftsStore.setDailyBonusConfig(data);
+    } catch (err) {
+        log.error("LOAD_DAILY_BONUS_CONFIG", err);
     }
 }
 
