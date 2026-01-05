@@ -1,3 +1,10 @@
+## [1.59.0](https://github.com/upstars-global/unity-core-modules/compare/v1.58.0...v1.59.0) (2026-01-05)
+
+### 🚀 Features
+
+* (UN-2089) adventure - compare without hours ([#293](https://github.com/upstars-global/unity-core-modules/issues/293))
+ ([8bbbb15](https://github.com/upstars-global/unity-core-modules/commit/8bbbb15bc669e4e47a1fab06c03126a2da57758a))
+
 ## [1.58.0](https://github.com/upstars-global/unity-core-modules/compare/v1.57.0...v1.58.0) (2025-12-30)
 
 ### ⏪ Reverts
