@@ -48,15 +48,21 @@ export const useCMS = defineStore("CMS", () => {
     const inflight = new Map<string, ReturnType<typeof loadPageContentFromCmsReq>>();
 
     async function loadStaticPages({ reload } = { reload: false }) {
-        if (isExistData(staticPages.value) && !reload) {
-            return staticPages.value;
-        }
+        try {
+            if (isExistData(staticPages.value) && !reload) {
+                return staticPages.value;
+            }
 
-        const pages = await loadCMSPagesReq(getUserLocale.value);
-        if (pages) {
-            staticPages.value = prepareMapStaticPages(pages);
+            const pages = await loadCMSPagesReq(getUserLocale.value);
+            if (pages?.length) {
+                staticPages.value = prepareMapStaticPages(pages);
+                return pages;
+            }
+
+            throw new Error(`pages.length < 1, pages = ${pages}`);
+        } catch (err) {
+            log.error("STORE_LOAD_STATIC_PAGES_ERROR", err);
         }
-        return pages;
     }
 
     const getStaticPages = computed(() => {

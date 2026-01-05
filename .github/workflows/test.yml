@@ -29,10 +29,14 @@ jobs:
         uses: borales/actions-yarn@v4
         with:
           cmd: install
+      - name: Dependency cruise thresholds
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: depcruise:check
       - name: Test
         uses: borales/actions-yarn@v4
         with:
           cmd: test:coverage
       - name: Report Coverage
         if: always() # Also generate the report if tests are failing
-        uses:  davelosert/vitest-coverage-report-action@v2
+        uses: davelosert/vitest-coverage-report-action@v2
