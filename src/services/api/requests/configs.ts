@@ -7,6 +7,7 @@ import { type MainWidgetItem } from "../../../models/mainWidget";
 import { type IProvidersList } from "../../../models/providers";
 import { type UserGroup } from "../../../models/user";
 import { type IVipManager } from "../../../models/vipManagers";
+import { type ICashboxPresets } from "../DTO/cashbox";
 import { type IGiftModifyConfig } from "../DTO/gifts";
 import { type IVipProgramConfigDTO } from "../DTO/levels";
 import { type IVipAdventuresConfig } from "../DTO/vipAdventuresDTO";
@@ -60,10 +61,15 @@ const loadEnabledGamesConfigReq = () => loadConfig<IEnabledGames>(
     "/api/fe/config/enable-games-config",
     "LOAD_ENABLED_GAMES_CONFIG_ERROR",
 );
+const loadCashboxPresetsReq = () => loadConfig<ICashboxPresets[]>(
+    "/api/fe/config/cashbox-presets",
+    "LOAD_CASHBOX_PRESETS_ERROR",
+);
 
 export {
     loadAdditionalDepositGiftsConfigReq,
     loadBettingConfigReq,
+    loadCashboxPresetsReq,
     loadCurrencyConfigReq,
     loadDisabledBonusesConfigReq,
     loadDisabledProvidersConfigReq,

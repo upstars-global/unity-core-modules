@@ -6,4 +6,8 @@ export interface IVipProgramConfigDTO {
     levelsConfig: Record<Level, LevelConfig>,
     levelCards: Record<Level, ILevelCard>,
     levelBonusesCount: Record<Level, number>,
+    seasonInfo: {
+        dateEnd: string,
+        dateStart: string,
+    },
 }
