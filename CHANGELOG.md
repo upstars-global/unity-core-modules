@@ -1,3 +1,61 @@
+## [1.58.0](https://github.com/upstars-global/unity-core-modules/compare/v1.57.0...v1.58.0) (2025-12-30)
+
+### ⏪ Reverts
+
+* 1.57.0 ([#286](https://github.com/upstars-global/unity-core-modules/issues/286))
+ ([26063e1](https://github.com/upstars-global/unity-core-modules/commit/26063e16be1f3fdc8ef452f36389dff31bab7b23))
+
+, closes [#279](https://github.com/upstars-global/unity-core-modules/issues/)
+
+### 🚀 Features
+
+* enforce dependency cruise thresholds ([#289](https://github.com/upstars-global/unity-core-modules/issues/289))
+ ([a9a43b5](https://github.com/upstars-global/unity-core-modules/commit/a9a43b5ca574cfffbc650f78377ace0ebd2b59c2))
+
+
+
+    * feat: enforce dependency cruise thresholds
+
+    - Add `depcruise-threshold.mjs` script to validate `depcruise` results against defined error and warning limits.
+
+    - Integrate `depcruise:check` script into pre-commit and CI workflows.
+
+    - Update `package.json` with `depcruise:check` command definition.
+
+    * refactor: clean up logging in `depcruise-threshold.mjs` script
+
+## [1.56.0](https://github.com/upstars-global/unity-core-modules/compare/v1.55.3...v1.56.0) (2025-12-23)
+
+### 🚀 Features
+
+* UN-1995 add cashbox presets
+ ([8aba5c0](https://github.com/upstars-global/unity-core-modules/commit/8aba5c01c34b3c3d3e5d035866a1267dfb372d8e))
+
+## [1.55.3](https://github.com/upstars-global/unity-core-modules/compare/v1.55.2...v1.55.3) (2025-12-23)
+
+### 🐛 Bug Fixes
+
+* UN-2049 modify loadStaticPages ([#280](https://github.com/upstars-global/unity-core-modules/issues/280))
+ ([e63e792](https://github.com/upstars-global/unity-core-modules/commit/e63e79217632933d7dd36cd63a061ccca77fbcec))
+
+## [1.55.2](https://github.com/upstars-global/unity-core-modules/compare/v1.55.1...v1.55.2) (2025-12-22)
+
+### 🐛 Bug Fixes
+
+* UN-2060 check if variables exist in vip adventure config ([#282](https://github.com/upstars-global/unity-core-modules/issues/282))
+ ([5d4c4d8](https://github.com/upstars-global/unity-core-modules/commit/5d4c4d80bb2908d90e0335ec534d283f16c5265e))
+
+## [1.55.1](https://github.com/upstars-global/unity-core-modules/compare/v1.55.0...v1.55.1) (2025-12-19)
+
+### 🔧 Maintenance
+
+* UN-1967 add seasonInfo to vip config ([#276](https://github.com/upstars-global/unity-core-modules/issues/276))
+ ([0876880](https://github.com/upstars-global/unity-core-modules/commit/087688096591aa263faa02b48f9925cbd4b8f6e8))
+
+
+
+    chore: UN-1967 add seasonInfo to vip config
+
 ## [1.55.0](https://github.com/upstars-global/unity-core-modules/compare/v1.54.0...v1.55.0) (2025-12-15)
 
 ### 🚀 Features
