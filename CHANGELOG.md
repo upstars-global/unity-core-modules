@@ -1,3 +1,14 @@
+## [1.57.0](https://github.com/upstars-global/unity-core-modules/compare/v1.56.0...v1.57.0) (2025-12-24)
+
+### 🚀 Features
+
+* **UN-1960:** refactor userLimits store and cover it with tests ([#279](https://github.com/upstars-global/unity-core-modules/issues/279))
+ ([b18bf4b](https://github.com/upstars-global/unity-core-modules/commit/b18bf4b30d54ad96ca52a583c6c7de72f69309a2))
+
+
+
+    Co-authored-by: Artem Oleinychenko <a.oleinychenko@upstars.com>
+
 ## [1.56.0](https://github.com/upstars-global/unity-core-modules/compare/v1.55.3...v1.56.0) (2025-12-23)
 
 ### 🚀 Features
