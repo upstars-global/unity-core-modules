@@ -35,3 +35,8 @@ vi.mock("@src/config/gift", () => ({
     TYPE_GIFT_REGISTRATION: "registration",
     TYPE_GIFT_FS: "fs",
 }), { virtual: true });
+
+vi.mock("@modules/Limits/limitConstants", () => ({
+    LIMIT_TYPE_COOLING_OFF: "cooling_off",
+    LIMIT_TYPE_DEPOSIT: "deposit",
+}));
