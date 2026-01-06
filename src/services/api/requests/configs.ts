@@ -6,7 +6,7 @@ import { IEnabledGames } from "../../../models/game";
 import { type MainWidgetItem } from "../../../models/mainWidget";
 import { type IProvidersList } from "../../../models/providers";
 import { type ICashboxPresets } from "../DTO/cashbox";
-import { type IGiftModifyConfig } from "../DTO/gifts";
+import { IDailyGiftConfig, type IGiftModifyConfig } from "../DTO/gifts";
 import { type IVipProgramConfigDTO } from "../DTO/levels";
 import { type IVipAdventuresConfig } from "../DTO/vipAdventuresDTO";
 import { http } from "../http";
@@ -62,12 +62,17 @@ const loadCashboxPresetsReq = () => loadConfig<ICashboxPresets[]>(
     "/api/fe/config/cashbox-presets",
     "LOAD_CASHBOX_PRESETS_ERROR",
 );
+const loadDailyBonusConfigReq = () => loadConfig<Record<string, IDailyGiftConfig>>(
+    "/api/fe/config/daily-bonus-config",
+    "LOAD_DAILY_BONUS_CONFIG_ERROR",
+);
 
 export {
     loadAdditionalDepositGiftsConfigReq,
     loadBettingConfigReq,
     loadCashboxPresetsReq,
     loadCurrencyConfigReq,
+    loadDailyBonusConfigReq,
     loadDisabledBonusesConfigReq,
     loadDisabledProvidersConfigReq,
     loadEnabledGamesConfigReq,
