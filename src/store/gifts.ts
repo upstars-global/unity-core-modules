@@ -243,7 +243,7 @@ export const useGiftsStore = defineStore("giftsStore", () => {
         fsGiftsAll.value = [];
     }
 
-    function setDailyBonusConfig (value) {
+    function setDailyBonusConfig (value: Record<string, IDailyGiftConfig>) {
         dailyBonusConfig.value = value;
     }
 
