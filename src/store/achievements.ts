@@ -65,6 +65,8 @@ export const useAchievements = defineStore("achievements", () => {
     const { historyDeposits } = storeToRefs(useCashboxStore());
     const { groups } = storeToRefs(useLevelsStore());
 
+    console.log("historyDeposits::", historyDeposits.value);
+
     const getTournamentForAchiev = computed<IAchievement[]>(() => {
         return tournamentsStore.getAllTournamentsOnlyUser.filter((tour) => {
             return TOURNAMENT_IDS_FOR_ACHIEV.includes(tour.frontend_identifier);
@@ -98,6 +100,8 @@ export const useAchievements = defineStore("achievements", () => {
         return countCompletedDeps.length;
     });
 
+    console.log("getDepCountForAchiev::", getDepCountForAchiev.value);
+
     const getAchievementsActive = computed<IAchievement[]>(() => {
         return getAchievementsAll.value.filter((itemAchiev) => {
             if (
@@ -111,6 +115,9 @@ export const useAchievements = defineStore("achievements", () => {
             const userStatusHasAchievId = !itemAchiev.frontend_identifier ?
                 containAchievIdInUserStatuses(userStatuses.getUserStatuses, itemAchiev.id) : true;
 
+            console.log("userStatusHasAchievId::", userStatusHasAchievId, itemAchiev.id);
+            console.log("userStatuses:: ", userStatuses.getUserStatuses);
+
             const betsInTour = tournamentsStore.getStatusTournamentById(itemAchiev.id)?.bet_cents;
             const betsSumIsComplete = itemAchiev.frontend_identifier ?
                 itemAchiev.status === STATUS_PROMO.ARCHIVE ||
@@ -121,6 +128,8 @@ export const useAchievements = defineStore("achievements", () => {
             const isDoneCountDep = itemAchiev.id === ACHIEV_ID.DEP_COUNT ?
                 getDepCountForAchiev.value >= defaultDepCount :
                 true;
+
+            console.log("isDoneCountDep::", isDoneCountDep, itemAchiev.id, getDepCountForAchiev.value);
 
             const spinsInTour = tournamentsStore.getStatusTournamentById(itemAchiev.id)?.games_taken;
             const isCompleteSpinCount = itemAchiev.frontend_identifier ?
