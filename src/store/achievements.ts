@@ -65,8 +65,6 @@ export const useAchievements = defineStore("achievements", () => {
     const { historyDeposits } = storeToRefs(useCashboxStore());
     const { groups } = storeToRefs(useLevelsStore());
 
-    console.log("historyDeposits::", historyDeposits.value);
-
     const getTournamentForAchiev = computed<IAchievement[]>(() => {
         return tournamentsStore.getAllTournamentsOnlyUser.filter((tour) => {
             return TOURNAMENT_IDS_FOR_ACHIEV.includes(tour.frontend_identifier);
@@ -100,44 +98,36 @@ export const useAchievements = defineStore("achievements", () => {
         return countCompletedDeps.length;
     });
 
-    console.log("getDepCountForAchiev::", getDepCountForAchiev.value);
-
     const getAchievementsActive = computed<IAchievement[]>(() => {
         return getAchievementsAll.value.filter((itemAchiev) => {
-            if (
-                "frontend_identifier" in itemAchiev &&
-                itemAchiev.frontend_identifier &&
-                itemAchiev.status === STATUS_PROMO.ARCHIVE
-            ) {
+            if (itemAchiev?.frontend_identifier && itemAchiev.status === STATUS_PROMO.ARCHIVE) {
                 return false;
             }
 
-            const userStatusHasAchievId = !itemAchiev.frontend_identifier ?
-                containAchievIdInUserStatuses(userStatuses.getUserStatuses, itemAchiev.id) : true;
-
-            console.log("userStatusHasAchievId::", userStatusHasAchievId, itemAchiev.id);
-            console.log("userStatuses:: ", userStatuses.getUserStatuses);
+            const userHasStatus = containAchievIdInUserStatuses(userStatuses.getUserStatuses, itemAchiev.id);
+            if (userHasStatus) {
+                return false;
+            }
 
             const betsInTour = tournamentsStore.getStatusTournamentById(itemAchiev.id)?.bet_cents;
-            const betsSumIsComplete = itemAchiev.frontend_identifier ?
-                itemAchiev.status === STATUS_PROMO.ARCHIVE ||
-                betSunCompletedInTour(betsInTour, itemAchiev.money_budget_cents)
-                :
-                true;
+            const betsSumIsComplete = betSunCompletedInTour(betsInTour, itemAchiev.money_budget_cents);
+            if (betsSumIsComplete) {
+                return false;
+            }
 
-            const isDoneCountDep = itemAchiev.id === ACHIEV_ID.DEP_COUNT ?
-                getDepCountForAchiev.value >= defaultDepCount :
-                true;
-
-            console.log("isDoneCountDep::", isDoneCountDep, itemAchiev.id, getDepCountForAchiev.value);
+            const isDoneCountDep = itemAchiev.id === ACHIEV_ID.DEP_COUNT && getDepCountForAchiev.value >= defaultDepCount;
+            if (isDoneCountDep) {
+                return false;
+            }
 
             const spinsInTour = tournamentsStore.getStatusTournamentById(itemAchiev.id)?.games_taken;
-            const isCompleteSpinCount = itemAchiev.frontend_identifier ?
-                itemAchiev.status === STATUS_PROMO.ARCHIVE ||
-                betSunCompletedInTour(spinsInTour, itemAchiev.money_budget_cents)
-                : true;
+            const isCompleteSpinCount = betSunCompletedInTour(spinsInTour, itemAchiev.money_budget_cents);
 
-            return !userStatusHasAchievId || !betsSumIsComplete || !isDoneCountDep || !isCompleteSpinCount;
+            if (isCompleteSpinCount) {
+                return false;
+            }
+
+            return true;
         });
     });
 
