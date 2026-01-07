@@ -40,6 +40,8 @@ export async function loadCurrencyConfig() {
 export async function loadMainWidgetConfig() {
     const commonStore = useCommon();
 
+    console.log("is Exist data:", isExistData(commonStore.widgetsConfig));
+
     if (isExistData(commonStore.widgetsConfig)) {
         return commonStore.widgetsConfig;
     }
