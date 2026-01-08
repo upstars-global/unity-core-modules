@@ -39,6 +39,13 @@ export async function loadCurrencyConfig() {
 
 export async function loadMainWidgetConfig() {
     const commonStore = useCommon();
+
+    console.log("is Exist data:", isExistData(commonStore.widgetsConfig), commonStore.widgetsConfig);
+
+    if (isExistData(commonStore.widgetsConfig)) {
+        return commonStore.widgetsConfig;
+    }
+
     const response = await loadMainWidgetConfigReq();
 
     if (response?.widgets) {
@@ -48,6 +55,11 @@ export async function loadMainWidgetConfig() {
 
 export async function loadBettingConfig() {
     const configStore = useConfigStore();
+
+    if (isExistData(configStore.bettingConfig)) {
+        return configStore.bettingConfig;
+    }
+
     const config = await loadBettingConfigReq();
 
     if (config) {
@@ -57,8 +69,12 @@ export async function loadBettingConfig() {
 
 export async function loadVipProgramConfig() {
     const configStore = useConfigStore();
-    const config = await loadVipProgramConfigReq();
 
+    if (isExistData(configStore.vipProgramConfig)) {
+        return configStore.vipProgramConfig;
+    }
+
+    const config = await loadVipProgramConfigReq();
     if (config) {
         configStore.setVipProgramConfig(config);
     }
