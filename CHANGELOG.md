@@ -1,3 +1,19 @@
+## [1.61.0](https://github.com/upstars-global/unity-core-modules/compare/v1.60.0...v1.61.0) (2026-01-08)
+
+### 🚀 Features
+
+* **UN-1961:** refactor userStatuses store and cover it with tests ([#281](https://github.com/upstars-global/unity-core-modules/issues/281))
+ ([e1101e5](https://github.com/upstars-global/unity-core-modules/commit/e1101e56d696a410e9ff13a8ae5b9478e5244be8))
+
+## [1.60.0](https://github.com/upstars-global/unity-core-modules/compare/v1.59.0...v1.60.0) (2026-01-06)
+
+### 🚀 Features
+
+* **UN-1960:** refactore userLimits store and cover it with tests ([#294](https://github.com/upstars-global/unity-core-modules/issues/294))
+ ([87b5d1e](https://github.com/upstars-global/unity-core-modules/commit/87b5d1e403450d5afdc07f8e54f67f36fa41cd46))
+
+, closes [#286](https://github.com/upstars-global/unity-core-modules/issues/)
+
 ## [1.59.0](https://github.com/upstars-global/unity-core-modules/compare/v1.58.0...v1.59.0) (2026-01-05)
 
 ### 🚀 Features

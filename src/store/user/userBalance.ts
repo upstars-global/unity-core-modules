@@ -7,13 +7,11 @@ import { Currencies } from "../../models/enums/currencies";
 import type { IGift } from "../../services/api/DTO/gifts";
 import type { IUserAccount } from "../../services/api/DTO/playerDTO";
 import { loadUserBalanceReq, selectUserWalletReq } from "../../services/api/requests/player";
-import { loadUserProfile } from "../../services/user";
+import { loadUserLimits, loadUserProfile } from "../../services/user";
 import { useCommon } from "../common";
 import { useGiftsStore } from "../gifts";
 import { useSettings } from "../settings";
 import { useUserInfo } from "./userInfo";
-import { useUserLimits } from "./userLimits";
-
 const handleBets = "handle_bets";
 
 export const useUserBalance = defineStore("userBalance", () => {
@@ -47,7 +45,6 @@ export const useUserBalance = defineStore("userBalance", () => {
 
     async function selectUserWallet(currency: Currencies) {
         try {
-            const { loadUserLimits } = useUserLimits();
             await selectUserWalletReq(currency);
 
             return Promise.all([

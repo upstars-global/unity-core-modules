@@ -15,19 +15,24 @@ import { useMultilangStore } from "../store/multilang";
 import { useUserDocuments } from "../store/user/userDocuments";
 import { userGamesHistory } from "../store/user/userGamesHistory";
 import { useUserInfo } from "../store/user/userInfo";
+import { useUserLimits } from "../store/user/userLimits";
 import { useUserSecurity } from "../store/user/userSecurity";
 import { useUserStatuses } from "../store/user/userStatuses";
 import { useUserVerificationSumsub } from "../store/user/userVerificationSumsub";
+import { type IUserLimit } from "./api/DTO/userLimits";
+import { loadManagersConfigReq } from "./api/requests/configs";
 import { activeCouponReq } from "./api/requests/couponePromoCodes";
 import { deleteDocument, loadDocuments, uploadDocuments } from "./api/requests/documents";
 import {
     activateTwoFactorReq,
     activateUserCouponReq,
+    changePlayerGroup,
     closeUserSessionByIdReq,
     confirmEmailResendReg,
     confirmPlayerReq,
     deleteDepositBonusCodeReq,
     deleteTwoFactorReq,
+    IPlayerGroup,
     loadBettingPlayerSettingsRequest,
     loadFreshChatRestoreIdReq,
     loadPlayerFieldsInfoRequest,
@@ -50,6 +55,13 @@ import {
     updateUserPasswordReq,
 } from "./api/requests/player";
 import { getSumsubTokenReq } from "./api/requests/sumsub";
+import {
+    confirmUserLimitChangeReq,
+    createNewUserLimitReq,
+    deleteUserLimitReq,
+    loadUserLimitsReq,
+    updateUserLimitReq,
+} from "./api/requests/userLimits";
 import { loadDepositGiftsData } from "./gifts";
 
 export async function userSetToGroupForAbTest() {
@@ -535,5 +547,117 @@ export async function loadUserProfile({ reload = false, route }: { reload?: bool
             dataUserLoadedOneTime: true,
             dataIsLoaded: true,
         });
+    }
+}
+export async function changeUserToGroup(groupForAdding?: IPlayerGroup, groupForRemoving?: IPlayerGroup): Promise<void> {
+    const userStore = useUserInfo();
+    const { getUserGroups } = storeToRefs(useUserStatuses());
+
+    if (!groupForAdding && !groupForRemoving) {
+        log.error("CHANGE_PLAYER_GROUP_EMPTY_PARAMS", {
+            groupForAdding: String(groupForAdding),
+            groupForRemoving: String(groupForRemoving),
+        });
+
+        return;
+    }
+
+    if (groupForAdding === groupForRemoving) {
+        log.error("CHANGE_PLAYER_GROUP_SAME_PARAMS", {
+            groupForAdding: String(groupForAdding),
+            groupForRemoving: String(groupForRemoving),
+        });
+
+        return;
+    }
+
+    const allowedToAddGroup = groupForAdding && !getUserGroups.value.includes(groupForAdding);
+    const allowedToRemoveGroup = groupForRemoving && getUserGroups.value.includes(groupForRemoving);
+
+    if (!allowedToAddGroup && !allowedToRemoveGroup) {
+        return;
+    }
+
+    if (allowedToAddGroup) {
+        userStore.addUserGroup({ id: groupForAdding, name: groupForAdding });
+    }
+
+    if (allowedToRemoveGroup) {
+        userStore.removeUserGroup({ id: groupForRemoving, name: groupForRemoving });
+    }
+
+    await changePlayerGroup(
+        allowedToAddGroup ? groupForAdding : null,
+        allowedToRemoveGroup ? groupForRemoving : null,
+    );
+}
+
+export async function loadUserManager() {
+    const userStatusesStore = useUserStatuses();
+    const { getUserManager, getUserGroups } = storeToRefs(userStatusesStore);
+
+    if (getUserManager.value) {
+        return getUserManager.value;
+    }
+
+    const manager = await loadManagersConfigReq(getUserGroups.value);
+
+    if (manager) {
+        userStatusesStore.setUserManager(manager);
+    }
+
+    return getUserManager.value;
+}
+
+export async function loadUserLimits() {
+    const userLimitsStore = useUserLimits();
+
+    try {
+        const data = await loadUserLimitsReq();
+
+        userLimitsStore.setUserLimits(data);
+
+        return data;
+    } catch (err) {
+        log.error("LOAD_USER_LIMITS", err);
+    }
+}
+
+export async function createNewUserLimit(dataLimit: IUserLimit) {
+    try {
+        await createNewUserLimitReq(dataLimit);
+        return await loadUserLimits();
+    } catch (err) {
+        log.error("CREATE_NEW_USER_LIMIT", err);
+        throw err;
+    }
+}
+
+export async function updateUserLimit(dataLimit: IUserLimit) {
+    try {
+        await updateUserLimitReq(dataLimit);
+        return await loadUserLimits();
+    } catch (err) {
+        log.error("UPDATE_USER_LIMIT", err);
+        throw err;
+    }
+}
+
+export async function deleteUserLimit(limitId: number) {
+    try {
+        await deleteUserLimitReq(limitId);
+        return await loadUserLimits();
+    } catch (err) {
+        log.error("DELETE_USER_LIMIT", err);
+        throw err;
+    }
+}
+
+export async function confirmUserLimitChange(token: string): Promise<void> {
+    try {
+        return await confirmUserLimitChangeReq(token);
+    } catch (err) {
+        log.error("CONFIRM_USER_LIMIT_CHANGE", err);
+        throw err;
     }
 }
