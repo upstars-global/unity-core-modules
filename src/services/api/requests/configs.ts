@@ -3,9 +3,11 @@ import { log } from "../../../controllers/Logger";
 import { type CurrencyData } from "../../../models/cashbox";
 import { type IStagByReferName, type ISurveyConfig } from "../../../models/configs";
 import { type IBettingConfig } from "../../../models/configs";
-import { IEnabledGames } from "../../../models/game";
+import { type IEnabledGames } from "../../../models/game";
 import { type MainWidgetItem } from "../../../models/mainWidget";
 import { type IProvidersList } from "../../../models/providers";
+import { type UserGroup } from "../../../models/user";
+import { type IVipManager } from "../../../models/vipManagers";
 import { type ICashboxPresets } from "../DTO/cashbox";
 import { type IGiftModifyConfig } from "../DTO/gifts";
 import { type IVipProgramConfigDTO } from "../DTO/levels";
@@ -46,7 +48,7 @@ const loadModifyGiftsConfigReq = () => loadConfig<IGiftModifyConfig[]>(
     `${ FE_API_PREFIX }/config/modify-gifts-config`,
     "LOAD_MODIFY_GIFTS_CONFIG_ERROR",
 );
-const loadManagersConfigReq = (userGroups) => loadConfig(
+const loadManagersConfigReq = (userGroups: UserGroup[]) => loadConfig<IVipManager>(
     `${ FE_API_PREFIX }/config/managers`,
     "LOAD_MANAGERS_CONFIG_ERROR", { userGroups },
 );
