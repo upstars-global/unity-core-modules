@@ -193,15 +193,6 @@ export const useGiftsStore = defineStore("giftsStore", () => {
         activeDepositGift.value = value;
     }
 
-    async function resetActiveDepositGift() {
-        if (activeDepositGiftGroupID.value) {
-            // @ts-expect-error No overload matches this call.
-            await userStatuses.changeUserToGroup(null, activeDepositGiftGroupID.value);
-            setActiveDepositGift(null);
-        }
-    }
-
-
     function setGiftsLoading(value: boolean): void {
         isLoadingGiftData.value = value;
     }
@@ -282,6 +273,5 @@ export const useGiftsStore = defineStore("giftsStore", () => {
         giftMatchInUserGroupID,
         getDepositGiftGroupID,
         setActiveDepositGift,
-        resetActiveDepositGift,
     };
 });

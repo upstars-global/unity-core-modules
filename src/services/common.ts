@@ -137,3 +137,4 @@ export async function loadCryptoExchangeRates(): Promise<void> {
         commonStore.setCryptoExchangeRates(data);
     }
 }
+
