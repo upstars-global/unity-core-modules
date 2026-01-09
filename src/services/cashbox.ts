@@ -14,6 +14,7 @@ import { useCommon } from "../store/common";
 import { useUserBalance } from "../store/user/userBalance";
 import { useUserInfo } from "../store/user/userInfo";
 import { ActionsTransaction } from "./api/DTO/cashbox";
+import { loadCashboxPresetsReq } from "./api/requests/configs";
 import { cancelWithdrawRequestByID, loadPlayerPayments } from "./api/requests/player";
 import { usePaymentsAPI } from "./paymentsAPI";
 
@@ -137,6 +138,17 @@ export function useCashBoxService() {
         }
     }
 
+    async function loadCashboxPresets() {
+        try {
+            const cashboxStore = useCashboxStore();
+            const data = await loadCashboxPresetsReq();
+
+            cashboxStore.setCashboxPresets(data);
+        } catch (err) {
+            log.error("LOAD_CASHBOX_PRESETS_ERROR", err);
+        }
+    }
+
 
     return {
         loadUserCoinspaidAddresses,
@@ -144,5 +156,6 @@ export function useCashBoxService() {
         removeWithdrawRequestById,
         getPaymentsApiMethods,
         loadPaymentMethods,
+        loadCashboxPresets,
     };
 }

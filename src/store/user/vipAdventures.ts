@@ -97,9 +97,10 @@ export const useVipAdventures = defineStore("vipAdventures", () => {
     const superConfig = computed(() => {
         const calendarLength = calendarConfig.value.length;
         const lastCalendarDay = calendarConfig.value[calendarLength - 1];
+
         return {
             index: calendarConfig.value.length,
-            today: dayjs(lastCalendarDay.fullDate, formatDateVipAdv).isBefore(toDay.value),
+            today: dayjs(lastCalendarDay.fullDate, formatDateVipAdv).isBefore(toDay.value, "day"),
         };
     });
 
@@ -147,9 +148,12 @@ export const useVipAdventures = defineStore("vipAdventures", () => {
                 config.prizes[userGroupForAdventure.value] :
                 Object.values(config.prizes)[0];
 
-            vipAdventuresVariables.value = userGroupForAdventure.value ?
-                config.variables[userGroupForAdventure.value] :
-                Object.values(config.variables)[0];
+
+            if (config.variables) {
+                vipAdventuresVariables.value = userGroupForAdventure.value ?
+                    config.variables[userGroupForAdventure.value] :
+                    Object.values(config.variables)[0];
+            }
         }
     }
 
