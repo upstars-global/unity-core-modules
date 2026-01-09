@@ -1,5 +1,6 @@
 import type { SlugCategoriesGames } from "@theme/configs/categoryesGames";
 
+import { FE_API_PREFIX } from "../../../consts/apiConfig";
 import { log } from "../../../controllers/Logger";
 import type { IGame } from "../../../models/game";
 import {
@@ -37,10 +38,10 @@ export async function loadRandomGame(config: IRandomGameFilter): Promise<IGame> 
     try {
         const query = Object.entries(config)
             .filter(([ , value ]) => value !== undefined && value !== null)
-            .map(([ key, value ]) => `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`)
+            .map(([ key, value ]) => `${ encodeURIComponent(key) }=${ encodeURIComponent(String(value)) }`)
             .join("&");
 
-        const { data } = await http().get<IGame>(`/api/games/random${ query ? `?${query}` : "" }`);
+        const { data } = await http().get<IGame>(`/api/games/random${ query ? `?${ query }` : "" }`);
         return data;
     } catch (error) {
         log.error("LOAD_RANDOM_GAME_ERROR", error);
@@ -80,7 +81,7 @@ export async function loadGamesCategory(config: Record<string, unknown>): Promis
 
 export async function loadCategoriesFileConfigRequest() {
     try {
-        const { data } = await http().get<Record<string, SlugCategoriesGames[]>>("/api/fe/config/menu-categories-games");
+        const { data } = await http().get<Record<string, SlugCategoriesGames[]>>(`${ FE_API_PREFIX }/config/menu-categories-games`);
 
         return data;
     } catch (err) {

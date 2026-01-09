@@ -12,7 +12,7 @@ export async function loadLocalesReq(query?: string): Promise<Locales> {
     }
 }
 
-export async function updateLocalesReq({ locale }: { locale: LocaleName }): Promise<void> {
+export async function updateLocalesReq({ locale }: { locale: LocaleName }): Promise<unknown> {
     try {
         return http().patch("/api/player/update_locale", { locale });
     } catch (err) {

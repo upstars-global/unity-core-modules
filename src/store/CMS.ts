@@ -12,7 +12,7 @@ import { prepareMapStaticPages } from "../helpers/staticPages";
 import { CurrentPage, type ICurrentPage, ICurrentPageMeta, type IPageCMSPrepare } from "../models/CMS";
 import type { ISnippetItemCMS } from "../services/api/DTO/CMS";
 import { loadCMSPagesReq, loadCMSSnippetsReq, loadPageContentFromCmsReq } from "../services/api/requests/CMS";
-import { useMultilangStore } from "../store/multilang";
+import { useMultilangStore } from "./multilang";
 
 function replaceCurrentYearPlaceholder<T>(template: TemplateType): T {
     return replaceStringHelper({
@@ -132,7 +132,7 @@ export const useCMS = defineStore("CMS", () => {
 
     function ensureStaticIfReady(slug: string): string | void {
         if (staticPages.value.length && !hasStaticPageInCMS(slug)) {
-            return `${slug} page is not StaticPages`;
+            return `${ slug } page is not StaticPages`;
         }
 
         return;
@@ -176,7 +176,7 @@ export const useCMS = defineStore("CMS", () => {
             const data = await fetchCmsPageOnce(slug, getUserLocale.value);
 
             if (!data) {
-                return `${slug} page is not found`;
+                return `${ slug } page is not found`;
             }
 
             const page = replaceCurrentYearPlaceholder<ICurrentPage>(new CurrentPage(data));
@@ -214,7 +214,7 @@ export const useCMS = defineStore("CMS", () => {
             const data = await fetchCmsPageOnce(slug, getUserLocale.value);
 
             if (!data) {
-                return `${slug} page data is not found`;
+                return `${ slug } page data is not found`;
             }
 
             const blocks = data.blocks;
