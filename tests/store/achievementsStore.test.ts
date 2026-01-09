@@ -30,7 +30,14 @@ vi.mock("../../src/store/user/userStatuses", () => ({
     })),
 }));
 vi.mock("@config/achievements", () => ({
-    ACHIEV_ID: { EMAIL_CONFIRM: 1, EMAIL_CONFIRM_AND_MORE: 2, EXCHANGE_COIN: 3, COMPOINT_CHANGE: 4, DEP_PS: 5, DEP_COUNT: 6 },
+    ACHIEV_IDS: {
+        EMAIL_CONFIRM: [ 1 ],
+        EMAIL_CONFIRM_AND_MORE: [ 2 ],
+        EXCHANGE_COIN: [ 3 ],
+        COMPOINT_CHANGE: [ 4 ],
+        DEP_PS: [ 5 ],
+        DEP_COUNT: [ 6 ],
+    },
     defaultDepCount: 2,
     TOURNAMENT_IDS_FOR_ACHIEV: [ 100, 101 ],
 }));

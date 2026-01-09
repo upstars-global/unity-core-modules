@@ -1,4 +1,14 @@
-import { ACHIEV_ID, defaultDepCount, TOURNAMENT_IDS_FOR_ACHIEV } from "@config/achievements";
+import {
+    ACHIEV_ID_COMPOINT_CHANGE,
+    ACHIEV_ID_DEP_COUNT,
+    ACHIEV_ID_DEP_PS,
+    ACHIEV_ID_EMAIL_CONFIRM,
+    ACHIEV_ID_EMAIL_CONFIRM_AND_MORE,
+    ACHIEV_ID_EXCHANGE_COIN,
+    ACHIEV_IDS,
+    defaultDepCount,
+    TOURNAMENT_IDS_FOR_ACHIEV,
+} from "@config/achievements";
 import featureFlags from "@theme/configs/featureFlags";
 import dayjs from "dayjs";
 import { defineStore, storeToRefs } from "pinia";
@@ -24,38 +34,38 @@ type IAchievement = Omit<IStatuses, "status" | "id"> & {
 
 function showAchievByUserStatus(userStatuses: IUserStatus[]): number[] {
     const showAchievEmail = userStatuses.some((status) => {
-        return Number(status.id) === 606 || Number(status.id) === ACHIEV_ID.EMAIL_CONFIRM;
+        return Boolean(ACHIEV_IDS.EMAIL_CONFIRM.includes(Number(status.id)));
     });
 
     const showAchievEmailConfirmAndAction = userStatuses.some((status) => {
-        return Number(status.id) === 55 || Number(status.id) === ACHIEV_ID.EMAIL_CONFIRM_AND_MORE;
+        return Boolean(ACHIEV_IDS.EMAIL_CONFIRM_AND_MORE.includes(Number(status.id)));
     });
 
     /*
     // uncomment if you want ot enable AchievReceivePromo
     const showAchievReceivePromo = userStatuses.some((status) => {
-        return Number(status.id) === 402 || Number(status.id) === ACHIEV_ID_RECEIVE_PROMOS;
+        return Boolean(ACHIEV_IDS.RECEIVE_PROMOS.includes(Number(status.id)));
     }); */
 
     const showAchievExCoin = userStatuses.some((status) => {
-        return Number(status.id) === ACHIEV_ID.EXCHANGE_COIN || Number(status.id) === ACHIEV_ID.COMPOINT_CHANGE;
+        return Boolean([ ACHIEV_ID_EXCHANGE_COIN, ACHIEV_ID_COMPOINT_CHANGE ].includes(Number(status.id)));
     });
 
     const showAchievDepPS = userStatuses.some((status) => {
-        return Number(status.id) === 56 || Number(status.id) === ACHIEV_ID.DEP_PS;
+        return Boolean(ACHIEV_IDS.DEP_PS.includes(Number(status.id)));
     });
 
     const showAchievDepCount = userStatuses.some((status) => {
-        return Number(status.id) === ACHIEV_ID.EXCHANGE_COIN || Number(status.id) === ACHIEV_ID.DEP_COUNT;
+        return Boolean([ ACHIEV_ID_EXCHANGE_COIN, ACHIEV_ID_DEP_COUNT ].includes(Number(status.id)));
     });
 
     // display/hide some achiev for user by status
     return [
-        ...(showAchievEmail ? [ ACHIEV_ID.EMAIL_CONFIRM ] : []),
-        ...(showAchievEmailConfirmAndAction ? [ ACHIEV_ID.EMAIL_CONFIRM_AND_MORE ] : []),
-        ...(showAchievExCoin && featureFlags.enableConpoints ? [ ACHIEV_ID.COMPOINT_CHANGE ] : []),
-        ...(showAchievDepPS ? [ ACHIEV_ID.DEP_PS ] : []),
-        ...(showAchievDepCount ? [ ACHIEV_ID.DEP_COUNT ] : []),
+        ...(showAchievEmail ? [ ACHIEV_ID_EMAIL_CONFIRM ] : []),
+        ...(showAchievEmailConfirmAndAction ? [ ACHIEV_ID_EMAIL_CONFIRM_AND_MORE ] : []),
+        ...(showAchievExCoin && featureFlags.enableConpoints ? [ ACHIEV_ID_COMPOINT_CHANGE ] : []),
+        ...(showAchievDepPS ? [ ACHIEV_ID_DEP_PS ] : []),
+        ...(showAchievDepCount ? [ ACHIEV_ID_DEP_COUNT ] : []),
     ];
 }
 
@@ -100,35 +110,34 @@ export const useAchievements = defineStore("achievements", () => {
 
     const getAchievementsActive = computed<IAchievement[]>(() => {
         return getAchievementsAll.value.filter((itemAchiev) => {
-            if (
-                "frontend_identifier" in itemAchiev &&
-                itemAchiev.frontend_identifier &&
-                itemAchiev.status === STATUS_PROMO.ARCHIVE
-            ) {
+            if (itemAchiev?.frontend_identifier && itemAchiev.status === STATUS_PROMO.ARCHIVE) {
                 return false;
             }
 
-            const userStatusHasAchievId = !itemAchiev.frontend_identifier ?
-                containAchievIdInUserStatuses(userStatuses.getUserStatuses, itemAchiev.id) : true;
+            const userHasStatus = containAchievIdInUserStatuses(userStatuses.getUserStatuses, itemAchiev.id);
+            if (userHasStatus) {
+                return false;
+            }
 
             const betsInTour = tournamentsStore.getStatusTournamentById(itemAchiev.id)?.bet_cents;
-            const betsSumIsComplete = itemAchiev.frontend_identifier ?
-                itemAchiev.status === STATUS_PROMO.ARCHIVE ||
-                betSunCompletedInTour(betsInTour, itemAchiev.money_budget_cents)
-                :
-                true;
+            const betsSumIsComplete = betSunCompletedInTour(betsInTour, itemAchiev.money_budget_cents);
+            if (betsSumIsComplete) {
+                return false;
+            }
 
-            const isDoneCountDep = itemAchiev.id === ACHIEV_ID.DEP_COUNT ?
-                getDepCountForAchiev.value >= defaultDepCount :
-                true;
+            const isDoneCountDep = itemAchiev.id === ACHIEV_ID_DEP_COUNT && getDepCountForAchiev.value >= defaultDepCount;
+            if (isDoneCountDep) {
+                return false;
+            }
 
             const spinsInTour = tournamentsStore.getStatusTournamentById(itemAchiev.id)?.games_taken;
-            const isCompleteSpinCount = itemAchiev.frontend_identifier ?
-                itemAchiev.status === STATUS_PROMO.ARCHIVE ||
-                betSunCompletedInTour(spinsInTour, itemAchiev.money_budget_cents)
-                : true;
+            const isCompleteSpinCount = betSunCompletedInTour(spinsInTour, itemAchiev.money_budget_cents);
 
-            return !userStatusHasAchievId || !betsSumIsComplete || !isDoneCountDep || !isCompleteSpinCount;
+            if (isCompleteSpinCount) {
+                return false;
+            }
+
+            return true;
         });
     });
 
