@@ -2,9 +2,12 @@ import { log } from "../../../controllers/Logger";
 import { type CurrencyData } from "../../../models/cashbox";
 import { type IStagByReferName, type ISurveyConfig } from "../../../models/configs";
 import { type IBettingConfig } from "../../../models/configs";
-import { IEnabledGames } from "../../../models/game";
+import { type IEnabledGames } from "../../../models/game";
 import { type MainWidgetItem } from "../../../models/mainWidget";
 import { type IProvidersList } from "../../../models/providers";
+import { type UserGroup } from "../../../models/user";
+import { type IVipManager } from "../../../models/vipManagers";
+import { type ICashboxPresets } from "../DTO/cashbox";
 import { type IGiftModifyConfig } from "../DTO/gifts";
 import { type IVipProgramConfigDTO } from "../DTO/levels";
 import { type IVipAdventuresConfig } from "../DTO/vipAdventuresDTO";
@@ -31,7 +34,8 @@ const loadDisabledBonusesConfigReq = () =>
     loadConfig<{ group_keys: string[] }>("/api/fe/config/disabled-bonuses", "LOAD_DISABLED_BONUSES_CONFIG_ERROR");
 const loadModifyGiftsConfigReq = () =>
     loadConfig<IGiftModifyConfig[]>("/api/fe/config/modify-gifts-config", "LOAD_MODIFY_GIFTS_CONFIG_ERROR");
-const loadManagersConfigReq = (userGroups) => loadConfig("/api/fe/config/managers", "LOAD_MANAGERS_CONFIG_ERROR", { userGroups });
+const loadManagersConfigReq = (userGroups: UserGroup[]) =>
+    loadConfig<IVipManager>("/api/fe/config/managers", "LOAD_MANAGERS_CONFIG_ERROR", { userGroups });
 const loadExcludedPromoStagsReq = () =>
     loadConfig<string[]>("/api/fe/config/excluded-promo-stags", "LOAD_EXCLUDED_PROMO_STAGS_CONFIG_ERROR");
 const loadCurrencyConfigReq = () => loadConfig<CurrencyData>("/api/fe/config/currency-config", "LOAD_CURRENCY_CONFIG_ERROR");
@@ -57,10 +61,15 @@ const loadEnabledGamesConfigReq = () => loadConfig<IEnabledGames>(
     "/api/fe/config/enable-games-config",
     "LOAD_ENABLED_GAMES_CONFIG_ERROR",
 );
+const loadCashboxPresetsReq = () => loadConfig<ICashboxPresets[]>(
+    "/api/fe/config/cashbox-presets",
+    "LOAD_CASHBOX_PRESETS_ERROR",
+);
 
 export {
     loadAdditionalDepositGiftsConfigReq,
     loadBettingConfigReq,
+    loadCashboxPresetsReq,
     loadCurrencyConfigReq,
     loadDisabledBonusesConfigReq,
     loadDisabledProvidersConfigReq,
