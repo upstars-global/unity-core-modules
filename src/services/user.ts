@@ -76,7 +76,7 @@ export async function userSetToGroupForAbTest() {
     }
     const groupForAdding = userInfo.info.id % 2 ? ID_GROUP_FOR_UNPAIRED_ID : ID_GROUP_FOR_PAIRED_ID;
 
-    await userStatuses.changeUserToGroup(groupForAdding);
+    await changeUserToGroup(groupForAdding);
 }
 
 export async function loadPlayerFieldsInfo({ reload } = { reload: false }): Promise<IPlayerFieldsInfo | undefined> {
@@ -659,5 +659,16 @@ export async function confirmUserLimitChange(token: string): Promise<void> {
     } catch (err) {
         log.error("CONFIRM_USER_LIMIT_CHANGE", err);
         throw err;
+    }
+}
+
+export async function resetActiveDepositGift() {
+    const giftsStore = useGiftsStore();
+    const { activeDepositGiftGroupID } = storeToRefs(giftsStore);
+
+    if (activeDepositGiftGroupID.value) {
+        await changeUserToGroup(null, activeDepositGiftGroupID.value);
+
+        giftsStore.setActiveDepositGift(null);
     }
 }

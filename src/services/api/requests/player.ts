@@ -1,5 +1,6 @@
 import { v4 as uuid } from "uuid";
 
+import { FE_API_PREFIX } from "../../../consts/apiConfig";
 import { log } from "../../../controllers/Logger";
 import { IAuthProvider, IUserAuthProvider } from "../../../models/authProviders";
 import { type IPlayerFieldsInfo } from "../../../models/common";
@@ -17,6 +18,7 @@ import { BettingPlayerSettingsDTO, IPlayerStats, ISubscriptions, IUserAccount, I
 import { http } from "../http";
 
 export type IPlayerGroup = string | number | null;
+
 export interface LoadPlayerPaymentsParams {
     type?: string;
     currency?: string;
@@ -25,6 +27,7 @@ export interface LoadPlayerPaymentsParams {
 }
 
 let loadingChangePlayerGroup = false;
+
 export async function changePlayerGroup(groupForAdding?: IPlayerGroup, groupForRemoving?: IPlayerGroup): Promise<void> {
     if (loadingChangePlayerGroup) {
         return;
@@ -89,7 +92,7 @@ export async function loadPlayerPayments(
 export async function cancelWithdrawRequestByID(id: number) {
     try {
         const { data } = await http().post(
-            `/api/player/payments/${id}/recall`);
+            `/api/player/payments/${ id }/recall`);
         return data;
     } catch (err) {
         log.error("REMOVE_WITHDRAW_REQUEST_BY_ID", err);
@@ -183,7 +186,7 @@ export async function restorePasswordRestoreReq(payload) {
 
 export async function confirmPlayerReq(token: string) {
     try {
-        return await http().get(`/api/users/confirmation?confirmation_token=${token}`);
+        return await http().get(`/api/users/confirmation?confirmation_token=${ token }`);
     } catch (err) {
         log.error("CONFIRM_PLAYER_ERROR", err);
         throw err;
@@ -219,7 +222,7 @@ export async function getUserAuthProvidersReq() {
 
 export async function disconnectAuthProviderReq(id: number) {
     try {
-        const data = await http().delete(`/api/auth_providers/${id}`);
+        const data = await http().delete(`/api/auth_providers/${ id }`);
         return data;
     } catch (err) {
         log.error("DISCONNECT_AUTH_PROVIDER_ERROR", err);
@@ -236,7 +239,7 @@ export async function updateAuthDetailsProvidersReq(data: Record<string, unknown
 
 export async function loadFreshChatRestoreIdReq(id: string, project: string) {
     try {
-        const { data } = await http().post<{data: { restoreId: string }}>("/restore-id/get", {
+        const { data } = await http().post<{data: { restoreId: string }}>(`${ FE_API_PREFIX }/restore-id/get`, {
             data: {
                 internalId: String(id),
                 project,
@@ -253,7 +256,7 @@ export async function loadFreshChatRestoreIdReq(id: string, project: string) {
 
 export async function sendFreshChatRestoreIdReq(userId: string, restoreId: string, project: string) {
     try {
-        await http().post("/restore-id/set", {
+        await http().post(`${ FE_API_PREFIX }/restore-id/set`, {
             data: {
                 restoreId,
                 internalId: String(userId),
@@ -378,7 +381,7 @@ export async function loadUserActiveSessionsReq() {
 
 export async function closeUserSessionByIdReq(sessionId: number) {
     try {
-        await http().delete(`/api/player/sessions/${sessionId}`);
+        await http().delete(`/api/player/sessions/${ sessionId }`);
     } catch (err) {
         log.error("CLOSE_USER_SESSION_BY_ID_REQ_ERROR", err);
         throw err;
