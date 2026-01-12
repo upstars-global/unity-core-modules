@@ -1,3 +1,4 @@
+import { FE_API_PREFIX } from "../../../consts/apiConfig";
 import { log } from "../../../controllers/Logger";
 import { getUtmParamsFromCookies } from "../../../controllers/utmParams";
 import { getErrorMessage } from "../../../helpers/formErrorMessageHelper";
@@ -26,7 +27,7 @@ function prepareErrorsForMetric(errorsCollection: IFormErrorsCollection): IFormE
 export async function sendMetricsErrorsValidationForm(data: IErrorsValidationForm) {
     try {
         const { side, component, errors } = data;
-        await http().put<IMetricsErrorsValidationForm>("/metrics-errors-validation", {
+        await http().put<IMetricsErrorsValidationForm>(`${ FE_API_PREFIX }/metrics-errors-validation`, {
             side,
             component,
             errors: prepareErrorsForMetric(errors),
@@ -47,7 +48,7 @@ export async function sendTransactionToCovery(data) {
 
 export async function sendUtmSetMetrics(utmMetrics: IUtmMetrics) {
     try {
-        return await http().post("/log_utm_set", {
+        return await http().post(`${ FE_API_PREFIX }/log_utm_set`, {
             utmMetrics,
         });
     } catch (err) {
@@ -57,7 +58,7 @@ export async function sendUtmSetMetrics(utmMetrics: IUtmMetrics) {
 
 export async function sendUtmSendMetrics(utmMetrics: IUtmMetrics) {
     try {
-        return await http().post("/log_utm_send", {
+        return await http().post(`${ FE_API_PREFIX }/log_utm_send`, {
             utmMetrics,
         });
     } catch (err) {
@@ -82,4 +83,5 @@ export function getUtmMetricsLogAction(actionType) {
         actionsMap[actionType](utmParams);
     }
 }
+
 export default {};

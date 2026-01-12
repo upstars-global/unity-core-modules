@@ -1,10 +1,11 @@
+import { FE_API_PREFIX } from "../../../consts/apiConfig";
 import { log } from "../../../controllers/Logger";
 import { IUserFormData } from "../../../models/user";
 import { http } from "../http";
 
 export async function checkEmail(email: string) {
     try {
-        const { data } = await http().post("/check-email", { email });
+        const { data } = await http().post(`${ FE_API_PREFIX }/check-email`, { email });
 
         return data;
     } catch (error) {
