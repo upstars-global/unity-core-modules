@@ -105,9 +105,11 @@ export const useAchievements = defineStore("achievements", () => {
                 return false;
             }
 
-            console.log("tournamentsStore.getStatusTournamentById(itemAchiev.id)", tournamentsStore.getStatusTournamentById(itemAchiev.id));
+            console.log("tournamentsStore.getStatusTournamentById(itemAchiev.id)",
+                tournamentsStore.getStatusTournamentById(itemAchiev.id));
 
             const userHasStatus = containAchievIdInUserStatuses(userStatuses.getUserStatuses, itemAchiev.id);
+            console.log("userHasStatus", userStatuses.getUserStatuses, itemAchiev.id);
             if (userHasStatus) {
                 return false;
             }
@@ -116,6 +118,7 @@ export const useAchievements = defineStore("achievements", () => {
 
             const betsInTour = tournamentsStore.getStatusTournamentById(itemAchiev.id)?.bet_cents;
             const betsSumIsComplete = betSunCompletedInTour(betsInTour, itemAchiev.money_budget_cents);
+            console.log("betsSumIsComplete", betsInTour, itemAchiev.money_budget_cents);
             if (betsSumIsComplete) {
                 return false;
             }
