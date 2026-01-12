@@ -63,6 +63,7 @@ import {
     updateUserLimitReq,
 } from "./api/requests/userLimits";
 import { loadDepositGiftsData } from "./gifts";
+import { updateLocale } from "./localization";
 
 export async function userSetToGroupForAbTest() {
     const userInfo = useUserInfo();
@@ -521,7 +522,6 @@ export async function loadUserProfile({ reload = false, route }: { reload?: bool
             const responseLang = response.data.language;
 
             if (responseLang !== multilang.getUserLocale && response.data.id) {
-                // @ts-expect-error 'route' does not exist in type '{ lang: string; }'
                 updateLocale({ lang: responseLang, route });
             }
 
