@@ -1,3 +1,12 @@
+## [1.62.1](https://github.com/upstars-global/unity-core-modules/compare/v1.62.0...v1.62.1) (2026-01-12)
+
+### ⏪ Reverts
+
+* "UN-2035 fix and refactor achiemvents conditions" ([#301](https://github.com/upstars-global/unity-core-modules/issues/301))
+ ([ade3f2a](https://github.com/upstars-global/unity-core-modules/commit/ade3f2a89473a76fac79d1fb3d300ec21cd56570))
+
+, closes [#296](https://github.com/upstars-global/unity-core-modules/issues/)
+
 ## [1.62.0](https://github.com/upstars-global/unity-core-modules/compare/v1.61.2...v1.62.0) (2026-01-12)
 
 ### 🚀 Features
