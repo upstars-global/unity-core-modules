@@ -92,9 +92,9 @@ export async function loadBettingPlayerSettings() {
     }
 }
 
-export async function loadSumsubToken(): Promise<string> {
+export async function loadSumsubToken(levelName?: string): Promise<string> {
     const { setAccessToken } = useUserVerificationSumsub();
-    const response = await getSumsubTokenReq();
+    const response = await getSumsubTokenReq(levelName);
 
     if (response?.access_token) {
         setAccessToken(response.access_token);
