@@ -85,11 +85,11 @@ const loadEnabledGamesConfigReq = () => loadConfig<IEnabledGames>(
     "LOAD_ENABLED_GAMES_CONFIG_ERROR",
 );
 const loadCashboxPresetsReq = () => loadConfig<ICashboxPresets[]>(
-    "/api/fe/config/cashbox-presets",
+    `${ FE_API_PREFIX }/config/cashbox-presets`,
     "LOAD_CASHBOX_PRESETS_ERROR",
 );
 const loadDailyBonusConfigReq = () => loadConfig<Record<string, IDailyGiftConfig>>(
-    "/api/fe/config/daily-bonus-config",
+    `${ FE_API_PREFIX }/config/daily-bonus-config`,
     "LOAD_DAILY_BONUS_CONFIG_ERROR",
 );
 
