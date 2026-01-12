@@ -1,3 +1,16 @@
+## [1.62.0](https://github.com/upstars-global/unity-core-modules/compare/v1.61.2...v1.62.0) (2026-01-12)
+
+### 🚀 Features
+
+* (UN-2035) fix and refactor achiemvents conditions ([#296](https://github.com/upstars-global/unity-core-modules/issues/296))
+ ([05a5c4c](https://github.com/upstars-global/unity-core-modules/commit/05a5c4c5994ffde42f88cb6777d53829d8e57e4d))
+
+
+
+    * UN-2035 add debug info
+
+    * UN-2035 simplify conditions
+
 ## [1.61.2](https://github.com/upstars-global/unity-core-modules/compare/v1.61.1...v1.61.2) (2026-01-12)
 
 ### 🔨 Refactoring
