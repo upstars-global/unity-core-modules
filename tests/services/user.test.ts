@@ -1,6 +1,6 @@
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { ref } from "vue";
+import { computed, reactive, ref } from "vue";
 
 import type { IPlayerFieldsInfo } from "../../src/models/common";
 import { EnumFormFields } from "../../src/models/common";
@@ -19,6 +19,8 @@ vi.mock("@config/groupAB", () => ({
 
 const changeUserToGroupMock = vi.fn();
 const useUserInfoMock = {
+    addUserGroup: vi.fn(),
+    removeUserGroup: vi.fn(),
     setFreshChatRestoreId: vi.fn((id: string) => {
         freshchatRestoreId.value = id;
     }),
@@ -55,10 +57,12 @@ vi.mock("../../src/store/user/userInfo", () => ({
 }));
 
 vi.mock("../../src/store/user/userStatuses", () => ({
-    useUserStatuses: vi.fn(() => ({
-        getUserGroups: userGroups,
-        changeUserToGroup: changeUserToGroupMock,
-    })),
+    useUserStatuses: vi.fn(() =>
+        reactive({
+            getUserGroups: computed(() => userGroups),
+            changeUserToGroup: changeUserToGroupMock,
+        }),
+    ),
 }));
 
 const playerFieldsInfo = ref<IPlayerFieldsInfo | undefined>(undefined);
@@ -76,6 +80,7 @@ vi.mock("../../src/store/common", () => ({
 }));
 
 vi.mock("../../src/services/api/requests/player", () => ({
+    changePlayerGroup: vi.fn(),
     loadPlayerFieldsInfoRequest: vi.fn(),
     sendFreshChatRestoreIdReq: vi.fn(),
     sendUserDataReq: vi.fn(),
@@ -110,7 +115,7 @@ describe("user service helpers", () => {
 
             await userSetToGroupForAbTest();
 
-            expect(changeUserToGroupMock).not.toHaveBeenCalled();
+            expect(playerRequests.changePlayerGroup).not.toHaveBeenCalled();
         });
 
         it("assigns paired group for even user id", async () => {
@@ -118,7 +123,7 @@ describe("user service helpers", () => {
 
             await userSetToGroupForAbTest();
 
-            expect(changeUserToGroupMock).toHaveBeenCalledWith(100);
+            expect(playerRequests.changePlayerGroup).toHaveBeenCalledWith(100, null);
         });
 
         it("assigns unpaired group for odd user id", async () => {
@@ -126,7 +131,7 @@ describe("user service helpers", () => {
 
             await userSetToGroupForAbTest();
 
-            expect(changeUserToGroupMock).toHaveBeenCalledWith(101);
+            expect(playerRequests.changePlayerGroup).toHaveBeenCalledWith(101, null);
         });
     });
 
