@@ -111,23 +111,13 @@ export const useAchievements = defineStore("achievements", () => {
 
             const betsInTour = tournamentsStore.getStatusTournamentById(itemAchiev.id)?.bet_cents;
             const betsSumIsComplete = betSunCompletedInTour(betsInTour, itemAchiev.money_budget_cents);
-            if (betsSumIsComplete) {
-                return false;
-            }
 
             const isDoneCountDep = itemAchiev.id === ACHIEV_ID.DEP_COUNT && getDepCountForAchiev.value >= defaultDepCount;
-            if (isDoneCountDep) {
-                return false;
-            }
 
             const spinsInTour = tournamentsStore.getStatusTournamentById(itemAchiev.id)?.games_taken;
             const isCompleteSpinCount = betSunCompletedInTour(spinsInTour, itemAchiev.money_budget_cents);
 
-            if (isCompleteSpinCount) {
-                return false;
-            }
-
-            return true;
+            return !betsSumIsComplete || !isDoneCountDep || !isCompleteSpinCount;
         });
     });
 
