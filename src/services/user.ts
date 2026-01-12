@@ -15,14 +15,17 @@ import { useUserSecurity } from "../store/user/userSecurity";
 import { useUserStatuses } from "../store/user/userStatuses";
 import { useUserVerificationSumsub } from "../store/user/userVerificationSumsub";
 import { type IUserLimit } from "./api/DTO/userLimits";
+import { loadManagersConfigReq } from "./api/requests/configs";
 import { activeCouponReq } from "./api/requests/couponePromoCodes";
 import { deleteDocument, loadDocuments, uploadDocuments } from "./api/requests/documents";
 import {
     activateTwoFactorReq,
     activateUserCouponReq,
+    changePlayerGroup,
     closeUserSessionByIdReq,
     deleteDepositBonusCodeReq,
     deleteTwoFactorReq,
+    IPlayerGroup,
     loadBettingPlayerSettingsRequest,
     loadPlayerFieldsInfoRequest,
     loadTwoFactorReq,
@@ -54,7 +57,7 @@ export async function userSetToGroupForAbTest() {
     }
     const groupForAdding = userInfo.info.id % 2 ? ID_GROUP_FOR_UNPAIRED_ID : ID_GROUP_FOR_PAIRED_ID;
 
-    await userStatuses.changeUserToGroup(groupForAdding);
+    await changeUserToGroup(groupForAdding);
 }
 
 export async function loadPlayerFieldsInfo({ reload } = { reload: false }): Promise<IPlayerFieldsInfo | undefined> {
@@ -309,6 +312,66 @@ export async function deleteTwoFactor(code: string): Promise<unknown> {
     }
 }
 
+export async function changeUserToGroup(groupForAdding?: IPlayerGroup, groupForRemoving?: IPlayerGroup): Promise<void> {
+    const userStore = useUserInfo();
+    const { getUserGroups } = storeToRefs(useUserStatuses());
+
+    if (!groupForAdding && !groupForRemoving) {
+        log.error("CHANGE_PLAYER_GROUP_EMPTY_PARAMS", {
+            groupForAdding: String(groupForAdding),
+            groupForRemoving: String(groupForRemoving),
+        });
+
+        return;
+    }
+
+    if (groupForAdding === groupForRemoving) {
+        log.error("CHANGE_PLAYER_GROUP_SAME_PARAMS", {
+            groupForAdding: String(groupForAdding),
+            groupForRemoving: String(groupForRemoving),
+        });
+
+        return;
+    }
+
+    const allowedToAddGroup = groupForAdding && !getUserGroups.value.includes(groupForAdding);
+    const allowedToRemoveGroup = groupForRemoving && getUserGroups.value.includes(groupForRemoving);
+
+    if (!allowedToAddGroup && !allowedToRemoveGroup) {
+        return;
+    }
+
+    if (allowedToAddGroup) {
+        userStore.addUserGroup({ id: groupForAdding, name: groupForAdding });
+    }
+
+    if (allowedToRemoveGroup) {
+        userStore.removeUserGroup({ id: groupForRemoving, name: groupForRemoving });
+    }
+
+    await changePlayerGroup(
+        allowedToAddGroup ? groupForAdding : null,
+        allowedToRemoveGroup ? groupForRemoving : null,
+    );
+}
+
+export async function loadUserManager() {
+    const userStatusesStore = useUserStatuses();
+    const { getUserManager, getUserGroups } = storeToRefs(userStatusesStore);
+
+    if (getUserManager.value) {
+        return getUserManager.value;
+    }
+
+    const manager = await loadManagersConfigReq(getUserGroups.value);
+
+    if (manager) {
+        userStatusesStore.setUserManager(manager);
+    }
+
+    return getUserManager.value;
+}
+
 export async function loadUserLimits() {
     const userLimitsStore = useUserLimits();
 
@@ -359,5 +422,16 @@ export async function confirmUserLimitChange(token: string): Promise<void> {
     } catch (err) {
         log.error("CONFIRM_USER_LIMIT_CHANGE", err);
         throw err;
+    }
+}
+
+export async function resetActiveDepositGift() {
+    const giftsStore = useGiftsStore();
+    const { activeDepositGiftGroupID } = storeToRefs(giftsStore);
+
+    if (activeDepositGiftGroupID.value) {
+        await changeUserToGroup(null, activeDepositGiftGroupID.value);
+
+        giftsStore.setActiveDepositGift(null);
     }
 }

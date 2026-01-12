@@ -1,3 +1,23 @@
+## [1.61.2](https://github.com/upstars-global/unity-core-modules/compare/v1.61.1...v1.61.2) (2026-01-12)
+
+### 🔨 Refactoring
+
+* UN-2066: chore: update API endpoints to use `/api-fe` prefix and appl… ([#284](https://github.com/upstars-global/unity-core-modules/issues/284))
+ ([27281a5](https://github.com/upstars-global/unity-core-modules/commit/27281a54a266ed9aea785947701772b0873264d4))
+
+
+
+    UN-2066: chore: update API endpoints to use `/api-fe` prefix and apply consistent code formatting
+
+    Co-authored-by: d-tashchi <kabak133@gmail.com>
+
+## [1.61.0](https://github.com/upstars-global/unity-core-modules/compare/v1.60.0...v1.61.0) (2026-01-08)
+
+### 🚀 Features
+
+* **UN-1961:** refactor userStatuses store and cover it with tests ([#281](https://github.com/upstars-global/unity-core-modules/issues/281))
+ ([e1101e5](https://github.com/upstars-global/unity-core-modules/commit/e1101e56d696a410e9ff13a8ae5b9478e5244be8))
+
 ## [1.60.0](https://github.com/upstars-global/unity-core-modules/compare/v1.59.0...v1.60.0) (2026-01-06)
 
 ### 🚀 Features
