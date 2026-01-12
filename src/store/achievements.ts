@@ -100,48 +100,24 @@ export const useAchievements = defineStore("achievements", () => {
 
     const getAchievementsActive = computed<IAchievement[]>(() => {
         return getAchievementsAll.value.filter((itemAchiev) => {
-            console.log("achiev", itemAchiev);
             if (itemAchiev?.frontend_identifier && itemAchiev.status === STATUS_PROMO.ARCHIVE) {
                 return false;
             }
 
-            console.log("tournamentsStore.getStatusTournamentById(itemAchiev.id)",
-                tournamentsStore.getStatusTournamentById(itemAchiev.id));
-
             const userHasStatus = containAchievIdInUserStatuses(userStatuses.getUserStatuses, itemAchiev.id);
-            console.log("userHasStatus", userStatuses.getUserStatuses, itemAchiev.id);
             if (userHasStatus) {
                 return false;
             }
 
-            console.log("itemAchiev.id", itemAchiev.id);
-
             const betsInTour = tournamentsStore.getStatusTournamentById(itemAchiev.id)?.bet_cents;
             const betsSumIsComplete = betSunCompletedInTour(betsInTour, itemAchiev.money_budget_cents);
-            console.log("betsSumIsComplete", betsInTour, itemAchiev.money_budget_cents);
-            if (betsSumIsComplete) {
-                return false;
-            }
-
-            console.log("itemAchiev.id for dep count", itemAchiev.id);
 
             const isDoneCountDep = itemAchiev.id === ACHIEV_ID.DEP_COUNT && getDepCountForAchiev.value >= defaultDepCount;
-            if (isDoneCountDep) {
-                return false;
-            }
-
-            console.log("itemAchiev.id for spin count", itemAchiev.id);
 
             const spinsInTour = tournamentsStore.getStatusTournamentById(itemAchiev.id)?.games_taken;
             const isCompleteSpinCount = betSunCompletedInTour(spinsInTour, itemAchiev.money_budget_cents);
 
-            if (isCompleteSpinCount) {
-                return false;
-            }
-
-            console.log("itemAchiev.id final", itemAchiev.id);
-
-            return true;
+            return !betsSumIsComplete || !isDoneCountDep || !isCompleteSpinCount;
         });
     });
 
