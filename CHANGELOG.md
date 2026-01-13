@@ -1,3 +1,10 @@
+## [1.62.2](https://github.com/upstars-global/unity-core-modules/compare/v1.62.1...v1.62.2) (2026-01-13)
+
+### 🧪 Testing
+
+* UN-1962 [unit-tests] vipAdventures ([#290](https://github.com/upstars-global/unity-core-modules/issues/290))
+ ([8ecaa39](https://github.com/upstars-global/unity-core-modules/commit/8ecaa39867c7cf5510b2d80e54f5ea3657b9c649))
+
 ## [1.62.1](https://github.com/upstars-global/unity-core-modules/compare/v1.62.0...v1.62.1) (2026-01-12)
 
 ### ⏪ Reverts
