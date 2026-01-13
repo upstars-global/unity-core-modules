@@ -1,3 +1,20 @@
+## [1.63.0](https://github.com/upstars-global/unity-core-modules/compare/v1.62.2...v1.63.0) (2026-01-13)
+
+### 🚀 Features
+
+* **UN-1921:** cache configs ([#273](https://github.com/upstars-global/unity-core-modules/issues/273))
+ ([3f3dddb](https://github.com/upstars-global/unity-core-modules/commit/3f3dddb63f7f2b3af0b4a2101a0517da31e7463c))
+
+
+
+    * UN-1921 cache configs
+
+    * added log
+
+    * added log
+
+    * remove log
+
 ## [1.62.2](https://github.com/upstars-global/unity-core-modules/compare/v1.62.1...v1.62.2) (2026-01-13)
 
 ### 🧪 Testing
