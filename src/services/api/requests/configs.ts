@@ -85,11 +85,11 @@ const loadEnabledGamesConfigReq = () => loadConfig<IEnabledGames>(
     "LOAD_ENABLED_GAMES_CONFIG_ERROR",
 );
 const loadCashboxPresetsReq = () => loadConfig<ICashboxPresets[]>(
-    "/api/fe/config/cashbox-presets",
+    `${ FE_API_PREFIX }/config/cashbox-presets`,
     "LOAD_CASHBOX_PRESETS_ERROR",
 );
 const loadManageWithdrawConfigReq = () => loadConfig<IManageWithdrawConfig>(
-    "/api/fe/config/manage-withdraw-config",
+    `${ FE_API_PREFIX }/config/manage-withdraw-config`,
     "LOAD_MANAGE_WITHDRAW_CONFIG_ERROR_REQ",
 );
 
