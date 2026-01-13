@@ -1,17 +1,20 @@
+import { FE_API_PREFIX } from "../../../consts/apiConfig";
 import { log } from "../../../controllers/Logger";
 import { type CurrencyData } from "../../../models/cashbox";
 import { type IStagByReferName, type ISurveyConfig } from "../../../models/configs";
 import { type IBettingConfig } from "../../../models/configs";
-import { IEnabledGames } from "../../../models/game";
+import { type IEnabledGames } from "../../../models/game";
 import { type MainWidgetItem } from "../../../models/mainWidget";
 import { type IProvidersList } from "../../../models/providers";
+import { type UserGroup } from "../../../models/user";
+import { type IVipManager } from "../../../models/vipManagers";
 import { type ICashboxPresets } from "../DTO/cashbox";
 import { type IGiftModifyConfig } from "../DTO/gifts";
 import { type IVipProgramConfigDTO } from "../DTO/levels";
 import { type IVipAdventuresConfig } from "../DTO/vipAdventuresDTO";
 import { http } from "../http";
 
-const loadConfig = async <T>(endpoint: string, logError: string, params?:unknown): Promise<T | undefined> => {
+const loadConfig = async <T>(endpoint: string, logError: string, params?: unknown): Promise<T | undefined> => {
     try {
         const { data } = await (params ? http().post<T>(endpoint, params) : http().get<T>(endpoint));
 
@@ -22,40 +25,63 @@ const loadConfig = async <T>(endpoint: string, logError: string, params?:unknown
     }
 };
 
-const loadStagByReferNameReq = () =>
-    loadConfig<IStagByReferName>("/api/fe/config/stag-by-referrer-name", "LOAD_STAG_BY_REFER_NAME_CONFIG");
-const loadSurveyConfigReq = () => loadConfig<ISurveyConfig>("/api/fe/config/survey-config", "LOAD_SURVEY_CONFIG_ERROR");
-const loadBettingConfigReq = () => loadConfig<IBettingConfig>("/api/fe/config/betting-config", "LOAD_BETTING_CONFIG_ERROR");
-const loadVipAdventuresConfigReq = () =>
-    loadConfig<IVipAdventuresConfig>("/api/fe/config/vip-adventures", "LOAD_VIP_ADVENTURES_CONFIG_ERROR");
-const loadDisabledBonusesConfigReq = () =>
-    loadConfig<{ group_keys: string[] }>("/api/fe/config/disabled-bonuses", "LOAD_DISABLED_BONUSES_CONFIG_ERROR");
-const loadModifyGiftsConfigReq = () =>
-    loadConfig<IGiftModifyConfig[]>("/api/fe/config/modify-gifts-config", "LOAD_MODIFY_GIFTS_CONFIG_ERROR");
-const loadManagersConfigReq = (userGroups) => loadConfig("/api/fe/config/managers", "LOAD_MANAGERS_CONFIG_ERROR", { userGroups });
-const loadExcludedPromoStagsReq = () =>
-    loadConfig<string[]>("/api/fe/config/excluded-promo-stags", "LOAD_EXCLUDED_PROMO_STAGS_CONFIG_ERROR");
-const loadCurrencyConfigReq = () => loadConfig<CurrencyData>("/api/fe/config/currency-config", "LOAD_CURRENCY_CONFIG_ERROR");
-const loadFooterPaymentsConfigReq = () =>
-    loadConfig<string[]>("/api/fe/config/footer-payments-config", "LOAD_FOOTER_PAYMENTS_CONFIG_ERROR");
+const loadStagByReferNameReq = () => loadConfig<IStagByReferName>(
+    `${ FE_API_PREFIX }/config/stag-by-referrer-name`,
+    "LOAD_STAG_BY_REFER_NAME_CONFIG",
+);
+const loadSurveyConfigReq = () => loadConfig<ISurveyConfig>(
+    `${ FE_API_PREFIX }/config/survey-config`,
+    "LOAD_SURVEY_CONFIG_ERROR");
+const loadBettingConfigReq = () => loadConfig<IBettingConfig>(
+    `${ FE_API_PREFIX }/config/betting-config`,
+    "LOAD_BETTING_CONFIG_ERROR",
+);
+const loadVipAdventuresConfigReq = () => loadConfig<IVipAdventuresConfig>(
+    `${ FE_API_PREFIX }/config/vip-adventures`,
+    "LOAD_VIP_ADVENTURES_CONFIG_ERROR",
+);
+const loadDisabledBonusesConfigReq = () => loadConfig<{ group_keys: string[] }>(
+    `${ FE_API_PREFIX }/config/disabled-bonuses`,
+    "LOAD_DISABLED_BONUSES_CONFIG_ERROR",
+);
+const loadModifyGiftsConfigReq = () => loadConfig<IGiftModifyConfig[]>(
+    `${ FE_API_PREFIX }/config/modify-gifts-config`,
+    "LOAD_MODIFY_GIFTS_CONFIG_ERROR",
+);
+const loadManagersConfigReq = (userGroups: UserGroup[]) => loadConfig<IVipManager>(
+    `${ FE_API_PREFIX }/config/managers`,
+    "LOAD_MANAGERS_CONFIG_ERROR", { userGroups },
+);
+const loadExcludedPromoStagsReq = () => loadConfig<string[]>(
+    `${ FE_API_PREFIX }/config/excluded-promo-stags`,
+    "LOAD_EXCLUDED_PROMO_STAGS_CONFIG_ERROR",
+);
+const loadCurrencyConfigReq = () => loadConfig<CurrencyData>(
+    `${ FE_API_PREFIX }/config/currency-config`,
+    "LOAD_CURRENCY_CONFIG_ERROR",
+);
+const loadFooterPaymentsConfigReq = () => loadConfig<string[]>(
+    `${ FE_API_PREFIX }/config/footer-payments-config`,
+    "LOAD_FOOTER_PAYMENTS_CONFIG_ERROR",
+);
 const loadAdditionalDepositGiftsConfigReq = () => loadConfig(
-    "/api/fe/config/additional-gifts",
+    `${ FE_API_PREFIX }/config/additional-gifts`,
     "LOAD_ADDITIONAL_DEPOSIT_GIFTS_CONFIG_ERROR",
 );
-const loadMainWidgetConfigReq = () => loadConfig<{widgets?: MainWidgetItem[]}>(
-    "/api/fe/config/main-widget-config",
+const loadMainWidgetConfigReq = () => loadConfig<{ widgets?: MainWidgetItem[] }>(
+    `${ FE_API_PREFIX }/config/main-widget-config`,
     "LOAD_MAIN_WIDGET_CONFIG_ERROR",
 );
 const loadVipProgramConfigReq = () => loadConfig<IVipProgramConfigDTO>(
-    "/api/fe/config/vip-program-config",
+    `${ FE_API_PREFIX }/config/vip-program-config`,
     "LOAD_VIP_PROGRAM_REWARDS_CONFIG_ERROR",
 );
 const loadDisabledProvidersConfigReq = () => loadConfig<IProvidersList>(
-    "/api/fe/config/providers-config",
+    `${ FE_API_PREFIX }/config/providers-config`,
     "LOAD_PROVIDERS_CONFIG_ERROR",
 );
 const loadEnabledGamesConfigReq = () => loadConfig<IEnabledGames>(
-    "/api/fe/config/enable-games-config",
+    `${ FE_API_PREFIX }/config/enable-games-config`,
     "LOAD_ENABLED_GAMES_CONFIG_ERROR",
 );
 const loadCashboxPresetsReq = () => loadConfig<ICashboxPresets[]>(
@@ -79,4 +105,5 @@ export {
     loadStagByReferNameReq,
     loadSurveyConfigReq,
     loadVipAdventuresConfigReq,
-    loadVipProgramConfigReq };
+    loadVipProgramConfigReq,
+};
