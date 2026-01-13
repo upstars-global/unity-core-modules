@@ -15,14 +15,9 @@ export function useVipAdventuresService() {
     } = storeToRefs(useVipAdventures());
 
     async function loadVipProgress(): Promise<IVipProgress | void> {
-        try {
-            const statusProgress = await loadVipStatusProgress();
-
-            userVipStatusProgress.value = statusProgress;
-            return statusProgress;
-        } catch (err) {
-            log.error("LOAD_VIP_PROGRESS_ERROR", err);
-        }
+        const statusProgress = await loadVipStatusProgress();
+        userVipStatusProgress.value = statusProgress;
+        return statusProgress;
     }
 
     async function loadVipAdventuresConfig(): Promise<void> {
