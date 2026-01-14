@@ -1,3 +1,14 @@
+## [1.64.0](https://github.com/upstars-global/unity-core-modules/compare/v1.63.0...v1.64.0) (2026-01-14)
+
+### 🚀 Features
+
+* UN-2000 add daily-bonus-config ([#292](https://github.com/upstars-global/unity-core-modules/issues/292))
+ ([8ab8ed4](https://github.com/upstars-global/unity-core-modules/commit/8ab8ed411a57f7976e99acb383de505ab9495aee))
+
+
+
+    * feat: UN-2000 add daily-bonus-config
+
 ## [1.63.0](https://github.com/upstars-global/unity-core-modules/compare/v1.62.2...v1.63.0) (2026-01-13)
 
 ### 🚀 Features
