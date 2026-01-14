@@ -1,3 +1,38 @@
+## [1.64.0](https://github.com/upstars-global/unity-core-modules/compare/v1.63.0...v1.64.0) (2026-01-14)
+
+### 🚀 Features
+
+* UN-2000 add daily-bonus-config ([#292](https://github.com/upstars-global/unity-core-modules/issues/292))
+ ([8ab8ed4](https://github.com/upstars-global/unity-core-modules/commit/8ab8ed411a57f7976e99acb383de505ab9495aee))
+
+
+
+    * feat: UN-2000 add daily-bonus-config
+
+## [1.63.0](https://github.com/upstars-global/unity-core-modules/compare/v1.62.2...v1.63.0) (2026-01-13)
+
+### 🚀 Features
+
+* **UN-1921:** cache configs ([#273](https://github.com/upstars-global/unity-core-modules/issues/273))
+ ([3f3dddb](https://github.com/upstars-global/unity-core-modules/commit/3f3dddb63f7f2b3af0b4a2101a0517da31e7463c))
+
+
+
+    * UN-1921 cache configs
+
+    * added log
+
+    * added log
+
+    * remove log
+
+## [1.62.2](https://github.com/upstars-global/unity-core-modules/compare/v1.62.1...v1.62.2) (2026-01-13)
+
+### 🧪 Testing
+
+* UN-1962 [unit-tests] vipAdventures ([#290](https://github.com/upstars-global/unity-core-modules/issues/290))
+ ([8ecaa39](https://github.com/upstars-global/unity-core-modules/commit/8ecaa39867c7cf5510b2d80e54f5ea3657b9c649))
+
 ## [1.62.1](https://github.com/upstars-global/unity-core-modules/compare/v1.62.0...v1.62.1) (2026-01-12)
 
 ### ⏪ Reverts
