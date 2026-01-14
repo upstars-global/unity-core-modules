@@ -110,35 +110,29 @@ export const useAchievements = defineStore("achievements", () => {
 
     const getAchievementsActive = computed<IAchievement[]>(() => {
         return getAchievementsAll.value.filter((itemAchiev) => {
-            if (
-                "frontend_identifier" in itemAchiev &&
-                itemAchiev.frontend_identifier &&
-                itemAchiev.status === STATUS_PROMO.ARCHIVE
-            ) {
+            const hasAchievId = itemAchiev.frontend_identifier;
+            const achievStatusArchive = itemAchiev.status === STATUS_PROMO.ARCHIVE;
+
+            if (hasAchievId && achievStatusArchive) {
                 return false;
             }
 
-            const userStatusHasAchievId = !itemAchiev.frontend_identifier ?
-                containAchievIdInUserStatuses(userStatuses.getUserStatuses, itemAchiev.id) : true;
+            if (hasAchievId) {
+                const betsInTour = tournamentsStore.getStatusTournamentById(itemAchiev.id)?.bet_cents;
+                const spinsInTour = tournamentsStore.getStatusTournamentById(itemAchiev.id)?.games_taken;
 
-            const betsInTour = tournamentsStore.getStatusTournamentById(itemAchiev.id)?.bet_cents;
-            const betsSumIsComplete = itemAchiev.frontend_identifier ?
-                itemAchiev.status === STATUS_PROMO.ARCHIVE ||
-                betSunCompletedInTour(betsInTour, itemAchiev.money_budget_cents)
-                :
-                true;
+                if (betsInTour || spinsInTour) {
+                    return betSunCompletedInTour(betsInTour || spinsInTour, itemAchiev.money_budget_cents);
+                }
 
-            const isDoneCountDep = itemAchiev.id === ACHIEV_ID_DEP_COUNT ?
-                getDepCountForAchiev.value >= defaultDepCount :
-                true;
+                if (itemAchiev.id === ACHIEV_ID_DEP_COUNT) {
+                    return getDepCountForAchiev.value >= defaultDepCount;
+                }
+            }
 
-            const spinsInTour = tournamentsStore.getStatusTournamentById(itemAchiev.id)?.games_taken;
-            const isCompleteSpinCount = itemAchiev.frontend_identifier ?
-                itemAchiev.status === STATUS_PROMO.ARCHIVE ||
-                betSunCompletedInTour(spinsInTour, itemAchiev.money_budget_cents)
-                : true;
-
-            return !userStatusHasAchievId || !betsSumIsComplete || !isDoneCountDep || !isCompleteSpinCount;
+            if (!hasAchievId) {
+                return containAchievIdInUserStatuses(userStatuses.getUserStatuses, itemAchiev.id);
+            }
         });
     });
 
