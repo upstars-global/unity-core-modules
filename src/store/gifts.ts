@@ -8,6 +8,7 @@ import { computed, ref } from "vue";
 import { currencyView } from "../helpers/currencyHelper";
 import { Currencies } from "../models/enums/currencies";
 import type { GiftAllItem, IGift, IGiftDeposit, IGiftFreeSpins, IGiftModifyConfig } from "../services/api/DTO/gifts";
+import { IDailyGiftConfig } from "../services/api/DTO/gifts";
 import { useUserInfo } from "./user/userInfo";
 import { useUserStatuses } from "./user/userStatuses";
 
@@ -24,6 +25,7 @@ export const useGiftsStore = defineStore("giftsStore", () => {
     const activeDepositGift = ref<IGiftDeposit | null>(null);
     const registrationGiftsAll = ref<IGiftDeposit[]>([]);
     const fsGiftsAll = ref<IGiftFreeSpins[]>([] as IGiftFreeSpins[]);
+    const dailyBonusConfig = ref<Record<string, IDailyGiftConfig>>();
 
     const fsGifts = computed<IGiftFreeSpins[]>(() => {
         return fsGiftsAll.value.filter((giftFs) => {
@@ -187,7 +189,7 @@ export const useGiftsStore = defineStore("giftsStore", () => {
             ?.value?.find((item) => String(item).includes("pick:"));
 
         return conditionId || null;
-    };
+    }
 
     function setActiveDepositGift(value: IGiftDeposit | null) {
         activeDepositGift.value = value;
@@ -232,6 +234,10 @@ export const useGiftsStore = defineStore("giftsStore", () => {
         fsGiftsAll.value = [];
     }
 
+    function setDailyBonusConfig (value: Record<string, IDailyGiftConfig>) {
+        dailyBonusConfig.value = value;
+    }
+
     return {
         giftsAll,
         giftsCounter,
@@ -241,6 +247,7 @@ export const useGiftsStore = defineStore("giftsStore", () => {
         giftsLost,
         giftsNew,
         giftsActive,
+        dailyBonusConfig,
 
         setGifts,
         setAdditionalGifts,
@@ -265,6 +272,7 @@ export const useGiftsStore = defineStore("giftsStore", () => {
 
         isLoadingGiftData,
         setGiftsLoading,
+        setDailyBonusConfig,
 
         activeDepositGift,
         activeDepositGiftGroupID,
