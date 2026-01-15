@@ -1,3 +1,14 @@
+## [1.65.0](https://github.com/upstars-global/unity-core-modules/compare/v1.64.0...v1.65.0) (2026-01-15)
+
+### 🚀 Features
+
+* UN-1997 add manageWithdraw config ([#295](https://github.com/upstars-global/unity-core-modules/issues/295))
+ ([d06bc25](https://github.com/upstars-global/unity-core-modules/commit/d06bc256982c9e6f9f46eefe41a891d208de9064))
+
+
+
+    * feat: UN-1997 add manageWithdraw config
+
 ## [1.64.0](https://github.com/upstars-global/unity-core-modules/compare/v1.63.0...v1.64.0) (2026-01-14)
 
 ### 🚀 Features
