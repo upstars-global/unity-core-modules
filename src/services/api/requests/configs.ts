@@ -9,7 +9,7 @@ import { type IProvidersList } from "../../../models/providers";
 import { type UserGroup } from "../../../models/user";
 import { type IVipManager } from "../../../models/vipManagers";
 import { type ICashboxPresets, IManageWithdrawConfig } from "../DTO/cashbox";
-import { type IGiftModifyConfig } from "../DTO/gifts";
+import { IDailyGiftConfig, type IGiftModifyConfig } from "../DTO/gifts";
 import { type IVipProgramConfigDTO } from "../DTO/levels";
 import { type IVipAdventuresConfig } from "../DTO/vipAdventuresDTO";
 import { http } from "../http";
@@ -92,12 +92,17 @@ const loadManageWithdrawConfigReq = () => loadConfig<IManageWithdrawConfig>(
     `${ FE_API_PREFIX }/config/manage-withdraw-config`,
     "LOAD_MANAGE_WITHDRAW_CONFIG_ERROR_REQ",
 );
+const loadDailyBonusConfigReq = () => loadConfig<Record<string, IDailyGiftConfig>>(
+    `${ FE_API_PREFIX }/config/daily-bonus-config`,
+    "LOAD_DAILY_BONUS_CONFIG_ERROR",
+);
 
 export {
     loadAdditionalDepositGiftsConfigReq,
     loadBettingConfigReq,
     loadCashboxPresetsReq,
     loadCurrencyConfigReq,
+    loadDailyBonusConfigReq,
     loadDisabledBonusesConfigReq,
     loadDisabledProvidersConfigReq,
     loadEnabledGamesConfigReq,
