@@ -1,3 +1,26 @@
+## [1.66.0](https://github.com/upstars-global/unity-core-modules/compare/v1.65.0...v1.66.0) (2026-01-15)
+
+### 🚀 Features
+
+* **UN-1959:** refactor userInfo store and cover it with tests ([#277](https://github.com/upstars-global/unity-core-modules/issues/277))
+ ([a2920be](https://github.com/upstars-global/unity-core-modules/commit/a2920beca65739b9ae306c2e27528d7bcea4ac47))
+
+
+
+    * feat(UN-1959): refactor userInfo store and cover it with tests
+
+    * fix: review comments
+
+    * fix: tests
+
+    * fix: review comments
+
+    * fix
+
+    * fix: user service
+
+    * fix: tests
+
 ## [1.65.0](https://github.com/upstars-global/unity-core-modules/compare/v1.64.0...v1.65.0) (2026-01-15)
 
 ### 🚀 Features
