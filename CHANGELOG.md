@@ -1,3 +1,71 @@
+## [1.65.0](https://github.com/upstars-global/unity-core-modules/compare/v1.64.0...v1.65.0) (2026-01-15)
+
+### 🚀 Features
+
+* UN-1997 add manageWithdraw config ([#295](https://github.com/upstars-global/unity-core-modules/issues/295))
+ ([d06bc25](https://github.com/upstars-global/unity-core-modules/commit/d06bc256982c9e6f9f46eefe41a891d208de9064))
+
+
+
+    * feat: UN-1997 add manageWithdraw config
+
+## [1.64.0](https://github.com/upstars-global/unity-core-modules/compare/v1.63.0...v1.64.0) (2026-01-14)
+
+### 🚀 Features
+
+* UN-2000 add daily-bonus-config ([#292](https://github.com/upstars-global/unity-core-modules/issues/292))
+ ([8ab8ed4](https://github.com/upstars-global/unity-core-modules/commit/8ab8ed411a57f7976e99acb383de505ab9495aee))
+
+
+
+    * feat: UN-2000 add daily-bonus-config
+
+## [1.63.0](https://github.com/upstars-global/unity-core-modules/compare/v1.62.2...v1.63.0) (2026-01-13)
+
+### 🚀 Features
+
+* **UN-1921:** cache configs ([#273](https://github.com/upstars-global/unity-core-modules/issues/273))
+ ([3f3dddb](https://github.com/upstars-global/unity-core-modules/commit/3f3dddb63f7f2b3af0b4a2101a0517da31e7463c))
+
+
+
+    * UN-1921 cache configs
+
+    * added log
+
+    * added log
+
+    * remove log
+
+## [1.62.2](https://github.com/upstars-global/unity-core-modules/compare/v1.62.1...v1.62.2) (2026-01-13)
+
+### 🧪 Testing
+
+* UN-1962 [unit-tests] vipAdventures ([#290](https://github.com/upstars-global/unity-core-modules/issues/290))
+ ([8ecaa39](https://github.com/upstars-global/unity-core-modules/commit/8ecaa39867c7cf5510b2d80e54f5ea3657b9c649))
+
+## [1.62.1](https://github.com/upstars-global/unity-core-modules/compare/v1.62.0...v1.62.1) (2026-01-12)
+
+### ⏪ Reverts
+
+* "UN-2035 fix and refactor achiemvents conditions" ([#301](https://github.com/upstars-global/unity-core-modules/issues/301))
+ ([ade3f2a](https://github.com/upstars-global/unity-core-modules/commit/ade3f2a89473a76fac79d1fb3d300ec21cd56570))
+
+, closes [#296](https://github.com/upstars-global/unity-core-modules/issues/)
+
+## [1.62.0](https://github.com/upstars-global/unity-core-modules/compare/v1.61.2...v1.62.0) (2026-01-12)
+
+### 🚀 Features
+
+* (UN-2035) fix and refactor achiemvents conditions ([#296](https://github.com/upstars-global/unity-core-modules/issues/296))
+ ([05a5c4c](https://github.com/upstars-global/unity-core-modules/commit/05a5c4c5994ffde42f88cb6777d53829d8e57e4d))
+
+
+
+    * UN-2035 add debug info
+
+    * UN-2035 simplify conditions
+
 ## [1.61.2](https://github.com/upstars-global/unity-core-modules/compare/v1.61.1...v1.61.2) (2026-01-12)
 
 ### 🔨 Refactoring
