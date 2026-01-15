@@ -2,6 +2,7 @@ import toast from "@plugins/Toast";
 import { onBeforeUnmount, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 
+import { putUserSubscription } from "../services/user";
 import { useUserInfo } from "../store/user/userInfo";
 import { log } from "./Logger";
 
@@ -24,7 +25,7 @@ export function useGlobalHandler(): void {
         }
 
         try {
-            await userStore.putUserSubscription({ subscription_params: { receive_promos: true } });
+            await putUserSubscription({ subscription_params: { receive_promos: true } });
             toast.show({
                 text: $useI18n.t("NOTIFICATIONS.SUCCESS_RECAEVED_PROMO"),
                 id: Date.now(),
