@@ -1,8 +1,7 @@
-import config from "@theme/configs/config";
-import { PROJECT } from "@theme/configs/constantsFreshChat";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
+import { useConfigStore } from "./configStore";
 import { useUserInfo } from "./user/userInfo";
 
 interface ISanitizedUserData {
@@ -22,6 +21,8 @@ interface IFreshChatData {
 }
 
 export const useFreshChatStore = defineStore("freshchatStore", () => {
+    const { $defaultProjectConfig } = useConfigStore();
+
     const newMessagesCount = ref(0);
 
     const getMessagesCount = computed(() => {
@@ -38,7 +39,7 @@ export const useFreshChatStore = defineStore("freshchatStore", () => {
         const { id, mobile_phone, email, first_name, last_name } = userInfo.value;
         if (id) {
             return {
-                externalId: `${ PROJECT }-${ id }`,
+                externalId: `${ $defaultProjectConfig.PROJECT }-${ id }`,
                 email,
                 firstName: first_name,
                 lastName: last_name,
@@ -58,13 +59,13 @@ export const useFreshChatStore = defineStore("freshchatStore", () => {
         const externalId = userInfo.value.id;
 
         return {
-            token: config.freshChat.token,
-            widgetUuid: config.freshChat.widgetUuid,
+            token: $defaultProjectConfig.config?.freshChat?.token,
+            widgetUuid: $defaultProjectConfig.config?.freshChat?.widgetUuid,
             // restore have no impact without externalId
             restoreId: externalId ? restoreId.value : undefined,
             // externalId cause generating new restoreId, so we need wait initializing
             // our saved restoreId to prevent overriding
-            externalId: restoreIdLoaded.value && externalId ? `${ PROJECT }-${ externalId }` : null,
+            externalId: restoreIdLoaded.value && externalId ? `${ $defaultProjectConfig.PROJECT }-${ externalId }` : null,
             ...(userData.value || {}),
             pending: isLoaded.value && !restoreIdLoaded.value,
         };

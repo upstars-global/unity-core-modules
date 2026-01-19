@@ -40,7 +40,6 @@ export const useCommon = defineStore("common", () => {
     }
 
     const defaultCurrency = computed(() => {
-        console.log({ $defaultProjectConfig });
         return $defaultProjectConfig.ENABLE_CURRENCIES;
     });
 

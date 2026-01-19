@@ -1,9 +1,6 @@
 import type { PiniaPluginContext } from "pinia";
 
-export type UnityConfig = {
-    ENABLE_CURRENCIES: string[];
-    currencyDefault: string;
-}
+import { type UnityConfig } from "../../types/configProjectTypes";
 
 
 declare module "pinia" {
@@ -17,18 +14,12 @@ declare module "pinia" {
 }
 
 
-export const createUnityConfigPlugin = ({
-    ENABLE_CURRENCIES,
-    currencyDefault,
-}: UnityConfig) => {
+export const createUnityConfigPlugin = (configProject: UnityConfig) => {
     return ({ store, options }: PiniaPluginContext) => {
         if (!options.projectConfiguration) {
             return;
         }
 
-        store.$defaultProjectConfig = {
-            ENABLE_CURRENCIES,
-            currencyDefault,
-        };
+        store.$defaultProjectConfig = configProject;
     };
 };

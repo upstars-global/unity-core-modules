@@ -1,5 +1,3 @@
-import { routeNames } from "@router/routeNames";
-import { metaDataSSR } from "@theme/configs/meta";
 import { defineStore, type Pinia, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
@@ -12,6 +10,7 @@ import { prepareMapStaticPages } from "../helpers/staticPages";
 import { CurrentPage, type ICurrentPage, ICurrentPageMeta, type IPageCMSPrepare } from "../models/CMS";
 import type { ISnippetItemCMS } from "../services/api/DTO/CMS";
 import { loadCMSPagesReq, loadCMSSnippetsReq, loadPageContentFromCmsReq } from "../services/api/requests/CMS";
+import { useConfigStore } from "./configStore";
 import { useMultilangStore } from "./multilang";
 
 function replaceCurrentYearPlaceholder<T>(template: TemplateType): T {
@@ -22,12 +21,15 @@ function replaceCurrentYearPlaceholder<T>(template: TemplateType): T {
     }) as T;
 }
 
-function resolveUrlFromRoute(route: { path: string; name?: string; meta?: { metaUrl?: string } }): string {
+function resolveUrlFromRoute(
+    route: { path: string; name?: string; meta?: { metaUrl?: string } },
+    mainRouteName: string,
+): string {
     if (route?.meta?.metaUrl) {
         return route.meta.metaUrl;
     }
 
-    if (route?.name === routeNames.main) {
+    if (route?.name === mainRouteName) {
         return "/home";
     }
     return route?.path ?? "";
@@ -38,6 +40,8 @@ function normalizeUrl(url: string): string {
 }
 
 export const useCMS = defineStore("CMS", () => {
+    const { $defaultProjectConfig } = useConfigStore();
+
     const staticPages = ref<IPageCMSPrepare[]>([]);
     const snippets = ref<ISnippetItemCMS[]>([]);
     const { getUserLocale } = storeToRefs(useMultilangStore());
@@ -59,7 +63,7 @@ export const useCMS = defineStore("CMS", () => {
                 return pages;
             }
 
-            throw new Error(`pages.length < 1, pages = ${pages}`);
+            throw new Error(`pages.length < 1, pages = ${ pages }`);
         } catch (err) {
             log.error("STORE_LOAD_STATIC_PAGES_ERROR", err);
         }
@@ -192,7 +196,7 @@ export const useCMS = defineStore("CMS", () => {
     }
 
     async function loadMetaSEO(route: { path: string; name: string; meta?: { metaUrl: string } }) {
-        const url = resolveUrlFromRoute(route);
+        const url = resolveUrlFromRoute(route, $defaultProjectConfig.routeNames.main);
         const slug = normalizeUrl(url);
 
         const staticErr = ensureStaticIfReady(slug);
@@ -228,7 +232,7 @@ export const useCMS = defineStore("CMS", () => {
                     json: blocks.json,
                 };
             } else {
-                const fallback = metaDataSSR(getUserLocale.value);
+                const fallback = $defaultProjectConfig.metaDataSSR(getUserLocale.value);
                 meta = {
                     metaTitle: fallback?.title,
                     metaDescription: fallback?.description,

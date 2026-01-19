@@ -1,12 +1,13 @@
-import { DEFAULT_COUNTRY, DEFAULT_LOCALE_BY_COUNTRY } from "@theme/configs/constsLocales";
 import { defineStore, type Pinia } from "pinia";
 import { computed, ref } from "vue";
 
 import { getLocale } from "../helpers/localeInCookies";
 import type { LocaleName, Locales } from "../services/api/DTO/multilang";
+import { useConfigStore } from "./configStore";
 
 export interface IDefaultLocaleByCountry {
     [key: string]: string;
+
     default: string;
 }
 
@@ -16,12 +17,13 @@ export interface IMultilangDefaultParams {
 }
 
 export const useMultilangStore = defineStore("multilang", () => {
+    const { $defaultProjectConfig } = useConfigStore();
     const locales = ref<Locales>([]);
     const locale = ref<LocaleName>("");
     const geo = ref("");
     const country = ref("");
-    const defaultCountry = ref(DEFAULT_COUNTRY);
-    const defaultLocaleByCountry = ref(DEFAULT_LOCALE_BY_COUNTRY as IDefaultLocaleByCountry);
+    const defaultCountry = ref($defaultProjectConfig.DEFAULT_COUNTRY);
+    const defaultLocaleByCountry = ref($defaultProjectConfig.DEFAULT_LOCALE_BY_COUNTRY as IDefaultLocaleByCountry);
 
     const getDefaultLang = computed(() => {
         const {

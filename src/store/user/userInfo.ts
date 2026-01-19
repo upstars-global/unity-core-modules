@@ -1,6 +1,4 @@
 import { usePopupNewProvider } from "@modules/Popups/PopupProviderNew/usePopupNewProviderController";
-import { PROJECT } from "@theme/configs/constantsFreshChat";
-import { getStateByCounty } from "@theme/configs/stateFieldConfig";
 import { defineStore, type Pinia, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
@@ -22,6 +20,7 @@ import {
 import { updateLocale } from "../../services/localization";
 import { loadPlayerFieldsInfo } from "../../services/user";
 import { useCommon } from "../common";
+import { useConfigStore } from "../configStore";
 import { useMultilangStore } from "../multilang";
 
 const defaultUser: IUserData = {
@@ -67,6 +66,8 @@ const defaultUser: IUserData = {
 export const useUserInfo = defineStore("userInfo", () => {
     const useCommonStore = useCommon();
     const { getDefaultCurrency, getCurrencyCrypto } = storeToRefs(useCommonStore);
+    const { $defaultProjectConfig } = useConfigStore();
+
 
     const info = ref<IUserData>(defaultUser);
     const settings = ref<IUserSettings>();
@@ -199,7 +200,7 @@ export const useUserInfo = defineStore("userInfo", () => {
         const userPostCode = getUserInfo.value.postal_code;
 
         if (stateFieldConfig && !userState && userPostCode) {
-            const stateForEdit = getStateByCounty(info.value.country as string, userPostCode);
+            const stateForEdit = $defaultProjectConfig.getStateByCounty(info.value.country as string, userPostCode);
             if (stateForEdit) {
                 await sendUserData({
                     context: "edition",
@@ -251,7 +252,7 @@ export const useUserInfo = defineStore("userInfo", () => {
                 cioIdentifyUser(response.data);
                 checkToShowPopup();
 
-                loadFreshChatRestoreId(PROJECT);
+                loadFreshChatRestoreId($defaultProjectConfig.PROJECT);
 
                 loadPlayerFieldsInfo({ reload: true })
                     .then(checkUserState);

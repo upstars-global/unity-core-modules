@@ -1,7 +1,7 @@
-import { CONFIG_DEFAULT_COLLECTIONS_MENU_SLUGS, SlugCategoriesGames } from "@theme/configs/categoryesGames";
 import { defineStore, type Pinia, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
+import type { ResolvedCategorySlug } from "../../../types/configProjectTypes";
 import { log } from "../../controllers/Logger";
 import { currencyView } from "../../helpers/currencyHelper";
 import { processGame } from "../../helpers/gameHelpers";
@@ -14,6 +14,7 @@ import {
     loadGamesJackpots as loadGamesJackpotsReq,
     loadLastGames as loadLastGamesReq,
 } from "../../services/api/requests/games";
+import { useConfigStore } from "../configStore";
 import { useRootStore } from "../root";
 import { useUserInfo } from "../user/userInfo";
 import { filterGames, findGameBySeoTittleAndProducer } from "./helpers/games";
@@ -34,10 +35,13 @@ interface IJackpots {
 }
 
 interface IGamesCommonStoreDefaultOptions {
-  defaultMenuGameCategories: Record<string, SlugCategoriesGames[]>;
+    defaultMenuGameCategories: Record<string, ResolvedCategorySlug[]>;
 }
 
 export const useGamesCommon = defineStore("gamesCommon", () => {
+    const { $defaultProjectConfig } = useConfigStore();
+
+
     const gamesDataCached = ref<Record<string, IGame>>({});
     const games = ref<IGame[]>([]);
     const gamesCategories = ref<IGamesProvider[]>([]);
@@ -48,8 +52,12 @@ export const useGamesCommon = defineStore("gamesCommon", () => {
     const userInfoStore = useUserInfo();
     const { getUserCurrency } = storeToRefs(userInfoStore);
     const getGamesCategories = computed(() => gamesCategories.value);
-    const menuGameCategories = ref<Record<string, SlugCategoriesGames[]>>({});
-    const defaultMenuGameCategories = ref<Record<string, SlugCategoriesGames[]>>(CONFIG_DEFAULT_COLLECTIONS_MENU_SLUGS);
+    const menuGameCategories = ref<Record<string, ResolvedCategorySlug[]>>({});
+    const defaultMenuGameCategories = ref<
+        Record<string, ResolvedCategorySlug[]>
+    >(
+        $defaultProjectConfig.CONFIG_DEFAULT_COLLECTIONS_MENU_SLUGS,
+    );
     const enabledGamesConfig = ref<IEnabledGames>({});
 
     const getRecentGames = computed(() => {
@@ -76,7 +84,7 @@ export const useGamesCommon = defineStore("gamesCommon", () => {
         return category ? category.name : "";
     }
 
-    function setMenuGameCategories(categories: Record<string, SlugCategoriesGames[]>): void {
+    function setMenuGameCategories(categories: Record<string, ResolvedCategorySlug[]>): void {
         menuGameCategories.value = categories;
     }
 
@@ -168,7 +176,7 @@ export const useGamesCommon = defineStore("gamesCommon", () => {
                     ...category,
                     provider: category.id,
                     slug: category.id,
-                    url: `/games/${category.id}`,
+                    url: `/games/${ category.id }`,
                     name: category.title,
                 };
             });
