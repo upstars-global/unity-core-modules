@@ -11,6 +11,7 @@ import {
     type IUserInfo,
     type IUserSession,
 } from "../../../models/user";
+import { type IBettingBonus } from "../DTO/bets";
 import { IPlayerPayment } from "../DTO/cashbox";
 import { type UserCouponStatuses } from "../DTO/couponePromoCodes";
 import { BettingPlayerSettingsDTO, IPlayerStats, ISubscriptions, IUserAccount, IUserSettings } from "../DTO/playerDTO";
@@ -238,7 +239,7 @@ export async function updateAuthDetailsProvidersReq(data: Record<string, unknown
 
 export async function loadFreshChatRestoreIdReq(id: string, project: string) {
     try {
-        const { data } = await http().post(`${ FE_API_PREFIX }/restore-id/get`, {
+        const { data } = await http().post<{data: { restoreId: string }}>(`${ FE_API_PREFIX }/restore-id/get`, {
             data: {
                 internalId: String(id),
                 project,
@@ -289,7 +290,7 @@ export async function loadUserStatsReq() {
 
 export async function loadUserBettingBonuses() {
     try {
-        const { data } = await http().get("/api/v2/bonuses");
+        const { data } = await http().get<IBettingBonus[]>("/api/v2/bonuses");
         return data;
     } catch (err) {
         log.error("LOAD_USER_BETTING_BONUSES_ERROR", err);
