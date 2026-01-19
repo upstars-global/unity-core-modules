@@ -1,3 +1,37 @@
+## [1.66.0](https://github.com/upstars-global/unity-core-modules/compare/v1.65.0...v1.66.0) (2026-01-15)
+
+### 🚀 Features
+
+* **UN-1959:** refactor userInfo store and cover it with tests ([#277](https://github.com/upstars-global/unity-core-modules/issues/277))
+ ([a2920be](https://github.com/upstars-global/unity-core-modules/commit/a2920beca65739b9ae306c2e27528d7bcea4ac47))
+
+
+
+    * feat(UN-1959): refactor userInfo store and cover it with tests
+
+    * fix: review comments
+
+    * fix: tests
+
+    * fix: review comments
+
+    * fix
+
+    * fix: user service
+
+    * fix: tests
+
+## [1.65.0](https://github.com/upstars-global/unity-core-modules/compare/v1.64.0...v1.65.0) (2026-01-15)
+
+### 🚀 Features
+
+* UN-1997 add manageWithdraw config ([#295](https://github.com/upstars-global/unity-core-modules/issues/295))
+ ([d06bc25](https://github.com/upstars-global/unity-core-modules/commit/d06bc256982c9e6f9f46eefe41a891d208de9064))
+
+
+
+    * feat: UN-1997 add manageWithdraw config
+
 ## [1.64.0](https://github.com/upstars-global/unity-core-modules/compare/v1.63.0...v1.64.0) (2026-01-14)
 
 ### 🚀 Features
