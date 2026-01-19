@@ -1,3 +1,14 @@
+## [1.66.1](https://github.com/upstars-global/unity-core-modules/compare/v1.66.0...v1.66.1) (2026-01-19)
+
+### 🐛 Bug Fixes
+
+* **UN-2113:** use only less than 0 current_value_amount_cents for limit ([#298](https://github.com/upstars-global/unity-core-modules/issues/298))
+ ([f52f5d6](https://github.com/upstars-global/unity-core-modules/commit/f52f5d6ea814fc590258541573ba1780617dfb85))
+
+
+
+    fix(UN-2113): use only less than 0 current_value_amount_cents for limit reach calculation
+
 ## [1.66.0](https://github.com/upstars-global/unity-core-modules/compare/v1.65.0...v1.66.0) (2026-01-15)
 
 ### 🚀 Features
