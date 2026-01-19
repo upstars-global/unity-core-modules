@@ -100,22 +100,19 @@ export const useAchievements = defineStore("achievements", () => {
 
     const getAchievementsActive = computed<IAchievement[]>(() => {
         return getAchievementsAll.value.filter((itemAchiev) => {
-            if (
-                "frontend_identifier" in itemAchiev &&
-                itemAchiev.frontend_identifier &&
-                itemAchiev.status === STATUS_PROMO.ARCHIVE
-            ) {
+            const hasIdentifier = itemAchiev?.frontend_identifier;
+            if (hasIdentifier && itemAchiev.status === STATUS_PROMO.ARCHIVE) {
                 return false;
             }
 
-            const userStatusHasAchievId = !itemAchiev.frontend_identifier ?
-                containAchievIdInUserStatuses(userStatuses.getUserStatuses, itemAchiev.id) : true;
+            if (!hasIdentifier && containAchievIdInUserStatuses(userStatuses.getUserStatuses, itemAchiev.id)) {
+                return false;
+            }
 
             const betsInTour = tournamentsStore.getStatusTournamentById(itemAchiev.id)?.bet_cents;
-            const betsSumIsComplete = itemAchiev.frontend_identifier ?
+            const betsSumIsComplete = hasIdentifier ?
                 itemAchiev.status === STATUS_PROMO.ARCHIVE ||
-                betSunCompletedInTour(betsInTour, itemAchiev.money_budget_cents)
-                :
+                betSunCompletedInTour(betsInTour, itemAchiev.money_budget_cents) :
                 true;
 
             const isDoneCountDep = itemAchiev.id === ACHIEV_ID.DEP_COUNT ?
@@ -123,12 +120,12 @@ export const useAchievements = defineStore("achievements", () => {
                 true;
 
             const spinsInTour = tournamentsStore.getStatusTournamentById(itemAchiev.id)?.games_taken;
-            const isCompleteSpinCount = itemAchiev.frontend_identifier ?
+            const isCompleteSpinCount = hasIdentifier ?
                 itemAchiev.status === STATUS_PROMO.ARCHIVE ||
                 betSunCompletedInTour(spinsInTour, itemAchiev.money_budget_cents)
                 : true;
 
-            return !userStatusHasAchievId || !betsSumIsComplete || !isDoneCountDep || !isCompleteSpinCount;
+            return !betsSumIsComplete || !isDoneCountDep || !isCompleteSpinCount;
         });
     });
 
