@@ -16,3 +16,6 @@ export enum GiftLevelTypes {
     Currency = "bonus",
     Freespins = "freespins",
 }
+
+
+export default {};
