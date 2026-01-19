@@ -1,4 +1,5 @@
 import type { Currencies } from "../../../models/enums/currencies";
+import { EnumLootboxState } from "../../../models/enums/lootboxes";
 
 enum LootboxUserGroups {
     _635 = 635,
@@ -36,7 +37,7 @@ export interface ILootbox {
     group_key: string;
     id: number;
     items: ILootboxItemConfig[];
-    stage: string;
+    stage: EnumLootboxState;
     strategy: string;
     title: string;
     valid_until: string;
