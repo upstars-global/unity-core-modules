@@ -5,15 +5,28 @@ export type UnityConfig = {
     currencyDefault: string;
 }
 
+
 declare module "pinia" {
+    export interface DefineStoreOptionsBase<S, Store> {
+        projectConfiguration?: boolean
+    }
+
     export interface PiniaCustomProperties {
-        $unityConfig: UnityConfig
+        $defaultProjectConfig: UnityConfig
     }
 }
 
-export const createUnityConfigPlugin = ({ ENABLE_CURRENCIES, currencyDefault }: UnityConfig) => {
-    return ({ store, pinia, ...args }: PiniaPluginContext) => {
-        pinia.state.$unityConfig = {
+
+export const createUnityConfigPlugin = ({
+    ENABLE_CURRENCIES,
+    currencyDefault,
+}: UnityConfig) => {
+    return ({ store, options }: PiniaPluginContext) => {
+        if (!options.projectConfiguration) {
+            return;
+        }
+
+        store.$defaultProjectConfig = {
             ENABLE_CURRENCIES,
             currencyDefault,
         };

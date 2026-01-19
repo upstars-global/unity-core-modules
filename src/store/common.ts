@@ -1,4 +1,4 @@
-import { defineStore, getActivePinia, storeToRefs } from "pinia";
+import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
 import { isValidCurrency } from "../helpers/currencyOfCountry";
@@ -10,6 +10,7 @@ import { Currencies } from "../models/enums/currencies";
 import type { MainWidgetItem } from "../models/mainWidget";
 import type { ICurrentIP } from "../services/api/DTO/current-ip";
 import type { ICountries, ICryptoExchangeRates, ICurrencies, IProjectInfo } from "../services/api/DTO/info";
+import { useConfigStore } from "./configStore";
 import { useMultilangStore } from "./multilang";
 
 export interface ICommonStoreDefaultOptions {
@@ -18,8 +19,7 @@ export interface ICommonStoreDefaultOptions {
 }
 
 export const useCommon = defineStore("common", () => {
-    const pinia = getActivePinia();
-
+    const { $defaultProjectConfig } = useConfigStore();
 
     const platform = ref<IPlatformState>();
     const currentIpInfo = ref<ICurrentIP>();
@@ -40,11 +40,12 @@ export const useCommon = defineStore("common", () => {
     }
 
     const defaultCurrency = computed(() => {
-        return pinia.state.$unityConfig.ENABLE_CURRENCIES;
+        console.log({ $defaultProjectConfig });
+        return $defaultProjectConfig.ENABLE_CURRENCIES;
     });
 
     const enableCurrencies = computed(() => {
-        return pinia.state.$unityConfig.currencyDefault;
+        return $defaultProjectConfig.currencyDefault;
     });
 
     const isMobile = computed<boolean | undefined>(() => {
