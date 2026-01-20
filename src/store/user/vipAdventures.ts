@@ -7,7 +7,6 @@ import { type Currencies } from "../../models/enums/currencies";
 import type { IUserStatus, UserGroup } from "../../models/user";
 import type { IVipAdventuresDayConfig } from "../../models/vipAdventures";
 import type { IPrizeConfigItem, IVipProgress } from "../../services/api/DTO/vipAdventuresDTO";
-import { loadVipAdventuresConfigFile, loadVipStatusProgress } from "../../services/api/requests/vipAdventures";
 import { useEnvironments } from "../../store/environments";
 import { useUserStatuses } from "./userStatuses";
 
@@ -97,9 +96,10 @@ export const useVipAdventures = defineStore("vipAdventures", () => {
     const superConfig = computed(() => {
         const calendarLength = calendarConfig.value.length;
         const lastCalendarDay = calendarConfig.value[calendarLength - 1];
+
         return {
             index: calendarConfig.value.length,
-            today: dayjs(lastCalendarDay.fullDate, formatDateVipAdv).isBefore(toDay.value),
+            today: dayjs(lastCalendarDay.fullDate, formatDateVipAdv).isBefore(toDay.value, "day"),
         };
     });
 
@@ -128,43 +128,14 @@ export const useVipAdventures = defineStore("vipAdventures", () => {
         return userStatuses.getUserGroups.find((userGroupItem) => USER_INCLUDES_ADVENTURES[userGroupItem]);
     });
 
-    async function loadVipProgress() {
-        const statusProgress = await loadVipStatusProgress();
-
-        userVipStatusProgress.value = statusProgress;
-        return statusProgress;
-    }
-
-    async function loadVipAdventuresConfig(): Promise<void> {
-        if (vipAdventuresConfigFile.value) {
-            return;
-        }
-
-        const config = await loadVipAdventuresConfigFile();
-
-        if (config) {
-            vipAdventuresConfigFile.value = userGroupForAdventure.value ?
-                config.prizes[userGroupForAdventure.value] :
-                Object.values(config.prizes)[0];
-
-
-            if (config.variables) {
-                vipAdventuresVariables.value = userGroupForAdventure.value ?
-                    config.variables[userGroupForAdventure.value] :
-                    Object.values(config.variables)[0];
-            }
-        }
-    }
-
     return {
-        loadVipAdventuresConfig,
-        loadVipProgress,
         vipAdventuresConfigFile,
         vipAdventuresVariables,
 
         vipAdventuresDays,
         superDay,
         userVipStatusProgress,
+        userGroupForAdventure,
 
         calendarConfig,
         superConfig,
