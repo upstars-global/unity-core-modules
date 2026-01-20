@@ -1,18 +1,19 @@
-import { WELCOME_PACK_STAG_ID } from "@theme/configs/stagConsts";
 import { storeToRefs } from "pinia";
 import { computed, watchEffect } from "vue";
 
 import { wait } from "../helpers/functionsHelper";
+import { useConfigStore } from "../store/configStore";
 import { useUserInfo } from "../store/user/userInfo";
 import { useUserStatuses } from "../store/user/userStatuses";
 import { StagController } from "./StagController";
 
-type StagIdWelcomePack = keyof typeof WELCOME_PACK_STAG_ID;
+type StagIdWelcomePack = Record<string, boolean>;
 
 export type IWaitingShowWelcomePack = Promise<StagIdWelcomePack | null>;
 
 export const useWelcomePack = () => {
     const { getIsLogged, getDataIsLoaded } = storeToRefs(useUserInfo());
+    const { $defaultProjectConfig: { WELCOME_PACK_STAG_ID } } = useConfigStore();
 
     const nameForWelcomePackByUserStatus = computed<StagIdWelcomePack | null>(() => {
         const { getUserStatuses } = useUserStatuses();

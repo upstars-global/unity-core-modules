@@ -139,7 +139,7 @@ export const useGamesProviders = defineStore("gamesProviders", () => {
                 };
             });
 
-            data = filterProviders(data, disabledGamesProviders.value);
+            data = filterProviders(data);
 
             setAllProviders(data);
             initCollection(data);
