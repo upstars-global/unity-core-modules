@@ -1,3 +1,14 @@
+## [1.66.2](https://github.com/upstars-global/unity-core-modules/compare/v1.66.1...v1.66.2) (2026-01-20)
+
+### 🐛 Bug Fixes
+
+* **UN-2143:** promisify addScript method to reject error on script load for cashbox metrics feature  ([#306](https://github.com/upstars-global/unity-core-modules/issues/306))
+ ([805a407](https://github.com/upstars-global/unity-core-modules/commit/805a4071a2421c33984cc735ba0608c3850c8217))
+
+
+
+    fix: metrics
+
 ## [1.66.1](https://github.com/upstars-global/unity-core-modules/compare/v1.66.0...v1.66.1) (2026-01-19)
 
 ### 🐛 Bug Fixes
