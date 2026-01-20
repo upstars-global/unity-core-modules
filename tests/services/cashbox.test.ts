@@ -10,9 +10,9 @@ import type { IUserAccount } from "../../src/services/api/DTO/playerDTO";
 import * as playerRequests from "../../src/services/api/requests/player";
 import { useCashBoxService } from "../../src/services/cashbox";
 import * as paymentsApiModule from "../../src/services/paymentsAPI";
+import * as userBalanceModule from "../../src/services/userBalance";
 import { useCashboxStore } from "../../src/store/cashboxStore";
 import * as cashboxStoreModule from "../../src/store/cashboxStore";
-import * as userBalanceModule from "../../src/store/user/userBalance";
 
 
 const PAYMENT_HIDE = "test_hide_payment";
@@ -119,7 +119,6 @@ vi.mock("../../src/store/user/userInfo", () => ({
 vi.mock("../../src/store/user/userBalance", () => ({
     useUserBalance: vi.fn(() => ({
         userWallets: ref([ useWallet ]),
-        loadUserBalance: vi.fn(),
     })),
 }));
 vi.mock("../../src/store/common", () => ({
@@ -131,6 +130,11 @@ vi.mock("../../src/controllers/Logger", () => ({
     log: {
         error: vi.fn(),
     },
+}));
+vi.mock("../../src/services/userBalance", () => ({
+    useUserBalanceService:() => ({
+        loadUserBalance: vi.fn(),
+    }),
 }));
 vi.mock("../../src/services/paymentsAPI", () => ({
     usePaymentsAPI: () => ({
@@ -313,8 +317,9 @@ describe("useCashBoxService", () => {
             cancelWithdrawRequestByIDSpy.mockResolvedValue(undefined);
             const loadUserBalanceMock = vi.fn();
 
-            vi.spyOn(userBalanceModule, "useUserBalance").mockReturnValue({
+            vi.spyOn(userBalanceModule, "useUserBalanceService").mockReturnValue({
                 loadUserBalance: loadUserBalanceMock,
+                selectUserWallet: vi.fn(),
             });
 
             const service = useCashBoxService();
