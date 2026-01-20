@@ -1,4 +1,3 @@
-import { ID_GROUP_FOR_PAIRED_ID, ID_GROUP_FOR_UNPAIRED_ID } from "@config/groupAB";
 import { storeToRefs } from "pinia";
 
 import { log } from "../controllers/Logger";
@@ -6,6 +5,7 @@ import { isApiError } from "../helpers/apiErrors";
 import type { IPlayerFieldsInfo } from "../models/common";
 import type { IDataForUpdatePass, ITwoFactorAuthData } from "../models/user";
 import { useCommon } from "../store/common";
+import { useConfigStore } from "../store/configStore";
 import { useGiftsStore } from "../store/gifts";
 import { useUserDocuments } from "../store/user/userDocuments";
 import { userGamesHistory } from "../store/user/userGamesHistory";
@@ -46,6 +46,8 @@ import {
 import { loadDepositGiftsData } from "./gifts";
 
 export async function userSetToGroupForAbTest() {
+    const { $defaultProjectConfig } = useConfigStore();
+    const { ID_GROUP_FOR_PAIRED_ID, ID_GROUP_FOR_UNPAIRED_ID } = $defaultProjectConfig;
     const userInfo = useUserInfo();
     const userStatuses = useUserStatuses();
 

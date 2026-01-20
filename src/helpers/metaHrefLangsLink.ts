@@ -1,7 +1,4 @@
-import {
-    AVAILABLE_LOCALES,
-    MAIN_LOCALES_AND_DOMAINS,
-} from "@theme/configs/constsLocales";
+import { useConfigStore } from "../store/configStore";
 
 interface IAllDomainsHrefLangs {
     rel: string;
@@ -10,6 +7,8 @@ interface IAllDomainsHrefLangs {
 }
 
 export function metaHrefLangsLink(routePath: string): IAllDomainsHrefLangs[] {
+    const { $defaultProjectConfig } = useConfigStore();
+    const { AVAILABLE_LOCALES, MAIN_LOCALES_AND_DOMAINS } = $defaultProjectConfig;
     const allDomainsHrefLangs: IAllDomainsHrefLangs[] = [];
 
     Object.keys(MAIN_LOCALES_AND_DOMAINS).forEach((locale) => {

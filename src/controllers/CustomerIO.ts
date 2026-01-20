@@ -1,4 +1,4 @@
-import { ORGANIZATION_ID, PRODUCT_ID, YOUR_SITE_ID } from "@config/customerIO";
+import { useConfigStore } from "../store/configStore";
 
 declare global {
   interface Window {
@@ -8,6 +8,8 @@ declare global {
 
 /* eslint-disable*/
 function init() {
+    const { $defaultProjectConfig } = useConfigStore();
+    const { ORGANIZATION_ID, YOUR_SITE_ID } = $defaultProjectConfig;
     if (typeof window !== "undefined") {
         window._cio = window._cio || [];
         (function() {
@@ -41,6 +43,8 @@ function init() {
 }
 
 function cioIdentify({ id: idUser, email, created_at: createdProfile, ...data }) {
+    const { $defaultProjectConfig } = useConfigStore();
+    const { PRODUCT_ID } = $defaultProjectConfig;
     const created_at = new Date(createdProfile).getTime() / 1000;
 
     _cio.identify({
@@ -62,4 +66,3 @@ export function cioIdentifyUser(userInfo) {
 
     cioIdentify(userInfo);
 }
-

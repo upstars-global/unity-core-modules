@@ -1,7 +1,6 @@
-import i18nInit from "@i18n";
-
 import type { IBannerConfig } from "../models/banners";
 import type { IJackpotItem } from "../services/api/DTO/jackpot";
+import { useConfigStore } from "../store/configStore";
 import { useJackpots } from "../store/jackpots";
 import { useUserInfo } from "../store/user/userInfo";
 import { currencyView } from "./currencyHelper";
@@ -24,7 +23,8 @@ export function jackpotPrizePool(jackpotData: IJackpotItem, subUntilFn: (currenc
 }
 
 export function prepareJackpotsBanners(bannerConfig: IBannerConfig): IBannerConfig {
-    const i18n = i18nInit.instance || i18nInit.init();
+    const { $defaultProjectConfig } = useConfigStore();
+    const i18n = $defaultProjectConfig.getI18n();
     const { t } = i18n.global;
     const { jackpotsList } = useJackpots();
     const { getSubunitsToUnitsByCode: subUntilFn } = useUserInfo();

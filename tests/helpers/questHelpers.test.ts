@@ -1,7 +1,10 @@
-import getQuestConfig from "@config/quest";
+import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import * as questHelpers from "../../src/helpers/questHelpers";
+import { createUnityConfigPlugin } from "../../src/plugins/ConfigPlugin";
+import type { UnityConfig } from "../../types/configProjectTypes";
+import { baseUnityConfig } from "../mocks/unityConfig";
 
 const mockLevels = {
     1: { bets: { USD: 10, EUR: 8 } },
@@ -9,14 +12,20 @@ const mockLevels = {
     3: { bets: { USD: 30, EUR: 24 } },
 };
 
-vi.mock("@config/quest", () => ({
-    default: vi.fn(() => ({ mockLevels })),
-    DEFAULT_QUEST_SIZE: "default",
-}));
+const getQuestConfigMock = vi.fn(() => ({ mockLevels }));
 
 describe("questHelpers", () => {
     beforeEach(() => {
-        getQuestConfig.mockReset();
+        const config = {
+            ...baseUnityConfig,
+            getQuestConfig: getQuestConfigMock,
+        } satisfies UnityConfig;
+
+        const pinia = createPinia();
+        pinia.use(createUnityConfigPlugin(config));
+        setActivePinia(pinia);
+
+        getQuestConfigMock.mockReturnValue({ mockLevels });
     });
 
     describe("isQuest", () => {
@@ -69,7 +78,7 @@ describe("questHelpers", () => {
         });
 
         it("returns empty array if no level matches", () => {
-            getQuestConfig.mockImplementation(() => ({ mockLevels: {} }));
+            getQuestConfigMock.mockImplementation(() => ({ mockLevels: {} }));
             expect(questHelpers.getCurrentLevelData("any", "USD", 5)).toEqual([]);
         });
     });

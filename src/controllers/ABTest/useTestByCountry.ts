@@ -1,4 +1,3 @@
-import { COUNTRIES } from "@theme/configs/constsLocales";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
 
@@ -6,7 +5,7 @@ import { useUserInfo } from "../../store/user/userInfo";
 import { ABTestController } from "./ABTestController";
 
 const testEnableByCountry: Record<string, boolean> = {
-    [COUNTRIES.CANADA]: false,
+    CA: false,
 };
 
 export const useTestByCountry = () => {

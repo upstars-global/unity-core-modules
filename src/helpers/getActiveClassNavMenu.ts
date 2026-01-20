@@ -1,6 +1,6 @@
-import { routeNames } from "@router/routeNames";
 import { useRoute } from "vue-router";
 
+import { useConfigStore } from "../store/configStore";
 export interface IBadge {
     background: string;
     color: string;
@@ -20,6 +20,8 @@ export interface IItemMenu {
 }
 
 export const useGetActiveClass = () => {
+    const { $defaultProjectConfig } = useConfigStore();
+    const { routeNames } = $defaultProjectConfig;
     const $route = useRoute();
 
     // @ts-expect-error Parameter 'isActive' implicitly has an 'any' type.

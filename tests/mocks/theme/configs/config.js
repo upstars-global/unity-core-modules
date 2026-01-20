@@ -1,10 +1,10 @@
-import featureFlags from "@theme/configs/featureFlags";
-import pus18 from "@theme/images/footer/18plus.svg";
-import gamblingTherapypus from "@theme/images/footer/gambling-therapy.svg";
-import GDPR from "@theme/images/footer/GDPR.svg";
-import PSIDSS from "@theme/images/footer/PSIDSS.svg";
-import SSL from "@theme/images/footer/SSL.svg";
-import TLS from "@theme/images/footer/TLS.svg";
+const featureFlags = {};
+const pus18 = "18plus.svg";
+const gamblingTherapypus = "gambling-therapy.svg";
+const GDPR = "GDPR.svg";
+const PSIDSS = "PSIDSS.svg";
+const SSL = "SSL.svg";
+const TLS = "TLS.svg";
 
 export default {
     featureFlags,

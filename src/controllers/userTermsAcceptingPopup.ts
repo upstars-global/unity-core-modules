@@ -1,14 +1,12 @@
-const supportPopup = defineAsyncComponent(() => {
-    return import("@modules/Popups/SupportPopup/SupportPopup.vue");
-});
+import { computed } from "vue";
 
-import Modal from "@plugins/Modal";
-import { computed, defineAsyncComponent } from "vue";
-
+import { useConfigStore } from "../store/configStore";
 import { useMultilangStore } from "../store/multilang";
 import { useUserInfo } from "../store/user/userInfo";
 
 export function useUserTermsAcceptingPopup() {
+    const { $defaultProjectConfig } = useConfigStore();
+    const { modal, supportPopupComponent } = $defaultProjectConfig;
     const userInfoStore = useUserInfo();
     const multilangStore = useMultilangStore();
 
@@ -48,9 +46,9 @@ export function useUserTermsAcceptingPopup() {
     }
 
     function showAcceptTermsPopup() {
-        Modal.show({
+        modal.show({
             name: "modal-support",
-            component: supportPopup,
+            component: supportPopupComponent,
             mobileFriendly: true,
             blockCloseOverlay: true,
             fullScreenMobile: true,

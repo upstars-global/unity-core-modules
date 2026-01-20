@@ -1,11 +1,5 @@
-import {
-    STATUSES_GIFT_ISSUED,
-    TYPE_GIFT_BONUS,
-    TYPE_GIFT_DEPOSIT,
-    TYPE_GIFT_FS,
-    TYPE_GIFT_REGISTRATION } from "@src/config/gift";
-
 import { log } from "../controllers/Logger";
+import { useConfigStore } from "../store/configStore";
 import { useGiftsStore } from "../store/gifts";
 import type { IGift, IGiftDeposit, IGiftFreeSpins } from "./api/DTO/gifts";
 import {
@@ -47,13 +41,15 @@ function preparingGiftOther(giftsCollection: IGiftDeposit[], type: string) {
     });
 }
 
-function filterActiveGifts(gifts: IGift[], disabledGifts: string[]) {
+function filterActiveGifts(gifts: IGift[], disabledGifts: string[], statusGiftIssued: string) {
     return disabledGifts.length ?
-        gifts.filter((gift) => !(disabledGifts.includes(gift.group_key) && gift.stage === STATUSES_GIFT_ISSUED))
+        gifts.filter((gift) => !(disabledGifts.includes(gift.group_key) && gift.stage === statusGiftIssued))
         : gifts;
 }
 
 export async function loadGiftsData(): Promise<IGift[]> {
+    const { $defaultProjectConfig } = useConfigStore();
+    const { STATUSES_GIFT_ISSUED, TYPE_GIFT_BONUS } = $defaultProjectConfig;
     const giftsStore = useGiftsStore();
 
     if (giftsStore.isLoadingGiftData) {
@@ -65,7 +61,7 @@ export async function loadGiftsData(): Promise<IGift[]> {
     try {
         const data = await getPlayerBonusesReq();
         const prepareGiftsData = preparingGiftData<IGift>(data, TYPE_GIFT_BONUS);
-        const activeGifts = filterActiveGifts(prepareGiftsData, giftsStore.disabledBonuses);
+        const activeGifts = filterActiveGifts(prepareGiftsData, giftsStore.disabledBonuses, STATUSES_GIFT_ISSUED);
 
         giftsStore.setGifts(activeGifts);
 
@@ -109,6 +105,8 @@ export async function loadAdditionalDepositGifts(): Promise<void> {
 
 export async function loadDepositGiftsData(): Promise<void> {
     try {
+        const { $defaultProjectConfig } = useConfigStore();
+        const { TYPE_GIFT_DEPOSIT } = $defaultProjectConfig;
         const giftsStore = useGiftsStore();
         const data = await getDepositBonusesReq();
         const prepareGiftsData = preparingGiftOther(data, TYPE_GIFT_DEPOSIT);
@@ -122,6 +120,8 @@ export async function loadDepositGiftsData(): Promise<void> {
 
 export async function loadRegistrationGiftsData(): Promise<void> {
     try {
+        const { $defaultProjectConfig } = useConfigStore();
+        const { TYPE_GIFT_REGISTRATION } = $defaultProjectConfig;
         const giftsStore = useGiftsStore();
         const data = await getRegistrationBonusesReq();
         const prepareRegistrationGifts = preparingGiftOther(data, TYPE_GIFT_REGISTRATION);
@@ -135,6 +135,8 @@ export async function loadRegistrationGiftsData(): Promise<void> {
 
 export async function loadFSGiftsData(): Promise<void> {
     try {
+        const { $defaultProjectConfig } = useConfigStore();
+        const { TYPE_GIFT_FS } = $defaultProjectConfig;
         const giftsStore = useGiftsStore();
         const data = await getPlayerFreespinsReq();
         const prepareFSGiftsData = preparingGiftData<IGiftFreeSpins>(data, TYPE_GIFT_FS);
@@ -194,4 +196,3 @@ export async function loadDailyBonusConfig() {
         log.error("LOAD_DAILY_BONUS_CONFIG", err);
     }
 }
-

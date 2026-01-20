@@ -42,6 +42,18 @@ vi.mock("../../../src/controllers/Logger", () => ({
     },
 }));
 
+vi.mock("../../../src/store/configStore", () => ({
+    useConfigStore: () => ({
+        gamesPageLimit: ref(20),
+        $defaultProjectConfig: {
+            SPECIAL_GAME_PROVIDER_NAME: "special_provider",
+            CONFIG_DEFAULT_COLLECTIONS_MENU_SLUGS:[],
+            featureFlags:{
+                enableAllProviders: true },
+        },
+    }),
+}));
+
 describe("useGamesCommon", () => {
     beforeEach(() => {
         setActivePinia(createPinia());

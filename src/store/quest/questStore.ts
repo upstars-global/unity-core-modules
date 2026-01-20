@@ -1,4 +1,3 @@
-import getQuestConfig, { DEFAULT_QUEST_SIZE } from "@config/quest";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
@@ -7,6 +6,7 @@ import { findNextLevelData, getCurrentLevelData, questSizeById, questSlugById } 
 import { PromoType } from "../../models/enums/tournaments";
 import type { ICurrentUserQuestsStatus, IQuestData, IQuestItem, IUserStatusQuest } from "../../models/quest";
 import { type ITournament } from "../../services/api/DTO/tournamentsDTO";
+import { useConfigStore } from "../configStore";
 
 function promoFilterAndSettingsOneItem(item: IQuestData, type: PromoType) {
     const [ result ] = promoFilterAndSettings([ item ], type);
@@ -14,6 +14,8 @@ function promoFilterAndSettingsOneItem(item: IQuestData, type: PromoType) {
 }
 
 export const useQuestStore = defineStore("questStore", () => {
+    const { $defaultProjectConfig } = useConfigStore();
+    const { getQuestConfig, DEFAULT_QUEST_SIZE } = $defaultProjectConfig;
     const userStatusQuest = ref<IUserStatusQuest>({} as IUserStatusQuest);
     const questsList = ref<IQuestItem[]>([]);
     const currentUserQuestsStatuses = ref<ICurrentUserQuestsStatus[]>([]);

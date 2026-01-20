@@ -1,8 +1,7 @@
-import { COOKIE_BY_LOCALE } from "@theme/configs/constsLocales";
-
 import { log } from "../../controllers/Logger";
 import { isServer } from "../../helpers/ssrHelpers";
 import { BUS_EVENTS, EventBus } from "../../plugins/EventBus";
+import { useConfigStore } from "../../store/configStore";
 
 const SERVER_TIMEOUT = 8000;
 const CLIENT_TIMEOUT = 30000;
@@ -281,6 +280,8 @@ class HttpClient {
 }
 
 export function http({ headers, locale }: IHttpParams = {}): HttpClient {
+    const { $defaultProjectConfig } = useConfigStore();
+    const { COOKIE_BY_LOCALE } = $defaultProjectConfig;
     const clientHeaders: Record<string, string> = {
         "Accept": "application/json, text/plain, */*",
         "X-Requested-With": "XMLHttpRequest",

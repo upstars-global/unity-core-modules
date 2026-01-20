@@ -1,12 +1,12 @@
-import { REFERRER_COOKIE_NAME } from "@theme/configs/constsCookies";
-
 import { CookieController } from "../controllers/CookieController";
 import { isServer } from "../helpers/ssrHelpers";
+import { useConfigStore } from "../store/configStore";
 
 export const referrerHelper = (): string | undefined => {
     if (isServer) {
         return;
     }
+    const { $defaultProjectConfig } = useConfigStore();
 
-    return document.referrer || CookieController.get(REFERRER_COOKIE_NAME);
+    return document.referrer || CookieController.get($defaultProjectConfig.REFERRER_COOKIE_NAME);
 };

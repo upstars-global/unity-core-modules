@@ -1,6 +1,3 @@
-import { getGameImagePath } from "@helpers/gameImage";
-import { SlugCategoriesGames } from "@theme/configs/categoryesGames";
-
 import { log } from "../controllers/Logger";
 import type { IGame } from "../models/game";
 import { loadRandomGame } from "../services/api/requests/games";
@@ -84,6 +81,7 @@ export async function getRandomGame(category?: string): Promise<IGame | undefine
 
 export function processGame(game, gameKey): IGameItem {
     const { $defaultProjectConfig } = useConfigStore();
+    const { getGameImagePath, gameCategorySlugs } = $defaultProjectConfig;
     const gameCategoriesWithoutGeo: Record<string, number> = {};
     Object.entries(game.collections || {}).forEach(([ key, value ]) => {
         const categoryName = key.split(":")[0];
@@ -91,21 +89,21 @@ export function processGame(game, gameKey): IGameItem {
     });
 
     const badges = [] as IGameBadge[];
-    if (gameCategoriesWithoutGeo[SlugCategoriesGames.SLUG_CATEGORY_TOP] > -1) {
-        badges.push({ type: SlugCategoriesGames.SLUG_CATEGORY_TOP });
+    if (gameCategoriesWithoutGeo[gameCategorySlugs.top] > -1) {
+        badges.push({ type: gameCategorySlugs.top });
     }
-    if (gameCategoriesWithoutGeo[SlugCategoriesGames.SLUG_CATEGORY_NEW] > -1) {
-        badges.push({ type: SlugCategoriesGames.SLUG_CATEGORY_NEW });
+    if (gameCategoriesWithoutGeo[gameCategorySlugs.new] > -1) {
+        badges.push({ type: gameCategorySlugs.new });
     }
-    if (gameCategoriesWithoutGeo[SlugCategoriesGames.SLUG_CATEGORY_BONUS_WAGERING] > -1) {
-        badges.push({ type: SlugCategoriesGames.SLUG_CATEGORY_BONUS_WAGERING });
+    if (gameCategoriesWithoutGeo[gameCategorySlugs.bonusWagering] > -1) {
+        badges.push({ type: gameCategorySlugs.bonusWagering });
     }
     if ($defaultProjectConfig.featureFlags.enableMysticJackpots &&
-        gameCategoriesWithoutGeo[SlugCategoriesGames.SLUG_CATEGORY_MYSTIC_JACKPOTS] > -1) {
-        badges.push({ type: SlugCategoriesGames.SLUG_CATEGORY_MYSTIC_JACKPOTS });
+        gameCategoriesWithoutGeo[gameCategorySlugs.mysticJackpots] > -1) {
+        badges.push({ type: gameCategorySlugs.mysticJackpots });
     }
-    if (gameCategoriesWithoutGeo[SlugCategoriesGames.SLUG_CATEGORY_JACKPOT] > -1) {
-        badges.push({ type: SlugCategoriesGames.SLUG_CATEGORY_JACKPOT });
+    if (gameCategoriesWithoutGeo[gameCategorySlugs.jackpot] > -1) {
+        badges.push({ type: gameCategorySlugs.jackpot });
     }
 
     const [ , title ] = gameKey.split("/");
@@ -142,7 +140,9 @@ export function processGameForNewAPI(game: IGameItemFilter): IGameItem {
 }
 
 export function hasGameDemo(game: IGame): boolean {
-    return Boolean(game.currencies.FUN?.id) && !game.categories.includes(SlugCategoriesGames.SLUG_CATEGORY_LIVE);
+    const { $defaultProjectConfig } = useConfigStore();
+    const { gameCategorySlugs } = $defaultProjectConfig;
+    return Boolean(game.currencies.FUN?.id) && !game.categories.includes(gameCategorySlugs.live);
 }
 
 export function paramsUrlGamePage(game: IGame): IParamsUrlGame {

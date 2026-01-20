@@ -1,7 +1,7 @@
-import { getCentrifugeUrl } from "@config/centrifuge";
 import Centrifuge from "centrifuge/centrifuge";
 import { storeToRefs } from "pinia";
 
+import { useConfigStore } from "../store/configStore";
 import { useEnvironments } from "../store/environments";
 import { useUserInfo } from "../store/user/userInfo";
 
@@ -63,6 +63,8 @@ async function start() {
     if (typeof location === "undefined") {
         return;
     }
+    const { $defaultProjectConfig } = useConfigStore();
+    const { getCentrifugeUrl } = $defaultProjectConfig;
     const { getSettings } = storeToRefs(useUserInfo());
 
     const settings = getSettings.value;

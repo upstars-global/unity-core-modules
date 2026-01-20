@@ -1,4 +1,4 @@
-import getQuestConfig from "@config/quest";
+import { useConfigStore } from "../store/configStore";
 
 const SEPARATOR_QUEST_FRONT_IS = "--";
 const PLACE_SLUG_IN_FRONT_ID = 2;
@@ -17,6 +17,8 @@ export function questSizeById(frontendId = "") {
 }
 
 export function getCurrentLevelData(questSize, defaultCurrency, userBets) {
+    const { $defaultProjectConfig } = useConfigStore();
+    const { getQuestConfig } = $defaultProjectConfig;
     if (!questSize && !defaultCurrency && !userBets) {
         return [];
     }
@@ -34,6 +36,8 @@ export function getCurrentLevelData(questSize, defaultCurrency, userBets) {
 }
 
 export function findNextLevelData(questSize, currentLevelData, defaultCurrency, userBetsInTargetQuest) {
+    const { $defaultProjectConfig } = useConfigStore();
+    const { getQuestConfig } = $defaultProjectConfig;
     if (!questSize && !currentLevelData && !defaultCurrency && !userBetsInTargetQuest) {
         return [];
     }

@@ -1,7 +1,3 @@
-import {
-    LOOTBOX_TYPE_GIFTS,
-    STATUSES_LOST_GIFT,
-} from "@src/config/gift";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
@@ -9,10 +5,13 @@ import { currencyView } from "../helpers/currencyHelper";
 import { Currencies } from "../models/enums/currencies";
 import type { GiftAllItem, IGift, IGiftDeposit, IGiftFreeSpins, IGiftModifyConfig } from "../services/api/DTO/gifts";
 import { IDailyGiftConfig } from "../services/api/DTO/gifts";
+import { useConfigStore } from "./configStore";
 import { useUserInfo } from "./user/userInfo";
 import { useUserStatuses } from "./user/userStatuses";
 
 export const useGiftsStore = defineStore("giftsStore", () => {
+    const { $defaultProjectConfig } = useConfigStore();
+    const { LOOTBOX_TYPE_GIFTS, STATUSES_LOST_GIFT } = $defaultProjectConfig;
     const userStatuses = useUserStatuses();
     const userInfo = useUserInfo();
 

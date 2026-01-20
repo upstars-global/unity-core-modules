@@ -1,21 +1,24 @@
-import {
-    ALL_LEVELS,
-    ID_CASHBOX_ONBOARD_DONE,
-    ID_GROUP_FOR_MULTI_ACC,
-    TEST_GROUP_ID,
-} from "@config/user-statuses";
-import { VIP_CLUB_STATUSES } from "@config/vip-clubs";
-import { getUserIsDiamond, getUserVipGroup } from "@helpers/user";
-import type { ILevel } from "@types/levels";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
+import type { ILevel } from "../../models/levels";
 import type { IUserStatus, UserGroup } from "../../models/user";
 import { IVipManager } from "../../models/vipManagers";
+import { useConfigStore } from "../configStore";
 import { useLevelsStore } from "../levels/levelsStore";
 import { useUserInfo } from "./userInfo";
 
 export const useUserStatuses = defineStore("userStatuses", () => {
+    const { $defaultProjectConfig } = useConfigStore();
+    const {
+        ALL_LEVELS,
+        ID_CASHBOX_ONBOARD_DONE,
+        ID_GROUP_FOR_MULTI_ACC,
+        TEST_GROUP_ID,
+        VIP_CLUB_STATUSES,
+        getUserIsDiamond,
+        getUserVipGroup,
+    } = $defaultProjectConfig;
     const userStore = useUserInfo();
     const { getUserInfo } = storeToRefs(userStore);
     const userManager = ref<IVipManager | null>(null);

@@ -1,7 +1,3 @@
-import {
-    getTargetWallets,
-    srcPaymentImage,
-} from "@config/cashbox";
 import { storeToRefs } from "pinia";
 
 import { log } from "../controllers/Logger";
@@ -11,6 +7,7 @@ import { IPayloadMethodFields } from "../models/PaymentsLib";
 import { EventBus } from "../plugins/EventBus";
 import { useCashboxStore } from "../store/cashboxStore";
 import { useCommon } from "../store/common";
+import { useConfigStore } from "../store/configStore";
 import { useUserBalance } from "../store/user/userBalance";
 import { useUserInfo } from "../store/user/userInfo";
 import { ActionsTransaction } from "./api/DTO/cashbox";
@@ -19,6 +16,8 @@ import { cancelWithdrawRequestByID, loadPlayerPayments } from "./api/requests/pl
 import { usePaymentsAPI } from "./paymentsAPI";
 
 export function useCashBoxService() {
+    const { $defaultProjectConfig } = useConfigStore();
+    const { getTargetWallets, srcPaymentImage } = $defaultProjectConfig;
     const {
         coinspaidAddresses,
         paymentHistory,

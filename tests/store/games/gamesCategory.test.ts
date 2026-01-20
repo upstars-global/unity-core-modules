@@ -1,6 +1,6 @@
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 
 import { log } from "../../../src/controllers/Logger";
 import { processGameForNewAPI } from "../../../src/helpers/gameHelpers";
@@ -35,7 +35,7 @@ vi.mock("../../../src/store/user/userInfo", () => ({
 }));
 
 vi.mock("../../../src/store/configStore", () => ({
-    useConfigStore: () => ({
+    useConfigStore: () => reactive({
         gamesPageLimit: ref(20),
     }),
 }));

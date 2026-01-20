@@ -1,11 +1,13 @@
-import { SlugCategoriesGames } from "@theme/configs/categoryesGames";
-
+import type { ResolvedCategorySlug } from "../../types/configProjectTypes";
+import { useConfigStore } from "../store/configStore";
 import { useGamesCommon } from "../store/games/gamesStore";
 import { useJackpots } from "../store/jackpots";
 import { loadEnabledGamesConfigReq } from "./api/requests/configs";
 import { loadCategoriesFileConfigRequest } from "./api/requests/games";
 
-export function getMenuCategoriesBySlug(slug: string): SlugCategoriesGames[] {
+export function getMenuCategoriesBySlug(slug: string): ResolvedCategorySlug[] {
+    const { $defaultProjectConfig } = useConfigStore();
+    const { gameCategorySlugs } = $defaultProjectConfig;
     const jackpotsStore = useJackpots();
     const gamesStore = useGamesCommon();
 
@@ -13,7 +15,7 @@ export function getMenuCategoriesBySlug(slug: string): SlugCategoriesGames[] {
         gamesStore.menuGameCategories[slug] ||
     gamesStore.defaultMenuGameCategories[slug]
     ).filter((menuSlug: string) =>
-        (menuSlug === SlugCategoriesGames.SLUG_CATEGORY_MYSTIC_JACKPOTS ? jackpotsStore.isTurnOnJPMystic : true));
+        (menuSlug === gameCategorySlugs.mysticJackpots ? jackpotsStore.isTurnOnJPMystic : true));
 }
 
 export async function loadCategoriesFileConfig() {

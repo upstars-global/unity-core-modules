@@ -39,13 +39,8 @@ export const useCommon = defineStore("common", () => {
         });
     }
 
-    const defaultCurrency = computed(() => {
-        return $defaultProjectConfig.ENABLE_CURRENCIES;
-    });
-
-    const enableCurrencies = computed(() => {
-        return $defaultProjectConfig.currencyDefault;
-    });
+    const defaultCurrency = ref($defaultProjectConfig.currencyDefault);
+    const enableCurrencies = ref([ ...$defaultProjectConfig.ENABLE_CURRENCIES ]);
 
     const isMobile = computed<boolean | undefined>(() => {
         return platform.value && platform.value.isMobile;

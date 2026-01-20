@@ -1,6 +1,3 @@
-import config from "@theme/configs/config";
-import { ENABLE_CURRENCIES } from "@theme/configs/currencies";
-import { REFERRER } from "@theme/configs/stagConsts";
 import { createPinia, setActivePinia } from "pinia";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -9,35 +6,19 @@ import { EnumContextFields, EnumFormFields, type IPlayerFieldsInfo } from "../..
 import type { IStagByReferName } from "../../src/models/configs";
 import { Currencies } from "../../src/models/enums/currencies";
 import { type MainWidgetItem, Widgets } from "../../src/models/mainWidget";
+import { createUnityConfigPlugin } from "../../src/plugins/ConfigPlugin";
 import type { ICurrentIP } from "../../src/services/api/DTO/current-ip";
 import type { ICountries, ICryptoExchangeRates, ICurrencies, IProjectInfo } from "../../src/services/api/DTO/info";
 import { UserAccountLicense } from "../../src/services/api/DTO/playerDTO";
 import { useCommon } from "../../src/store/common";
 import { useMultilangStore } from "../../src/store/multilang";
+import { baseUnityConfig } from "../mocks/unityConfig";
 
-vi.mock("@theme/configs/config", () => ({
-    default: {
-        currencyDefault: "EUR",
-    },
-}));
-
-vi.mock("@theme/configs/currencies", () => ({
-    ENABLE_CURRENCIES: [
-        "GBP", "AUD", "CAD",
-        "NZD", "EUR", "USD",
-        "JPY", "NOK", "BRL",
-        "BTC", "ETH", "BCH",
-        "LTC", "DOG", "USDT",
-    ],
-}));
-
-vi.mock("@theme/configs/stagConsts", () => ({
-    REFERRER: {
-        GOOGLE: "google",
-        BING: "bing",
-        YAHOO: "yahoo",
-    },
-}));
+const referrers = {
+    GOOGLE: "google",
+    BING: "bing",
+    YAHOO: "yahoo",
+};
 
 const mockGetUserAgentPlatform = vi.fn<() => Promise<{ isMobile: boolean; transitionName: string }>>();
 
@@ -51,7 +32,9 @@ const flushPromises = () => new Promise((resolve) => setTimeout(resolve, 0));
 
 describe("useCommon store", () => {
     beforeEach(() => {
-        setActivePinia(createPinia());
+        const pinia = createPinia();
+        pinia.use(createUnityConfigPlugin(baseUnityConfig));
+        setActivePinia(pinia);
         vi.clearAllMocks();
         mockGetUserAgentPlatform.mockResolvedValue({
             isMobile: true,
@@ -67,12 +50,12 @@ describe("useCommon store", () => {
     it("initializes with config defaults", () => {
         const store = useCommon();
 
-        expect(store.enableCurrencies).toEqual(ENABLE_CURRENCIES);
+        expect(store.enableCurrencies).toEqual(baseUnityConfig.ENABLE_CURRENCIES);
         expect(store.getAllCurrencies).toEqual([]);
         expect(store.countries).toEqual([]);
         expect(store.widgetsConfig).toEqual([]);
         expect(store.currencyConfig).toBeNull();
-        expect(store.getDefaultCurrency).toBe(config.currencyDefault);
+        expect(store.getDefaultCurrency).toBe(baseUnityConfig.currencyDefault);
     });
 
     it("setDefaultOptions overrides defaults without mutating source data", () => {
@@ -115,7 +98,7 @@ describe("useCommon store", () => {
             default_currency: Currencies.BTC,
         });
 
-        expect(store.getDefaultCurrency).toBe(config.currencyDefault);
+        expect(store.getDefaultCurrency).toBe(baseUnityConfig.currencyDefault);
     });
 
     it("reorders countries so that user geo goes first", () => {
@@ -315,17 +298,17 @@ describe("useCommon store", () => {
         };
         const stagsByReferName: IStagByReferName = {
             pages: {
-                [REFERRER.GOOGLE]: {
+                [referrers.GOOGLE]: {
                     "/": "home",
                 },
-                [REFERRER.BING]: {},
-                [REFERRER.YAHOO]: {},
+                [referrers.BING]: {},
+                [referrers.YAHOO]: {},
             },
             countries: {
                 CA: {
-                    [REFERRER.GOOGLE]: "111",
-                    [REFERRER.BING]: "222",
-                    [REFERRER.YAHOO]: "333",
+                    [referrers.GOOGLE]: "111",
+                    [referrers.BING]: "222",
+                    [referrers.YAHOO]: "333",
                 },
             },
         };

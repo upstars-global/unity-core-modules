@@ -1,7 +1,3 @@
-import {
-    GROUP_HIDE_SOFORT,
-    PAYMENT_HIDE_SOFORT,
-} from "@config/cashbox";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
@@ -11,6 +7,7 @@ import type { UserGroup } from "../models/user";
 import type { IPlayerPayment } from "../services/api/DTO/cashbox";
 import { type ICashboxPresets } from "../services/api/DTO/cashbox";
 import { TypeSystemPayment } from "../services/api/DTO/cashbox";
+import { useConfigStore } from "./configStore";
 import { useUserStatuses } from "./user/userStatuses";
 
 function filterPaymentsByGroup(
@@ -29,6 +26,7 @@ function filterPaymentsByGroup(
 }
 
 export const useCashboxStore = defineStore("cashboxStore", () => {
+    const { $defaultProjectConfig } = useConfigStore();
     const userStatuses = useUserStatuses();
 
     const paymentHistory = ref<IPlayerPayment[]>([]);
@@ -70,8 +68,8 @@ export const useCashboxStore = defineStore("cashboxStore", () => {
         return filterPaymentsByGroup(
             paymentSystems.value,
             userStatuses.getUserGroups,
-            PAYMENT_HIDE_SOFORT,
-            GROUP_HIDE_SOFORT,
+            $defaultProjectConfig.PAYMENT_HIDE_SOFORT,
+            $defaultProjectConfig.GROUP_HIDE_SOFORT,
         );
     });
 
@@ -79,8 +77,8 @@ export const useCashboxStore = defineStore("cashboxStore", () => {
         return filterPaymentsByGroup(
             payoutSystems.value,
             userStatuses.getUserGroups,
-            PAYMENT_HIDE_SOFORT,
-            GROUP_HIDE_SOFORT,
+            $defaultProjectConfig.PAYMENT_HIDE_SOFORT,
+            $defaultProjectConfig.GROUP_HIDE_SOFORT,
         );
     });
 

@@ -1,17 +1,10 @@
-import {
-    AFFB_ID_COOKIE,
-    AFFB_ID_DEFAULT,
-    AFFB_ID_NEW_PARTNERS,
-    DEFAULT_STAGS_COUNTRY_REFER,
-    REFERRER,
-    STAG_PARTNER_COOKIE,
-} from "@theme/configs/stagConsts";
 import { storeToRefs } from "pinia";
 
 import { referrerHelper } from "../helpers/referrerHelper";
 import { isServer } from "../helpers/ssrHelpers";
 import type { IStagByReferName } from "../models/configs";
 import { loadStagByReferName } from "../services/common";
+import { useConfigStore } from "../store/configStore";
 import { useMultilangStore } from "../store/multilang";
 import { CookieController } from "./CookieController";
 import { log } from "./Logger";
@@ -32,10 +25,14 @@ const expires = 30 * 86400; // 30 days
 
 
 function getReferSearchEnginesMatch(referrer: string): string {
-    return Object.values(REFERRER).find((refItem) => referrer.includes(refItem as string)) || "";
+    const { $defaultProjectConfig } = useConfigStore();
+    const { REFERRER_SOURCES } = $defaultProjectConfig.stagConsts;
+    return REFERRER_SOURCES.find((refItem) => referrer.includes(refItem as string)) || "";
 }
 
 function getStagByReferrerName({ referrer, stagsByReferName, path, country } = {} as IGetStagParams): string {
+    const { $defaultProjectConfig } = useConfigStore();
+    const { DEFAULT_STAGS_COUNTRY_REFER } = $defaultProjectConfig.stagConsts;
     if (referrer) {
         const searchEngine = getReferSearchEnginesMatch(referrer as string);
 
@@ -59,6 +56,8 @@ function getStagByReferrerName({ referrer, stagsByReferName, path, country } = {
 }
 
 function setStag(stag: string): void {
+    const { $defaultProjectConfig } = useConfigStore();
+    const { STAG_PARTNER_COOKIE } = $defaultProjectConfig.stagConsts;
     try {
         CookieController.set(STAG_PARTNER_COOKIE, stag, { expires, path: "/" });
     } catch (error) {
@@ -67,6 +66,8 @@ function setStag(stag: string): void {
 }
 
 function getStag(): string | undefined {
+    const { $defaultProjectConfig } = useConfigStore();
+    const { STAG_PARTNER_COOKIE } = $defaultProjectConfig.stagConsts;
     return CookieController.get(STAG_PARTNER_COOKIE);
 }
 
@@ -117,6 +118,8 @@ async function initStag(queryParams: URLSearchParams, path: string, referrer: st
 
 
 function setAffbId(affb_id: string): void {
+    const { $defaultProjectConfig } = useConfigStore();
+    const { AFFB_ID_COOKIE } = $defaultProjectConfig.stagConsts;
     try {
         CookieController.set(AFFB_ID_COOKIE, affb_id, { expires, path: "/" });
     } catch (error) {
@@ -125,10 +128,14 @@ function setAffbId(affb_id: string): void {
 }
 
 function getAffbId(): string | undefined {
+    const { $defaultProjectConfig } = useConfigStore();
+    const { AFFB_ID_COOKIE } = $defaultProjectConfig.stagConsts;
     return CookieController.get(AFFB_ID_COOKIE);
 }
 
 function initAffbId(queryParams: URLSearchParams, referrer: string): void {
+    const { $defaultProjectConfig } = useConfigStore();
+    const { AFFB_ID_COOKIE, AFFB_ID_NEW_PARTNERS, AFFB_ID_DEFAULT } = $defaultProjectConfig.stagConsts;
     if (getAffbId()) {
         return;
     }
@@ -152,6 +159,8 @@ function init(): void {
         return;
     }
 
+    const { $defaultProjectConfig } = useConfigStore();
+    const { AFFB_ID_COOKIE } = $defaultProjectConfig.stagConsts;
     const referrer = referrerHelper() || "";
     const url = new URL(window.location.href);
     const path = url.pathname;

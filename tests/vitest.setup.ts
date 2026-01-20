@@ -1,4 +1,23 @@
-import { vi } from "vitest";
+import { beforeEach, vi } from "vitest";
+
+vi.mock("pinia", async () => {
+    const actual = await vi.importActual<typeof import("pinia")>("pinia");
+    const { createUnityConfigPlugin } = await import("../src/plugins/ConfigPlugin");
+    const { baseUnityConfig } = await import("./mocks/unityConfig");
+    return {
+        ...actual,
+        createPinia: () => {
+            const pinia = actual.createPinia();
+            pinia.use(createUnityConfigPlugin(baseUnityConfig));
+            return pinia;
+        },
+    };
+});
+
+beforeEach(async () => {
+    const { createPinia, setActivePinia } = await import("pinia");
+    setActivePinia(createPinia());
+});
 
 
 vi.mock("@helpers/lootBoxes", () => ({

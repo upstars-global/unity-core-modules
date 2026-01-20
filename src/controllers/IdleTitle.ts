@@ -1,4 +1,4 @@
-import config from "@theme/configs/config";
+import { useConfigStore } from "../store/configStore";
 
 class IdleTitleClass {
     private savedTitle: string | null = null;
@@ -57,27 +57,42 @@ class IdleTitleClass {
     }
 }
 
-const titleRepeater = new IdleTitleClass(
-    [],
-    config.idlePageTitle.changeDelay,
-    config.idlePageTitle.idleStartDelay,
-);
+let titleRepeater: IdleTitleClass | null = null;
+
+function getTitleRepeater(): IdleTitleClass {
+    if (!titleRepeater) {
+        const { $defaultProjectConfig } = useConfigStore();
+        const { idlePageTitle } = $defaultProjectConfig;
+        titleRepeater = new IdleTitleClass(
+            [],
+            idlePageTitle.changeDelay,
+            idlePageTitle.idleStartDelay,
+        );
+    }
+
+    return titleRepeater;
+}
 
 function visibilityChangeHandler() {
+    const repeater = getTitleRepeater();
     switch (document.visibilityState) {
         case "hidden":
-            titleRepeater.start();
+            repeater.start();
             break;
         case "visible":
         default:
-            titleRepeater.stop();
+            repeater.stop();
             break;
     }
 }
 
 function init(titles: string[]) {
-    if (config.idlePageTitle.enabled) {
-        titleRepeater.titles = titles;
+    const { $defaultProjectConfig } = useConfigStore();
+    const { idlePageTitle } = $defaultProjectConfig;
+
+    if (idlePageTitle.enabled) {
+        const repeater = getTitleRepeater();
+        repeater.titles = titles;
         document.addEventListener("visibilitychange", visibilityChangeHandler, false);
     }
 }
