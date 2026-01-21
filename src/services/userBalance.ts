@@ -3,9 +3,8 @@ import { storeToRefs } from "pinia";
 import { log } from "../controllers/Logger";
 import { Currencies } from "../models/enums/currencies";
 import { loadUserBalanceReq, selectUserWalletReq } from "../services/api/requests/player";
+import { loadUserLimits, loadUserProfile } from "../services/user";
 import { useUserBalance } from "../store/user/userBalance";
-import { useUserInfo } from "../store/user/userInfo";
-import { useUserLimits } from "../store/user/userLimits";
 
 export function useUserBalanceService() {
     const { balance } = storeToRefs(useUserBalance());
@@ -20,9 +19,6 @@ export function useUserBalanceService() {
 
     async function selectUserWallet(currency: Currencies) {
         try {
-            const { loadUserProfile } = useUserInfo();
-            const { loadUserLimits } = useUserLimits();
-
             await selectUserWalletReq(currency);
 
             return Promise.allSettled([
