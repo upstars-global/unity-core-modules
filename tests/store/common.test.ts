@@ -6,7 +6,6 @@ import { EnumContextFields, EnumFormFields, type IPlayerFieldsInfo } from "../..
 import type { IStagByReferName } from "../../src/models/configs";
 import { Currencies } from "../../src/models/enums/currencies";
 import { type MainWidgetItem, Widgets } from "../../src/models/mainWidget";
-import { createUnityConfigPlugin } from "../../src/plugins/ConfigPlugin";
 import type { ICurrentIP } from "../../src/services/api/DTO/current-ip";
 import type { ICountries, ICryptoExchangeRates, ICurrencies, IProjectInfo } from "../../src/services/api/DTO/info";
 import { UserAccountLicense } from "../../src/services/api/DTO/playerDTO";
@@ -25,6 +24,17 @@ const mockGetUserAgentPlatform = vi.fn<() => Promise<{ isMobile: boolean; transi
 vi.mock("../../src/helpers/userAgentPlatform", () => ({
     getUserAgentPlatform: () => mockGetUserAgentPlatform(),
 }));
+vi.mock("../../src/store/configStore", async () => {
+    const { createConfigStoreMock } = await import("../test-utils/configStoreMock");
+    // const { baseUnityConfig } = await import("../mocks/unityConfig");
+    return createConfigStoreMock();
+    // return createConfigStoreMock({
+    //     $defaultProjectConfig: {
+    //         ENABLE_CURRENCIES: baseUnityConfig.ENABLE_CURRENCIES,
+    //         currencyDefault: baseUnityConfig.currencyDefault,
+    //     },
+    // });
+});
 
 const globalWithWindow = globalThis as typeof globalThis & { window?: unknown };
 const originalWindow = globalWithWindow.window;
@@ -32,9 +42,7 @@ const flushPromises = () => new Promise((resolve) => setTimeout(resolve, 0));
 
 describe("useCommon store", () => {
     beforeEach(() => {
-        const pinia = createPinia();
-        pinia.use(createUnityConfigPlugin(baseUnityConfig));
-        setActivePinia(pinia);
+        setActivePinia(createPinia());
         vi.clearAllMocks();
         mockGetUserAgentPlatform.mockResolvedValue({
             isMobile: true,

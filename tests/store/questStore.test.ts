@@ -1,43 +1,58 @@
-
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useQuestStore } from "../../src/store/quest/questStore";
 
-const mockLevels = {
-    1: {
-        position: {
-            left: 132,
-            top: 151,
+const { mockLevels, getQuestConfigMock } = vi.hoisted(() => {
+    const mockLevelsData = {
+        1: {
+            position: {
+                left: 132,
+                top: 151,
+            },
+            bets: {
+                USD: 0,
+            },
         },
-        bets: {
-            USD: 0,
+        2: {
+            position: {
+                left: 50,
+                top: 218,
+            },
+            bets: {
+                USD: 150,
+            },
         },
-    },
-    2: {
-        position: {
-            left: 50,
-            top: 218,
+        3: {
+            position: {
+                left: 83,
+                top: 311,
+            },
+            bets: {
+                USD: 500,
+            },
         },
-        bets: {
-            USD: 150,
-        },
-    },
-    3: {
-        position: {
-            left: 83,
-            top: 311,
-        },
-        bets: {
-            USD: 500,
-        },
-    },
-};
+    };
+    return {
+        mockLevels: mockLevelsData,
+        getQuestConfigMock: vi.fn(() => ({ mockLevels: mockLevelsData })),
+    };
+});
 
 vi.mock("@config/quest", () => ({
     default: vi.fn(() => ({ mockLevels })),
     DEFAULT_QUEST_SIZE: "default",
 }));
+
+vi.mock("../../src/store/configStore", async () => {
+    const { createConfigStoreMock } = await import("../test-utils/configStoreMock");
+    return createConfigStoreMock({
+        $defaultProjectConfig: {
+            DEFAULT_QUEST_SIZE: "default",
+            getQuestConfig: getQuestConfigMock,
+        },
+    });
+});
 
 vi.mock("../../src/helpers/promoHelpers", () => ({
     promoFilterAndSettings: vi.fn((items) => items),

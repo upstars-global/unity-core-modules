@@ -19,6 +19,11 @@ beforeEach(async () => {
     setActivePinia(createPinia());
 });
 
+vi.mock("../src/store/configStore", async () => {
+    const { createConfigStoreMock } = await import("./test-utils/configStoreMock");
+    return createConfigStoreMock();
+});
+
 
 vi.mock("@helpers/lootBoxes", () => ({
 

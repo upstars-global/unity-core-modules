@@ -1,6 +1,6 @@
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { reactive, ref } from "vue";
+import { ref } from "vue";
 
 import { IGameItemFilter, processGameForNewAPI } from "../../../src/helpers/gameHelpers";
 import type { ICollectionItem, IGamesProvider } from "../../../src/models/game";
@@ -22,17 +22,10 @@ vi.mock("../../../src/store/root", () => ({
         isMobile: ref(false),
     }),
 }));
-vi.mock("../../../src/store/configStore", () => ({
-    useConfigStore: () => reactive({
-        gamesPageLimit: ref(20),
-        $defaultProjectConfig: {
-            SPECIAL_GAME_PROVIDER_NAME: "special_provider",
-            featureFlags: {
-                enableAllProviders: true,
-            },
-        },
-    }),
-}));
+vi.mock("../../../src/store/configStore", async () => {
+    const { createConfigStoreMock } = await import("../../test-utils/configStoreMock");
+    return createConfigStoreMock();
+});
 const mockGamesCategories = ref<IGamesProvider[]>([]);
 const mockEnabledGamesConfig = ref<IEnabledGames>({});
 vi.mock("../../../src/store/games/gamesStore", () => ({

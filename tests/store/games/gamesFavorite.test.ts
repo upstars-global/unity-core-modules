@@ -23,6 +23,10 @@ vi.mock("../../../src/services/api/requests/games", () => ({
     fetchAddFavoriteGamesCount: vi.fn(),
     fetchDeleteGameFromFavorites: vi.fn(),
 }));
+vi.mock("../../../src/store/configStore", async () => {
+    const { createConfigStoreMock } = await import("../../test-utils/configStoreMock");
+    return createConfigStoreMock();
+});
 
 
 const mockFetchFavorite = vi.mocked(fetchFavoriteGames);

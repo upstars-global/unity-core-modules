@@ -3,42 +3,53 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 
 import type { IUserStatus } from "../../src/models/user";
-import { createUnityConfigPlugin } from "../../src/plugins/ConfigPlugin";
 import { useLevelsStore } from "../../src/store/levels/levelsStore";
 import { useUserInfo } from "../../src/store/user/userInfo";
 import { useUserStatuses } from "../../src/store/user/userStatuses";
-import type { UnityConfig } from "../../types/configProjectTypes";
-import { baseUnityConfig } from "../mocks/unityConfig";
 
-const ALL_LEVELS = [ 10, 20, 30 ];
-const ID_CASHBOX_ONBOARD_DONE = 99;
-const ID_GROUP_FOR_MULTI_ACC = 77;
-const TEST_GROUP_ID = 11;
-const VIP_CLUB_IDS = {
-    GOLD: "vip_gold",
-    DIAMOND: "vip_diamond",
-};
+const {
+    ALL_LEVELS,
+    ID_CASHBOX_ONBOARD_DONE,
+    ID_GROUP_FOR_MULTI_ACC,
+    TEST_GROUP_ID,
+    VIP_CLUB_IDS,
+    getUserVipGroupMock,
+    getUserIsDiamondMock,
+} = vi.hoisted(() => ({
+    ALL_LEVELS: [ 10, 20, 30 ],
+    ID_CASHBOX_ONBOARD_DONE: 99,
+    ID_GROUP_FOR_MULTI_ACC: 77,
+    TEST_GROUP_ID: 11,
+    VIP_CLUB_IDS: {
+        GOLD: "vip_gold",
+        DIAMOND: "vip_diamond",
+    },
+    getUserVipGroupMock: vi.fn(),
+    getUserIsDiamondMock: vi.fn(),
+}));
 
 const mockUserInfo = ref<{ statuses: IUserStatus[] }>({
     statuses: [],
 });
 const mockGetLevelsById = vi.fn();
-const getUserVipGroupMock = vi.fn();
-const getUserIsDiamondMock = vi.fn();
 
-const config = {
-    ...baseUnityConfig,
-    ALL_LEVELS,
-    ID_CASHBOX_ONBOARD_DONE,
-    ID_GROUP_FOR_MULTI_ACC,
-    TEST_GROUP_ID,
-    VIP_CLUB_STATUSES: {
-        [VIP_CLUB_IDS.GOLD]: "Gold",
-        [VIP_CLUB_IDS.DIAMOND]: "Diamond",
-    },
-    getUserVipGroup: getUserVipGroupMock,
-    getUserIsDiamond: getUserIsDiamondMock,
-} satisfies UnityConfig;
+vi.mock("../../src/store/configStore", async () => {
+    const { createConfigStoreMock } = await import("../test-utils/configStoreMock");
+    return createConfigStoreMock({
+        $defaultProjectConfig: {
+            ALL_LEVELS,
+            ID_CASHBOX_ONBOARD_DONE,
+            ID_GROUP_FOR_MULTI_ACC,
+            TEST_GROUP_ID,
+            VIP_CLUB_STATUSES: {
+                [VIP_CLUB_IDS.GOLD]: "Gold",
+                [VIP_CLUB_IDS.DIAMOND]: "Diamond",
+            },
+            getUserVipGroup: getUserVipGroupMock,
+            getUserIsDiamond: getUserIsDiamondMock,
+        },
+    });
+});
 
 vi.mock("../../src/store/levels/levelsStore", () => ({
     useLevelsStore: vi.fn(),
@@ -50,9 +61,7 @@ vi.mock("../../src/store/user/userInfo", () => ({
 
 describe("useUserStatuses", () => {
     beforeEach(() => {
-        const pinia = createPinia();
-        pinia.use(createUnityConfigPlugin(config));
-        setActivePinia(pinia);
+        setActivePinia(createPinia());
         vi.clearAllMocks();
         mockUserInfo.value = { statuses: [] };
         mockGetLevelsById.mockReset();

@@ -1,10 +1,10 @@
+import { formatDateVipAdv, VIP_ADV_GROUP } from "@config/vip-adventures";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import weekday from "dayjs/plugin/weekday";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { createUnityConfigPlugin } from "../../src/plugins/ConfigPlugin";
 import type { IPrizeConfigItem } from "../../src/services/api/DTO/vipAdventuresDTO";
 import {
     parseAdventuresTitleDayConfig,
