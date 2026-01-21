@@ -52,4 +52,10 @@ export interface ICashboxPresets {
     global: Record<Currencies, string[]>
 }
 
+export interface IManageWithdrawConfig {
+    disable: {
+        unverifiedUsersGeo: string[]
+    }
+}
+
 export default {};

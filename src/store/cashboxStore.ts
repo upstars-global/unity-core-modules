@@ -5,7 +5,7 @@ import type { ICoinspaidAddresses } from "../models/cashbox";
 import type { IPaymentsMethod } from "../models/PaymentsLib";
 import type { UserGroup } from "../models/user";
 import type { IPlayerPayment } from "../services/api/DTO/cashbox";
-import { type ICashboxPresets } from "../services/api/DTO/cashbox";
+import { type ICashboxPresets, IManageWithdrawConfig } from "../services/api/DTO/cashbox";
 import { TypeSystemPayment } from "../services/api/DTO/cashbox";
 import { useConfigStore } from "./configStore";
 import { useUserStatuses } from "./user/userStatuses";
@@ -36,6 +36,7 @@ export const useCashboxStore = defineStore("cashboxStore", () => {
     const payoutSystems = ref<IPaymentsMethod[]>([]);
     const coinspaidAddresses = ref<ICoinspaidAddresses>();
     const cashboxPresets = ref<ICashboxPresets>();
+    const manageWithdraw = ref<IManageWithdrawConfig>();
 
     const hasMorePages = ref<Record<string, boolean>>({
         "": true,
@@ -56,6 +57,10 @@ export const useCashboxStore = defineStore("cashboxStore", () => {
 
     function setCashboxPresets(value: ICashboxPresets) {
         cashboxPresets.value = value;
+    }
+
+    function setManageWithdraw(value: IManageWithdrawConfig) {
+        manageWithdraw.value = value;
     }
 
     const getWithdrawRequests = computed<IPlayerPayment[]>(() => {
@@ -98,6 +103,7 @@ export const useCashboxStore = defineStore("cashboxStore", () => {
         paymentHistory,
         historyDeposits,
         historyPayouts,
+        manageWithdraw,
 
 
         paymentSystems,
@@ -111,5 +117,6 @@ export const useCashboxStore = defineStore("cashboxStore", () => {
 
         resetHistory,
         setCashboxPresets,
+        setManageWithdraw,
     };
 });

@@ -1,3 +1,77 @@
+## [1.66.4](https://github.com/upstars-global/unity-core-modules/compare/v1.66.3...v1.66.4) (2026-01-20)
+
+### 🐛 Bug Fixes
+
+* userBalance.ts minor ([#308](https://github.com/upstars-global/unity-core-modules/issues/308))
+ ([00eb3ac](https://github.com/upstars-global/unity-core-modules/commit/00eb3ac7aed9c6116d3a107debe5876875745410))
+
+
+
+    userBalance.ts fix minor
+
+## [1.66.3](https://github.com/upstars-global/unity-core-modules/compare/v1.66.2...v1.66.3) (2026-01-20)
+
+### 🧪 Testing
+
+* UN-1958 [unit-tests] userBalance
+ ([dceda7e](https://github.com/upstars-global/unity-core-modules/commit/dceda7ef32046b24fd757638d8b363aa40d0a157))
+
+## [1.66.2](https://github.com/upstars-global/unity-core-modules/compare/v1.66.1...v1.66.2) (2026-01-20)
+
+### 🐛 Bug Fixes
+
+* **UN-2143:** promisify addScript method to reject error on script load for cashbox metrics feature  ([#306](https://github.com/upstars-global/unity-core-modules/issues/306))
+ ([805a407](https://github.com/upstars-global/unity-core-modules/commit/805a4071a2421c33984cc735ba0608c3850c8217))
+
+
+
+    fix: metrics
+
+## [1.66.1](https://github.com/upstars-global/unity-core-modules/compare/v1.66.0...v1.66.1) (2026-01-19)
+
+### 🐛 Bug Fixes
+
+* **UN-2113:** use only less than 0 current_value_amount_cents for limit ([#298](https://github.com/upstars-global/unity-core-modules/issues/298))
+ ([f52f5d6](https://github.com/upstars-global/unity-core-modules/commit/f52f5d6ea814fc590258541573ba1780617dfb85))
+
+
+
+    fix(UN-2113): use only less than 0 current_value_amount_cents for limit reach calculation
+
+## [1.66.0](https://github.com/upstars-global/unity-core-modules/compare/v1.65.0...v1.66.0) (2026-01-15)
+
+### 🚀 Features
+
+* **UN-1959:** refactor userInfo store and cover it with tests ([#277](https://github.com/upstars-global/unity-core-modules/issues/277))
+ ([a2920be](https://github.com/upstars-global/unity-core-modules/commit/a2920beca65739b9ae306c2e27528d7bcea4ac47))
+
+
+
+    * feat(UN-1959): refactor userInfo store and cover it with tests
+
+    * fix: review comments
+
+    * fix: tests
+
+    * fix: review comments
+
+    * fix
+
+    * fix: user service
+
+    * fix: tests
+
+## [1.65.0](https://github.com/upstars-global/unity-core-modules/compare/v1.64.0...v1.65.0) (2026-01-15)
+
+### 🚀 Features
+
+* UN-1997 add manageWithdraw config ([#295](https://github.com/upstars-global/unity-core-modules/issues/295))
+ ([d06bc25](https://github.com/upstars-global/unity-core-modules/commit/d06bc256982c9e6f9f46eefe41a891d208de9064))
+
+
+
+    * feat: UN-1997 add manageWithdraw config
+
 ## [1.64.0](https://github.com/upstars-global/unity-core-modules/compare/v1.63.0...v1.64.0) (2026-01-14)
 
 ### 🚀 Features

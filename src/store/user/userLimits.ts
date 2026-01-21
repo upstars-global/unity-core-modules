@@ -45,6 +45,7 @@ export const useUserLimits = defineStore("userLimits", () => {
             return limit.accounts?.some((acc) => {
                 return limit.type !== LIMIT_TYPE_DEPOSIT &&
                   acc.currency === userCurr.value &&
+                    acc.current_value_amount_cents <= 0 &&
                     acc.amount_cents - Math.abs(acc.current_value_amount_cents) <= 0;
             });
         });
