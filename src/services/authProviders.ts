@@ -6,7 +6,7 @@ export async function loadAuthProviders() {
     const authProvidersStore = useAuthProvidersStore();
 
     if (isExistData(authProvidersStore.authProviders)) {
-        return authProvidersStore.authProviders;
+        return;
     }
 
     const data = await getAuthProvidersReq();
@@ -18,9 +18,9 @@ export async function loadAuthProviders() {
 
 export async function loadUserAuthProviders() {
     const authProvidersStore = useAuthProvidersStore();
+
     if (isExistData(authProvidersStore.userAuthProviders)) {
-        authProvidersStore.setUserAuthProvidersLoadedStatus(true);
-        return authProvidersStore.userAuthProviders;
+        return;
     }
 
     const data = await getUserAuthProvidersReq();

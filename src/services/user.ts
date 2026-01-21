@@ -3,6 +3,7 @@ import { PROJECT } from "@theme/configs/constantsFreshChat";
 import { getStateByCounty } from "@theme/configs/stateFieldConfig";
 import { storeToRefs } from "pinia";
 
+import CoveryController from "../controllers/CoveryController";
 import { cioIdentifyUser } from "../controllers/CustomerIO";
 import { log } from "../controllers/Logger";
 import { isApiError } from "../helpers/apiErrors";
@@ -20,6 +21,8 @@ import { useUserSecurity } from "../store/user/userSecurity";
 import { useUserStatuses } from "../store/user/userStatuses";
 import { useUserVerificationSumsub } from "../store/user/userVerificationSumsub";
 import { type IUserLimit } from "./api/DTO/userLimits";
+import { isHttpError } from "./api/http";
+import { userAccessCheckReq } from "./api/requests/auth";
 import { loadManagersConfigReq } from "./api/requests/configs";
 import { activeCouponReq } from "./api/requests/couponePromoCodes";
 import { deleteDocument, loadDocuments, uploadDocuments } from "./api/requests/documents";
@@ -670,5 +673,27 @@ export async function resetActiveDepositGift() {
         await changeUserToGroup(null, activeDepositGiftGroupID.value);
 
         giftsStore.setActiveDepositGift(null);
+    }
+}
+
+export async function userAccessCheck() {
+    try {
+        const userInfoStore = useUserInfo();
+        const { getUserInfo } = storeToRefs(userInfoStore);
+
+        const user = {
+            email: getUserInfo.value?.email ?? null,
+            phone: getUserInfo.value?.mobile_phone ?? null,
+            first_name: getUserInfo.value?.first_name ?? null,
+            last_name: getUserInfo.value?.last_name ?? null,
+            country: getUserInfo.value?.country ?? null,
+            dfpc: CoveryController.deviceFingerprint(),
+        };
+
+        return userAccessCheckReq(user);
+    } catch (error) {
+        if (isHttpError(error)) {
+            return error.response;
+        }
     }
 }
