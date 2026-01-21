@@ -690,7 +690,9 @@ export async function userAccessCheck() {
             dfpc: CoveryController.deviceFingerprint(),
         };
 
-        return userAccessCheckReq(user);
+        const response = await userAccessCheckReq(user);
+
+        return response;
     } catch (error) {
         if (isHttpError(error)) {
             return error.response;
