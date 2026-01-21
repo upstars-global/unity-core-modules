@@ -34,11 +34,11 @@ type IAchievement = Omit<IStatuses, "status" | "id"> & {
 
 function showAchievByUserStatus(userStatuses: IUserStatus[]): number[] {
     const showAchievEmail = userStatuses.some((status) => {
-        return Boolean(ACHIEV_IDS.EMAIL_CONFIRM.includes(Number(status.id)));
+        return ACHIEV_IDS.EMAIL_CONFIRM.includes(Number(status.id));
     });
 
     const showAchievEmailConfirmAndAction = userStatuses.some((status) => {
-        return Boolean(ACHIEV_IDS.EMAIL_CONFIRM_AND_MORE.includes(Number(status.id)));
+        return ACHIEV_IDS.EMAIL_CONFIRM_AND_MORE.includes(Number(status.id));
     });
 
     /*
@@ -48,15 +48,15 @@ function showAchievByUserStatus(userStatuses: IUserStatus[]): number[] {
     }); */
 
     const showAchievExCoin = userStatuses.some((status) => {
-        return Boolean([ ACHIEV_ID_EXCHANGE_COIN, ACHIEV_ID_COMPOINT_CHANGE ].includes(Number(status.id)));
+        return [ ACHIEV_ID_EXCHANGE_COIN, ACHIEV_ID_COMPOINT_CHANGE ].includes(Number(status.id));
     });
 
     const showAchievDepPS = userStatuses.some((status) => {
-        return Boolean(ACHIEV_IDS.DEP_PS.includes(Number(status.id)));
+        return ACHIEV_IDS.DEP_PS.includes(Number(status.id));
     });
 
     const showAchievDepCount = userStatuses.some((status) => {
-        return Boolean([ ACHIEV_ID_EXCHANGE_COIN, ACHIEV_ID_DEP_COUNT ].includes(Number(status.id)));
+        return ACHIEV_IDS.DEP_COUNT.includes(Number(status.id));
     });
 
     // display/hide some achiev for user by status
@@ -82,7 +82,6 @@ export const useAchievements = defineStore("achievements", () => {
     });
 
     const getAchievementsAll = computed<IAchievement[]>(() => {
-        // display/hide some achiev for user by status
         const arrayAchievId = showAchievByUserStatus(userStatuses.getUserStatuses);
         const achievByGroups = groups.value.map((itemGroup) => {
             return {
