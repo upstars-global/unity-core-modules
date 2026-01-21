@@ -1,3 +1,32 @@
+## [1.66.4](https://github.com/upstars-global/unity-core-modules/compare/v1.66.3...v1.66.4) (2026-01-20)
+
+### 🐛 Bug Fixes
+
+* userBalance.ts minor ([#308](https://github.com/upstars-global/unity-core-modules/issues/308))
+ ([00eb3ac](https://github.com/upstars-global/unity-core-modules/commit/00eb3ac7aed9c6116d3a107debe5876875745410))
+
+
+
+    userBalance.ts fix minor
+
+## [1.66.3](https://github.com/upstars-global/unity-core-modules/compare/v1.66.2...v1.66.3) (2026-01-20)
+
+### 🧪 Testing
+
+* UN-1958 [unit-tests] userBalance
+ ([dceda7e](https://github.com/upstars-global/unity-core-modules/commit/dceda7ef32046b24fd757638d8b363aa40d0a157))
+
+## [1.66.2](https://github.com/upstars-global/unity-core-modules/compare/v1.66.1...v1.66.2) (2026-01-20)
+
+### 🐛 Bug Fixes
+
+* **UN-2143:** promisify addScript method to reject error on script load for cashbox metrics feature  ([#306](https://github.com/upstars-global/unity-core-modules/issues/306))
+ ([805a407](https://github.com/upstars-global/unity-core-modules/commit/805a4071a2421c33984cc735ba0608c3850c8217))
+
+
+
+    fix: metrics
+
 ## [1.66.1](https://github.com/upstars-global/unity-core-modules/compare/v1.66.0...v1.66.1) (2026-01-19)
 
 ### 🐛 Bug Fixes
