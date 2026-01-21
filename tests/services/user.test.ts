@@ -91,9 +91,20 @@ vi.mock("../../src/controllers/Logger", () => ({
     log: { error: vi.fn() },
 }));
 
-vi.mock("@theme/configs/stateFieldConfig", () => ({
-    getStateByCounty: vi.fn(() => "QC"),
-}));
+
+vi.mock("../../src/store/configStore", async () => {
+    const { createConfigStoreMock } = await import("../test-utils/configStoreMock");
+    return createConfigStoreMock({
+        $defaultProjectConfig: {
+            ID_GROUP_FOR_PAIRED_ID: 100,
+            ID_GROUP_FOR_UNPAIRED_ID: 101,
+            TEST_GROUP_ID: 1,
+            featureFlags: {
+                enableAbTest: true,
+            },
+        },
+    });
+});
 
 describe("user service helpers", () => {
     beforeEach(() => {

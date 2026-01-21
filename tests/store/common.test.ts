@@ -26,14 +26,7 @@ vi.mock("../../src/helpers/userAgentPlatform", () => ({
 }));
 vi.mock("../../src/store/configStore", async () => {
     const { createConfigStoreMock } = await import("../test-utils/configStoreMock");
-    // const { baseUnityConfig } = await import("../mocks/unityConfig");
     return createConfigStoreMock();
-    // return createConfigStoreMock({
-    //     $defaultProjectConfig: {
-    //         ENABLE_CURRENCIES: baseUnityConfig.ENABLE_CURRENCIES,
-    //         currencyDefault: baseUnityConfig.currencyDefault,
-    //     },
-    // });
 });
 
 const globalWithWindow = globalThis as typeof globalThis & { window?: unknown };

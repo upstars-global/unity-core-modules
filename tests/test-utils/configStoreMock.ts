@@ -181,7 +181,7 @@ export function createConfigStoreMock(overrides: Partial<DefaultConfigMock> = {}
             },
         }),
         getQuestConfig: () => ({ mockLevels: {} }),
-        getStateByCounty: () => null,
+        getStateByCounty: () => "QC",
         getTargetWallets: (wallets) => wallets.map((wallet) => wallet.currency || ""),
         getUserIsDiamond: () => false,
         getUserVipGroup: () => undefined,
