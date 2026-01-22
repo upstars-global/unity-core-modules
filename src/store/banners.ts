@@ -1,11 +1,3 @@
-import {
-    BANNER_CATEGORY_131811__HIDE,
-    BANNER_CATEGORY_131811_SHOW,
-    BANNER_CATEGORY_JACKPOTS,
-    BANNER_CATEGORY_TERMS_CONDITIONS,
-    BANNERS_CATEGORIES_ENABLE,
-    shouldDisplayRegistrationBanner,
-} from "@config/banners";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import type{ Pinia } from "pinia";
@@ -17,12 +9,21 @@ import { prepareJackpotsBanners } from "../helpers/jackpotsHelpers";
 import type { IBannerConfig, IViewedGTMBanners } from "../models/banners";
 import type { IFileCMS } from "../services/api/DTO/CMS";
 import { loadAllFilesFromCMSReq } from "../services/api/requests/CMS";
+import { useConfigStore } from "./configStore";
 import { useMultilangStore } from "./multilang";
 import { useSettings } from "./settings";
 import { useUserInfo } from "./user/userInfo";
 import { useUserStatuses } from "./user/userStatuses";
 
 export const useBannerStore = defineStore("bannerStore", () => {
+    const { $defaultProjectConfig } = useConfigStore();
+    const {
+        BANNER_CATEGORY_131811__HIDE,
+        BANNER_CATEGORY_131811_SHOW,
+        BANNER_CATEGORY_JACKPOTS,
+        BANNER_CATEGORY_TERMS_CONDITIONS,
+        shouldDisplayRegistrationBanner,
+    } = $defaultProjectConfig;
     const { getIsLogged, isCryptoUserCurrency } = storeToRefs(useUserInfo());
     const { getUserGroups } = storeToRefs(useUserStatuses());
     const { getUserLocale } = storeToRefs(useMultilangStore());

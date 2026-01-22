@@ -1,6 +1,3 @@
-import { excludeNotificationTitles } from "@config/gift";
-import { ENABLED_NOTICES_USER_GROUP_IDS } from "@config/user-statuses";
-import { eventsHandlers } from "@helpers/generateNotifications";
 import { defineStore, storeToRefs } from "pinia";
 import { v4 as uuid } from "uuid";
 import { computed, ref } from "vue";
@@ -18,11 +15,18 @@ import {
     WSNotificationName,
 } from "../models/WSnotices";
 import { GiftState } from "../services/api/DTO/gifts";
+import { useConfigStore } from "./configStore";
 import { useUserStatuses } from "./user/userStatuses";
 
 const { notificationDB } = useNotificationDB();
 
 export const useNoticesStore = defineStore("notices", () => {
+    const { $defaultProjectConfig } = useConfigStore();
+    const {
+        excludeNotificationTitles,
+        ENABLED_NOTICES_USER_GROUP_IDS,
+        eventsHandlers,
+    } = $defaultProjectConfig;
     const { getUserGroups } = storeToRefs(useUserStatuses());
 
     const headerNotices = ref<IConfigNotice[]>([]);

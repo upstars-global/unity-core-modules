@@ -1,14 +1,16 @@
-import { getGameImagePath } from "@helpers/gameImage";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
 import { log } from "../../controllers/Logger";
 import type { IGame } from "../../models/game";
 import { http } from "../../services/api/http";
+import { useConfigStore } from "../configStore";
 import { useGamesCommon } from "./gamesStore";
 import { findGameBySeoTittleAndProducer } from "./helpers/games";
 
 export const useGameCurrent = defineStore("gameCurrent", () => {
+    const { $defaultProjectConfig } = useConfigStore();
+    const { getGameImagePath } = $defaultProjectConfig;
     const { setGameToCache, getGameFromCache } = useGamesCommon();
     const currentGame = ref<IGame | null>();
 

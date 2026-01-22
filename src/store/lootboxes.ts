@@ -1,4 +1,3 @@
-import { filterIssuedLootBoxes } from "@helpers/lootBoxes";
 import { defineStore, Pinia, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
@@ -6,9 +5,11 @@ import { type ILootbox } from "../models/lootboxes";
 import type { IPageItemCMS } from "../services/api/DTO/CMS";
 import type { ILootboxesFileConfig, ILootboxItemConfig } from "../services/api/DTO/lootboxes";
 import { useCMS } from "./CMS";
+import { useConfigStore } from "./configStore";
 import { useUserStatuses } from "./user/userStatuses";
 
 export const useLootboxesStore = defineStore("lootboxes", () => {
+    const { $defaultProjectConfig } = useConfigStore();
     const lootboxesList = ref<ILootbox[]>([]);
     const fakeIdPrizeWin = ref<number>();
     const pageContentByGroup = ref<IPageItemCMS>();
@@ -19,7 +20,7 @@ export const useLootboxesStore = defineStore("lootboxes", () => {
     const { currentStaticPage } = storeToRefs(useCMS());
 
     const lootboxListIssued = computed<ILootbox[]>(() => {
-        return filterIssuedLootBoxes(lootboxesList.value);
+        return $defaultProjectConfig.filterIssuedLootBoxes(lootboxesList.value);
     });
 
     const countActiveLootbox = computed(() => lootboxListIssued.value.length);

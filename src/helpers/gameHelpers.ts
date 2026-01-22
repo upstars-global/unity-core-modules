@@ -1,10 +1,7 @@
-import { getGameImagePath } from "@helpers/gameImage";
-import { SlugCategoriesGames } from "@theme/configs/categoryesGames";
-import featureFlags from "@theme/configs/featureFlags";
-
 import { log } from "../controllers/Logger";
 import type { IGame } from "../models/game";
 import { loadRandomGame } from "../services/api/requests/games";
+import { useConfigStore } from "../store/configStore";
 import { filterGames } from "../store/games/helpers/games";
 
 interface IGameBadge {
@@ -59,6 +56,7 @@ export interface IParamsUrlGame {
 }
 
 let randomGameCounter = 0;
+
 export async function getRandomGame(category?: string): Promise<IGame | undefined> {
     const randomGame = await loadRandomGame({ identifier: category });
     randomGameCounter++;
@@ -82,6 +80,8 @@ export async function getRandomGame(category?: string): Promise<IGame | undefine
 }
 
 export function processGame(game, gameKey): IGameItem {
+    const { $defaultProjectConfig } = useConfigStore();
+    const { getGameImagePath, gameCategorySlugs } = $defaultProjectConfig;
     const gameCategoriesWithoutGeo: Record<string, number> = {};
     Object.entries(game.collections || {}).forEach(([ key, value ]) => {
         const categoryName = key.split(":")[0];
@@ -89,21 +89,21 @@ export function processGame(game, gameKey): IGameItem {
     });
 
     const badges = [] as IGameBadge[];
-    if (gameCategoriesWithoutGeo[SlugCategoriesGames.SLUG_CATEGORY_TOP] > -1) {
-        badges.push({ type: SlugCategoriesGames.SLUG_CATEGORY_TOP });
+    if (gameCategoriesWithoutGeo[gameCategorySlugs.top] > -1) {
+        badges.push({ type: gameCategorySlugs.top });
     }
-    if (gameCategoriesWithoutGeo[SlugCategoriesGames.SLUG_CATEGORY_NEW] > -1) {
-        badges.push({ type: SlugCategoriesGames.SLUG_CATEGORY_NEW });
+    if (gameCategoriesWithoutGeo[gameCategorySlugs.new] > -1) {
+        badges.push({ type: gameCategorySlugs.new });
     }
-    if (gameCategoriesWithoutGeo[SlugCategoriesGames.SLUG_CATEGORY_BONUS_WAGERING] > -1) {
-        badges.push({ type: SlugCategoriesGames.SLUG_CATEGORY_BONUS_WAGERING });
+    if (gameCategoriesWithoutGeo[gameCategorySlugs.bonusWagering] > -1) {
+        badges.push({ type: gameCategorySlugs.bonusWagering });
     }
-    if (featureFlags.enableMysticJackpots &&
-        gameCategoriesWithoutGeo[SlugCategoriesGames.SLUG_CATEGORY_MYSTIC_JACKPOTS] > -1) {
-        badges.push({ type: SlugCategoriesGames.SLUG_CATEGORY_MYSTIC_JACKPOTS });
+    if ($defaultProjectConfig.featureFlags.enableMysticJackpots &&
+        gameCategoriesWithoutGeo[gameCategorySlugs.mysticJackpots] > -1) {
+        badges.push({ type: gameCategorySlugs.mysticJackpots });
     }
-    if (gameCategoriesWithoutGeo[SlugCategoriesGames.SLUG_CATEGORY_JACKPOT] > -1) {
-        badges.push({ type: SlugCategoriesGames.SLUG_CATEGORY_JACKPOT });
+    if (gameCategoriesWithoutGeo[gameCategorySlugs.jackpot] > -1) {
+        badges.push({ type: gameCategorySlugs.jackpot });
     }
 
     const [ , title ] = gameKey.split("/");
@@ -140,7 +140,9 @@ export function processGameForNewAPI(game: IGameItemFilter): IGameItem {
 }
 
 export function hasGameDemo(game: IGame): boolean {
-    return Boolean(game.currencies.FUN?.id) && !game.categories.includes(SlugCategoriesGames.SLUG_CATEGORY_LIVE);
+    const { $defaultProjectConfig } = useConfigStore();
+    const { gameCategorySlugs } = $defaultProjectConfig;
+    return Boolean(game.currencies.FUN?.id) && !game.categories.includes(gameCategorySlugs.live);
 }
 
 export function paramsUrlGamePage(game: IGame): IParamsUrlGame {

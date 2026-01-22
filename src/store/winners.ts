@@ -1,8 +1,8 @@
-import { getGameImagePath } from "@helpers/gameImage";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
 import { http } from "../services/api/http";
+import { useConfigStore } from "./configStore";
 
 enum CURRENCY {
     AUD = "AUD",
@@ -40,6 +40,8 @@ interface IWinnerResponse {
 }
 
 export const useWinners = defineStore("winners", () => {
+    const { $defaultProjectConfig } = useConfigStore();
+    const { getGameImagePath } = $defaultProjectConfig;
     const winnersList = ref<IWinner[]>([]);
 
     async function loadWinners(reload = false) {

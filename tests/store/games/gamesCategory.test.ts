@@ -34,11 +34,10 @@ vi.mock("../../../src/store/user/userInfo", () => ({
     }),
 }));
 
-vi.mock("../../../src/store/configStore", () => ({
-    useConfigStore: () => ({
-        gamesPageLimit: ref(20),
-    }),
-}));
+vi.mock("../../../src/store/configStore", async () => {
+    const { createConfigStoreMock } = await import("../../test-utils/configStoreMock");
+    return createConfigStoreMock();
+});
 
 vi.mock("../../../src/store/root", () => ({
     useRootStore: () => ({

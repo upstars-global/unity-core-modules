@@ -1,16 +1,18 @@
-import config from "@theme/configs/config";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
 import bodyDisableScroll from "../helpers/bodyDisableScroll";
 import type { IModalOptions } from "../models/modalOptions";
 import { EventBus as bus } from "../plugins/EventBus";
+import { useConfigStore } from "./configStore";
 
 export const useUIStore = defineStore("UI", () => {
+    const { $defaultProjectConfig: { config } } = useConfigStore();
+
     const showModal = ref<boolean>(false);
     const modals = ref<IModalOptions[]>([]);
 
-    const colorTheme = ref<string>(config.theme);
+    const colorTheme = ref<string>(config?.theme);
     const isThemeDark = ref<boolean>(colorTheme.value === "theme-dark");
 
     function setShowModal(options: IModalOptions) {

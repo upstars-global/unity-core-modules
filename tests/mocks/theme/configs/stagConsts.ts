@@ -1,4 +1,6 @@
-import { COUNTRIES } from "@theme/configs/constsLocales";
+const COUNTRIES = {
+    CANADA: "CA",
+};
 
 export const STAG_KEY = "stag";
 export const STAG_PARTNER_KEY = "partner-stag";

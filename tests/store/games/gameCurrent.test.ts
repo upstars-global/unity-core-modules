@@ -7,6 +7,11 @@ vi.mock("@theme/configs/constantsFreshChat", () => ({
     PROJECT: "project",
 }));
 
+vi.mock("../../../src/store/configStore", async () => {
+    const { createConfigStoreMock } = await import("../../test-utils/configStoreMock");
+    return createConfigStoreMock();
+});
+
 describe("store/games/gameCurrent", () => {
     beforeEach(() => {
         setActivePinia(createPinia());

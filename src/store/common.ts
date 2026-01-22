@@ -1,5 +1,3 @@
-import config from "@theme/configs/config";
-import { ENABLE_CURRENCIES } from "@theme/configs/currencies";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
@@ -12,19 +10,20 @@ import { Currencies } from "../models/enums/currencies";
 import type { MainWidgetItem } from "../models/mainWidget";
 import type { ICurrentIP } from "../services/api/DTO/current-ip";
 import type { ICountries, ICryptoExchangeRates, ICurrencies, IProjectInfo } from "../services/api/DTO/info";
+import { useConfigStore } from "./configStore";
 import { useMultilangStore } from "./multilang";
 
 export interface ICommonStoreDefaultOptions {
-  defaultCurrency: string;
-  enableCurrencies: string[];
+    defaultCurrency: string;
+    enableCurrencies: string[];
 }
 
 export const useCommon = defineStore("common", () => {
+    const { $defaultProjectConfig } = useConfigStore();
+
     const platform = ref<IPlatformState>();
-    const defaultCurrency = ref(config.currencyDefault);
     const currentIpInfo = ref<ICurrentIP>();
     const currencies = ref<ICurrencies[]>([]);
-    const enableCurrencies = ref<string[]>(ENABLE_CURRENCIES);
     const playerFieldsInfo = ref<IPlayerFieldsInfo>();
     const excludedPromoStags = ref<string[]>([]);
     const currencyConfig = ref<null | CurrencyData>(null);
@@ -39,6 +38,9 @@ export const useCommon = defineStore("common", () => {
             platform.value = platformData;
         });
     }
+
+    const defaultCurrency = ref($defaultProjectConfig.currencyDefault);
+    const enableCurrencies = ref([ ...$defaultProjectConfig.ENABLE_CURRENCIES ]);
 
     const isMobile = computed<boolean | undefined>(() => {
         return platform.value && platform.value.isMobile;

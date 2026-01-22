@@ -1,17 +1,18 @@
-import type { REFERRER } from "@theme/configs/stagConsts";
+import type { ResolvedReferrer } from "../../types/configProjectTypes";
 
 export interface IStagByReferName {
     pages: {
-        [referrer in REFERRER]: {
+        [referrer in ResolvedReferrer]: {
             [path: string]: string;
         }
     } | null;
     countries: {
         [country: string]: {
-            [referrer in REFERRER]: string;
+            [referrer in ResolvedReferrer]: string;
         };
     };
 }
+
 export type ISurveyConfig = {
     survey_id: string;
     survey_collector_id: string;

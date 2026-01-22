@@ -1,5 +1,3 @@
-import { ACHIEV_ID, defaultDepCount, TOURNAMENT_IDS_FOR_ACHIEV } from "@config/achievements";
-import featureFlags from "@theme/configs/featureFlags";
 import dayjs from "dayjs";
 import { defineStore, storeToRefs } from "pinia";
 import { computed } from "vue";
@@ -9,6 +7,7 @@ import { STATUS_PROMO } from "../models/enums/tournaments";
 import { type IUserStatus } from "../models/user";
 import { type IStatuses } from "../services/api/DTO/statuses";
 import { useCashboxStore } from "./cashboxStore";
+import { useConfigStore } from "./configStore";
 import { useLevelsStore } from "./levels/levelsStore";
 import { useTournamentsStore } from "./tournaments/tournamentsStore";
 import { useUserStatuses } from "./user/userStatuses";
@@ -22,7 +21,7 @@ type IAchievement = Omit<IStatuses, "status" | "id"> & {
     id: number;
 };
 
-function showAchievByUserStatus(userStatuses: IUserStatus[]): number[] {
+function showAchievByUserStatus(userStatuses: IUserStatus[], featureFlagsProps: Record<string, boolean>, ACHIEV_ID): number[] {
     const showAchievEmail = userStatuses.some((status) => {
         return Number(status.id) === 606 || Number(status.id) === ACHIEV_ID.EMAIL_CONFIRM;
     });
@@ -53,13 +52,15 @@ function showAchievByUserStatus(userStatuses: IUserStatus[]): number[] {
     return [
         ...(showAchievEmail ? [ ACHIEV_ID.EMAIL_CONFIRM ] : []),
         ...(showAchievEmailConfirmAndAction ? [ ACHIEV_ID.EMAIL_CONFIRM_AND_MORE ] : []),
-        ...(showAchievExCoin && featureFlags.enableConpoints ? [ ACHIEV_ID.COMPOINT_CHANGE ] : []),
+        ...(showAchievExCoin && featureFlagsProps.enableConpoints ? [ ACHIEV_ID.COMPOINT_CHANGE ] : []),
         ...(showAchievDepPS ? [ ACHIEV_ID.DEP_PS ] : []),
         ...(showAchievDepCount ? [ ACHIEV_ID.DEP_COUNT ] : []),
     ];
 }
 
 export const useAchievements = defineStore("achievements", () => {
+    const { $defaultProjectConfig } = useConfigStore();
+
     const userStatuses = useUserStatuses();
     const tournamentsStore = useTournamentsStore();
     const { historyDeposits } = storeToRefs(useCashboxStore());
@@ -67,13 +68,17 @@ export const useAchievements = defineStore("achievements", () => {
 
     const getTournamentForAchiev = computed<IAchievement[]>(() => {
         return tournamentsStore.getAllTournamentsOnlyUser.filter((tour) => {
-            return TOURNAMENT_IDS_FOR_ACHIEV.includes(tour.frontend_identifier);
+            return $defaultProjectConfig.TOURNAMENT_IDS_FOR_ACHIEV.includes(tour.frontend_identifier);
         }) as unknown as IAchievement[];
     });
 
     const getAchievementsAll = computed<IAchievement[]>(() => {
         // display/hide some achiev for user by status
-        const arrayAchievId = showAchievByUserStatus(userStatuses.getUserStatuses);
+        const arrayAchievId = showAchievByUserStatus(
+            userStatuses.getUserStatuses,
+            $defaultProjectConfig.featureFlags,
+            $defaultProjectConfig.ACHIEV_ID,
+        );
         const achievByGroups = groups.value.map((itemGroup) => {
             return {
                 ...itemGroup,
@@ -118,8 +123,8 @@ export const useAchievements = defineStore("achievements", () => {
                 :
                 true;
 
-            const isDoneCountDep = itemAchiev.id === ACHIEV_ID.DEP_COUNT ?
-                getDepCountForAchiev.value >= defaultDepCount :
+            const isDoneCountDep = itemAchiev.id === $defaultProjectConfig.ACHIEV_ID.DEP_COUNT ?
+                getDepCountForAchiev.value >= $defaultProjectConfig.defaultDepCount :
                 true;
 
             const spinsInTour = tournamentsStore.getStatusTournamentById(itemAchiev.id)?.games_taken;

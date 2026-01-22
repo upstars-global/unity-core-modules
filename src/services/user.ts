@@ -1,6 +1,3 @@
-import { ID_GROUP_FOR_PAIRED_ID, ID_GROUP_FOR_UNPAIRED_ID } from "@config/groupAB";
-import { PROJECT } from "@theme/configs/constantsFreshChat";
-import { getStateByCounty } from "@theme/configs/stateFieldConfig";
 import { storeToRefs } from "pinia";
 
 import { cioIdentifyUser } from "../controllers/CustomerIO";
@@ -10,6 +7,7 @@ import { EnumContextFields, EnumFormFields, type IPlayerFieldsInfo } from "../mo
 import type { IDataForUpdatePass, ITwoFactorAuthData } from "../models/user";
 import { EventBus as bus } from "../plugins/EventBus";
 import { useCommon } from "../store/common";
+import { useConfigStore } from "../store/configStore";
 import { useGiftsStore } from "../store/gifts";
 import { useMultilangStore } from "../store/multilang";
 import { useUserDocuments } from "../store/user/userDocuments";
@@ -66,6 +64,8 @@ import { loadDepositGiftsData } from "./gifts";
 import { updateLocale } from "./localization";
 
 export async function userSetToGroupForAbTest() {
+    const { $defaultProjectConfig } = useConfigStore();
+    const { ID_GROUP_FOR_PAIRED_ID, ID_GROUP_FOR_UNPAIRED_ID } = $defaultProjectConfig;
     const userInfo = useUserInfo();
     const userStatuses = useUserStatuses();
 
@@ -483,6 +483,8 @@ export async function checkUserState() {
     const userInfoStore = useUserInfo();
     const { getUserInfo } = storeToRefs(userInfoStore);
     const useCommonStore = useCommon();
+    const { $defaultProjectConfig } = useConfigStore();
+    const { getStateByCounty } = $defaultProjectConfig;
 
     const stateFieldConfig = useCommonStore.getFieldsType(EnumContextFields.edition, EnumFormFields.state);
     const userState = getUserInfo.value.state;
@@ -516,6 +518,9 @@ export async function loadUserProfile({ reload = false, route }: { reload?: bool
 
     try {
         const response = await loadUserProfileReq();
+        const { $defaultProjectConfig } = useConfigStore();
+        const { PROJECT } = $defaultProjectConfig;
+
         if (response) {
             userInfoStore.setUserData(response.data);
 

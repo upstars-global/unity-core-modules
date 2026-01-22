@@ -1,6 +1,4 @@
-import { ID_GROUP_FOR_PAIRED_ID, ID_GROUP_FOR_UNPAIRED_ID } from "@config/groupAB";
-import featureFlags from "@theme/configs/featureFlags";
-
+import { useConfigStore } from "../../store/configStore";
 import { useUserInfo } from "../../store/user/userInfo";
 import { useUserStatuses } from "../../store/user/userStatuses";
 import { StagController } from "../StagController";
@@ -11,18 +9,14 @@ type variantBType = 1;
 const variantA: variantAType = 0;
 const variantB: variantBType = 1;
 
-export const groupForVariantA = ID_GROUP_FOR_PAIRED_ID;
-export const groupForVariantB = ID_GROUP_FOR_UNPAIRED_ID;
-
-const mapVariantToGroup: { [index: number]: number } = {
-    [groupForVariantA]: variantA,
-    [groupForVariantB]: variantB,
-};
-
-const mapGroupByVariant = {
-    [variantA]: groupForVariantA,
-    [variantB]: groupForVariantB,
-};
+function getABGroups() {
+    const { $defaultProjectConfig } = useConfigStore();
+    const { ID_GROUP_FOR_PAIRED_ID, ID_GROUP_FOR_UNPAIRED_ID } = $defaultProjectConfig;
+    return {
+        groupForVariantA: ID_GROUP_FOR_PAIRED_ID,
+        groupForVariantB: ID_GROUP_FOR_UNPAIRED_ID,
+    };
+}
 
 enum ABResultType { variantAType, variantBType}
 
@@ -45,14 +39,29 @@ export class ABTestController {
     }
 
     static get groupByStag(): ABGroupsType {
+        const { groupForVariantA, groupForVariantB } = getABGroups();
+        const mapGroupByVariant = {
+            [variantA]: groupForVariantA,
+            [variantB]: groupForVariantB,
+        };
         return ABTestController.variantByStag ? mapGroupByVariant[ABTestController.variantByStag] : groupForVariantA;
     }
 
     static get groupById(): ABGroupsType {
+        const { groupForVariantA, groupForVariantB } = getABGroups();
+        const mapGroupByVariant = {
+            [variantA]: groupForVariantA,
+            [variantB]: groupForVariantB,
+        };
         return mapGroupByVariant[ABTestController.variantByUserId];
     }
 
     static get variantByUserGroup(): ABResultType | null {
+        const { groupForVariantA, groupForVariantB } = getABGroups();
+        const mapVariantToGroup: { [index: number]: number } = {
+            [groupForVariantA]: variantA,
+            [groupForVariantB]: variantB,
+        };
         const userStatuses = useUserStatuses();
         const userIncludeInABTest = [ groupForVariantA, groupForVariantB ].find((abID) => {
             return userStatuses.getUserGroups.includes(abID);
@@ -61,7 +70,8 @@ export class ABTestController {
     }
 
     static get variant(): ABResultType | null {
-        if (featureFlags.enableABReg) {
+        const { $defaultProjectConfig } = useConfigStore();
+        if ($defaultProjectConfig.featureFlags.enableABReg) {
             return ABTestController.variantByUserGroup;
         }
         return null;

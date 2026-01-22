@@ -1,7 +1,8 @@
-import { linkProfile } from "@config/profile";
-import { USER_STATUSES } from "@config/user-statuses";
+import { useConfigStore } from "../store/configStore";
 
 export default (userInfo) => {
+    const { $defaultProjectConfig } = useConfigStore();
+    const { linkProfile, USER_STATUSES } = $defaultProjectConfig;
     let userName = " Visitor ";
     if (userInfo.first_name || userInfo.last_name) {
         userName = `${userInfo.first_name} ${userInfo.last_name}`;

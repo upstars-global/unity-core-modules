@@ -1,5 +1,4 @@
-
-import { defineStore, type Pinia, storeToRefs } from "pinia";
+import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
 import { Currencies } from "../../models/enums/currencies";

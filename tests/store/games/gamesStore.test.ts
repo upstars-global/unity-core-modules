@@ -42,6 +42,11 @@ vi.mock("../../../src/controllers/Logger", () => ({
     },
 }));
 
+vi.mock("../../../src/store/configStore", async () => {
+    const { createConfigStoreMock } = await import("../../test-utils/configStoreMock");
+    return createConfigStoreMock();
+});
+
 describe("useGamesCommon", () => {
     beforeEach(() => {
         setActivePinia(createPinia());

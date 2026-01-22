@@ -1,9 +1,9 @@
-import { mapLevelItem } from "@helpers/lootBoxes";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
 import { ILevel } from "../../models/levels";
 import { IStatuses } from "../../services/api/DTO/statuses";
+import { useConfigStore } from "../configStore";
 
 const getIndex = (id: string | undefined): number | undefined => {
     if (!id) {
@@ -16,6 +16,7 @@ const getIndex = (id: string | undefined): number | undefined => {
 };
 
 export const useLevelsStore = defineStore("levelsStore", () => {
+    const { $defaultProjectConfig } = useConfigStore();
     const levels = ref<ILevel[]>([]);
     const groups = ref<IStatuses[]>([]);
 
@@ -60,7 +61,7 @@ export const useLevelsStore = defineStore("levelsStore", () => {
 
         for (const item of data) {
             if (item.status) {
-                levelsList.push(mapLevelItem(item));
+                levelsList.push($defaultProjectConfig.mapLevelItem(item));
             } else {
                 groupsList.push(item);
             }
@@ -69,6 +70,7 @@ export const useLevelsStore = defineStore("levelsStore", () => {
         levels.value = levelsList;
         groups.value = groupsList;
     }
+
 
     return {
         levels,

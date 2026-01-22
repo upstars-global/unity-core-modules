@@ -1,13 +1,15 @@
-import { LIMIT_TYPE_COOLING_OFF, LIMIT_TYPE_DEPOSIT } from "@modules/Limits/limitConstants";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
 import { type Currencies } from "../../models/enums/currencies";
 import { type IUserLimit } from "../../services/api/DTO/userLimits";
 import { useCommon } from "../common";
+import { useConfigStore } from "../configStore";
 import { useUserInfo } from "./userInfo";
 
 export const useUserLimits = defineStore("userLimits", () => {
+    const { $defaultProjectConfig } = useConfigStore();
+    const { LIMIT_TYPE_COOLING_OFF, LIMIT_TYPE_DEPOSIT } = $defaultProjectConfig;
     const { isCryptoCurrency } = useCommon();
 
     const limits = ref<IUserLimit[]>([]);

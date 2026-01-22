@@ -1,4 +1,3 @@
-import { CoinShopPageSlug } from "@config/compPoints";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
@@ -6,6 +5,7 @@ import { CompPointRatesTypes, CompPointsTypes } from "../../models/enums/compPoi
 import { Currencies } from "../../models/enums/currencies";
 import { type IRedeemableCards } from "../../services/api/DTO/compPoints";
 import { useCMS } from "../CMS";
+import { useConfigStore } from "../configStore";
 import { useUserInfo } from "../user/userInfo";
 import { useStatusCompPointsStore } from "./statusCompPointsStore";
 
@@ -27,6 +27,8 @@ export function checkHasAvailableCards(list: IRedeemableCards[] | undefined, isL
 }
 
 export const useRedeemableCompPointsStore = defineStore("redeemableCompPointsStore", () => {
+    const { $defaultProjectConfig } = useConfigStore();
+    const { CoinShopPageSlug } = $defaultProjectConfig;
     const rates = ref<Record<string, IRedeemableCards[]>>({});
     const { getIsLogged, getUserCurrency } = storeToRefs(useUserInfo());
     const { currentStaticPage } = storeToRefs(useCMS());

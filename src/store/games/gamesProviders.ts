@@ -1,4 +1,3 @@
-import { SPECIAL_GAME_PROVIDER_NAME } from "@theme/configs/games";
 import { defineStore, type Pinia, storeToRefs } from "pinia";
 import { ref, type UnwrapRef } from "vue";
 
@@ -17,8 +16,9 @@ import { useRootStore } from "../root";
 import { useGamesCommon } from "./gamesStore";
 import { defaultCollection, filterGames, filterProviders } from "./helpers/games";
 
-
 export const useGamesProviders = defineStore("gamesProviders", () => {
+    const { $defaultProjectConfig } = useConfigStore();
+
     const { isMobile } = storeToRefs(useRootStore());
     const gamesProviders = ref<IGamesProvider[]>([] as IGamesProvider[]);
     const disabledGamesProviders = ref<IDisabledGamesProvider>({});
@@ -41,7 +41,7 @@ export const useGamesProviders = defineStore("gamesProviders", () => {
 
     function getProviderBySlug(slug: string): IGamesProvider | undefined {
         // workaround to not display ss provider
-        const sanitizedSlug = slug === SPECIAL_GAME_PROVIDER_NAME ? "bgaming" : slug;
+        const sanitizedSlug = slug === $defaultProjectConfig.SPECIAL_GAME_PROVIDER_NAME ? "bgaming" : slug;
         return gamesProviders.value.find((providerObj: IGamesProvider) => providerObj.slug === sanitizedSlug);
     }
 
@@ -139,7 +139,7 @@ export const useGamesProviders = defineStore("gamesProviders", () => {
                 };
             });
 
-            data = filterProviders(data, disabledGamesProviders.value);
+            data = filterProviders(data);
 
             setAllProviders(data);
             initCollection(data);

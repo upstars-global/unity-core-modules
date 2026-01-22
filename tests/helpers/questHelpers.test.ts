@@ -1,22 +1,35 @@
-import getQuestConfig from "@config/quest";
+import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import * as questHelpers from "../../src/helpers/questHelpers";
 
-const mockLevels = {
-    1: { bets: { USD: 10, EUR: 8 } },
-    2: { bets: { USD: 20, EUR: 16 } },
-    3: { bets: { USD: 30, EUR: 24 } },
-};
+const { mockLevels, getQuestConfigMock } = vi.hoisted(() => {
+    const mockLevelsData = {
+        1: { bets: { USD: 10, EUR: 8 } },
+        2: { bets: { USD: 20, EUR: 16 } },
+        3: { bets: { USD: 30, EUR: 24 } },
+    };
+    return {
+        mockLevels: mockLevelsData,
+        getQuestConfigMock: vi.fn(() => ({ mockLevels: mockLevelsData })),
+    };
+});
 
-vi.mock("@config/quest", () => ({
-    default: vi.fn(() => ({ mockLevels })),
-    DEFAULT_QUEST_SIZE: "default",
-}));
+vi.mock("../../src/store/configStore", async () => {
+    const { createConfigStoreMock } = await import("../test-utils/configStoreMock");
+    return createConfigStoreMock({
+        $defaultProjectConfig: {
+            DEFAULT_QUEST_SIZE: "default",
+            getQuestConfig: getQuestConfigMock,
+        },
+    });
+});
 
 describe("questHelpers", () => {
     beforeEach(() => {
-        getQuestConfig.mockReset();
+        setActivePinia(createPinia());
+
+        getQuestConfigMock.mockReturnValue({ mockLevels });
     });
 
     describe("isQuest", () => {
@@ -69,7 +82,7 @@ describe("questHelpers", () => {
         });
 
         it("returns empty array if no level matches", () => {
-            getQuestConfig.mockImplementation(() => ({ mockLevels: {} }));
+            getQuestConfigMock.mockImplementation(() => ({ mockLevels: {} }));
             expect(questHelpers.getCurrentLevelData("any", "USD", 5)).toEqual([]);
         });
     });

@@ -22,11 +22,10 @@ vi.mock("../../../src/store/root", () => ({
         isMobile: ref(false),
     }),
 }));
-vi.mock("../../../src/store/configStore", () => ({
-    useConfigStore: () => ({
-        gamesPageLimit: ref(20),
-    }),
-}));
+vi.mock("../../../src/store/configStore", async () => {
+    const { createConfigStoreMock } = await import("../../test-utils/configStoreMock");
+    return createConfigStoreMock();
+});
 const mockGamesCategories = ref<IGamesProvider[]>([]);
 const mockEnabledGamesConfig = ref<IEnabledGames>({});
 vi.mock("../../../src/store/games/gamesStore", () => ({
@@ -34,9 +33,6 @@ vi.mock("../../../src/store/games/gamesStore", () => ({
         getGamesCategories: mockGamesCategories,
         enabledGamesConfig: mockEnabledGamesConfig,
     }),
-}));
-vi.mock("@theme/configs/games", () => ({
-    SPECIAL_GAME_PROVIDER_NAME: "special_provider",
 }));
 
 describe("store/games/gamesProviders", () => {

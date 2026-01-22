@@ -1,14 +1,16 @@
-import toast from "@plugins/Toast";
 import { onBeforeUnmount, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 
 import { putUserSubscription } from "../services/user";
+import { useConfigStore } from "../store/configStore";
 import { useUserInfo } from "../store/user/userInfo";
 import { log } from "./Logger";
 
 export function useGlobalHandler(): void {
     const userStore = useUserInfo();
     const $useI18n = useI18n();
+    const { $defaultProjectConfig } = useConfigStore();
+    const { toast } = $defaultProjectConfig;
 
     async function reqReceivePromo(): Promise<void> {
         // @ts-expect-error Property 'receive_promos' does not exist

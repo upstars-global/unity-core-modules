@@ -1,11 +1,12 @@
-import {
-    COUNTRY_BY_HOST,
-    DEFAULT_COUNTRY,
-    DEFAULT_LOCALE_BY_COUNTRY,
-    LOCALES,
-} from "@theme/configs/constsLocales";
+import { useConfigStore } from "../store/configStore";
+
+function getLocaleConfig() {
+    const { $defaultProjectConfig } = useConfigStore();
+    return $defaultProjectConfig;
+}
 
 function getPathLocale(pathname: string): string | null {
+    const { LOCALES } = getLocaleConfig();
     const [ , lang ] = pathname.split("/");
 
     return Object.values(LOCALES).includes(lang) ? lang : null;
@@ -16,6 +17,11 @@ interface IResConfig {
     url: string;
 }
 export function localeHostname(url: URL, savedLoc: string): IResConfig {
+    const {
+        COUNTRY_BY_HOST,
+        DEFAULT_COUNTRY,
+        DEFAULT_LOCALE_BY_COUNTRY,
+    } = getLocaleConfig();
     const pathLoc = getPathLocale(url.pathname);
     const country = COUNTRY_BY_HOST[url.hostname] || DEFAULT_COUNTRY;
     const hostLoc = DEFAULT_LOCALE_BY_COUNTRY[country];

@@ -1,5 +1,4 @@
-import type { SlugCategoriesGames } from "@theme/configs/categoryesGames";
-
+import type { ResolvedCategorySlug } from "../../../../types/configProjectTypes";
 import { FE_API_PREFIX } from "../../../consts/apiConfig";
 import { log } from "../../../controllers/Logger";
 import type { IGame } from "../../../models/game";
@@ -81,7 +80,9 @@ export async function loadGamesCategory(config: Record<string, unknown>): Promis
 
 export async function loadCategoriesFileConfigRequest() {
     try {
-        const { data } = await http().get<Record<string, SlugCategoriesGames[]>>(`${ FE_API_PREFIX }/config/menu-categories-games`);
+        const { data } = await http().get<Record<string, ResolvedCategorySlug[]>>(
+            `${ FE_API_PREFIX }/config/menu-categories-games`,
+        );
 
         return data;
     } catch (err) {
