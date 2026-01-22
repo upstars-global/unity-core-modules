@@ -109,7 +109,7 @@ export const useAchievements = defineStore("achievements", () => {
 
     const getAchievementsActive = computed<IAchievement[]>(() => {
         return getAchievementsAll.value.filter((itemAchiev) => {
-            const hasAchievId = itemAchiev.frontend_identifier;
+            const hasAchievId = itemAchiev.frontend_identifier as string;
             const achievStatusArchive = itemAchiev.status === STATUS_PROMO.ARCHIVE;
 
             if (hasAchievId && achievStatusArchive) {
@@ -121,13 +121,19 @@ export const useAchievements = defineStore("achievements", () => {
                     return getDepCountForAchiev.value >= defaultDepCount;
                 }
 
-                const betsInTour = tournamentsStore.getStatusTournamentById(itemAchiev.id)?.bet_cents;
-                const spinsInTour = tournamentsStore.getStatusTournamentById(itemAchiev.id)?.games_taken;
+                // tournaments achievements
+                let tourValue = null;
 
-                const tourValue = betsInTour || spinsInTour;
+                if (hasAchievId.includes("spin")) {
+                    tourValue = tournamentsStore.getStatusTournamentById(itemAchiev.id)?.games_taken;
+                } else if (hasAchievId.includes("bet")) {
+                    tourValue = tournamentsStore.getStatusTournamentById(itemAchiev.id)?.bet_cents;
+                }
+
                 if (tourValue) {
                     return !betSunCompletedInTour(tourValue, itemAchiev.money_budget_cents);
                 }
+
                 return true;
             }
 
