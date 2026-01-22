@@ -26,8 +26,8 @@ const expires = 30 * 86400; // 30 days
 
 function getReferSearchEnginesMatch(referrer: string): string {
     const { $defaultProjectConfig } = useConfigStore();
-    const { REFERRER_SOURCES } = $defaultProjectConfig.REFERRER;
-    return REFERRER_SOURCES.find((refItem) => referrer.includes(refItem as string)) || "";
+    const { REFERRER_SOURCES } = $defaultProjectConfig.stagConsts;
+    return REFERRER_SOURCES?.[referrer] || "";
 }
 
 function getStagByReferrerName({ referrer, stagsByReferName, path, country } = {} as IGetStagParams): string {
