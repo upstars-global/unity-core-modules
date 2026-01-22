@@ -7,6 +7,7 @@ import {
     ACHIEV_ID_EXCHANGE_COIN,
     ACHIEV_IDS,
     defaultDepCount,
+    TOUR_ID_ACHIEV_SPIN_COUNT,
     TOURNAMENT_IDS_FOR_ACHIEV,
 } from "@config/achievements";
 import featureFlags from "@theme/configs/featureFlags";
@@ -109,14 +110,14 @@ export const useAchievements = defineStore("achievements", () => {
 
     const getAchievementsActive = computed<IAchievement[]>(() => {
         return getAchievementsAll.value.filter((itemAchiev) => {
-            const hasAchievId = itemAchiev.frontend_identifier as string;
+            const frontID = itemAchiev.frontend_identifier as string;
             const achievStatusArchive = itemAchiev.status === STATUS_PROMO.ARCHIVE;
 
-            if (hasAchievId && achievStatusArchive) {
+            if (frontID && achievStatusArchive) {
                 return false;
             }
 
-            if (hasAchievId) {
+            if (frontID) {
                 if (itemAchiev.id === ACHIEV_ID_DEP_COUNT) {
                     return getDepCountForAchiev.value >= defaultDepCount;
                 }
@@ -124,9 +125,9 @@ export const useAchievements = defineStore("achievements", () => {
                 // tournaments achievements
                 let tourValue = null;
 
-                if (hasAchievId.includes("spin")) {
+                if (frontID === TOUR_ID_ACHIEV_SPIN_COUNT) {
                     tourValue = tournamentsStore.getStatusTournamentById(itemAchiev.id)?.games_taken;
-                } else if (hasAchievId.includes("bet")) {
+                } else if (TOURNAMENT_IDS_FOR_ACHIEV.includes(frontID)) {
                     tourValue = tournamentsStore.getStatusTournamentById(itemAchiev.id)?.bet_cents;
                 }
 
@@ -137,7 +138,7 @@ export const useAchievements = defineStore("achievements", () => {
                 return true;
             }
 
-            if (!hasAchievId) {
+            if (!frontID) {
                 return containAchievIdInUserStatuses(userStatuses.getUserStatuses, itemAchiev.id);
             }
         });
