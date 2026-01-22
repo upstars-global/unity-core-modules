@@ -121,7 +121,7 @@ export const useAchievements = defineStore("achievements", () => {
                 const spinsInTour = tournamentsStore.getStatusTournamentById(itemAchiev.id)?.games_taken;
 
                 if (betsInTour || spinsInTour) {
-                    return betSunCompletedInTour(betsInTour || spinsInTour, itemAchiev.money_budget_cents);
+                    return !betSunCompletedInTour(betsInTour || spinsInTour, itemAchiev.money_budget_cents);
                 }
 
                 if (itemAchiev.id === ACHIEV_ID_DEP_COUNT) {
