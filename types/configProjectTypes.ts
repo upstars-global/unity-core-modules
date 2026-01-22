@@ -20,7 +20,7 @@ export type MenuCollectionsName =
 // точка расширения под проект
 export interface ProjectConfigOverrides {
     CategorySlug?: string;
-    Referrer?: string;
+    Referrer?: string[];
 }
 
 export type ResolvedCategorySlug =

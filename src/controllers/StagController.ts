@@ -26,7 +26,7 @@ const expires = 30 * 86400; // 30 days
 
 function getReferSearchEnginesMatch(referrer: string): string {
     const { $defaultProjectConfig } = useConfigStore();
-    const { REFERRER_SOURCES } = $defaultProjectConfig.stagConsts;
+    const { REFERRER_SOURCES } = $defaultProjectConfig.REFERRER;
     return REFERRER_SOURCES.find((refItem) => referrer.includes(refItem as string)) || "";
 }
 
@@ -83,7 +83,7 @@ function getStagInfo(): IStagInfo | null {
 }
 
 function sendLogUserEmptyStag(referrer: string): void {
-    log.error("STAG_ERROR_EMPTY", `Referrer: ${referrer}`);
+    log.error("STAG_ERROR_EMPTY", `Referrer: ${ referrer }`);
 }
 
 async function initStag(queryParams: URLSearchParams, path: string, referrer: string): Promise<void> {
