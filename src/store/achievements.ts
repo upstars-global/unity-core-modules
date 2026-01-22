@@ -117,16 +117,18 @@ export const useAchievements = defineStore("achievements", () => {
             }
 
             if (hasAchievId) {
-                const betsInTour = tournamentsStore.getStatusTournamentById(itemAchiev.id)?.bet_cents;
-                const spinsInTour = tournamentsStore.getStatusTournamentById(itemAchiev.id)?.games_taken;
-
-                if (betsInTour || spinsInTour) {
-                    return !betSunCompletedInTour(betsInTour || spinsInTour, itemAchiev.money_budget_cents);
-                }
-
                 if (itemAchiev.id === ACHIEV_ID_DEP_COUNT) {
                     return getDepCountForAchiev.value >= defaultDepCount;
                 }
+
+                const betsInTour = tournamentsStore.getStatusTournamentById(itemAchiev.id)?.bet_cents;
+                const spinsInTour = tournamentsStore.getStatusTournamentById(itemAchiev.id)?.games_taken;
+
+                const tourValue = betsInTour || spinsInTour;
+                if (tourValue) {
+                    return !betSunCompletedInTour(tourValue, itemAchiev.money_budget_cents);
+                }
+                return true;
             }
 
             if (!hasAchievId) {
