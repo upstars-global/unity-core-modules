@@ -118,7 +118,7 @@ export const useAchievements = defineStore("achievements", () => {
             }
 
             if (itemAchiev.id === ACHIEV_ID_DEP_COUNT) {
-                return getDepCountForAchiev.value <= defaultDepCount;
+                return getDepCountForAchiev.value < defaultDepCount;
             }
 
             // tournaments achievements
