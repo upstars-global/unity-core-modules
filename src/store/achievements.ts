@@ -6,7 +6,6 @@ import {
     ACHIEV_ID_EMAIL_CONFIRM_AND_MORE,
     ACHIEV_ID_EXCHANGE_COIN,
     ACHIEV_IDS_ALL,
-    defaultDepCount,
     TOUR_ID_ACHIEV_SPIN_COUNT,
     TOURNAMENT_IDS_FOR_ACHIEV,
 } from "@config/achievements";
@@ -115,10 +114,6 @@ export const useAchievements = defineStore("achievements", () => {
 
             if (frontID && achievStatusArchive) {
                 return false;
-            }
-
-            if (itemAchiev.id === ACHIEV_ID_DEP_COUNT) {
-                return getDepCountForAchiev.value < defaultDepCount;
             }
 
             // tournaments achievements
