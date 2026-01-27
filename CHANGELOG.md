@@ -1,3 +1,10 @@
+## [1.67.0](https://github.com/upstars-global/unity-core-modules/compare/v1.66.4...v1.67.0) (2026-01-26)
+
+### 🚀 Features
+
+* **UN-348:** refactor tournamentsStore and cover it with tests ([#304](https://github.com/upstars-global/unity-core-modules/issues/304))
+ ([7e570c9](https://github.com/upstars-global/unity-core-modules/commit/7e570c9a368ab2a758a997a939fcb84d20308886))
+
 ## [1.66.4](https://github.com/upstars-global/unity-core-modules/compare/v1.66.3...v1.66.4) (2026-01-20)
 
 ### 🐛 Bug Fixes
