@@ -1,3 +1,10 @@
+## [1.68.0](https://github.com/upstars-global/unity-core-modules/compare/v1.67.0...v1.68.0) (2026-01-27)
+
+### 🚀 Features
+
+* UN-2105 Доробки по ачівкам + доставити на прод ([#299](https://github.com/upstars-global/unity-core-modules/issues/299))
+ ([221a716](https://github.com/upstars-global/unity-core-modules/commit/221a716d29f0f4df67d8af6533c22de44de4c0b1))
+
 ## [1.67.0](https://github.com/upstars-global/unity-core-modules/compare/v1.66.4...v1.67.0) (2026-01-26)
 
 ### 🚀 Features
