@@ -3,7 +3,7 @@ import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 
-import { EnumLootboxState, Mode } from "../../src/models/lootboxes";
+import { EnumLootboxState, Mode } from "../../src/models/enums/lootboxes";
 import { useLootboxesStore } from "../../src/store/lootboxes";
 import { useRocketLootboxesStore } from "../../src/store/rocketLootboxes";
 

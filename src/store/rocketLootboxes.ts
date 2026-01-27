@@ -2,8 +2,8 @@ import dayjs from "dayjs";
 import { defineStore, storeToRefs } from "pinia";
 import { computed } from "vue";
 
-import { type LootboxMap, Mode, type ModeLootbox, RocketLootboxSkin } from "../models/lootboxes";
-import { EnumLootboxState } from "../models/lootboxes";
+import { EnumLootboxState, Mode } from "../models/enums/lootboxes";
+import { type LootboxMap, ModeLootbox, RocketLootboxSkin } from "../models/lootboxes";
 import type { ILootbox, ILootboxItemConfig } from "../services/api/DTO/lootboxes";
 import { useCMS } from "./CMS";
 import { useLootboxesStore } from "./lootboxes";
@@ -19,9 +19,9 @@ export const useRocketLootboxesStore = defineStore("rocketLootboxes", () => {
         const sameDay = dayjs().isSame(dayjs(created_at), "day");
 
         return !expired && (used && sameDay || !used);
-    };
+    }
 
-    const validLootboxes = computed(() => (lootboxesList.value as unknown as ILootbox[]).filter(isLootboxValid));
+    const validLootboxes = computed(() => (lootboxesList.value).filter(isLootboxValid));
 
     function isItemWithPrize(lootboxItem: ILootboxItemConfig) {
         return lootboxItem.prize;

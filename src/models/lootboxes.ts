@@ -1,12 +1,5 @@
 import type { ILootboxItemConfig } from "../services/api/DTO/lootboxes";
-import type { Currencies } from "./enums/currencies";
-
-export enum EnumLootboxState {
-    issued = "issued",
-    activated = "activated",
-    canceled = "canceled",
-    expired = "expired",
-}
+import { Mode } from "./enums/lootboxes";
 
 export interface ILootboxLevel {
     amount_cents: number;
@@ -20,31 +13,6 @@ export interface ILootboxLevel {
     state: string;
     total_amount_cents: number;
     working_days: [];
-}
-
-export interface ILootbox {
-    allowed_currencies: Currencies[];
-    currency: Currencies;
-    external_id: string;
-    games: [];
-    id: number;
-    identifier: string;
-    levels: ILootboxLevel[];
-    name: string;
-    stage: EnumLootboxState;
-    title: string;
-    group_key: string;
-}
-
-export enum Mode {
-    Lite = "rocket_lite",
-    Pro = "rocket_pro",
-    Max = "rocket_max"
-}
-
-export enum GiftLevelTypes {
-    Currency = "bonus",
-    Freespins = "freespins",
 }
 
 export const promocodes: Record<Mode, string> = {

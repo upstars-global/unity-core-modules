@@ -1,10 +1,9 @@
 import { filterIssuedLootBoxes } from "@helpers/lootBoxes";
-import { defineStore, Pinia, storeToRefs } from "pinia";
+import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
-import { type ILootbox } from "../models/lootboxes";
 import type { IPageItemCMS } from "../services/api/DTO/CMS";
-import type { ILootboxesFileConfig, ILootboxItemConfig } from "../services/api/DTO/lootboxes";
+import type { ILootbox, ILootboxesFileConfig, ILootboxItemConfig } from "../services/api/DTO/lootboxes";
 import { useCMS } from "./CMS";
 import { useUserStatuses } from "./user/userStatuses";
 
