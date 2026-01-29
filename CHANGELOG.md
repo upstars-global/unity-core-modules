@@ -1,3 +1,14 @@
+## [1.68.1](https://github.com/upstars-global/unity-core-modules/compare/v1.68.0...v1.68.1) (2026-01-29)
+
+### 🔨 Refactoring
+
+* UN-2102 refactor loot box interfaces ([#307](https://github.com/upstars-global/unity-core-modules/issues/307))
+ ([3ab174a](https://github.com/upstars-global/unity-core-modules/commit/3ab174af0958a9f015e0f71393841267b5c7d94f))
+
+
+
+    * refactor: UN-2102 refactor loot box interfaces
+
 ## [1.68.0](https://github.com/upstars-global/unity-core-modules/compare/v1.67.0...v1.68.0) (2026-01-27)
 
 ### 🚀 Features

@@ -2,7 +2,7 @@ import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 
-import { EnumLootboxState } from "../../src/models/lootboxes";
+import { EnumLootboxState } from "../../src/models/enums/lootboxes";
 import { useLootboxesStore } from "../../src/store/lootboxes";
 
 vi.mock("@helpers/lootBoxes", () => ({
