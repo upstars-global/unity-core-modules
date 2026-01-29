@@ -1,7 +1,7 @@
 import { FE_API_PREFIX } from "../../../consts/apiConfig";
 import { log } from "../../../controllers/Logger";
 import { IUserFormData } from "../../../models/user";
-import { http } from "../http";
+import { http, isHttpError } from "../http";
 
 export async function checkEmail(email: string) {
     try {
@@ -43,6 +43,18 @@ export async function registerUser(registrationData: { user: IUserFormData }) {
         return data;
     } catch (error) {
         log.error("REGISTRATION_REQUEST_ERROR", error);
+        throw error;
+    }
+}
+
+export async function userAccessCheckReq(user: IUserFormData) {
+    try {
+        const response = await http()
+            .post(`${FE_API_PREFIX}/users/access_check`, { user });
+
+        return response;
+    } catch (error) {
+        log.error("COVERY_VERIFY_ERROR", error);
         throw error;
     }
 }
