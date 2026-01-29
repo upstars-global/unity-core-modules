@@ -1,3 +1,4 @@
+import { COUNTRY_RESTRICT_STATUS, RESTRICTED_COUNTRIES_LIST } from "@theme/configs/countriesForRedirect451";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
@@ -8,6 +9,17 @@ import type { ICollectionItem, IGame, IGamesProvider } from "../../../src/models
 import { IEnabledGames } from "../../../src/models/game";
 import { loadGamesCategory as loadGamesCategoryReq } from "../../../src/services/api/requests/games";
 import { useGamesCategory } from "../../../src/store/games/gamesCategory";
+
+vi.mock("@theme/configs/countriesForRedirect451", () => ({
+    COUNTRY_RESTRICT_STATUS: {
+        full: "full",
+        partial: "partial",
+    },
+    RESTRICTED_COUNTRIES_LIST: {
+        PL: "full",
+        US: "partial",
+    },
+}));
 
 vi.mock("../../../src/controllers/Logger", () => ({
     log: {
@@ -112,6 +124,7 @@ describe("store/games/gamesCategory", () => {
             await store.loadGamesCategory("slots");
 
             expect(loadGamesCategoryReq).toHaveBeenCalledWith({
+                without_territorial_restrictions: false,
                 device: "desktop",
                 filter: {
                     categories: {

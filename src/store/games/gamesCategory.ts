@@ -1,3 +1,4 @@
+import { COUNTRY_RESTRICT_STATUS, RESTRICTED_COUNTRIES_LIST } from "@theme/configs/countriesForRedirect451";
 import { type Pinia, storeToRefs } from "pinia";
 import { defineStore } from "pinia";
 import { ref, toRefs } from "vue";
@@ -7,9 +8,12 @@ import { processGameForNewAPI } from "../../helpers/gameHelpers";
 import type { ICollectionItem, IGame } from "../../models/game";
 import type { ICollectionRecord, IGameFilter } from "../../services/api/DTO/gamesDTO";
 import { loadGamesCategory as loadGamesCategoryReq } from "../../services/api/requests/games";
+import { useCommon } from "../common";
 import { useConfigStore } from "../configStore";
+import { useContextStore } from "../context";
 import { useMultilangStore } from "../multilang";
 import { useRootStore } from "../root";
+import { useUserInfo } from "../user/userInfo";
 import { useGamesCommon } from "./gamesStore";
 import { defaultCollection, filterGames } from "./helpers/games";
 
@@ -92,10 +96,20 @@ export const useGamesCategory = defineStore("gamesCategory", () => {
 
         try {
             const { isMobile } = storeToRefs(useRootStore());
+            const { isBotUA } = storeToRefs(useContextStore());
+            const { currentIpInfo } = storeToRefs(useCommon());
+            const { getIsLogged } = storeToRefs(useUserInfo());
 
             const device = isMobile.value ? "mobile" : "desktop";
+            const isBotFromRestrictGeo = RESTRICTED_COUNTRIES_LIST && COUNTRY_RESTRICT_STATUS ?
+                Boolean(
+                    isBotUA.value &&
+                    !getIsLogged.value &&
+                    RESTRICTED_COUNTRIES_LIST[String(currentIpInfo.value?.country_code)] === COUNTRY_RESTRICT_STATUS.partial,
+                ) : false;
 
             const reqConfig: IGameFilter = {
+                without_territorial_restrictions: isBotFromRestrictGeo,
                 device,
                 filter: {
                     categories: {
