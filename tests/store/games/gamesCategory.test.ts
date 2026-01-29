@@ -112,6 +112,7 @@ describe("store/games/gamesCategory", () => {
             await store.loadGamesCategory("slots");
 
             expect(loadGamesCategoryReq).toHaveBeenCalledWith({
+                without_territorial_restrictions: true,
                 device: "desktop",
                 filter: {
                     categories: {

@@ -4,6 +4,7 @@ import { ref, toRefs } from "vue";
 
 import { log } from "../../controllers/Logger";
 import { processGameForNewAPI } from "../../helpers/gameHelpers";
+import { isServer } from "../../helpers/ssrHelpers";
 import type { ICollectionItem, IGame } from "../../models/game";
 import type { ICollectionRecord, IGameFilter } from "../../services/api/DTO/gamesDTO";
 import { loadGamesCategory as loadGamesCategoryReq } from "../../services/api/requests/games";
@@ -96,6 +97,7 @@ export const useGamesCategory = defineStore("gamesCategory", () => {
             const device = isMobile.value ? "mobile" : "desktop";
 
             const reqConfig: IGameFilter = {
+                without_territorial_restrictions: isServer,
                 device,
                 filter: {
                     categories: {
