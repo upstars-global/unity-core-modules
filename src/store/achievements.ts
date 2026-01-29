@@ -1,4 +1,14 @@
-import { ACHIEV_ID, defaultDepCount, TOURNAMENT_IDS_FOR_ACHIEV } from "@config/achievements";
+import {
+    ACHIEV_ID_COMPOINT_CHANGE,
+    ACHIEV_ID_DEP_COUNT,
+    ACHIEV_ID_DEP_PS,
+    ACHIEV_ID_EMAIL_CONFIRM,
+    ACHIEV_ID_EMAIL_CONFIRM_AND_MORE,
+    ACHIEV_ID_EXCHANGE_COIN,
+    ACHIEV_IDS_ALL,
+    TOUR_ID_ACHIEV_SPIN_COUNT,
+    TOURNAMENT_IDS_FOR_ACHIEV,
+} from "@config/achievements";
 import featureFlags from "@theme/configs/featureFlags";
 import dayjs from "dayjs";
 import { defineStore, storeToRefs } from "pinia";
@@ -24,38 +34,38 @@ type IAchievement = Omit<IStatuses, "status" | "id"> & {
 
 function showAchievByUserStatus(userStatuses: IUserStatus[]): number[] {
     const showAchievEmail = userStatuses.some((status) => {
-        return Number(status.id) === 606 || Number(status.id) === ACHIEV_ID.EMAIL_CONFIRM;
+        return ACHIEV_IDS_ALL.EMAIL_CONFIRM.includes(Number(status.id));
     });
 
     const showAchievEmailConfirmAndAction = userStatuses.some((status) => {
-        return Number(status.id) === 55 || Number(status.id) === ACHIEV_ID.EMAIL_CONFIRM_AND_MORE;
+        return ACHIEV_IDS_ALL.EMAIL_CONFIRM_AND_MORE.includes(Number(status.id));
     });
 
     /*
     // uncomment if you want ot enable AchievReceivePromo
     const showAchievReceivePromo = userStatuses.some((status) => {
-        return Number(status.id) === 402 || Number(status.id) === ACHIEV_ID_RECEIVE_PROMOS;
+        return Boolean(ACHIEV_IDS_ALL.RECEIVE_PROMOS.includes(Number(status.id)));
     }); */
 
     const showAchievExCoin = userStatuses.some((status) => {
-        return Number(status.id) === ACHIEV_ID.EXCHANGE_COIN || Number(status.id) === ACHIEV_ID.COMPOINT_CHANGE;
+        return [ ACHIEV_ID_EXCHANGE_COIN, ACHIEV_ID_COMPOINT_CHANGE ].includes(Number(status.id));
     });
 
     const showAchievDepPS = userStatuses.some((status) => {
-        return Number(status.id) === 56 || Number(status.id) === ACHIEV_ID.DEP_PS;
+        return ACHIEV_IDS_ALL.DEP_PS.includes(Number(status.id));
     });
 
     const showAchievDepCount = userStatuses.some((status) => {
-        return Number(status.id) === ACHIEV_ID.EXCHANGE_COIN || Number(status.id) === ACHIEV_ID.DEP_COUNT;
+        return ACHIEV_IDS_ALL.DEP_COUNT.includes(Number(status.id));
     });
 
     // display/hide some achiev for user by status
     return [
-        ...(showAchievEmail ? [ ACHIEV_ID.EMAIL_CONFIRM ] : []),
-        ...(showAchievEmailConfirmAndAction ? [ ACHIEV_ID.EMAIL_CONFIRM_AND_MORE ] : []),
-        ...(showAchievExCoin && featureFlags.enableConpoints ? [ ACHIEV_ID.COMPOINT_CHANGE ] : []),
-        ...(showAchievDepPS ? [ ACHIEV_ID.DEP_PS ] : []),
-        ...(showAchievDepCount ? [ ACHIEV_ID.DEP_COUNT ] : []),
+        ...(showAchievEmail ? [ ACHIEV_ID_EMAIL_CONFIRM ] : []),
+        ...(showAchievEmailConfirmAndAction ? [ ACHIEV_ID_EMAIL_CONFIRM_AND_MORE ] : []),
+        ...(showAchievExCoin && featureFlags.enableConpoints ? [ ACHIEV_ID_COMPOINT_CHANGE ] : []),
+        ...(showAchievDepPS ? [ ACHIEV_ID_DEP_PS ] : []),
+        ...(showAchievDepCount ? [ ACHIEV_ID_DEP_COUNT ] : []),
     ];
 }
 
@@ -72,7 +82,6 @@ export const useAchievements = defineStore("achievements", () => {
     });
 
     const getAchievementsAll = computed<IAchievement[]>(() => {
-        // display/hide some achiev for user by status
         const arrayAchievId = showAchievByUserStatus(userStatuses.getUserStatuses);
         const achievByGroups = groups.value.map((itemGroup) => {
             return {
@@ -100,35 +109,42 @@ export const useAchievements = defineStore("achievements", () => {
 
     const getAchievementsActive = computed<IAchievement[]>(() => {
         return getAchievementsAll.value.filter((itemAchiev) => {
-            if (
-                "frontend_identifier" in itemAchiev &&
-                itemAchiev.frontend_identifier &&
-                itemAchiev.status === STATUS_PROMO.ARCHIVE
-            ) {
+            const frontID = itemAchiev.frontend_identifier as string;
+            const achievStatusArchive = itemAchiev.status === STATUS_PROMO.ARCHIVE;
+
+            if (frontID && achievStatusArchive) {
                 return false;
             }
 
-            const userStatusHasAchievId = !itemAchiev.frontend_identifier ?
-                containAchievIdInUserStatuses(userStatuses.getUserStatuses, itemAchiev.id) : true;
+            // tournaments achievements
+            if (frontID) {
+                let tourValue = null;
 
-            const betsInTour = tournamentsStore.getStatusTournamentById(itemAchiev.id)?.bet_cents;
-            const betsSumIsComplete = itemAchiev.frontend_identifier ?
-                itemAchiev.status === STATUS_PROMO.ARCHIVE ||
-                betSunCompletedInTour(betsInTour, itemAchiev.money_budget_cents)
-                :
-                true;
+                if (frontID === TOUR_ID_ACHIEV_SPIN_COUNT) {
+                    tourValue = tournamentsStore.getStatusTournamentById(itemAchiev.id)?.games_taken;
+                } else if (TOURNAMENT_IDS_FOR_ACHIEV.includes(frontID)) {
+                    tourValue = tournamentsStore.getStatusTournamentById(itemAchiev.id)?.bet_cents;
+                }
 
-            const isDoneCountDep = itemAchiev.id === ACHIEV_ID.DEP_COUNT ?
-                getDepCountForAchiev.value >= defaultDepCount :
-                true;
+                if (tourValue) {
+                    return !betSunCompletedInTour(tourValue, itemAchiev.money_budget_cents);
+                }
 
-            const spinsInTour = tournamentsStore.getStatusTournamentById(itemAchiev.id)?.games_taken;
-            const isCompleteSpinCount = itemAchiev.frontend_identifier ?
-                itemAchiev.status === STATUS_PROMO.ARCHIVE ||
-                betSunCompletedInTour(spinsInTour, itemAchiev.money_budget_cents)
-                : true;
+                return true;
+            }
 
-            return !userStatusHasAchievId || !betsSumIsComplete || !isDoneCountDep || !isCompleteSpinCount;
+            if (!frontID) {
+                // Костыль на случай некорректной работы апи, когда возвращает 2 варианта айди для активного и неактивного статуса
+                // В этом случае делаем ачивку неактивной
+                const achievValues: number[][] = Object.values(ACHIEV_IDS_ALL);
+                const achievArr = achievValues.find((arr) => arr?.includes(itemAchiev.id));
+
+                if (achievArr?.every((id) => userStatuses.getUserGroups.includes(id))) {
+                    return false;
+                }
+
+                return containAchievIdInUserStatuses(userStatuses.getUserStatuses, itemAchiev.id);
+            }
         });
     });
 
