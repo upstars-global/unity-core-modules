@@ -106,3 +106,8 @@ export interface ITwoFactorAuthData {
     otp_secret: string;
     data: string;
 }
+
+export interface ISeasonStartPoints {
+    compointsStart: number
+    userId: number
+}
