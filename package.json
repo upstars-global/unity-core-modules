@@ -36,7 +36,7 @@
     "uuid": "^9.0.1",
     "vue": "^3.5.20",
     "vue-i18n": "^9.14.5",
-    "vue-router": "^4.5.1"
+    "vue-router": "^4.6.3"
   },
   "devDependencies": {
     "@octokit/auth-app": "^8.1.2",

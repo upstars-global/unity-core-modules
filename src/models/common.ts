@@ -1,5 +1,7 @@
 import type { IResult } from "ua-parser-js";
 
+import { IbizaKeysValidation } from "./enums/ibiza";
+
 export interface IMapImages {
     img: string;
     imgRetina: string;
@@ -106,3 +108,9 @@ export type OddsType =
     | "american"
     | "indonesian"
     | "malaysian";
+
+export interface IRespIbizaService {
+    errors: {
+        message: IbizaKeysValidation;
+    };
+}
