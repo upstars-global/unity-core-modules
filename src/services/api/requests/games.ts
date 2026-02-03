@@ -2,7 +2,7 @@ import type { SlugCategoriesGames } from "@theme/configs/categoryesGames";
 
 import { FE_API_PREFIX } from "../../../consts/apiConfig";
 import { log } from "../../../controllers/Logger";
-import type { IGame } from "../../../models/game";
+import type { IGame, IGamesProvider } from "../../../models/game";
 import {
     AcceptGamesVersion,
     IGameCollection,
@@ -76,6 +76,26 @@ export async function loadGamesCategory(config: Record<string, unknown>): Promis
     } catch (error) {
         log.error("LOAD_GAMES_CATEGORY_ERROR", error);
         return {};
+    }
+}
+
+export async function loadGamesDataByFilter<T>(config: Record<string, unknown>): Promise<T> {
+    try {
+        const { data } = await http().post<T>("/api/games_filter", config);
+        return data;
+    } catch (error) {
+        log.error("LOAD_GAMES_CATEGORY_ERROR", error);
+        return {} as T;
+    }
+}
+
+export async function loadGamesProvidersReq() {
+    try {
+        const { data } = await http().get<IGamesProvider[]>("/api/games/providers");
+        return data;
+    } catch (error) {
+        log.error("LOAD_GAMES_PROVIDERS_ERROR", error);
+        return [] as IGamesProvider[];
     }
 }
 

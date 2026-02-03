@@ -139,3 +139,10 @@ export function filterGames<T extends IGame | IGameItem>(
             isGameAllowed(game.identifier, enabledMap as IEnabledGames | undefined, country),
     );
 }
+
+export function isLoaded(collection: ICollectionItem, page: number) {
+    return Boolean(collection) && ((page === 1 && collection.data.length) ||
+            collection.pagination.next_page === null ||
+            page > collection.pagination.next_page ||
+            collection.pagination.current_page >= page);
+}
