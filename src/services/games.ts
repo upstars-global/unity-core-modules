@@ -1,18 +1,24 @@
 import { SlugCategoriesGames } from "@theme/configs/categoryesGames";
 import { storeToRefs } from "pinia";
-import { useConfigStore } from "src/store/configStore";
-import { defaultCollection, filterProviders, isLoaded } from "src/store/games/helpers/games";
+import { useGamesFavorite } from "src/store/games/gamesFavorite";
 import { UnwrapRef } from "vue";
 
 import { log } from "../controllers/Logger";
+import { processGame } from "../helpers/gameHelpers";
 import { isExistData } from "../helpers/isExistData";
 import { ICollectionItem, IGamesProvider, IRecentGames } from "../models/game";
+import { useConfigStore } from "../store/configStore";
 import { useGamesProviders } from "../store/games/gamesProviders";
 import { useGamesCommon } from "../store/games/gamesStore";
+import { defaultCollection, filterGames, filterProviders, isLoaded } from "../store/games/helpers/games";
 import { useJackpots } from "../store/jackpots";
 import { useRootStore } from "../store/root";
+import { AcceptsGamesVariants } from "./api/DTO/gamesDTO";
 import { loadEnabledGamesConfigReq } from "./api/requests/configs";
 import {
+    fetchAddFavoriteGamesCount,
+    fetchDeleteGameFromFavorites,
+    fetchFavoriteGames,
     loadCategoriesFileConfigRequest,
     loadFilteredGames as loadFilteredGamesReq,
     loadGamesCategories as loadGamesCategoriesReq,
@@ -218,4 +224,47 @@ export async function loadGamesProviders(): Promise<IGamesProvider[]> {
         log.error("LOAD_GAMES_PROVIDERS_ERROR", err);
         throw err;
     }
+}
+
+export async function loadFavoriteGames() {
+    try {
+        const gamesFavoriteStore = useGamesFavorite();
+        const [
+            gamesFullData,
+            gamesID,
+        ] = await Promise.all([
+            fetchFavoriteGames(AcceptsGamesVariants.fullData),
+            fetchFavoriteGames(AcceptsGamesVariants.onlyID),
+        ]);
+
+        const processedGames = gamesFullData
+            .map((game) => processGame(game, game.identifier));
+        const filteredGames = filterGames(processedGames);
+
+        gamesFavoriteStore.setFavoritesId(gamesID);
+        gamesFavoriteStore.setGamesFavoriteFullData(filteredGames);
+    } catch (err) {
+        log.error("LOAD_FAVORITE_GAMES_ERROR", err);
+        throw err;
+    }
+}
+
+export async function addGameToFavorites(idGame: number): Promise<void> {
+    await fetchAddFavoriteGamesCount(idGame);
+    await loadFavoriteGames();
+}
+
+export async function deleteGameFromFavorites(idGame: number) {
+    await fetchDeleteGameFromFavorites(idGame);
+
+    const gamesFavoriteStore = useGamesFavorite();
+    const { favoritesId, gamesFavoriteFullData } = storeToRefs(gamesFavoriteStore);
+
+    const filteredFavoritesId = favoritesId.value.filter((idFavorite) => idFavorite !== idGame);
+    const filteredGamesFavoriteFullData = gamesFavoriteFullData.value.filter((gameFavorite) => {
+        return !Object.values(gameFavorite.currencies).some(({ id }) => id === idGame);
+    });
+
+    gamesFavoriteStore.setFavoritesId(filteredFavoritesId);
+    gamesFavoriteStore.setGamesFavoriteFullData(filteredGamesFavoriteFullData);
 }
