@@ -1,9 +1,11 @@
 import { storeToRefs } from "pinia";
+import { useJackpotWinners } from "src/store/winnersJackpot";
 
+import { log } from "../controllers/Logger";
 import { isExistData } from "../helpers/isExistData";
 import { useJackpots } from "../store/jackpots";
 import { IJackpotItem } from "./api/DTO/jackpot";
-import { loadJackpotsList } from "./api/requests/jackpots";
+import { getJackpotWinnersReq, loadJackpotsList } from "./api/requests/jackpots";
 
 export async function loadJackpots(): Promise<IJackpotItem[] | void> {
     const jackpotsStore = useJackpots();
@@ -20,4 +22,19 @@ export async function loadJackpots(): Promise<IJackpotItem[] | void> {
     }
 
     return data;
+}
+
+export async function getJackpotWinners() {
+    try {
+        const winnersStore = useJackpotWinners();
+        const data = await getJackpotWinnersReq();
+
+        if (!data) {
+            return;
+        }
+
+        winnersStore.setWinnersData(data);
+    } catch (err) {
+        log.error("GET_JACKPOT_WINNERS_ERROR", err);
+    }
 }
