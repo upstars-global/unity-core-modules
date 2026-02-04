@@ -2,8 +2,6 @@ import {
     BANNER_CATEGORY_131811__HIDE,
     BANNER_CATEGORY_131811_SHOW,
     BANNER_CATEGORY_JACKPOTS,
-    BANNER_CATEGORY_TERMS_CONDITIONS,
-    BANNERS_CATEGORIES_ENABLE,
     shouldDisplayRegistrationBanner,
 } from "@config/banners";
 import dayjs from "dayjs";
@@ -16,8 +14,6 @@ import { useWelcomePack } from "../controllers/useWelcomePack";
 import { prepareJackpotsBanners } from "../helpers/jackpotsHelpers";
 import type { IBannerConfig, IViewedGTMBanners } from "../models/banners";
 import type { IFileCMS } from "../services/api/DTO/CMS";
-import { loadAllFilesFromCMSReq } from "../services/api/requests/CMS";
-import { useMultilangStore } from "./multilang";
 import { useSettings } from "./settings";
 import { useUserInfo } from "./user/userInfo";
 import { useUserStatuses } from "./user/userStatuses";
@@ -25,7 +21,7 @@ import { useUserStatuses } from "./user/userStatuses";
 export const useBannerStore = defineStore("bannerStore", () => {
     const { getIsLogged, isCryptoUserCurrency } = storeToRefs(useUserInfo());
     const { getUserGroups } = storeToRefs(useUserStatuses());
-    const { getUserLocale } = storeToRefs(useMultilangStore());
+
 
     const banners = ref<IBannerConfig[]>([]);
     const termsFiles = ref<IFileCMS[]>([]);
@@ -74,23 +70,6 @@ export const useBannerStore = defineStore("bannerStore", () => {
         });
     });
 
-    async function loadCMSPages(): Promise<IFileCMS[] | undefined> {
-        if (
-            termsFiles.value.length
-        ) {
-            return;
-        }
-
-        const filesCMS: IFileCMS[] = await loadAllFilesFromCMSReq(getUserLocale.value);
-
-        filesCMS.forEach((file) => {
-            if (file.categories.includes(BANNER_CATEGORY_TERMS_CONDITIONS)) {
-                termsFiles.value = [ ...termsFiles.value, file ];
-            }
-        });
-
-        return filesCMS;
-    }
 
     function welcomePackBannersFilter(bannersList: IBannerConfig[] = []): IBannerConfig[] {
         const { showWelcomePack } = useWelcomePack();
@@ -115,8 +94,12 @@ export const useBannerStore = defineStore("bannerStore", () => {
         viewedGTMBanners.value = [];
     }
 
+    function setTermsFiles(files: IFileCMS[]) {
+        termsFiles.value = files;
+    }
+
     return {
-        loadCMSPages,
+        setTermsFiles,
         setBanners,
         banners,
         termsFiles,
@@ -127,13 +110,3 @@ export const useBannerStore = defineStore("bannerStore", () => {
         clearViewedGTMBanners,
     };
 });
-
-export function useBannersFetchService(pinia?: Pinia) {
-    const {
-        loadCMSPages,
-    } = useBannerStore(pinia);
-
-    return {
-        loadCMSPages,
-    };
-}

@@ -1,3 +1,6 @@
+import {
+    BANNER_CATEGORY_TERMS_CONDITIONS,
+} from "@config/banners";
 import { metaDataSSR } from "@theme/configs/meta";
 import { storeToRefs } from "pinia";
 
@@ -6,9 +9,16 @@ import { isExistData } from "../helpers/isExistData";
 import { replaceCurrentYearPlaceholder } from "../helpers/replaceStringHelper";
 import { normalizeUrl, prepareMapStaticPages, resolveUrlFromRoute } from "../helpers/staticPages";
 import { CurrentPage, ICurrentPage, ICurrentPageMeta } from "../models/CMS";
+import { useBannerStore } from "../store/banners";
 import { useCMS } from "../store/CMS";
 import { useMultilangStore } from "../store/multilang";
-import { loadCMSPagesReq, loadCMSSnippetsReq, loadPageContentFromCmsReq } from "./api/requests/CMS";
+import { IFileCMS } from "./api/DTO/CMS";
+import {
+    loadAllFilesFromCMSReq,
+    loadCMSPagesReq,
+    loadCMSSnippetsReq,
+    loadPageContentFromCmsReq,
+} from "./api/requests/CMS";
 
 export async function loadStaticPages({ reload } = { reload: false }) {
     try {
@@ -170,4 +180,23 @@ export async function loadMetaSEO(route: { path: string; name: string; meta?: { 
         log.error("LOAD_SEO_META", err);
         return String(err);
     }
+}
+
+export async function loadCMSPages(): Promise<IFileCMS[] | undefined> {
+    const { getUserLocale } = storeToRefs(useMultilangStore());
+    const bannerStore = useBannerStore();
+    const { termsFiles } = storeToRefs(bannerStore);
+
+    if (
+        termsFiles.value.length
+    ) {
+        return;
+    }
+
+    const filesCMS: IFileCMS[] = await loadAllFilesFromCMSReq(getUserLocale.value);
+    const filteredFiles = filesCMS.filter((file) => file.categories.includes(BANNER_CATEGORY_TERMS_CONDITIONS));
+
+    bannerStore.setTermsFiles(filteredFiles);
+
+    return filesCMS;
 }
