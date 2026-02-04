@@ -137,3 +137,30 @@ export async function fetchDeleteGameFromFavorites(idGame: number): Promise<void
         log.error("FETCH_DELETE_GAME_FROM_FAVORITES_ERROR", err);
     }
 }
+
+export async function loadGameBySeoTitleReq(seoTitle: string, restrict: boolean = false) {
+    try {
+        const { data } = await http().post<Record<string, IGame>>("/api/games_filter/select_by_seo_titles", {
+            without_territorial_restrictions: restrict,
+            game_seo_titles: [ seoTitle ],
+        });
+
+        return data;
+    } catch (err) {
+        log.error("LOAD_GAME_BY_SEO_TITLE_ERROR", err);
+        throw err;
+    }
+}
+
+export async function loadGameBySlugReq(slug: string) {
+    try {
+        const { data } = await http().post<Record<string, IGame>>("/api/games_filter/select", {
+            game_ids: [ slug ],
+        });
+
+        return data;
+    } catch (err) {
+        log.error("LOAD_GAME_BY_SLUG_ERROR", err);
+        throw err;
+    }
+}

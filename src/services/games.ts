@@ -5,12 +5,19 @@ import { UnwrapRef } from "vue";
 import { log } from "../controllers/Logger";
 import { processGame } from "../helpers/gameHelpers";
 import { isExistData } from "../helpers/isExistData";
-import { ICollectionItem, IGamesProvider, IRecentGames } from "../models/game";
+import { ICollectionItem, IGame, IGamesProvider, IRecentGames } from "../models/game";
 import { useConfigStore } from "../store/configStore";
+import { useGameCurrent } from "../store/games/gameCurrent";
 import { useGamesFavorite } from "../store/games/gamesFavorite";
 import { useGamesProviders } from "../store/games/gamesProviders";
 import { useGamesCommon } from "../store/games/gamesStore";
-import { defaultCollection, filterGames, filterProviders, isLoaded } from "../store/games/helpers/games";
+import {
+    defaultCollection,
+    filterGames,
+    filterProviders,
+    findGameBySeoTittleAndProducer,
+    isLoaded,
+} from "../store/games/helpers/games";
 import { useJackpots } from "../store/jackpots";
 import { useRootStore } from "../store/root";
 import { AcceptsGamesVariants } from "./api/DTO/gamesDTO";
@@ -21,6 +28,8 @@ import {
     fetchFavoriteGames,
     loadCategoriesFileConfigRequest,
     loadFilteredGames as loadFilteredGamesReq,
+    loadGameBySeoTitleReq,
+    loadGameBySlugReq,
     loadGamesCategories as loadGamesCategoriesReq,
     loadGamesCategory as loadGamesCategoryReq,
     loadGamesDataByFilter,
@@ -267,4 +276,50 @@ export async function deleteGameFromFavorites(idGame: number) {
 
     gamesFavoriteStore.setFavoritesId(filteredFavoritesId);
     gamesFavoriteStore.setGamesFavoriteFullData(filteredGamesFavoriteFullData);
+}
+
+export async function loadGameBySeoTitle(seoTitle: string, producer: string, restrict: boolean = false): Promise<IGame> {
+    const { setGameToCache, getGameFromCache } = useGamesCommon();
+    const { setToCurrentGame } = useGameCurrent();
+    const gameFromCache = getGameFromCache({ seoTitle, producer });
+
+    if (gameFromCache) {
+        return setToCurrentGame(gameFromCache);
+    }
+
+    try {
+        const data = await loadGameBySeoTitleReq(seoTitle, restrict);
+        const dataToArray = Object.values(data);
+        const gameData = findGameBySeoTittleAndProducer(dataToArray, { seoTitle, producer }) || dataToArray[0];
+
+        setGameToCache(gameData);
+        return setToCurrentGame(gameData);
+    } catch (err) {
+        log.error("LOAD_GAME_BY_SEO_TITLE", err);
+        throw err;
+    }
+}
+
+export async function loadGameBySlug(slug: string) {
+    const { setGameToCache, getGameFromCache } = useGamesCommon();
+    const { setToCurrentGame } = useGameCurrent();
+    const gameInCache = getGameFromCache({ identifier: slug });
+
+    if (gameInCache) {
+        return setToCurrentGame(gameInCache);
+    }
+
+    try {
+        const data = await loadGameBySlugReq(slug);
+        const gameData = Object.values(data)[0];
+
+        if (gameData) {
+            setGameToCache(gameData);
+
+            return setToCurrentGame(gameData);
+        }
+    } catch (err) {
+        log.error("LOAD_GAME_BY_SLUG", err);
+        throw err;
+    }
 }
