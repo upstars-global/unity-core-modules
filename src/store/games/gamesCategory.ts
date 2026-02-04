@@ -2,14 +2,11 @@ import { type Pinia, storeToRefs } from "pinia";
 import { defineStore } from "pinia";
 import { ref, toRefs } from "vue";
 
-import { log } from "../../controllers/Logger";
 import { processGameForNewAPI } from "../../helpers/gameHelpers";
 import type { ICollectionItem, IGame } from "../../models/game";
-import type { ICollectionRecord, IGameFilter } from "../../services/api/DTO/gamesDTO";
-import { loadGamesCategory as loadGamesCategoryReq } from "../../services/api/requests/games";
+import type { ICollectionRecord } from "../../services/api/DTO/gamesDTO";
 import { useConfigStore } from "../configStore";
 import { useMultilangStore } from "../multilang";
-import { useRootStore } from "../root";
 import { useGamesCommon } from "./gamesStore";
 import { defaultCollection, filterGames } from "./helpers/games";
 
@@ -82,49 +79,16 @@ export const useGamesCategory = defineStore("gamesCategory", () => {
         });
     }
 
-    async function loadGamesCategory(slug: string, page: number = 1): Promise<ICollectionItem | undefined> {
-        const slugCollection = categoryGeo(slug);
-        const loaded = isLoaded(slugCollection, page);
-
-        if (loaded) {
-            return collections.value[slugCollection];
-        }
-
-        try {
-            const { isMobile } = storeToRefs(useRootStore());
-
-            const device = isMobile.value ? "mobile" : "desktop";
-
-            const reqConfig: IGameFilter = {
-                device,
-                filter: {
-                    categories: {
-                        identifiers: [ slugCollection ],
-                        strategy: "OR",
-                    },
-                },
-                page,
-                page_size: gamesPageLimit.value,
-            };
-
-            const data = await loadGamesCategoryReq(reqConfig);
-            setData(data, slugCollection);
-        } catch (err) {
-            log.error("LOAD_GAMES_CATEGORY_ERROR", err);
-        }
-    }
 
     return {
         collections,
-
         categoryGeo,
         getCollection,
         getCollectionFullData,
         getCollectionPagination,
         isLoaded,
-
-        loadGamesCategory,
         initCollection,
+        setData,
     };
 });
 

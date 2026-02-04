@@ -8,6 +8,7 @@ import { isExistData } from "../helpers/isExistData";
 import { ICollectionItem, IGame, IGamesProvider, IRecentGames } from "../models/game";
 import { useConfigStore } from "../store/configStore";
 import { useGameCurrent } from "../store/games/gameCurrent";
+import { useGamesCategory } from "../store/games/gamesCategory";
 import { useGamesFavorite } from "../store/games/gamesFavorite";
 import { useGamesProviders } from "../store/games/gamesProviders";
 import { useGamesCommon } from "../store/games/gamesStore";
@@ -20,7 +21,7 @@ import {
 } from "../store/games/helpers/games";
 import { useJackpots } from "../store/jackpots";
 import { useRootStore } from "../store/root";
-import { AcceptsGamesVariants } from "./api/DTO/gamesDTO";
+import { AcceptsGamesVariants, IGameFilter } from "./api/DTO/gamesDTO";
 import { loadEnabledGamesConfigReq } from "./api/requests/configs";
 import {
     fetchAddFavoriteGamesCount,
@@ -321,5 +322,41 @@ export async function loadGameBySlug(slug: string) {
     } catch (err) {
         log.error("LOAD_GAME_BY_SLUG", err);
         throw err;
+    }
+}
+
+export async function loadGamesCategory(slug: string, page: number = 1): Promise<ICollectionItem | undefined> {
+    const gamesCategoryStore = useGamesCategory();
+    const { collections } = storeToRefs(gamesCategoryStore);
+    const { gamesPageLimit } = storeToRefs(useConfigStore());
+    const slugCollection = gamesCategoryStore.categoryGeo(slug);
+    const loaded = gamesCategoryStore.isLoaded(slugCollection, page);
+
+    if (loaded) {
+        return collections.value[slugCollection];
+    }
+
+    try {
+        const { isMobile } = storeToRefs(useRootStore());
+
+        const device = isMobile.value ? "mobile" : "desktop";
+
+        const reqConfig: IGameFilter = {
+            device,
+            filter: {
+                categories: {
+                    identifiers: [ slugCollection ],
+                    strategy: "OR",
+                },
+            },
+            page,
+            page_size: gamesPageLimit.value,
+        };
+
+        const data = await loadGamesCategoryReq(reqConfig);
+
+        gamesCategoryStore.setData(data, slugCollection);
+    } catch (err) {
+        log.error("LOAD_GAMES_CATEGORY_ERROR", err);
     }
 }
