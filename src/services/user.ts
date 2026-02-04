@@ -675,15 +675,18 @@ export async function resetActiveDepositGift() {
 }
 
 export async function leadPlayerStartSeasonInfo() {
-    const { setUserSeasonStartPoints } = useUserInfo();
+    const userInfo = useUserInfo();
+    const { getIsLogged } = storeToRefs(useUserInfo());
 
-    try {
-        const data = await leadPlayerStartSeasonInfoReq();
+    if (getIsLogged.value) {
+        try {
+            const data = await leadPlayerStartSeasonInfoReq();
 
-        if (data) {
-            setUserSeasonStartPoints(data);
+            if (data) {
+                userInfo.setUserSeasonStartPoints(data);
+            }
+        } catch (err) {
+            log.error("PORTOFRANCO_VIP_STATUS_ERROR", err);
         }
-    } catch (err) {
-        log.error("PORTOFRANCO_VIP_STATUS_ERROR", err);
     }
 }
