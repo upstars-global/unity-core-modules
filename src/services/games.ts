@@ -186,7 +186,7 @@ export async function loadData({ slug, page = 1 }: { slug: string, page?: number
     }
 }
 
-export async function initCollection(data: IGamesProvider[]) {
+export function initCollection(data: IGamesProvider[]) {
     if (!data) {
         return;
     }
