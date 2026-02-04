@@ -1,4 +1,4 @@
-import { type Pinia, storeToRefs } from "pinia";
+import { storeToRefs } from "pinia";
 import { defineStore } from "pinia";
 import { ref, toRefs } from "vue";
 
@@ -91,11 +91,3 @@ export const useGamesCategory = defineStore("gamesCategory", () => {
         setData,
     };
 });
-
-export function useGamesCategoryFetchService(pinia?: Pinia) {
-    const { initCollection } = useGamesCategory(pinia);
-
-    return {
-        initCollection,
-    };
-}

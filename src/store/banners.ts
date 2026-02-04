@@ -6,7 +6,6 @@ import {
 } from "@config/banners";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-import type{ Pinia } from "pinia";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
