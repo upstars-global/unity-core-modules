@@ -1,11 +1,11 @@
 import { metaDataSSR } from "@theme/configs/meta";
 import { storeToRefs } from "pinia";
-import { replaceCurrentYearPlaceholder } from "src/helpers/replaceStringHelper";
-import { CurrentPage, ICurrentPage, ICurrentPageMeta } from "src/models/CMS";
 
 import { log } from "../controllers/Logger";
 import { isExistData } from "../helpers/isExistData";
+import { replaceCurrentYearPlaceholder } from "../helpers/replaceStringHelper";
 import { normalizeUrl, prepareMapStaticPages, resolveUrlFromRoute } from "../helpers/staticPages";
+import { CurrentPage, ICurrentPage, ICurrentPageMeta } from "../models/CMS";
 import { useCMS } from "../store/CMS";
 import { useMultilangStore } from "../store/multilang";
 import { loadCMSPagesReq, loadCMSSnippetsReq, loadPageContentFromCmsReq } from "./api/requests/CMS";

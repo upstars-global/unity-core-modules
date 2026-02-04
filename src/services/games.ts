@@ -1,6 +1,5 @@
 import { SlugCategoriesGames } from "@theme/configs/categoryesGames";
 import { storeToRefs } from "pinia";
-import { useGamesFavorite } from "src/store/games/gamesFavorite";
 import { UnwrapRef } from "vue";
 
 import { log } from "../controllers/Logger";
@@ -8,6 +7,7 @@ import { processGame } from "../helpers/gameHelpers";
 import { isExistData } from "../helpers/isExistData";
 import { ICollectionItem, IGamesProvider, IRecentGames } from "../models/game";
 import { useConfigStore } from "../store/configStore";
+import { useGamesFavorite } from "../store/games/gamesFavorite";
 import { useGamesProviders } from "../store/games/gamesProviders";
 import { useGamesCommon } from "../store/games/gamesStore";
 import { defaultCollection, filterGames, filterProviders, isLoaded } from "../store/games/helpers/games";

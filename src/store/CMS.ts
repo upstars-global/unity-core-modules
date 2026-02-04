@@ -1,9 +1,9 @@
 
 import { defineStore } from "pinia";
-import { replaceCurrentYearPlaceholder } from "src/helpers/replaceStringHelper";
 import { computed, ref } from "vue";
 
 import { enableCategoriesPage } from "../consts/cms";
+import { replaceCurrentYearPlaceholder } from "../helpers/replaceStringHelper";
 import { type ICurrentPage, ICurrentPageMeta, type IPageCMSPrepare } from "../models/CMS";
 import type { ISnippetItemCMS } from "../services/api/DTO/CMS";
 import { loadPageContentFromCmsReq } from "../services/api/requests/CMS";
