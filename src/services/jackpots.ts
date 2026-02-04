@@ -1,9 +1,9 @@
 import { storeToRefs } from "pinia";
-import { useJackpotWinners } from "src/store/winnersJackpot";
 
 import { log } from "../controllers/Logger";
 import { isExistData } from "../helpers/isExistData";
 import { useJackpots } from "../store/jackpots";
+import { useJackpotWinners } from "../store/winnersJackpot";
 import { IJackpotItem } from "./api/DTO/jackpot";
 import { getJackpotWinnersReq, loadJackpotsList } from "./api/requests/jackpots";
 
