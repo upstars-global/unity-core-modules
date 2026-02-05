@@ -3,12 +3,13 @@ import { defineStore } from "pinia";
 import { ref, toRefs } from "vue";
 
 import { processGameForNewAPI } from "../../helpers/gameHelpers";
+import { defaultCollection, filterGames } from "../../helpers/gameHelpers";
 import type { ICollectionItem, IGame } from "../../models/game";
 import type { ICollectionRecord } from "../../services/api/DTO/gamesDTO";
 import { useConfigStore } from "../configStore";
 import { useMultilangStore } from "../multilang";
+import { useGamesProviders } from "./gamesProviders";
 import { useGamesCommon } from "./gamesStore";
-import { defaultCollection, filterGames } from "./helpers/games";
 
 const DEFAULT_COLLECTION_NAME = "default";
 
@@ -54,7 +55,14 @@ export const useGamesCategory = defineStore("gamesCategory", () => {
 
     function setData(data: ICollectionItem, slug: string): void {
         const propsGame = { ...data };
-        propsGame.data = filterGames(data.data.map(processGameForNewAPI));
+        const { disabledGamesProviders } = storeToRefs(useGamesProviders());
+        const { enabledGamesConfig } = storeToRefs(useGamesCommon());
+
+        propsGame.data = filterGames(
+            data.data.map(processGameForNewAPI),
+            disabledGamesProviders.value,
+            enabledGamesConfig.value,
+        );
 
         if (!collections.value[slug]) {
             collections.value = {

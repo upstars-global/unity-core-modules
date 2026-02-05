@@ -4,6 +4,13 @@ import { UnwrapRef } from "vue";
 
 import { log } from "../controllers/Logger";
 import { processGame } from "../helpers/gameHelpers";
+import {
+    defaultCollection,
+    filterGames,
+    filterProviders,
+    findGameBySeoTittleAndProducer,
+    isLoaded,
+} from "../helpers/gameHelpers";
 import { isExistData } from "../helpers/isExistData";
 import { ICollectionItem, IGame, IGamesProvider, IRecentGames } from "../models/game";
 import { useConfigStore } from "../store/configStore";
@@ -12,13 +19,6 @@ import { useGamesCategory } from "../store/games/gamesCategory";
 import { useGamesFavorite } from "../store/games/gamesFavorite";
 import { useGamesProviders } from "../store/games/gamesProviders";
 import { useGamesCommon } from "../store/games/gamesStore";
-import {
-    defaultCollection,
-    filterGames,
-    filterProviders,
-    findGameBySeoTittleAndProducer,
-    isLoaded,
-} from "../store/games/helpers/games";
 import { useJackpots } from "../store/jackpots";
 import { useRootStore } from "../store/root";
 import { AcceptsGamesVariants, IGameFilter } from "./api/DTO/gamesDTO";
@@ -37,6 +37,7 @@ import {
     loadGamesJackpots as loadGamesJackpotsReq,
     loadGamesProvidersReq,
     loadLastGames as loadLastGamesReq,
+    loadRandomGame,
 } from "./api/requests/games";
 
 export function getMenuCategoriesBySlug(slug: string): SlugCategoriesGames[] {
@@ -212,6 +213,8 @@ export function initCollection(data: IGamesProvider[]) {
 export async function loadGamesProviders(): Promise<IGamesProvider[]> {
     try {
         const gamesProvidersStore = useGamesProviders();
+        const { disabledGamesProviders } = storeToRefs(gamesProvidersStore);
+
         const providers = await loadGamesProvidersReq();
 
         let data = providers.map((provider: IGamesProvider) => {
@@ -224,7 +227,7 @@ export async function loadGamesProviders(): Promise<IGamesProvider[]> {
             };
         });
 
-        data = filterProviders(data);
+        data = filterProviders(data, disabledGamesProviders.value);
 
         gamesProvidersStore.setAllProviders(data);
         initCollection(data);
@@ -239,6 +242,9 @@ export async function loadGamesProviders(): Promise<IGamesProvider[]> {
 export async function loadFavoriteGames() {
     try {
         const gamesFavoriteStore = useGamesFavorite();
+        const { disabledGamesProviders } = storeToRefs(useGamesProviders());
+        const { enabledGamesConfig } = storeToRefs(useGamesCommon());
+
         const [
             gamesFullData,
             gamesID,
@@ -249,7 +255,12 @@ export async function loadFavoriteGames() {
 
         const processedGames = gamesFullData
             .map((game) => processGame(game, game.identifier));
-        const filteredGames = filterGames(processedGames);
+
+        const filteredGames = filterGames(
+            processedGames,
+            disabledGamesProviders.value,
+            enabledGamesConfig.value,
+        );
 
         gamesFavoriteStore.setFavoritesId(gamesID);
         gamesFavoriteStore.setGamesFavoriteFullData(filteredGames);
@@ -359,4 +370,34 @@ export async function loadGamesCategory(slug: string, page: number = 1): Promise
     } catch (err) {
         log.error("LOAD_GAMES_CATEGORY_ERROR", err);
     }
+}
+
+let randomGameCounter = 0;
+export async function getRandomGame(category?: string): Promise<IGame | undefined> {
+    const randomGame = await loadRandomGame({ identifier: category });
+    const { disabledGamesProviders } = storeToRefs(useGamesProviders());
+    const { enabledGamesConfig } = storeToRefs(useGamesCommon());
+
+    randomGameCounter++;
+
+    const isValidRandomGame = filterGames(
+        [ randomGame ],
+        disabledGamesProviders.value,
+        enabledGamesConfig.value,
+    )?.length;
+
+    if (isValidRandomGame) {
+        randomGameCounter = 0;
+        return randomGame;
+    }
+
+    if (randomGameCounter <= 10) {
+        return getRandomGame(category);
+    }
+
+    if (randomGameCounter > 10) {
+        log.error("LOAD_RANDOM_GAME_ERROR", "Repeated 10 times, didn`t find an acceptable random game");
+    }
+
+    randomGameCounter = 0;
 }

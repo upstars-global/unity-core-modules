@@ -1,14 +1,15 @@
 import { CONFIG_DEFAULT_COLLECTIONS_MENU_SLUGS, SlugCategoriesGames } from "@theme/configs/categoryesGames";
-import { defineStore, type Pinia, storeToRefs } from "pinia";
+import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
 import { currencyView } from "../../helpers/currencyHelper";
 import { processGame } from "../../helpers/gameHelpers";
+import { filterGames, findGameBySeoTittleAndProducer } from "../../helpers/gameHelpers";
 import type { IGame, IGamesProvider, IRecentGames } from "../../models/game";
 import { IEnabledGames } from "../../models/game";
 import { type IJackpots } from "../../services/api/DTO/gamesDTO";
+import { useConfigStore } from "../configStore";
 import { useUserInfo } from "../user/userInfo";
-import { filterGames, findGameBySeoTittleAndProducer } from "./helpers/games";
 
 interface ISearchCachedGameKey {
     seoTitle?: string;
@@ -34,13 +35,19 @@ export const useGamesCommon = defineStore("gamesCommon", () => {
     const menuGameCategories = ref<Record<string, SlugCategoriesGames[]>>({});
     const defaultMenuGameCategories = ref<Record<string, SlugCategoriesGames[]>>(CONFIG_DEFAULT_COLLECTIONS_MENU_SLUGS);
     const enabledGamesConfig = ref<IEnabledGames>({});
+    const { disabledGamesProviders } = storeToRefs(useConfigStore());
 
     const getRecentGames = computed(() => {
         let tempGames = [];
         for (const [ id, game ] of Object.entries(recentGames.value)) {
             tempGames.push(processGame(game, id));
         }
-        tempGames = filterGames(tempGames);
+
+        tempGames = filterGames(
+            tempGames,
+            disabledGamesProviders.value,
+            enabledGamesConfig.value,
+        );
 
         return tempGames.sort(({ last_activity_at: lastActivityItem }, { last_activity_at: lastActivityNextItem }) => {
             return new Date(lastActivityNextItem).getTime() - new Date(lastActivityItem).getTime();

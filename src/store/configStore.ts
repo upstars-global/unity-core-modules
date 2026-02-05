@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { ref, shallowRef } from "vue";
 
 import { type IBettingConfig } from "../models/configs";
+import { IDisabledGamesProvider } from "../models/game";
 import type { IVipProgramConfig, Level, Rewards } from "../models/levels";
 import { type IVipProgramConfigDTO } from "../services/api/DTO/levels";
 
@@ -9,6 +10,7 @@ export const useConfigStore = defineStore("configStore", () => {
     const gamesPageLimit = ref<number>(40);
     const bettingConfig = ref<IBettingConfig | null>(null);
     const vipProgramConfig = shallowRef<IVipProgramConfig | null>(null);
+    const disabledGamesProviders = ref<IDisabledGamesProvider>({});
 
     function setGamesPageLimit(limit: number) {
         gamesPageLimit.value = limit;
@@ -46,6 +48,10 @@ export const useConfigStore = defineStore("configStore", () => {
         };
     }
 
+    function setDisabledGamesProviders(data: IDisabledGamesProvider) {
+        disabledGamesProviders.value = data;
+    }
+
     return {
         gamesPageLimit,
         setGamesPageLimit,
@@ -53,5 +59,7 @@ export const useConfigStore = defineStore("configStore", () => {
         setBettingConfig,
         vipProgramConfig,
         setVipProgramConfig,
+        disabledGamesProviders,
+        setDisabledGamesProviders,
     };
 });

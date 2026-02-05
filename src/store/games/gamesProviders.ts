@@ -2,7 +2,7 @@ import { SPECIAL_GAME_PROVIDER_NAME } from "@theme/configs/games";
 import { defineStore, storeToRefs } from "pinia";
 import { ref } from "vue";
 
-import { processGameForNewAPI } from "../../helpers/gameHelpers";
+import { filterGames, processGameForNewAPI } from "../../helpers/gameHelpers";
 import type {
     ICollectionItem,
     ICollections,
@@ -12,7 +12,6 @@ import type {
 } from "../../models/game";
 import { useConfigStore } from "../configStore";
 import { useGamesCommon } from "./gamesStore";
-import { filterGames } from "./helpers/games";
 
 export const useGamesProviders = defineStore("gamesProviders", () => {
     const gamesProviders = ref<IGamesProvider[]>([] as IGamesProvider[]);
@@ -54,6 +53,8 @@ export const useGamesProviders = defineStore("gamesProviders", () => {
 
     function setData(data: ICollectionItem, slug: string) {
         const propsGame = { ...data };
+        const { enabledGamesConfig } = storeToRefs(useGamesCommon());
+
         propsGame.data = data.data.map(processGameForNewAPI);
 
         const collectionData = collections.value[slug]?.data || [];
@@ -61,7 +62,11 @@ export const useGamesProviders = defineStore("gamesProviders", () => {
         collections.value = {
             ...collections.value,
             [slug]: {
-                data: filterGames([ ...collectionData, ...propsGame.data ]),
+                data: filterGames(
+                    [ ...collectionData, ...propsGame.data ],
+                    disabledGamesProviders.value,
+                    enabledGamesConfig.value,
+                ),
                 pagination: data.pagination,
             },
         };

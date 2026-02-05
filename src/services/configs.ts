@@ -1,7 +1,6 @@
 import { isExistData } from "../helpers/isExistData";
 import { useCommon } from "../store/common";
 import { useConfigStore } from "../store/configStore";
-import { useLevelsStore } from "../store/levels/levelsStore";
 import {
     loadBettingConfigReq,
     loadCurrencyConfigReq,
