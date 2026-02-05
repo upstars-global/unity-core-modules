@@ -41,7 +41,7 @@ vi.mock("@config/achievements", () => ({
     defaultDepCount: 2,
     TOURNAMENT_IDS_FOR_ACHIEV: [ 100, 101 ],
 }));
-vi.mock("@theme/configs/featureFlags", () => ({
+vi.mock("@theme/configs/featureFlags", () => ({ // fixme
     default: { enableConpoints: true },
 }));
 vi.mock("dayjs", () => ({

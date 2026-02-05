@@ -110,6 +110,7 @@ describe("store/games/gamesCategory", () => {
         it("should call api with correct params and set data", async () => {
             const store = useGamesCategory();
             await store.loadGamesCategory("slots");
+            console.log("store.collections", store.collections);
 
             expect(loadGamesCategoryReq).toHaveBeenCalledWith({
                 device: "desktop",
@@ -164,7 +165,7 @@ describe("store/games/gamesCategory", () => {
     });
 
     describe("Getters", () => {
-        const games = Array.from({ length: 50 }, (_, i) => ({ name: `Game ${i + 1}` } as IGame));
+        const games = Array.from({ length: 50 }, (_, i) => ({ name: `Game ${ i + 1 }` } as IGame));
 
         beforeEach(() => {
             const store = useGamesCategory();

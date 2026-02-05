@@ -1,4 +1,4 @@
-import featureFlags from "@theme/configs/featureFlags";
+import featureFlags from "@theme/configs/featureFlags"; // fixme:
 import pus18 from "@theme/images/footer/18plus.svg";
 import gamblingTherapypus from "@theme/images/footer/gambling-therapy.svg";
 import GDPR from "@theme/images/footer/GDPR.svg";
@@ -48,12 +48,8 @@ export default {
         "paysafecard", "inpay",
     ],
     PROMO_TOOLTIP_TIMER_MINUTES: 10,
-    socials: [
-
-    ],
-    awardsNominations: [
-
-    ],
+    socials: [],
+    awardsNominations: [],
     trust: [
 
         {
