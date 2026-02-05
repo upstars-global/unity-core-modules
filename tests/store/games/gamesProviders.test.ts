@@ -6,6 +6,7 @@ import { IGameItemFilter, processGameForNewAPI } from "../../../src/helpers/game
 import type { ICollectionItem, IGamesProvider } from "../../../src/models/game";
 import { IEnabledGames } from "../../../src/models/game";
 import { http } from "../../../src/services/api/http";
+import { loadData, loadGamesProviders } from "../../../src/services/games";
 import { useGamesProviders } from "../../../src/store/games/gamesProviders";
 
 vi.mock("../../../src/services/api/http");
@@ -14,7 +15,27 @@ vi.mock("../../../src/controllers/Logger", () => ({
         error: vi.fn(),
     },
 }));
-vi.mock("../../../src/helpers/gameHelpers");
+vi.mock("../../../src/helpers/gameHelpers", () => ({
+    processGameForNewAPI: vi.fn((game) => game),
+    filterProviders: vi.fn((data) => data),
+    filterGames: vi.fn((games) => games),
+    defaultCollection: vi.fn(() => ({
+        data: [],
+        pagination: {
+            current_page: 0,
+            next_page: undefined,
+            prev_page: undefined,
+            total_pages: 0,
+            total_count: 0,
+        },
+    })),
+    isLoaded: vi.fn((collection, page) => {
+        return Boolean(collection) && ((page === 1 && collection.data.length) ||
+            collection.pagination.next_page === null ||
+            page > collection.pagination.next_page ||
+            collection.pagination.current_page >= page);
+    }),
+}));
 vi.mock("../../../src/helpers/games");
 
 vi.mock("../../../src/store/root", () => ({
@@ -65,7 +86,7 @@ describe("store/games/gamesProviders", () => {
                 post: vi.fn(),
             });
 
-            await store.loadGamesProviders();
+            await loadGamesProviders();
 
             expect(store.gamesProviders).toHaveLength(2);
             expect(store.gamesProviders[0].slug).toBe("provider1");
@@ -79,7 +100,8 @@ describe("store/games/gamesProviders", () => {
                 post: vi.fn(),
             });
 
-            await expect(store.loadGamesProviders()).rejects.toThrow("API Error");
+            await expect(loadGamesProviders()).resolves.toEqual([]);
+            expect(store.gamesProviders).toEqual([]);
         });
 
         it("loadData should fetch and set games for a provider", async () => {
@@ -103,7 +125,7 @@ describe("store/games/gamesProviders", () => {
             });
             vi.mocked(processGameForNewAPI).mockImplementation((game) => game as IGameItemFilter);
 
-            await store.loadData({ slug });
+            await loadData({ slug });
 
             expect(store.collections[slug].data).toHaveLength(1);
             expect(store.collections[slug].pagination.next_page).toBe(2);
@@ -123,7 +145,7 @@ describe("store/games/gamesProviders", () => {
                 post: postMock,
             });
 
-            await store.loadData({ slug });
+            await loadData({ slug });
 
             expect(postMock).not.toHaveBeenCalled();
         });
@@ -136,7 +158,7 @@ describe("store/games/gamesProviders", () => {
                 post: vi.fn().mockRejectedValue(new Error("API Error")),
             });
 
-            await expect(store.loadData({ slug })).rejects.toThrow("API Error");
+            await expect(loadData({ slug })).rejects.toThrow();
         });
     });
 

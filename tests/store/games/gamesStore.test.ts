@@ -7,6 +7,7 @@ import {
     loadGamesCategories as loadGamesCategoriesReq,
     loadGamesJackpots as loadGamesJackpotsReq,
     loadLastGames as loadLastGamesReq } from "../../../src/services/api/requests/games";
+import { loadGamesCategories, loadGamesJackpots, loadLastGames } from "../../../src/services/games";
 import { useGamesCommon } from "../../../src/store/games/gamesStore";
 vi.mock("../../../src/services/api/requests/games", () => ({
     loadGamesCategories: vi.fn(),
@@ -21,6 +22,8 @@ vi.mock("../../../src/helpers/currencyHelper", () => ({
 
 vi.mock("../../../src/helpers/gameHelpers", () => ({
     processGame: vi.fn((game, id) => ({ ...game, processed: true, id })),
+    filterGames: vi.fn((games) => games),
+    findGameBySeoTittleAndProducer: vi.fn((games) => games?.[0]),
 }));
 
 vi.mock("../../../src/store/user/userInfo", () => ({
@@ -75,7 +78,7 @@ describe("useGamesCommon", () => {
         ]);
 
         const store = useGamesCommon();
-        await store.loadGamesCategories();
+        await loadGamesCategories();
 
         expect(store.gamesCategories).toEqual([
             { slug: "slot", provider: "slot", url: "/games/slot", name: "Slots", id: "slot", title: "Slots" },
@@ -87,7 +90,7 @@ describe("useGamesCommon", () => {
         loadGamesJackpotsReq.mockResolvedValue({ USD: 5000, EUR: 4200 });
 
         const store = useGamesCommon();
-        await store.loadGamesJackpots();
+        await loadGamesJackpots();
 
         expect(store.gamesJackpots).toEqual({ USD: 5000, EUR: 4200 });
     });
@@ -142,7 +145,7 @@ describe("useGamesCommon", () => {
         });
 
         const store = useGamesCommon();
-        await store.loadLastGames();
+        await loadLastGames();
 
         expect(loadFilteredGamesReq).toHaveBeenCalledWith({
             game_ids: [ "game1", "game2" ],

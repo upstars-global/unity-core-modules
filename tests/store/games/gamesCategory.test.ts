@@ -7,6 +7,7 @@ import { processGameForNewAPI } from "../../../src/helpers/gameHelpers";
 import type { ICollectionItem, IGame, IGamesProvider } from "../../../src/models/game";
 import { IEnabledGames } from "../../../src/models/game";
 import { loadGamesCategory as loadGamesCategoryReq } from "../../../src/services/api/requests/games";
+import { loadGamesCategory } from "../../../src/services/games";
 import { useGamesCategory } from "../../../src/store/games/gamesCategory";
 
 vi.mock("../../../src/controllers/Logger", () => ({
@@ -15,7 +16,20 @@ vi.mock("../../../src/controllers/Logger", () => ({
     },
 }));
 
-vi.mock("../../../src/helpers/gameHelpers");
+vi.mock("../../../src/helpers/gameHelpers", () => ({
+    processGameForNewAPI: vi.fn((game) => game),
+    filterGames: vi.fn((games) => games),
+    defaultCollection: vi.fn(() => ({
+        data: [],
+        pagination: {
+            current_page: 0,
+            next_page: undefined,
+            prev_page: undefined,
+            total_pages: 0,
+            total_count: 0,
+        },
+    })),
+}));
 vi.mock("../../../src/services/api/requests/games");
 
 const mockUserGeo = ref("");
@@ -109,7 +123,7 @@ describe("store/games/gamesCategory", () => {
 
         it("should call api with correct params and set data", async () => {
             const store = useGamesCategory();
-            await store.loadGamesCategory("slots");
+            await loadGamesCategory("slots");
 
             expect(loadGamesCategoryReq).toHaveBeenCalledWith({
                 device: "desktop",
@@ -134,7 +148,7 @@ describe("store/games/gamesCategory", () => {
                 pagination: { current_page: 1, next_page: null },
             } as ICollectionItem;
 
-            await store.loadGamesCategory("slots", 1);
+            await loadGamesCategory("slots", 1);
             expect(loadGamesCategoryReq).not.toHaveBeenCalled();
         });
 
@@ -143,7 +157,7 @@ describe("store/games/gamesCategory", () => {
             const error = new Error("API Failed");
             vi.mocked(loadGamesCategoryReq).mockRejectedValue(error);
 
-            await store.loadGamesCategory("slots");
+            await loadGamesCategory("slots");
 
             expect(log.error).toHaveBeenCalledWith("LOAD_GAMES_CATEGORY_ERROR", error);
         });
