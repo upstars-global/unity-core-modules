@@ -83,9 +83,7 @@ export async function getRandomGame(category?: string): Promise<IGame | undefine
 }
 
 export function processGame(game, gameKey): IGameItem {
-    console.log(" useConfigStore()", useConfigStore());
     const { $defaultProjectConfig } = useConfigStore();
-    console.log({ $defaultProjectConfig });
     const { featureFlags } = $defaultProjectConfig;
     const gameCategoriesWithoutGeo: Record<string, number> = {};
     Object.entries(game.collections || {}).forEach(([ key, value ]) => {

@@ -37,6 +37,11 @@ vi.mock("../../../src/store/user/userInfo", () => ({
 vi.mock("../../../src/store/configStore", () => ({
     useConfigStore: () => ({
         gamesPageLimit: ref(20),
+        $defaultProjectConfig: {
+            featureFlags: {
+                enableAllProviders: false,
+            },
+        },
     }),
 }));
 
@@ -110,7 +115,6 @@ describe("store/games/gamesCategory", () => {
         it("should call api with correct params and set data", async () => {
             const store = useGamesCategory();
             await store.loadGamesCategory("slots");
-            console.log("store.collections", store.collections);
 
             expect(loadGamesCategoryReq).toHaveBeenCalledWith({
                 device: "desktop",

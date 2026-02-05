@@ -97,9 +97,7 @@ export function filterProviders(
 ): IGamesProvider[] {
     const { isBotUA } = storeToRefs(useContextStore());
     const { disabledGamesProviders } = storeToRefs(useGamesProviders());
-    console.log("useConfigStore", useConfigStore());
     const { $defaultProjectConfig } = useConfigStore();
-    console.log({ $defaultProjectConfig });
 
     if (!Array.isArray(data) || $defaultProjectConfig.featureFlags.enableAllProviders || isBotUA.value) {
         return data;
@@ -121,7 +119,6 @@ export function filterGames<T extends IGame | IGameItem>(
     const { disabledGamesProviders } = storeToRefs(useGamesProviders());
     const { enabledGamesConfig } = storeToRefs(useGamesCommon());
     const { $defaultProjectConfig } = useConfigStore();
-    console.log("filterGames useConfigStore()", useConfigStore());
 
     if (!Array.isArray(data) || $defaultProjectConfig.featureFlags.enableAllProviders || isBotUA.value) {
         return data;

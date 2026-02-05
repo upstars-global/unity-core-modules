@@ -56,7 +56,6 @@ export const useGamesCategory = defineStore("gamesCategory", () => {
     };
 
     function setData(data: ICollectionItem, slug: string): void {
-        console.log("setData", data);
         const propsGame = { ...data };
         propsGame.data = filterGames(data.data.map(processGameForNewAPI));
 
