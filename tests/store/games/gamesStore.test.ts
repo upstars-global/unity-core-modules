@@ -7,6 +7,7 @@ import {
     loadGamesCategories as loadGamesCategoriesReq,
     loadGamesJackpots as loadGamesJackpotsReq,
     loadLastGames as loadLastGamesReq } from "../../../src/services/api/requests/games";
+import { loadGamesCategories, loadGamesJackpots, loadLastGames } from "../../../src/services/games";
 import { useGamesCommon } from "../../../src/store/games/gamesStore";
 vi.mock("../../../src/services/api/requests/games", () => ({
     loadGamesCategories: vi.fn(),
@@ -21,6 +22,8 @@ vi.mock("../../../src/helpers/currencyHelper", () => ({
 
 vi.mock("../../../src/helpers/gameHelpers", () => ({
     processGame: vi.fn((game, id) => ({ ...game, processed: true, id })),
+    filterGames: vi.fn((games) => games),
+    findGameBySeoTittleAndProducer: vi.fn((games) => games?.[0]),
 }));
 
 vi.mock("../../../src/store/user/userInfo", () => ({
@@ -68,6 +71,15 @@ describe("useGamesCommon", () => {
         expect(store.defaultMenuGameCategories).toEqual(defaultCategories);
     });
 
+    it("should set menu game categories", () => {
+        const store = useGamesCommon();
+        const categories = { main: [ "slots" ] };
+
+        store.setMenuGameCategories(categories);
+
+        expect(store.menuGameCategories).toEqual(categories);
+    });
+
     it("should load game categories", async () => {
         loadGamesCategoriesReq.mockResolvedValue([
             { id: "slot", title: "Slots" },
@@ -75,7 +87,7 @@ describe("useGamesCommon", () => {
         ]);
 
         const store = useGamesCommon();
-        await store.loadGamesCategories();
+        await loadGamesCategories();
 
         expect(store.gamesCategories).toEqual([
             { slug: "slot", provider: "slot", url: "/games/slot", name: "Slots", id: "slot", title: "Slots" },
@@ -87,7 +99,7 @@ describe("useGamesCommon", () => {
         loadGamesJackpotsReq.mockResolvedValue({ USD: 5000, EUR: 4200 });
 
         const store = useGamesCommon();
-        await store.loadGamesJackpots();
+        await loadGamesJackpots();
 
         expect(store.gamesJackpots).toEqual({ USD: 5000, EUR: 4200 });
     });
@@ -97,6 +109,13 @@ describe("useGamesCommon", () => {
         store.gamesJackpots = { USD: { game1: 1000, game2: 2000 } };
 
         expect(store.getJackpotTotalByCurrency).toBe("formatted-3000");
+    });
+
+    it("getGamesJackpots returns empty object for missing currency", () => {
+        const store = useGamesCommon();
+        store.gamesJackpots = { EUR: { game1: 1000 } };
+
+        expect(store.getGamesJackpots).toEqual({});
     });
 
     it("should add game to cache", () => {
@@ -115,6 +134,15 @@ describe("useGamesCommon", () => {
         store.setGameToCache(game);
 
         expect(store.getGameFromCache({ identifier: "game1" })).toEqual(game);
+    });
+
+    it("should get game from cache by seo title and producer", () => {
+        const store = useGamesCommon();
+        store.setGameToCache({ identifier: "g1", title: "Game 1", seo_title: "seo" } as never);
+
+        const result = store.getGameFromCache({ seoTitle: "seo", producer: "prod" });
+
+        expect(result).toEqual({ identifier: "g1", title: "Game 1", seo_title: "seo" });
     });
 
     it("should get processed recent games sorted by last activity", () => {
@@ -142,7 +170,7 @@ describe("useGamesCommon", () => {
         });
 
         const store = useGamesCommon();
-        await store.loadLastGames();
+        await loadLastGames();
 
         expect(loadFilteredGamesReq).toHaveBeenCalledWith({
             game_ids: [ "game1", "game2" ],
@@ -162,6 +190,12 @@ describe("useGamesCommon", () => {
         store.clearRecentGames();
 
         expect(store.recentGames).toEqual({});
+    });
+
+    it("should set enabled games config", () => {
+        const store = useGamesCommon();
+        store.setEnableGamesConfig({ provider1: { enabled: true } } as never);
+        expect(store.enabledGamesConfig).toEqual({ provider1: { enabled: true } });
     });
 
     it("should return empty string if category slug is not found", () => {

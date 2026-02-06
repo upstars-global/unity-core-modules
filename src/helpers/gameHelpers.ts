@@ -1,11 +1,18 @@
 import { getGameImagePath } from "@helpers/gameImage";
 import { SlugCategoriesGames } from "@theme/configs/categoryesGames";
 import featureFlags from "@theme/configs/featureFlags";
+import { storeToRefs } from "pinia";
 
-import { log } from "../controllers/Logger";
-import type { IGame } from "../models/game";
-import { loadRandomGame } from "../services/api/requests/games";
-import { filterGames } from "../store/games/helpers/games";
+import type { ICollectionItem, IDisabledGamesProvider, IGame, IGamesProvider } from "../models/game";
+import { GameDisableGeoStatus, IEnabledGames } from "../models/game";
+import { useCommon } from "../store/common";
+import { useContextStore } from "../store/context";
+import { useRootStore } from "../store/root";
+
+type IFindGameParams = {
+    producer: string;
+    seoTitle: string;
+};
 
 interface IGameBadge {
     [key: string]: string;
@@ -58,27 +65,136 @@ export interface IParamsUrlGame {
     producer: string;
 }
 
-let randomGameCounter = 0;
-export async function getRandomGame(category?: string): Promise<IGame | undefined> {
-    const randomGame = await loadRandomGame({ identifier: category });
-    randomGameCounter++;
+function findGameBySeoTittleAndProducerWithDuplicate(
+    gamesCollection: IGame[],
+    { producer, seoTitle }: IFindGameParams,
+): IGame | undefined {
+    const rootStore = useRootStore();
+    return gamesCollection
+        .filter((game: IGame) => {
+            return game.devices.length > 1 ||
+                game.devices.includes(rootStore.isMobile ? "mobile" : "desktop");
+        })
+        .find(({ seo_title: seoTitleItem, provider: providerItem }) => {
+            return producer === providerItem && seoTitleItem === seoTitle;
+        });
+}
 
-    const isValidRandomGame = filterGames([ randomGame ])?.length;
+export function findGameBySeoTittleAndProducer(
+    gamesCollection: IGame[],
+    { producer, seoTitle }: IFindGameParams,
+): IGame | undefined {
+    return findGameBySeoTittleAndProducerWithDuplicate(gamesCollection, { producer, seoTitle });
+}
 
-    if (isValidRandomGame) {
-        randomGameCounter = 0;
-        return randomGame;
+export function defaultCollection(): ICollectionItem {
+    return {
+        data: [],
+        pagination: {
+            current_page: 0,
+            next_page: undefined,
+            prev_page: undefined,
+            total_pages: 0,
+            total_count: 0,
+        },
+    };
+}
+
+function getCountryCode(): string | undefined {
+    const { currentIpInfo } = storeToRefs(useCommon());
+    return currentIpInfo.value?.country_code;
+}
+
+export function isProviderAllowed(
+    providerId: string,
+    disabledMap: Record<string, GameDisableGeoStatus | string[]> | undefined,
+    country?: string,
+): boolean {
+    if (!disabledMap) {
+        return true;
+    }
+    const rules = disabledMap[providerId];
+    if (!rules) {
+        return true;
+    }
+    if (rules === GameDisableGeoStatus.all) {
+        return false;
+    }
+    if (Array.isArray(rules)) {
+        return !rules.includes(String(country));
+    }
+    return true;
+}
+
+export function isGameAllowed(
+    identifier: string,
+    enabledMap: IEnabledGames | undefined,
+    country?: string,
+): boolean {
+    if (!enabledMap) {
+        return true;
+    }
+    const whitelist = enabledMap[identifier];
+    if (Array.isArray(whitelist)) {
+        return whitelist.includes(String(country));
+    }
+    return true;
+}
+
+export function filterProviders(
+    data: IGamesProvider[],
+    disabledGamesProviders: IDisabledGamesProvider,
+): IGamesProvider[] {
+    const { isBotUA } = storeToRefs(useContextStore());
+
+
+    if (!Array.isArray(data) || featureFlags.enableAllProviders || isBotUA.value) {
+        return data;
     }
 
-    if (randomGameCounter <= 10) {
-        return getRandomGame(category);
+    const disabledMap = disabledGamesProviders;
+    if (!disabledMap || Object.keys(disabledMap).length === 0) {
+        return data;
     }
 
-    if (randomGameCounter > 10) {
-        log.error("LOAD_RANDOM_GAME_ERROR", "Repeated 10 times, didn`t find an acceptable random game");
+    const country = getCountryCode();
+    return data.filter((item) => isProviderAllowed(item.provider, disabledMap, country));
+}
+
+export function filterGames<T extends IGame | IGameItem>(
+    data: T[],
+    disabledGamesProviders: IDisabledGamesProvider,
+    enabledGamesConfig: IEnabledGames,
+): T[] {
+    const { isBotUA } = storeToRefs(useContextStore());
+
+    if (!Array.isArray(data) || featureFlags.enableAllProviders || isBotUA.value) {
+        return data;
     }
 
-    randomGameCounter = 0;
+    const disabledMap = disabledGamesProviders;
+    const enabledMap = enabledGamesConfig;
+    const hasConfigs =
+        Boolean(disabledMap && Object.keys(disabledMap).length) ||
+        Boolean(enabledMap && Object.keys(enabledMap).length);
+
+    if (!hasConfigs) {
+        return data;
+    }
+
+    const country = getCountryCode();
+    return data.filter(
+        (game) =>
+            isProviderAllowed(game.provider, disabledMap, country) &&
+            isGameAllowed(game.identifier, enabledMap as IEnabledGames | undefined, country),
+    );
+}
+
+export function isLoaded(collection: ICollectionItem, page: number) {
+    return Boolean(collection) && ((page === 1 && collection.data.length) ||
+            collection.pagination.next_page === null ||
+            page > collection.pagination.next_page ||
+            collection.pagination.current_page >= page);
 }
 
 export function processGame(game, gameKey): IGameItem {

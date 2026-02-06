@@ -2,7 +2,7 @@ import type { SlugCategoriesGames } from "@theme/configs/categoryesGames";
 
 import { FE_API_PREFIX } from "../../../consts/apiConfig";
 import { log } from "../../../controllers/Logger";
-import type { IGame } from "../../../models/game";
+import type { IGame, IGamesProvider } from "../../../models/game";
 import {
     AcceptGamesVersion,
     IGameCollection,
@@ -79,6 +79,26 @@ export async function loadGamesCategory(config: Record<string, unknown>): Promis
     }
 }
 
+export async function loadGamesDataByFilter<T>(config: Record<string, unknown>): Promise<T> {
+    try {
+        const { data } = await http().post<T>("/api/games_filter", config);
+        return data;
+    } catch (error) {
+        log.error("LOAD_GAMES_CATEGORY_ERROR", error);
+        return {} as T;
+    }
+}
+
+export async function loadGamesProvidersReq() {
+    try {
+        const { data } = await http().get<IGamesProvider[]>("/api/games/providers");
+        return data;
+    } catch (error) {
+        log.error("LOAD_GAMES_PROVIDERS_ERROR", error);
+        return [] as IGamesProvider[];
+    }
+}
+
 export async function loadCategoriesFileConfigRequest() {
     try {
         const { data } = await http().get<Record<string, SlugCategoriesGames[]>>(`${ FE_API_PREFIX }/config/menu-categories-games`);
@@ -115,5 +135,32 @@ export async function fetchDeleteGameFromFavorites(idGame: number): Promise<void
         return await http({ auth: true }).delete(`/api/player/favorite_games/${ idGame }`);
     } catch (err) {
         log.error("FETCH_DELETE_GAME_FROM_FAVORITES_ERROR", err);
+    }
+}
+
+export async function loadGameBySeoTitleReq(seoTitle: string, restrict: boolean = false) {
+    try {
+        const { data } = await http().post<Record<string, IGame>>("/api/games_filter/select_by_seo_titles", {
+            without_territorial_restrictions: restrict,
+            game_seo_titles: [ seoTitle ],
+        });
+
+        return data;
+    } catch (err) {
+        log.error("LOAD_GAME_BY_SEO_TITLE_ERROR", err);
+        throw err;
+    }
+}
+
+export async function loadGameBySlugReq(slug: string) {
+    try {
+        const { data } = await http().post<Record<string, IGame>>("/api/games_filter/select", {
+            game_ids: [ slug ],
+        });
+
+        return data;
+    } catch (err) {
+        log.error("LOAD_GAME_BY_SLUG_ERROR", err);
+        throw err;
     }
 }

@@ -1,4 +1,4 @@
-import { defineStore, type Pinia } from "pinia";
+import { defineStore } from "pinia";
 import { ref } from "vue";
 
 export const useSettings = defineStore("settings", () => {
@@ -16,15 +16,3 @@ export const useSettings = defineStore("settings", () => {
         sentryDsn,
     };
 });
-
-export function useSettingsFetchService(pinia?: Pinia) {
-    useSettings(pinia);
-
-    function initSettingsStore() {
-        return Promise.resolve();
-    }
-
-    return {
-        initSettingsStore,
-    };
-}

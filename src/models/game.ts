@@ -10,6 +10,10 @@ interface IGameCurrencies {
     };
 }
 
+export interface IRecentGames {
+    [key: string]: IGame;
+}
+
 export type GameFavoriteIds = number[];
 
 export interface IGame {

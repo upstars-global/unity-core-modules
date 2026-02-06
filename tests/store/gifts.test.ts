@@ -1,25 +1,36 @@
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { reactive, ref } from "vue";
 
 import { GiftState } from "../../src/services/api/DTO/gifts";
 import { useGiftsStore } from "../../src/store/gifts";
 
 vi.mock("@theme/configs/constantsFreshChat", () => ({ PROJECT: "mocked" }));
 
+const userInfoMock = {
+    can_issue_bonuses: true,
+    deposit_bonus_code: null as string | null,
+};
+const userCurrency = ref("USD");
+const userStatusesMock = {
+    isMultiAccount: false,
+    getUserGroups: [ 5, 8 ] as Array<number | string>,
+};
+
 vi.mock("../../src/store/user/userInfo", () => ({
-    useUserInfo: () => ({
-        getUserInfo: {
-            can_issue_bonuses: true,
-            deposit_bonus_code: null,
-        },
+    useUserInfo: () => reactive({
+        getUserInfo: userInfoMock,
+        getUserCurrency: userCurrency,
+        getSubunitsToUnitsByCode: () => 100,
     }),
 }));
 
 vi.mock("../../src/store/user/userStatuses", () => ({
-    useUserStatuses: () => ({
-        isMultiAccount: false,
-        getUserGroups: [ 5, 8 ],
-    }),
+    useUserStatuses: () => userStatusesMock,
+}));
+
+vi.mock("../../src/helpers/currencyHelper", () => ({
+    currencyView: (amount: number) => amount / 100,
 }));
 
 vi.mock("@src/config/gift", () => ({
@@ -44,6 +55,10 @@ vi.mock("@src/config/gift", () => ({
 describe("useGiftsStore", () => {
     beforeEach(() => {
         setActivePinia(createPinia());
+        userInfoMock.can_issue_bonuses = true;
+        userInfoMock.deposit_bonus_code = null;
+        userStatusesMock.isMultiAccount = false;
+        userStatusesMock.getUserGroups = [ 5, 8 ];
     });
 
     it("sets gifts and filters actual and lost gifts correctly", () => {
@@ -186,5 +201,248 @@ describe("useGiftsStore", () => {
         const result = store.depositGifts.find((g) => g.id === "special");
         expect(result).toBeDefined();
         expect(result?.title).toBe("Special Bonus");
+    });
+
+    it("does not add additionalGift when user is not eligible", () => {
+        const store = useGiftsStore();
+        userInfoMock.can_issue_bonuses = false;
+
+        store.setAdditionalGifts({
+            8: {
+                id: "special",
+                title: "Special Bonus",
+                bonuses: [ {
+                    title: "Bonus",
+                    type: "normal",
+                    conditions: [],
+                    attributes: [],
+                    result_bonus: [],
+                } ],
+            },
+        });
+
+        expect(store.depositGifts.find((g) => g.id === "special")).toBeUndefined();
+    });
+
+    it("applies modifyGiftsConfig into giftsAll items", () => {
+        const store = useGiftsStore();
+
+        store.setGifts([ {
+            id: 1,
+            stage: GiftState.issued,
+            title: "",
+            amount_cents: 0,
+            currency: "",
+            strategy: "",
+            amount_wager_cents: 0,
+            amount_wager_requirement_cents: 0,
+            created_at: "",
+            activatable_until: null,
+            valid_until: "",
+            activatable: false,
+            cancelable: false,
+            type: "",
+        } ]);
+
+        store.setModifyGiftsConfig([ { group_keys: [ "1" ], title: "CMS" } as never ]);
+
+        expect(store.giftsAll[0].cmsData).toEqual({ group_keys: [ "1" ], title: "CMS" });
+    });
+
+    it("applies modifyGiftsConfig by group_key", () => {
+        const store = useGiftsStore();
+        store.setGifts([ {
+            id: 2,
+            group_key: "group-2",
+            stage: GiftState.issued,
+            title: "",
+            amount_cents: 0,
+            currency: "",
+            strategy: "",
+            amount_wager_cents: 0,
+            amount_wager_requirement_cents: 0,
+            created_at: "",
+            activatable_until: null,
+            valid_until: "",
+            activatable: false,
+            cancelable: false,
+            type: "",
+        } as never ]);
+
+        store.setModifyGiftsConfig([ { group_keys: [ "group-2" ], title: "CMS-2" } as never ]);
+
+        expect(store.giftsAll[0].cmsData).toEqual({ group_keys: [ "group-2" ], title: "CMS-2" });
+    });
+
+    it("computes activeDepositGiftMinDep for normal and lootbox bonuses", () => {
+        const store = useGiftsStore();
+
+        store.setActiveDepositGift(null);
+        expect(store.activeDepositGiftMinDep).toBe(0);
+
+        store.setActiveDepositGift({
+            id: "gift-1",
+            title: "Gift",
+            bonuses: [ {
+                title: "",
+                type: "normal",
+                conditions: [ {
+                    field: "amount",
+                    type: "min",
+                    value: [ { currency: "USD", amount_cents: 5000 } ],
+                } ],
+                attributes: [],
+                result_bonus: [],
+            } ],
+        } as never);
+
+        expect(store.activeDepositGiftMinDep).toBe(50);
+
+        store.setActiveDepositGift({
+            id: "gift-2",
+            title: "Lootbox",
+            bonuses: [ {
+                title: "",
+                type: "random",
+                boxes: [ {
+                    bonuses: [ {
+                        conditions: [ {
+                            field: "amount",
+                            type: "min",
+                            value: [ { currency: "USD", amount_cents: 7000 } ],
+                        } ],
+                    } ],
+                } ],
+                conditions: [],
+                attributes: [],
+                result_bonus: [],
+            } ],
+        } as never);
+
+        expect(store.activeDepositGiftMinDep).toBe(70);
+    });
+
+    it("returns null activeDepositGiftGroupID when no active gift", () => {
+        const store = useGiftsStore();
+        store.setActiveDepositGift(null);
+        expect(store.activeDepositGiftGroupID).toBeNull();
+    });
+
+    it("returns activeDepositGiftGroupID when active gift is set", () => {
+        const store = useGiftsStore();
+        store.setActiveDepositGift({
+            id: "gift-group",
+            title: "Group Gift",
+            bonuses: [ {
+                title: "",
+                type: "normal",
+                conditions: [ { field: "groups", type: "in", value: [ "pick:10" ] } ],
+                attributes: [],
+                result_bonus: [],
+            } ],
+        } as never);
+
+        expect(store.activeDepositGiftGroupID).toBe("pick:10");
+    });
+
+    it("returns 0 when min deposit condition is missing", () => {
+        const store = useGiftsStore();
+        store.setActiveDepositGift({
+            id: "gift-3",
+            title: "Gift 3",
+            bonuses: [ { title: "", type: "normal", conditions: [], attributes: [], result_bonus: [] } ],
+        } as never);
+
+        expect(store.activeDepositGiftMinDep).toBe(0);
+    });
+
+    it("computes giftMatchInUserGroup and ids", () => {
+        const store = useGiftsStore();
+        userStatusesMock.getUserGroups = [ "pick:5" ];
+
+        store.setDepositGiftsAll([
+            {
+                id: "d1",
+                title: "Dep 1",
+                bonuses: [ {
+                    title: "",
+                    type: "normal",
+                    conditions: [ { field: "groups", type: "in", value: [ "pick:5" ] } ],
+                    attributes: [],
+                    result_bonus: [],
+                } ],
+            },
+        ] as never);
+
+        expect(store.giftMatchInUserGroup?.id).toBe("d1");
+        expect(store.giftMatchInUserGroupID).toBe("pick:5");
+    });
+
+    it("returns null giftMatchInUserGroupID when no match", () => {
+        const store = useGiftsStore();
+        userStatusesMock.getUserGroups = [];
+
+        store.setDepositGiftsAll([
+            {
+                id: "d2",
+                title: "Dep 2",
+                bonuses: [ {
+                    title: "",
+                    type: "normal",
+                    conditions: [ { field: "groups", type: "in", value: [ "pick:5" ] } ],
+                    attributes: [],
+                    result_bonus: [],
+                } ],
+            },
+        ] as never);
+
+        expect(store.giftMatchInUserGroupID).toBeNull();
+    });
+
+    it("returns null giftMatchInUserGroupID when condition has no pick group", () => {
+        const store = useGiftsStore();
+        userStatusesMock.getUserGroups = [ "pick:5" ];
+
+        store.setDepositGiftsAll([
+            {
+                id: "d3",
+                title: "Dep 3",
+                bonuses: [ {
+                    title: "",
+                    type: "normal",
+                    conditions: [ { field: "groups", type: "in", value: [ "group:5" ] } ],
+                    attributes: [],
+                    result_bonus: [],
+                } ],
+            },
+        ] as never);
+
+        expect(store.giftMatchInUserGroupID).toBeNull();
+    });
+
+    it("clears gifts store state", () => {
+        const store = useGiftsStore();
+        store.setGifts([ { id: 1 } ] as never);
+        store.setDepositGiftsAll([ { id: "d1" } ] as never);
+        store.setRegistrationGiftsAll([ { id: "r1" } ] as never);
+        store.setFSGiftsAll([ { id: 1 } ] as never);
+
+        store.giftsStoreClear();
+
+        expect(store.gifts).toEqual([]);
+        expect(store.depositGiftsAll).toEqual([]);
+        expect(store.registrationGiftsAll).toEqual([]);
+        expect(store.fsGiftsAll).toEqual([]);
+    });
+
+    it("updates misc flags and configs", () => {
+        const store = useGiftsStore();
+        store.setDisabledBonuses([ "bonus1" ]);
+        store.setGiftsLoading(true);
+        store.setDailyBonusConfig({ daily: { id: 1 } } as never);
+
+        expect(store.disabledBonuses).toEqual([ "bonus1" ]);
+        expect(store.isLoadingGiftData).toBe(true);
+        expect(store.dailyBonusConfig).toEqual({ daily: { id: 1 } });
     });
 });

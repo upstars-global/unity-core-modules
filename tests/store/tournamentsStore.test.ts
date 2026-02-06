@@ -186,6 +186,24 @@ describe("useTournamentsStore", () => {
         expect(mockLogError).toHaveBeenCalledTimes(1);
     });
 
+    it("getAllTournamentsOnlyUser returns filtered list", () => {
+        const store = useTournamentsStore();
+        const list = [ makeTournament({ id: 1, frontend_identifier: "tournament-1" }) ];
+        store.setTournamentsList(list);
+
+        expect(store.getAllTournamentsOnlyUser).toEqual(list);
+    });
+
+    it("getActiveTournamentsList returns only in-progress tournaments", () => {
+        const store = useTournamentsStore();
+        store.setTournamentsList([
+            makeTournament({ id: 1, in_progress: true }),
+            makeTournament({ id: 2, in_progress: false }),
+        ]);
+
+        expect(store.getActiveTournamentsList).toEqual([ makeTournament({ id: 1, in_progress: true }) ]);
+    });
+
     it("getCurrentTournament enriches current tournament with status and banner", () => {
         const store = useTournamentsStore();
         mockBanners.value = [ { frontend_identifier: "tour-1", image: "img-1" } ];
@@ -199,6 +217,12 @@ describe("useTournamentsStore", () => {
             type: PromoType.TOURNAMENT,
             file: { frontend_identifier: "tour-1", image: "img-1" },
         });
+    });
+
+    it("getCurrentTournament returns empty object when no current tournament", () => {
+        const store = useTournamentsStore();
+        store.setCurrentTournament({ id: 1 });
+        expect(store.getCurrentTournament).toEqual({});
     });
 
     it("getTournamentBySlug returns tournament from list or custom list", () => {
@@ -216,6 +240,28 @@ describe("useTournamentsStore", () => {
 
         expect(store.getTournamentBySlug(1)).toMatchObject({ id: 1 });
         expect(store.getTournamentBySlug(2)).toMatchObject({ id: 2, custom: true });
+    });
+
+    it("getTournamentBySlug returns empty object when not found", () => {
+        const store = useTournamentsStore();
+        store.setTournamentsList([ makeTournament({ id: 1, frontend_identifier: "tournament-1" }) ]);
+
+        expect(store.getTournamentBySlug(999)).toEqual({});
+    });
+
+    it("getTournamentById returns undefined when not found", () => {
+        const store = useTournamentsStore();
+        store.setTournamentsList([ makeTournament({ id: 1 }) ]);
+        expect(store.getTournamentById(2)).toBeUndefined();
+    });
+
+    it("getUserTournamentById and getStatusTournamentById work with stored statuses", () => {
+        const store = useTournamentsStore();
+        store.setTournamentsList([ makeTournament({ id: 1 }) ]);
+        store.setCurrentUserTournamentsStatuses([ { tournament_id: 1 } as never ]);
+
+        expect(store.getUserTournamentById(1)?.id).toBe(1);
+        expect(store.getStatusTournamentById(1)?.tournament_id).toBe(1);
     });
 
     it("getRecentTournaments maps status and type", () => {
@@ -246,5 +292,21 @@ describe("useTournamentsStore", () => {
         store.updateUserTournament(0, 0, newStatus);
 
         expect(store.userTournaments[0].top_players[0]).toEqual(newStatus);
+    });
+
+    it("reloadTournaments and clearTournamentUserData reset store data", () => {
+        const store = useTournamentsStore();
+        store.setCurrentTournament({ id: 1, frontend_identifier: "tour-1" });
+        store.setCurrentUserTournamentsStatuses([ { tournament_id: 1 } as never ]);
+        store.setUserTournaments([ makeTournament({ id: 1 }) ]);
+        store.setTournamentsList([ makeTournament({ id: 1 }) ]);
+
+        store.reloadTournaments();
+        expect(store.currentTournament).toBeNull();
+
+        store.clearTournamentUserData();
+        expect(store.currentUserTournamentsStatuses).toEqual([]);
+        expect(store.userTournaments).toEqual([]);
+        expect(store.tournamentsList).toEqual([]);
     });
 });

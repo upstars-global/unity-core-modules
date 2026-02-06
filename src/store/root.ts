@@ -1,4 +1,4 @@
-import { defineStore, type Pinia } from "pinia";
+import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
 import { getBrowserName, isAndroidUserAgent, isIOSUserAgent } from "../helpers/platformHelpers";
@@ -50,15 +50,3 @@ export const useRootStore = defineStore("rootStore", () => {
         setPlatform,
     };
 });
-
-export function useRootStoreFetchService(pinia?: Pinia) {
-    useRootStore(pinia);
-
-    function initRootStore() {
-        return Promise.resolve();
-    }
-
-    return {
-        initRootStore,
-    };
-}

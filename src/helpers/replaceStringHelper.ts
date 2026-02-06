@@ -6,7 +6,7 @@ export interface IParams {
     replaceValue: string;
 }
 
-export default ({ template, replaceString, replaceValue }: IParams): TemplateType => {
+export default function replaceStringHelper({ template, replaceString, replaceValue }: IParams): TemplateType {
     const regExp = new RegExp(replaceString, "g");
 
     if (typeof template === "object") {
@@ -17,3 +17,11 @@ export default ({ template, replaceString, replaceValue }: IParams): TemplateTyp
 
     return template;
 };
+
+export function replaceCurrentYearPlaceholder<T>(template: TemplateType): T {
+    return replaceStringHelper({
+        template,
+        replaceString: "{current_year}",
+        replaceValue: new Date().getFullYear().toString(),
+    }) as T;
+}
