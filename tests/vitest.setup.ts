@@ -24,9 +24,6 @@ vi.mock("../src/store/configStore", async () => {
     return createConfigStoreMock();
 });
 
-
-vi.mock("@helpers/lootBoxes", () => ({}));
-
 vi.mock("@helpers/lootBoxes", () => ({}));
 
 vi.mock("@helpers/user", () => ({
