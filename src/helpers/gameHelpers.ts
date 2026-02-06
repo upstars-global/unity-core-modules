@@ -1,10 +1,10 @@
 import { getGameImagePath } from "@helpers/gameImage";
 import { SlugCategoriesGames } from "@theme/configs/categoryesGames";
-import featureFlags from "@theme/configs/featureFlags";
 
 import { log } from "../controllers/Logger";
 import type { IGame } from "../models/game";
 import { loadRandomGame } from "../services/api/requests/games";
+import { useConfigStore } from "../store/configStore";
 import { filterGames } from "../store/games/helpers/games";
 
 interface IGameBadge {
@@ -59,6 +59,7 @@ export interface IParamsUrlGame {
 }
 
 let randomGameCounter = 0;
+
 export async function getRandomGame(category?: string): Promise<IGame | undefined> {
     const randomGame = await loadRandomGame({ identifier: category });
     randomGameCounter++;
@@ -82,6 +83,8 @@ export async function getRandomGame(category?: string): Promise<IGame | undefine
 }
 
 export function processGame(game, gameKey): IGameItem {
+    const { $defaultProjectConfig } = useConfigStore();
+    const { featureFlags } = $defaultProjectConfig;
     const gameCategoriesWithoutGeo: Record<string, number> = {};
     Object.entries(game.collections || {}).forEach(([ key, value ]) => {
         const categoryName = key.split(":")[0];

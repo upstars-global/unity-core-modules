@@ -15,7 +15,6 @@ describe("useEnvironments", () => {
         expect(store.useMocker).toBe(false);
         expect(store.baseUrl).toBe("/");
         expect(store.environment).toBe("production");
-        console.log("store.environment", store.environment);
         expect(store.isProduction).toBe(true);
     });
 

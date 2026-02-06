@@ -1,4 +1,3 @@
-import featureFlags from "@theme/configs/featureFlags";
 import pus18 from "@theme/images/footer/18plus.svg";
 import gamblingTherapypus from "@theme/images/footer/gambling-therapy.svg";
 import GDPR from "@theme/images/footer/GDPR.svg";
@@ -7,7 +6,7 @@ import SSL from "@theme/images/footer/SSL.svg";
 import TLS from "@theme/images/footer/TLS.svg";
 
 export default {
-    featureFlags,
+    featureFlags: {},
     currencyDefault: "EUR",
     tagManagerId: "GTM-111",
     hotjar_id: "",
@@ -48,12 +47,8 @@ export default {
         "paysafecard", "inpay",
     ],
     PROMO_TOOLTIP_TIMER_MINUTES: 10,
-    socials: [
-
-    ],
-    awardsNominations: [
-
-    ],
+    socials: [],
+    awardsNominations: [],
     trust: [
 
         {
