@@ -30,7 +30,11 @@ export default defineConfig({
             provider: "v8",
             reporter: [ "text", "json-summary", "json" ],
             include: [ "src/**/*.ts" ],
-            exclude: [ "src/services/api/**", "src/models/**" ],
+            exclude: [
+                "src/services/**",
+                "src/models/**",
+                "src/consts/**",
+            ],
             reportOnFailure: true,
         },
         alias: [

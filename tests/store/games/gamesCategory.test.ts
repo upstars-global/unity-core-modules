@@ -175,6 +175,12 @@ describe("store/games/gamesCategory", () => {
             expect(store.collections.new2.data).toEqual([]);
             expect(Object.keys(store.collections)).toHaveLength(3);
         });
+
+        it("returns early when initCollection gets falsy data", () => {
+            const store = useGamesCategory();
+            store.initCollection(undefined as never);
+            expect(store.collections).toEqual({});
+        });
     });
 
     describe("Getters", () => {
@@ -262,6 +268,22 @@ describe("store/games/gamesCategory", () => {
                 const store = useGamesCategory();
                 expect(store.getCollectionFullData("slots")?.data).toHaveLength(50);
             });
+        });
+
+        it("setData appends data to existing collection", () => {
+            const store = useGamesCategory();
+            store.collections.slots = {
+                data: [ { identifier: "old" } as IGame ],
+                pagination: { current_page: 1, next_page: 2 },
+            } as ICollectionItem;
+
+            store.setData({
+                data: [ { identifier: "new" } as IGame ],
+                pagination: { current_page: 2, next_page: null },
+            } as ICollectionItem, "slots");
+
+            expect(store.collections.slots.data).toHaveLength(2);
+            expect(store.collections.slots.pagination.next_page).toBeNull();
         });
 
         describe("isLoaded", () => {

@@ -71,6 +71,15 @@ describe("useGamesCommon", () => {
         expect(store.defaultMenuGameCategories).toEqual(defaultCategories);
     });
 
+    it("should set menu game categories", () => {
+        const store = useGamesCommon();
+        const categories = { main: [ "slots" ] };
+
+        store.setMenuGameCategories(categories);
+
+        expect(store.menuGameCategories).toEqual(categories);
+    });
+
     it("should load game categories", async () => {
         loadGamesCategoriesReq.mockResolvedValue([
             { id: "slot", title: "Slots" },
@@ -102,6 +111,13 @@ describe("useGamesCommon", () => {
         expect(store.getJackpotTotalByCurrency).toBe("formatted-3000");
     });
 
+    it("getGamesJackpots returns empty object for missing currency", () => {
+        const store = useGamesCommon();
+        store.gamesJackpots = { EUR: { game1: 1000 } };
+
+        expect(store.getGamesJackpots).toEqual({});
+    });
+
     it("should add game to cache", () => {
         const store = useGamesCommon();
         const game = { identifier: "game1", title: "Game 1" };
@@ -118,6 +134,15 @@ describe("useGamesCommon", () => {
         store.setGameToCache(game);
 
         expect(store.getGameFromCache({ identifier: "game1" })).toEqual(game);
+    });
+
+    it("should get game from cache by seo title and producer", () => {
+        const store = useGamesCommon();
+        store.setGameToCache({ identifier: "g1", title: "Game 1", seo_title: "seo" } as never);
+
+        const result = store.getGameFromCache({ seoTitle: "seo", producer: "prod" });
+
+        expect(result).toEqual({ identifier: "g1", title: "Game 1", seo_title: "seo" });
     });
 
     it("should get processed recent games sorted by last activity", () => {
@@ -165,6 +190,12 @@ describe("useGamesCommon", () => {
         store.clearRecentGames();
 
         expect(store.recentGames).toEqual({});
+    });
+
+    it("should set enabled games config", () => {
+        const store = useGamesCommon();
+        store.setEnableGamesConfig({ provider1: { enabled: true } } as never);
+        expect(store.enabledGamesConfig).toEqual({ provider1: { enabled: true } });
     });
 
     it("should return empty string if category slug is not found", () => {
