@@ -1,10 +1,10 @@
 import { storeToRefs } from "pinia";
-import { useGamesProviders } from "src/store/games/gamesProviders";
-import { useGamesCommon } from "src/store/games/gamesStore";
 
 import { log } from "../../../controllers/Logger";
 import { processGameForNewAPI } from "../../../helpers/gameHelpers";
 import { filterGames } from "../../../helpers/gameHelpers";
+import { useGamesProviders } from "../../../store/games/gamesProviders";
+import { useGamesCommon } from "../../../store/games/gamesStore";
 import { useRootStore } from "../../../store/root";
 import { http } from "../http";
 

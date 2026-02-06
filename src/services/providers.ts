@@ -1,8 +1,8 @@
 import { storeToRefs } from "pinia";
-import { useConfigStore } from "src/store/configStore";
 
 import { isExistData } from "../helpers/isExistData";
 import type { IDisabledGamesProvider } from "../models/game";
+import { useConfigStore } from "../store/configStore";
 import { useGamesProviders } from "../store/games/gamesProviders";
 import { loadDisabledProvidersConfigReq } from "./api/requests/configs";
 
