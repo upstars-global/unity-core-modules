@@ -185,13 +185,8 @@ describe("useAchievements", () => {
         expect(store.getAchievementsActive).toEqual([]);
     });
 
-    it("getAchievementsActive handles non-frontend achievements", async () => {
-        vi.resetModules();
-        const containSpy = vi.fn(() => true);
-        vi.doMock("../../src/helpers/achievementHelpers", () => ({
-            betSunCompletedInTour: vi.fn(() => false),
-            containAchievIdInUserStatuses: containSpy,
-        }));
+    it("getAchievementsActive handles non-frontend achievements", () => {
+        mockContainAchievIdInUserStatuses.mockReturnValue(true);
         mockGroups.value = [
             { id: 6, status: "active", money_budget_cents: "0" },
         ];
@@ -212,7 +207,7 @@ describe("useAchievements", () => {
         expect(storeActive.getAchievementsActive).toEqual([
             expect.objectContaining({ id: 6 }),
         ]);
-        expect(containSpy).toHaveBeenCalled();
+        expect(mockContainAchievIdInUserStatuses).toHaveBeenCalled();
     });
 
     it("getAchievementsHistory returns only inactive achievements", () => {
