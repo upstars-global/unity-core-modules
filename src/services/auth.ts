@@ -36,7 +36,7 @@ interface RegistrationDeps {
     enableABReg: boolean;
 }
 
-export async function createLoginTwoFactor({ loadAuthData }: LoginTwoFactorDeps) {
+export function createLoginTwoFactor({ loadAuthData }: LoginTwoFactorDeps) {
     return async function loginTwoFactor(otp: string) {
         try {
             const { toggleUserIsLogged } = useUserInfo();
@@ -54,7 +54,7 @@ export async function createLoginTwoFactor({ loadAuthData }: LoginTwoFactorDeps)
     };
 }
 
-export async function createLogin({ loadAuthData, clearFreshChatUser }: LoginDeps) {
+export function createLogin({ loadAuthData, clearFreshChatUser }: LoginDeps) {
     return async function login(formData: IUserFormData & { route: string }) {
         try {
             const { email, password, captcha, route, custom_login_reg } = formData;
