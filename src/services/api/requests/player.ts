@@ -6,6 +6,7 @@ import { IAuthProvider, IUserAuthProvider } from "../../../models/authProviders"
 import { type IPlayerFieldsInfo } from "../../../models/common";
 import {
     type IDataForUpdatePass,
+    type ISeasonStartPoints,
     type ITwoFactorAuthData,
     type IUserGameHistoryItem,
     type IUserInfo,
@@ -439,5 +440,15 @@ export async function deleteTwoFactorReq(code: string) {
     } catch (err) {
         log.error("DELETE_TWO_FACTOR_REQ_ERROR", err);
         throw err;
+    }
+}
+
+export async function leadPlayerStartSeasonInfoReq() {
+    try {
+        const { data } = await http().get<ISeasonStartPoints>(`${ FE_API_PREFIX }/pf/compoints/season-start-get`);
+
+        return data;
+    } catch (error) {
+        log.error("PORTOFRANCO_VIP_STATUS_REQ_ERROR", error);
     }
 }
