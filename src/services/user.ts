@@ -36,6 +36,7 @@ import {
     deleteDepositBonusCodeReq,
     deleteTwoFactorReq,
     IPlayerGroup,
+    leadPlayerStartSeasonInfoReq,
     loadBettingPlayerSettingsRequest,
     loadFreshChatRestoreIdReq,
     loadPlayerFieldsInfoRequest,
@@ -696,6 +697,23 @@ export async function userAccessCheck() {
     } catch (error) {
         if (isHttpError(error)) {
             return error.response;
+        }
+    }
+}
+
+export async function leadPlayerStartSeasonInfo() {
+    const userInfo = useUserInfo();
+    const { getIsLogged } = storeToRefs(useUserInfo());
+
+    if (getIsLogged.value) {
+        try {
+            const data = await leadPlayerStartSeasonInfoReq();
+
+            if (data) {
+                userInfo.setUserSeasonStartPoints(data);
+            }
+        } catch (err) {
+            log.error("PORTOFRANCO_VIP_STATUS_ERROR", err);
         }
     }
 }

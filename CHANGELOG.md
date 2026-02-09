@@ -1,3 +1,16 @@
+## [1.69.0](https://github.com/upstars-global/unity-core-modules/compare/v1.68.1...v1.69.0) (2026-02-09)
+
+### 🚀 Features
+
+* UN-1988 add PORTOFRANCO season-start api ([#312](https://github.com/upstars-global/unity-core-modules/issues/312))
+ ([fedc6da](https://github.com/upstars-global/unity-core-modules/commit/fedc6da6d60240d62784d9530993baead848a3b1))
+
+
+
+    * feat: UN-1988 add PORTOFRANCO season-start api
+
+    * feat: UN-1988 add PORTOFRANCO season-start api
+
 ## [1.68.1](https://github.com/upstars-global/unity-core-modules/compare/v1.68.0...v1.68.1) (2026-01-29)
 
 ### 🔨 Refactoring
