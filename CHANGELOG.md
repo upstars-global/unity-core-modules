@@ -1,3 +1,22 @@
+## [1.70.0](https://github.com/upstars-global/unity-core-modules/compare/v1.69.0...v1.70.0) (2026-02-09)
+
+### 🚀 Features
+
+* **UN-2146:** check user access request and service  ([#309](https://github.com/upstars-global/unity-core-modules/issues/309))
+ ([7b4ecd6](https://github.com/upstars-global/unity-core-modules/commit/7b4ecd64c5d550691a4d1a28f0bf7b44da3c2bef))
+
+
+
+    * feat(UN-2146): check user access request and service
+* **UN-2146:** check user access request and service ([#315](https://github.com/upstars-global/unity-core-modules/issues/315))
+ ([9f8621d](https://github.com/upstars-global/unity-core-modules/commit/9f8621ded0fcc00a7765cdc3e622cc8252e55a05))
+
+
+
+    * fix: yarn lock
+* **UN-2146:** check user access request and service ([#316](https://github.com/upstars-global/unity-core-modules/issues/316))
+ ([e920c14](https://github.com/upstars-global/unity-core-modules/commit/e920c1420dacc32cd18945aa12e54c7dc1271e64))
+
 ## [1.69.0](https://github.com/upstars-global/unity-core-modules/compare/v1.68.1...v1.69.0) (2026-02-09)
 
 ### 🚀 Features
