@@ -703,9 +703,10 @@ export async function userAccessCheck() {
 
 export async function leadPlayerStartSeasonInfo() {
     const userInfo = useUserInfo();
-    const { getIsLogged } = storeToRefs(useUserInfo());
+    const { getIsLogged } = storeToRefs(userInfo);
+    const { isVip } = storeToRefs(useUserStatuses());
 
-    if (getIsLogged.value) {
+    if (getIsLogged.value && isVip.value) {
         try {
             const data = await leadPlayerStartSeasonInfoReq();
 
