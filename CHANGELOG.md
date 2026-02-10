@@ -1,3 +1,10 @@
+## [1.70.1](https://github.com/upstars-global/unity-core-modules/compare/v1.70.0...v1.70.1) (2026-02-10)
+
+### 🐛 Bug Fixes
+
+* UN-2318 send SeasonInfo request only for vip users ([#317](https://github.com/upstars-global/unity-core-modules/issues/317))
+ ([c684264](https://github.com/upstars-global/unity-core-modules/commit/c684264ba86d81bfc0b66ce4296ce15750eb8401))
+
 ## [1.70.0](https://github.com/upstars-global/unity-core-modules/compare/v1.69.0...v1.70.0) (2026-02-09)
 
 ### 🚀 Features
