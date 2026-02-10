@@ -816,10 +816,10 @@
     proc-log "^5.0.0"
     which "^5.0.0"
 
-"@octokit/auth-app@^8.1.2":
-  version "8.1.2"
-  resolved "https://registry.yarnpkg.com/@octokit/auth-app/-/auth-app-8.1.2.tgz#68f2ce201c525dc678965c50b377963b3bce135f"
-  integrity sha512-db8VO0PqXxfzI6GdjtgEFHY9tzqUql5xMFXYA12juq8TeTgPAuiiP3zid4h50lwlIP457p5+56PnJOgd2GGBuw==
+"@octokit/auth-app@^8.2.0":
+  version "8.2.0"
+  resolved "https://registry.yarnpkg.com/@octokit/auth-app/-/auth-app-8.2.0.tgz#9e4ce3de1dfbcaefea43f24c8cafa20c179b287c"
+  integrity sha512-vVjdtQQwomrZ4V46B9LaCsxsySxGoHsyw6IYBov/TqJVROrlYdyNgw5q6tQbB7KZt53v1l1W53RiqTvpzL907g==
   dependencies:
     "@octokit/auth-oauth-app" "^9.0.3"
     "@octokit/auth-oauth-user" "^6.0.2"
