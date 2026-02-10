@@ -21,7 +21,7 @@ export const useGamesCategory = defineStore("gamesCategory", () => {
     const { gamesPageLimit } = storeToRefs(useConfigStore());
 
     const categoryGeo = (slug: string): string => {
-        const slugWithGeo = getUserGeo.value ? `${slug}:${getUserGeo.value.toLocaleLowerCase()}` : "";
+        const slugWithGeo = getUserGeo.value ? `${ slug }:${ getUserGeo.value.toLocaleLowerCase() }` : "";
         const { gamesCategories } = storeToRefs(useGamesCommon());
         const hasCategory = gamesCategories.value.find((catItem) => {
             return catItem.id === slugWithGeo;

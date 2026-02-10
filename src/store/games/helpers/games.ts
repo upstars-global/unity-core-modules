@@ -1,4 +1,3 @@
-import featureFlags from "@theme/configs/featureFlags";
 import { storeToRefs } from "pinia";
 
 import { IGameItem } from "../../../helpers/gameHelpers";
@@ -6,6 +5,7 @@ import type { ICollectionItem, IGame, IGamesProvider } from "../../../models/gam
 import { GameDisableGeoStatus, IEnabledGames } from "../../../models/game";
 import { useRootStore } from "../../../store/root";
 import { useCommon } from "../../common";
+import { useConfigStore } from "../../configStore";
 import { useContextStore } from "../../context";
 import { useGamesProviders } from "../gamesProviders";
 import { useGamesCommon } from "../gamesStore";
@@ -24,7 +24,7 @@ function findGameBySeoTittleAndProducerWithDuplicate(
     return gamesCollection
         .filter((game: IGame) => {
             return game.devices.length > 1 ||
-                game.devices.includes(rootStore.isMobile ? "mobile" : "desktop");
+            game.devices.includes(rootStore.isMobile ? "mobile" : "desktop");
         })
         .find(({ seo_title: seoTitleItem, provider: providerItem }) => {
             return producer === providerItem && seoTitleItem === seoTitle;
@@ -97,8 +97,9 @@ export function filterProviders(
 ): IGamesProvider[] {
     const { isBotUA } = storeToRefs(useContextStore());
     const { disabledGamesProviders } = storeToRefs(useGamesProviders());
+    const { $defaultProjectConfig } = useConfigStore();
 
-    if (!Array.isArray(data) || featureFlags.enableAllProviders || isBotUA.value) {
+    if (!Array.isArray(data) || $defaultProjectConfig.featureFlags.enableAllProviders || isBotUA.value) {
         return data;
     }
 
@@ -117,8 +118,9 @@ export function filterGames<T extends IGame | IGameItem>(
     const { isBotUA } = storeToRefs(useContextStore());
     const { disabledGamesProviders } = storeToRefs(useGamesProviders());
     const { enabledGamesConfig } = storeToRefs(useGamesCommon());
+    const { $defaultProjectConfig } = useConfigStore();
 
-    if (!Array.isArray(data) || featureFlags.enableAllProviders || isBotUA.value) {
+    if (!Array.isArray(data) || $defaultProjectConfig.featureFlags.enableAllProviders || isBotUA.value) {
         return data;
     }
 
