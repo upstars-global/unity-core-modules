@@ -8,6 +8,7 @@ import {
     type IDataForUpdatePass,
     type ISeasonStartPoints,
     type ITwoFactorAuthData,
+    type IUserData,
     type IUserGameHistoryItem,
     type IUserInfo,
     type IUserSession,
@@ -187,7 +188,7 @@ export async function restorePasswordRestoreReq(payload) {
 
 export async function confirmPlayerReq(token: string) {
     try {
-        return await http().get(`/api/users/confirmation?confirmation_token=${ token }`);
+        return await http().get<IUserData>(`/api/users/confirmation?confirmation_token=${ token }`);
     } catch (err) {
         log.error("CONFIRM_PLAYER_ERROR", err);
         throw err;
