@@ -80,7 +80,7 @@ async function start() {
 
     sock = new Centrifuge({
         ...settings.cent,
-        url: getCentrifugeUrl(settings.cent.url),
+        // url: getCentrifugeUrl(settings.cent.url),
     });
     subscribe(CHANNELS_TYPE_PUBLIC);
 
@@ -90,7 +90,7 @@ async function start() {
 
     sock.connect();
 
-    sock.onmessage = function(response) {
+    sock.onmessage = function (response) {
         const json = JSON.parse(response.data);
         $bus.$emit(`websocket.${ json.type }`, json);
     };
