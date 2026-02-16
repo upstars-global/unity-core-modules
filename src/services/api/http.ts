@@ -22,7 +22,7 @@ interface IHttpParams {
     locale?: string;
 }
 
-interface RequestConfig {
+export interface RequestConfig {
     method?: string;
     headers?: Record<string, string>;
     body?: unknown;
@@ -32,7 +32,7 @@ interface RequestConfig {
     params?: Record<string, unknown>;
 }
 
-interface HttpResponse<T = unknown> {
+export interface HttpResponse<T = unknown> {
     data: T;
     status: number;
     statusText: string;
@@ -40,7 +40,7 @@ interface HttpResponse<T = unknown> {
     config: RequestConfig;
 }
 
-interface HttpError extends Error {
+export interface HttpError extends Error {
     response?: {
         status: number;
         statusText: string;
@@ -48,6 +48,15 @@ interface HttpError extends Error {
     };
     config?: RequestConfig;
 }
+
+export const isHttpError = (error: unknown): error is HttpError => {
+    if (!error || typeof error !== "object") {
+        return false;
+    }
+
+    const maybeError = error as HttpError;
+    return typeof maybeError.message === "string" && ("response" in maybeError || "config" in maybeError);
+};
 
 class HttpClient {
     private readonly baseURL: string;

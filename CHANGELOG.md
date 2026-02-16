@@ -1,3 +1,185 @@
+## [1.70.1](https://github.com/upstars-global/unity-core-modules/compare/v1.70.0...v1.70.1) (2026-02-10)
+
+### 🐛 Bug Fixes
+
+* UN-2318 send SeasonInfo request only for vip users ([#317](https://github.com/upstars-global/unity-core-modules/issues/317))
+ ([c684264](https://github.com/upstars-global/unity-core-modules/commit/c684264ba86d81bfc0b66ce4296ce15750eb8401))
+
+## [1.70.0](https://github.com/upstars-global/unity-core-modules/compare/v1.69.0...v1.70.0) (2026-02-09)
+
+### 🚀 Features
+
+* **UN-2146:** check user access request and service  ([#309](https://github.com/upstars-global/unity-core-modules/issues/309))
+ ([7b4ecd6](https://github.com/upstars-global/unity-core-modules/commit/7b4ecd64c5d550691a4d1a28f0bf7b44da3c2bef))
+
+
+
+    * feat(UN-2146): check user access request and service
+* **UN-2146:** check user access request and service ([#315](https://github.com/upstars-global/unity-core-modules/issues/315))
+ ([9f8621d](https://github.com/upstars-global/unity-core-modules/commit/9f8621ded0fcc00a7765cdc3e622cc8252e55a05))
+
+
+
+    * fix: yarn lock
+* **UN-2146:** check user access request and service ([#316](https://github.com/upstars-global/unity-core-modules/issues/316))
+ ([e920c14](https://github.com/upstars-global/unity-core-modules/commit/e920c1420dacc32cd18945aa12e54c7dc1271e64))
+
+## [1.69.0](https://github.com/upstars-global/unity-core-modules/compare/v1.68.1...v1.69.0) (2026-02-09)
+
+### 🚀 Features
+
+* UN-1988 add PORTOFRANCO season-start api ([#312](https://github.com/upstars-global/unity-core-modules/issues/312))
+ ([fedc6da](https://github.com/upstars-global/unity-core-modules/commit/fedc6da6d60240d62784d9530993baead848a3b1))
+
+
+
+    * feat: UN-1988 add PORTOFRANCO season-start api
+
+    * feat: UN-1988 add PORTOFRANCO season-start api
+
+## [1.68.1](https://github.com/upstars-global/unity-core-modules/compare/v1.68.0...v1.68.1) (2026-01-29)
+
+### 🔨 Refactoring
+
+* UN-2102 refactor loot box interfaces ([#307](https://github.com/upstars-global/unity-core-modules/issues/307))
+ ([3ab174a](https://github.com/upstars-global/unity-core-modules/commit/3ab174af0958a9f015e0f71393841267b5c7d94f))
+
+
+
+    * refactor: UN-2102 refactor loot box interfaces
+
+## [1.68.0](https://github.com/upstars-global/unity-core-modules/compare/v1.67.0...v1.68.0) (2026-01-27)
+
+### 🚀 Features
+
+* UN-2105 Доробки по ачівкам + доставити на прод ([#299](https://github.com/upstars-global/unity-core-modules/issues/299))
+ ([221a716](https://github.com/upstars-global/unity-core-modules/commit/221a716d29f0f4df67d8af6533c22de44de4c0b1))
+
+## [1.67.0](https://github.com/upstars-global/unity-core-modules/compare/v1.66.4...v1.67.0) (2026-01-26)
+
+### 🚀 Features
+
+* **UN-348:** refactor tournamentsStore and cover it with tests ([#304](https://github.com/upstars-global/unity-core-modules/issues/304))
+ ([7e570c9](https://github.com/upstars-global/unity-core-modules/commit/7e570c9a368ab2a758a997a939fcb84d20308886))
+
+## [1.66.4](https://github.com/upstars-global/unity-core-modules/compare/v1.66.3...v1.66.4) (2026-01-20)
+
+### 🐛 Bug Fixes
+
+* userBalance.ts minor ([#308](https://github.com/upstars-global/unity-core-modules/issues/308))
+ ([00eb3ac](https://github.com/upstars-global/unity-core-modules/commit/00eb3ac7aed9c6116d3a107debe5876875745410))
+
+
+
+    userBalance.ts fix minor
+
+## [1.66.3](https://github.com/upstars-global/unity-core-modules/compare/v1.66.2...v1.66.3) (2026-01-20)
+
+### 🧪 Testing
+
+* UN-1958 [unit-tests] userBalance
+ ([dceda7e](https://github.com/upstars-global/unity-core-modules/commit/dceda7ef32046b24fd757638d8b363aa40d0a157))
+
+## [1.66.2](https://github.com/upstars-global/unity-core-modules/compare/v1.66.1...v1.66.2) (2026-01-20)
+
+### 🐛 Bug Fixes
+
+* **UN-2143:** promisify addScript method to reject error on script load for cashbox metrics feature  ([#306](https://github.com/upstars-global/unity-core-modules/issues/306))
+ ([805a407](https://github.com/upstars-global/unity-core-modules/commit/805a4071a2421c33984cc735ba0608c3850c8217))
+
+
+
+    fix: metrics
+
+## [1.66.1](https://github.com/upstars-global/unity-core-modules/compare/v1.66.0...v1.66.1) (2026-01-19)
+
+### 🐛 Bug Fixes
+
+* **UN-2113:** use only less than 0 current_value_amount_cents for limit ([#298](https://github.com/upstars-global/unity-core-modules/issues/298))
+ ([f52f5d6](https://github.com/upstars-global/unity-core-modules/commit/f52f5d6ea814fc590258541573ba1780617dfb85))
+
+
+
+    fix(UN-2113): use only less than 0 current_value_amount_cents for limit reach calculation
+
+## [1.66.0](https://github.com/upstars-global/unity-core-modules/compare/v1.65.0...v1.66.0) (2026-01-15)
+
+### 🚀 Features
+
+* **UN-1959:** refactor userInfo store and cover it with tests ([#277](https://github.com/upstars-global/unity-core-modules/issues/277))
+ ([a2920be](https://github.com/upstars-global/unity-core-modules/commit/a2920beca65739b9ae306c2e27528d7bcea4ac47))
+
+
+
+    * feat(UN-1959): refactor userInfo store and cover it with tests
+
+    * fix: review comments
+
+    * fix: tests
+
+    * fix: review comments
+
+    * fix
+
+    * fix: user service
+
+    * fix: tests
+
+## [1.65.0](https://github.com/upstars-global/unity-core-modules/compare/v1.64.0...v1.65.0) (2026-01-15)
+
+### 🚀 Features
+
+* UN-1997 add manageWithdraw config ([#295](https://github.com/upstars-global/unity-core-modules/issues/295))
+ ([d06bc25](https://github.com/upstars-global/unity-core-modules/commit/d06bc256982c9e6f9f46eefe41a891d208de9064))
+
+
+
+    * feat: UN-1997 add manageWithdraw config
+
+## [1.64.0](https://github.com/upstars-global/unity-core-modules/compare/v1.63.0...v1.64.0) (2026-01-14)
+
+### 🚀 Features
+
+* UN-2000 add daily-bonus-config ([#292](https://github.com/upstars-global/unity-core-modules/issues/292))
+ ([8ab8ed4](https://github.com/upstars-global/unity-core-modules/commit/8ab8ed411a57f7976e99acb383de505ab9495aee))
+
+
+
+    * feat: UN-2000 add daily-bonus-config
+
+## [1.63.0](https://github.com/upstars-global/unity-core-modules/compare/v1.62.2...v1.63.0) (2026-01-13)
+
+### 🚀 Features
+
+* **UN-1921:** cache configs ([#273](https://github.com/upstars-global/unity-core-modules/issues/273))
+ ([3f3dddb](https://github.com/upstars-global/unity-core-modules/commit/3f3dddb63f7f2b3af0b4a2101a0517da31e7463c))
+
+
+
+    * UN-1921 cache configs
+
+    * added log
+
+    * added log
+
+    * remove log
+
+## [1.62.2](https://github.com/upstars-global/unity-core-modules/compare/v1.62.1...v1.62.2) (2026-01-13)
+
+### 🧪 Testing
+
+* UN-1962 [unit-tests] vipAdventures ([#290](https://github.com/upstars-global/unity-core-modules/issues/290))
+ ([8ecaa39](https://github.com/upstars-global/unity-core-modules/commit/8ecaa39867c7cf5510b2d80e54f5ea3657b9c649))
+
+## [1.62.1](https://github.com/upstars-global/unity-core-modules/compare/v1.62.0...v1.62.1) (2026-01-12)
+
+### ⏪ Reverts
+
+* "UN-2035 fix and refactor achiemvents conditions" ([#301](https://github.com/upstars-global/unity-core-modules/issues/301))
+ ([ade3f2a](https://github.com/upstars-global/unity-core-modules/commit/ade3f2a89473a76fac79d1fb3d300ec21cd56570))
+
+, closes [#296](https://github.com/upstars-global/unity-core-modules/issues/)
+
 ## [1.62.0](https://github.com/upstars-global/unity-core-modules/compare/v1.61.2...v1.62.0) (2026-01-12)
 
 ### 🚀 Features

@@ -1,23 +1,34 @@
+import { isExistData } from "../helpers/isExistData";
 import { useAuthProvidersStore } from "../store/authProviders";
 import { disconnectAuthProviderReq, getAuthProvidersReq, getUserAuthProvidersReq } from "./api/requests/player";
 
 export async function loadAuthProviders() {
-    const { setAuthProviders } = useAuthProvidersStore();
+    const authProvidersStore = useAuthProvidersStore();
+
+    if (isExistData(authProvidersStore.authProviders)) {
+        return;
+    }
+
     const data = await getAuthProvidersReq();
 
     if (data) {
-        setAuthProviders(data);
+        authProvidersStore.setAuthProviders(data);
     }
 }
 
 export async function loadUserAuthProviders() {
-    const { setUserAuthProviders, setUserAuthProvidersLoadedStatus } = useAuthProvidersStore();
+    const authProvidersStore = useAuthProvidersStore();
+
+    if (isExistData(authProvidersStore.userAuthProviders)) {
+        return;
+    }
+
     const data = await getUserAuthProvidersReq();
 
-    setUserAuthProvidersLoadedStatus(true);
+    authProvidersStore.setUserAuthProvidersLoadedStatus(true);
 
     if (data) {
-        setUserAuthProviders(data);
+        authProvidersStore.setUserAuthProviders(data);
     }
 }
 
