@@ -58,7 +58,7 @@ import {
     updateBonusSettingsReq,
     updateUserPasswordReq,
 } from "./api/requests/player";
-import { getSumsubTokenReq } from "./api/requests/sumsub";
+import { getSumsubTokenReq, getSumsubVerificationStatusReq } from "./api/requests/sumsub";
 import {
     confirmUserLimitChangeReq,
     createNewUserLimitReq,
@@ -125,6 +125,34 @@ export async function loadSumsubToken(levelName?: string): Promise<string> {
     }
 
     return response?.access_token || "";
+}
+
+export async function loadSumsubVerificationStatus(): Promise<void> {
+    const sumsubStore = useUserVerificationSumsub();
+    const userInfoStore = useUserInfo();
+    const { getUserInfo } = storeToRefs(userInfoStore);
+
+    const userId = getUserInfo.value.id;
+
+    if (!userId) {
+        log.error("LOAD_SUMSUB_STATUS_NO_USER_ID", "User ID is not available");
+        return;
+    }
+
+    sumsubStore.setStatusLoading(true);
+
+    try {
+        const data = await getSumsubVerificationStatusReq(userId);
+
+        if (data) {
+            sumsubStore.setVerificationStatus(data);
+        }
+    } catch (err) {
+        sumsubStore.setStatusError(err instanceof Error ? err.message : "Unknown error");
+        log.error("LOAD_SUMSUB_VERIFICATION_STATUS_ERROR", err);
+    } finally {
+        sumsubStore.setStatusLoading(false);
+    }
 }
 
 
