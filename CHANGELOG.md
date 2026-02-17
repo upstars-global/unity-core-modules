@@ -1,3 +1,20 @@
+## [1.71.0](https://github.com/upstars-global/unity-core-modules/compare/v1.70.1...v1.71.0) (2026-02-17)
+
+### 🚀 Features
+
+* (UN-2288): replace featureFlags with $defaultProjectConfig and add ConfigPlugin ([#314](https://github.com/upstars-global/unity-core-modules/issues/314))
+ ([3f94149](https://github.com/upstars-global/unity-core-modules/commit/3f94149afee8365e93c524d0c083b4fd5f563d66))
+
+
+
+    * feat: (UN-2288): replace featureFlags with $defaultProjectConfig and add ConfigPlugin
+
+    * refactor: remove debug console logs and adjust test mocks for `$defaultProjectConfig`
+
+    * refactor: remove unused featureFlags import and update test mocks
+
+    * refactor: remove redundant newline in test mock setup
+
 ## [1.70.1](https://github.com/upstars-global/unity-core-modules/compare/v1.70.0...v1.70.1) (2026-02-10)
 
 ### 🐛 Bug Fixes

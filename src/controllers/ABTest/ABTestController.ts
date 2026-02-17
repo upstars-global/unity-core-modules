@@ -1,6 +1,6 @@
 import { ID_GROUP_FOR_PAIRED_ID, ID_GROUP_FOR_UNPAIRED_ID } from "@config/groupAB";
-import featureFlags from "@theme/configs/featureFlags";
 
+import { useConfigStore } from "../../store/configStore";
 import { useUserInfo } from "../../store/user/userInfo";
 import { useUserStatuses } from "../../store/user/userStatuses";
 import { StagController } from "../StagController";
@@ -61,7 +61,8 @@ export class ABTestController {
     }
 
     static get variant(): ABResultType | null {
-        if (featureFlags.enableABReg) {
+        const { $defaultProjectConfig } = useConfigStore();
+        if ($defaultProjectConfig.featureFlags.enableABReg) {
             return ABTestController.variantByUserGroup;
         }
         return null;
