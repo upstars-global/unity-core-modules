@@ -25,6 +25,11 @@ vi.mock("../../../src/store/root", () => ({
 vi.mock("../../../src/store/configStore", () => ({
     useConfigStore: () => ({
         gamesPageLimit: ref(20),
+        $defaultProjectConfig: {
+            featureFlags: {
+                enableAllProviders: false,
+            },
+        },
     }),
 }));
 const mockGamesCategories = ref<IGamesProvider[]>([]);
@@ -97,6 +102,13 @@ describe("store/games/gamesProviders", () => {
                 ],
                 pagination: { current_page: 1, next_page: 2 },
             };
+
+            // Initialize collection before loading data
+            store.collections[slug] = {
+                data: [],
+                pagination: { current_page: 0, next_page: 1 },
+            } as ICollectionItem;
+
             vi.mocked(http).mockReturnValue({
                 get: vi.fn(),
                 post: vi.fn().mockResolvedValue({ data: mockGames }),
