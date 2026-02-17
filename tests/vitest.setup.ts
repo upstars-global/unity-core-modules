@@ -1,9 +1,30 @@
-import { vi } from "vitest";
+import { beforeEach, vi } from "vitest";
 
+vi.mock("pinia", async () => {
+    const actual = await vi.importActual<typeof import("pinia")>("pinia");
+    const { createUnityConfigPlugin } = await import("../src/plugins/ConfigPlugin");
+    const { baseUnityConfig } = await import("./mocks/unityConfig");
+    return {
+        ...actual,
+        createPinia: () => {
+            const pinia = actual.createPinia();
+            pinia.use(createUnityConfigPlugin(baseUnityConfig));
+            return pinia;
+        },
+    };
+});
 
-vi.mock("@helpers/lootBoxes", () => ({
+beforeEach(async () => {
+    const { createPinia, setActivePinia } = await import("pinia");
+    setActivePinia(createPinia());
+});
 
-}));
+vi.mock("../src/store/configStore", async () => {
+    const { createConfigStoreMock } = await import("./test-utils/configStoreMock");
+    return createConfigStoreMock();
+});
+
+vi.mock("@helpers/lootBoxes", () => ({}));
 
 vi.mock("@helpers/user", () => ({
     getUserVipGroup: () => {
