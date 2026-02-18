@@ -384,12 +384,9 @@ export async function restorePasswordRestore(payload) {
 
 export async function confirmPlayer(token: string) {
     const userInfoStore = useUserInfo();
-    const { isUserTester } = storeToRefs(useUserStatuses());
 
     const response = await confirmPlayerReq(token);
-    if (isUserTester.value) {
-        userInfoStore.setUserData(response.data);
-    }
+    userInfoStore.setUserData(response.data);
     return response;
 }
 
