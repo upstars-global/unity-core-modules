@@ -26,7 +26,7 @@ export default [
             "n/no-unsupported-features/node-builtins": [
                 "error",
                 {
-                    version: ">=22.4.1",
+                    version: ">=22.22.0",
                     ignores: [ "localStorage" ],
                 },
             ],
