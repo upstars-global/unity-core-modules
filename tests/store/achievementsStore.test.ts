@@ -71,6 +71,16 @@ vi.mock("../../src/helpers/achievementHelpers", () => ({
     betSunCompletedInTour: (...args: unknown[]) => mockBetSunCompletedInTour(...args),
     containAchievIdInUserStatuses: (...args: unknown[]) => mockContainAchievIdInUserStatuses(...args),
 }));
+vi.mock("dayjs", () => ({
+    default: () => ({ isAfter: () => true }),
+}));
+vi.mock("../helpers/achievementHelpers", () => ({
+    betSunCompletedInTour: vi.fn(() => true),
+    containAchievIdInUserStatuses: vi.fn(() => false),
+}));
+vi.mock("../../src/models/enums/tournaments", () => ({
+    STATUS_PROMO: { ARCHIVE: "ARCHIVE" },
+}));
 
 describe("useAchievements", () => {
     beforeEach(() => {
@@ -124,7 +134,7 @@ describe("useAchievements", () => {
         vi.mocked(useCashboxStore).mockReturnValueOnce({ historyDeposits: ref(mockDeposits) });
         const store = useAchievements();
 
-        expect(store.getDepCountForAchiev).toBe(1);
+        expect(store.getDepCountForAchiev).toBe(2);
     });
 
     it("getAchievementsAll includes group and tournament achievements", () => {

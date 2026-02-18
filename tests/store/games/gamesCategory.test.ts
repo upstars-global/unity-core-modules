@@ -51,6 +51,11 @@ vi.mock("../../../src/store/user/userInfo", () => ({
 vi.mock("../../../src/store/configStore", () => ({
     useConfigStore: () => ({
         gamesPageLimit: ref(20),
+        $defaultProjectConfig: {
+            featureFlags: {
+                enableAllProviders: false,
+            },
+        },
     }),
 }));
 
@@ -184,7 +189,7 @@ describe("store/games/gamesCategory", () => {
     });
 
     describe("Getters", () => {
-        const games = Array.from({ length: 50 }, (_, i) => ({ name: `Game ${i + 1}` } as IGame));
+        const games = Array.from({ length: 50 }, (_, i) => ({ name: `Game ${ i + 1 }` } as IGame));
 
         beforeEach(() => {
             const store = useGamesCategory();

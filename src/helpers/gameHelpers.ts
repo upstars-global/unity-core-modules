@@ -1,11 +1,11 @@
 import { getGameImagePath } from "@helpers/gameImage";
 import { SlugCategoriesGames } from "@theme/configs/categoryesGames";
-import featureFlags from "@theme/configs/featureFlags";
 import { storeToRefs } from "pinia";
 
 import type { ICollectionItem, IDisabledGamesProvider, IGame, IGamesProvider } from "../models/game";
 import { GameDisableGeoStatus, IEnabledGames } from "../models/game";
 import { useCommon } from "../store/common";
+import { useConfigStore } from "../store/configStore";
 import { useContextStore } from "../store/context";
 import { useRootStore } from "../store/root";
 
@@ -146,7 +146,8 @@ export function filterProviders(
     disabledGamesProviders: IDisabledGamesProvider,
 ): IGamesProvider[] {
     const { isBotUA } = storeToRefs(useContextStore());
-
+    const { $defaultProjectConfig } = useConfigStore();
+    const { featureFlags } = $defaultProjectConfig;
 
     if (!Array.isArray(data) || featureFlags.enableAllProviders || isBotUA.value) {
         return data;
@@ -167,6 +168,8 @@ export function filterGames<T extends IGame | IGameItem>(
     enabledGamesConfig: IEnabledGames,
 ): T[] {
     const { isBotUA } = storeToRefs(useContextStore());
+    const { $defaultProjectConfig } = useConfigStore();
+    const { featureFlags } = $defaultProjectConfig;
 
     if (!Array.isArray(data) || featureFlags.enableAllProviders || isBotUA.value) {
         return data;
@@ -198,6 +201,8 @@ export function isLoaded(collection: ICollectionItem, page: number) {
 }
 
 export function processGame(game, gameKey): IGameItem {
+    const { $defaultProjectConfig } = useConfigStore();
+    const { featureFlags } = $defaultProjectConfig;
     const gameCategoriesWithoutGeo: Record<string, number> = {};
     Object.entries(game.collections || {}).forEach(([ key, value ]) => {
         const categoryName = key.split(":")[0];

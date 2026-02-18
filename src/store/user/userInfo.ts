@@ -1,10 +1,10 @@
-
-import { defineStore, type Pinia, storeToRefs } from "pinia";
+import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
 import { Currencies } from "../../models/enums/currencies";
 import { BettingPlayerSettings } from "../../models/player";
 import type { IUserData, IUserStatus } from "../../models/user";
+import { ISeasonStartPoints } from "../../models/user";
 import type { IPlayerStats, ISubscriptions, IUserSettings } from "../../services/api/DTO/playerDTO";
 import { useCommon } from "../common";
 
@@ -67,6 +67,7 @@ export const useUserInfo = defineStore("userInfo", () => {
         oddsTypes: [],
         selectedOddsType: "european",
     });
+    const userStartSeasonInfo = ref<ISeasonStartPoints>();
 
     const getUserInfo = computed(() => info.value);
     const getUserBettingBonuses = computed(() => bettingBonuses.value);
@@ -88,6 +89,7 @@ export const useUserInfo = defineStore("userInfo", () => {
     const getUserNickName = computed(() => info.value.nickname || info.value.email);
     const getIsLoadedUsedData = computed(() => isLoadedUsedData.value);
     const getPlayerStats = computed(() => stats.value);
+    const getUserStartSeasonInfo = computed(() => userStartSeasonInfo.value);
 
     function setPlayerStats(data: IPlayerStats) {
         stats.value = data;
@@ -192,6 +194,10 @@ export const useUserInfo = defineStore("userInfo", () => {
         isLoadUserProfile.value = value;
     }
 
+    function setUserSeasonStartPoints(data: ISeasonStartPoints) {
+        userStartSeasonInfo.value = data;
+    }
+
     return {
         getUserInfo,
         setUserInfo,
@@ -217,6 +223,7 @@ export const useUserInfo = defineStore("userInfo", () => {
         getIsLoadedUsedData,
         getUserBettingBonuses,
         getPlayerStats,
+        getUserStartSeasonInfo,
         setPlayerStats,
         getSubunitsToUnitsByCode,
         toggleUserIsLogged,
@@ -233,5 +240,6 @@ export const useUserInfo = defineStore("userInfo", () => {
         setUserSettings,
         isLoadUserProfile,
         toggleIsLoadUserProfile,
+        setUserSeasonStartPoints,
     };
 });

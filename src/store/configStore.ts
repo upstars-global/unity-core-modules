@@ -21,7 +21,8 @@ export const useConfigStore = defineStore("configStore", () => {
     }
 
     function setVipProgramConfig(data: IVipProgramConfigDTO) {
-        const { levelRewards,
+        const {
+            levelRewards,
             levelBonusesCount,
             levelCards,
             levelsConfig,
@@ -62,4 +63,8 @@ export const useConfigStore = defineStore("configStore", () => {
         disabledGamesProviders,
         setDisabledGamesProviders,
     };
-});
+},
+{
+    projectConfiguration: true, // кастомная опция только для нужных сторах
+},
+);
