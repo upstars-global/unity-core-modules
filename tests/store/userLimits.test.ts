@@ -76,6 +76,15 @@ describe("useUserLimits store", () => {
         ]);
     });
 
+    it("getUserLimits keeps limits without accounts", () => {
+        const store = useUserLimits();
+        store.setUserLimits([
+            createLimit({ accounts: undefined }),
+        ]);
+
+        expect(store.getUserLimits[0].accounts).toBeUndefined();
+    });
+
     it("getLimitsByType uses filtered limits when only fiat is enabled", () => {
         const commonStore = useCommon();
         commonStore.setCurrencies([
@@ -135,5 +144,38 @@ describe("useUserLimits store", () => {
         expect(store.hasSomeReachedLimit).toBe(true);
         expect(store.hasDepositLimit).toBe(true);
         expect(store.getLimitsByType("deposit")).toHaveLength(1);
+    });
+
+    it("returns false flags when limits are not reached", () => {
+        const userInfoStore = useUserInfo();
+        userInfoStore.info.currency = Currencies.USD;
+        const store = useUserLimits();
+        store.setUserLimits([
+            createLimit({
+                type: "withdrawal",
+                accounts: [
+                    createLimitAccount({
+                        currency: Currencies.USD,
+                        current_value_amount_cents: -100,
+                        amount_cents: 10_000,
+                    }),
+                ],
+            }),
+        ]);
+
+        expect(store.isOneLimitReached).toBe(false);
+        expect(store.hasDepositLimit).toBe(false);
+        expect(store.hasSomeReachedLimit).toBe(false);
+    });
+
+    it("clearState resets limits and onlyFiat flag", () => {
+        const store = useUserLimits();
+        store.setUserLimits([ createLimit() ]);
+        store.setOnlyFiatLimits(true);
+
+        store.clearState();
+
+        expect(store.limits).toEqual([]);
+        expect(store.getLimitsByType("deposit")).toEqual([]);
     });
 });

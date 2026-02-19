@@ -58,6 +58,7 @@ export const useUserInfo = defineStore("userInfo", () => {
     const freshchatRestoreIdLoaded = ref<boolean>(false);
     const freshchatRestoreId = ref<string>("");
     const isLogged = ref<boolean>(false);
+    const isLoadUserProfile = ref(false);
     const subscriptions = ref<ISubscriptions>();
     const notice = ref<unknown[]>([]);
     const stats = ref<IPlayerStats>();
@@ -189,6 +190,10 @@ export const useUserInfo = defineStore("userInfo", () => {
         settings.value = data;
     }
 
+    function toggleIsLoadUserProfile(value: boolean) {
+        isLoadUserProfile.value = value;
+    }
+
     function setUserSeasonStartPoints(data: ISeasonStartPoints) {
         userStartSeasonInfo.value = data;
     }
@@ -233,6 +238,8 @@ export const useUserInfo = defineStore("userInfo", () => {
         bettingPlayerSettings,
         setBettingPlayerSettings,
         setUserSettings,
+        isLoadUserProfile,
+        toggleIsLoadUserProfile,
         setUserSeasonStartPoints,
     };
 });

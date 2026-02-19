@@ -21,6 +21,7 @@ beforeEach(async () => {
 
 vi.mock("../src/store/configStore", async () => {
     const { createConfigStoreMock } = await import("./test-utils/configStoreMock");
+
     return createConfigStoreMock();
 });
 

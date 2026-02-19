@@ -1,5 +1,3 @@
-import { reactive, ref } from "vue";
-
 import { UnityConfig } from "../../types/configProjectTypes";
 
 export type DefaultProjectConfigMock = UnityConfig & {
@@ -13,7 +11,9 @@ export type DefaultConfigMock = {
     $defaultProjectConfig?: DefaultProjectConfigMock;
 };
 
-export function createConfigStoreMock(overrides: Partial<DefaultConfigMock> = {}) {
+export async function createConfigStoreMock(
+    overrides: Partial<DefaultConfigMock> = {},
+) {
     const baseProjectConfig: DefaultProjectConfigMock = {
         featureFlags: {
             enableAllProviders: true,
@@ -31,9 +31,15 @@ export function createConfigStoreMock(overrides: Partial<DefaultConfigMock> = {}
         },
     };
 
+    const { useConfigStore: actualUseConfigStore } = await import("../../src/store/configStore");
+
     return {
-        useConfigStore: () => reactive({
-            $defaultProjectConfig: projectConfig,
-        }),
+        useConfigStore: () => {
+            const actual = actualUseConfigStore();
+
+            actual.$defaultProjectConfig = projectConfig;
+
+            return actual;
+        },
     };
 }

@@ -1,17 +1,15 @@
-import { type Pinia, storeToRefs } from "pinia";
+import { storeToRefs } from "pinia";
 import { defineStore } from "pinia";
 import { ref, toRefs } from "vue";
 
-import { log } from "../../controllers/Logger";
 import { processGameForNewAPI } from "../../helpers/gameHelpers";
+import { defaultCollection, filterGames } from "../../helpers/gameHelpers";
 import type { ICollectionItem, IGame } from "../../models/game";
-import type { ICollectionRecord, IGameFilter } from "../../services/api/DTO/gamesDTO";
-import { loadGamesCategory as loadGamesCategoryReq } from "../../services/api/requests/games";
+import type { ICollectionRecord } from "../../services/api/DTO/gamesDTO";
 import { useConfigStore } from "../configStore";
 import { useMultilangStore } from "../multilang";
-import { useRootStore } from "../root";
+import { useGamesProviders } from "./gamesProviders";
 import { useGamesCommon } from "./gamesStore";
-import { defaultCollection, filterGames } from "./helpers/games";
 
 const DEFAULT_COLLECTION_NAME = "default";
 
@@ -57,7 +55,14 @@ export const useGamesCategory = defineStore("gamesCategory", () => {
 
     function setData(data: ICollectionItem, slug: string): void {
         const propsGame = { ...data };
-        propsGame.data = filterGames(data.data.map(processGameForNewAPI));
+        const { disabledGamesProviders } = storeToRefs(useGamesProviders());
+        const { enabledGamesConfig } = storeToRefs(useGamesCommon());
+
+        propsGame.data = filterGames(
+            data.data.map(processGameForNewAPI),
+            disabledGamesProviders.value,
+            enabledGamesConfig.value,
+        );
 
         if (!collections.value[slug]) {
             collections.value = {
@@ -82,56 +87,15 @@ export const useGamesCategory = defineStore("gamesCategory", () => {
         });
     }
 
-    async function loadGamesCategory(slug: string, page: number = 1): Promise<ICollectionItem | undefined> {
-        const slugCollection = categoryGeo(slug);
-        const loaded = isLoaded(slugCollection, page);
-
-        if (loaded) {
-            return collections.value[slugCollection];
-        }
-
-        try {
-            const { isMobile } = storeToRefs(useRootStore());
-
-            const device = isMobile.value ? "mobile" : "desktop";
-
-            const reqConfig: IGameFilter = {
-                device,
-                filter: {
-                    categories: {
-                        identifiers: [ slugCollection ],
-                        strategy: "OR",
-                    },
-                },
-                page,
-                page_size: gamesPageLimit.value,
-            };
-
-            const data = await loadGamesCategoryReq(reqConfig);
-            setData(data, slugCollection);
-        } catch (err) {
-            log.error("LOAD_GAMES_CATEGORY_ERROR", err);
-        }
-    }
 
     return {
         collections,
-
         categoryGeo,
         getCollection,
         getCollectionFullData,
         getCollectionPagination,
         isLoaded,
-
-        loadGamesCategory,
         initCollection,
+        setData,
     };
 });
-
-export function useGamesCategoryFetchService(pinia?: Pinia) {
-    const { initCollection } = useGamesCategory(pinia);
-
-    return {
-        initCollection,
-    };
-}

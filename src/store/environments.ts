@@ -1,4 +1,4 @@
-import { defineStore, type Pinia } from "pinia";
+import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
 const PRODUCTION_ENV = "production";
@@ -34,14 +34,3 @@ export const useEnvironments = defineStore("environments", () => {
     };
 });
 
-export function useEnvironmentsFetchService(pinia?: Pinia) {
-    useEnvironments(pinia);
-
-    function loadEnvironments() {
-        return Promise.resolve();
-    }
-
-    return {
-        loadEnvironments,
-    };
-}

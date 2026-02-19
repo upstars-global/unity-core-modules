@@ -1,11 +1,11 @@
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { PromoType } from "../../src/models/enums/tournaments";
+import { promoFilterAndSettings } from "../../src/helpers/promoHelpers";
 import { useLotteriesStore } from "../../src/store/lotteries";
 
 vi.mock("../../src/helpers/promoHelpers", () => ({
-    promoFilterAndSettings: <T>(list: T[], type: PromoType) => list,
+    promoFilterAndSettings: vi.fn(<T>(list: T[]) => list),
 }));
 
 describe("useLotteriesStore", () => {
@@ -75,6 +75,15 @@ describe("useLotteriesStore", () => {
         store.currentLottery = { id: 5, in_progress: true };
         expect(store.getCurrentLottery).toEqual({ id: 5, in_progress: true });
         store.currentLottery = null;
+        expect(store.getCurrentLottery).toBe(null);
+    });
+
+    it("getCurrentLottery returns null when filtered list is empty", () => {
+        const store = useLotteriesStore();
+        vi.mocked(promoFilterAndSettings).mockReturnValueOnce([]);
+
+        // @ts-expect-error - different type
+        store.currentLottery = { id: 6, in_progress: true };
         expect(store.getCurrentLottery).toBe(null);
     });
 });

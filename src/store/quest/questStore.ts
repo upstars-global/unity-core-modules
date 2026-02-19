@@ -62,12 +62,11 @@ export const useQuestStore = defineStore("questStore", () => {
 
         if (getQuestsList.value) {
             getQuestsList.value.forEach((questItem) => {
+                if (!questItem) {
+                    return;
+                }
                 const userBets = getUserBetsInQuestById.value(questItem.id);
                 const defaultCurrency = questItem?.currency;
-
-                if (!questItem) {
-                    return [];
-                }
 
                 const questSize = questItem.questSize;
 

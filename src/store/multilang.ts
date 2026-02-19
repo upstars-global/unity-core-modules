@@ -1,5 +1,5 @@
 import { DEFAULT_COUNTRY, DEFAULT_LOCALE_BY_COUNTRY } from "@theme/configs/constsLocales";
-import { defineStore, type Pinia } from "pinia";
+import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
 import { getLocale } from "../helpers/localeInCookies";
@@ -67,15 +67,3 @@ export const useMultilangStore = defineStore("multilang", () => {
         setLocales,
     };
 });
-
-export function useMultilangFetchService(pinia?: Pinia) {
-    const multilangStore = useMultilangStore(pinia);
-
-    function loadMultilang() {
-        return Promise.resolve();
-    }
-
-    return {
-        loadMultilang,
-    };
-}
