@@ -1,3 +1,10 @@
+## [1.71.1](https://github.com/upstars-global/unity-core-modules/compare/v1.71.0...v1.71.1) (2026-02-19)
+
+### 🐛 Bug Fixes
+
+* UN-2365 set player info after confirm email ([#318](https://github.com/upstars-global/unity-core-modules/issues/318))
+ ([f54614e](https://github.com/upstars-global/unity-core-modules/commit/f54614eb40fa45dffeca78b5216617b4eab0925b))
+
 ## [1.71.0](https://github.com/upstars-global/unity-core-modules/compare/v1.70.1...v1.71.0) (2026-02-17)
 
 ### 🚀 Features
