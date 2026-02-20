@@ -98,3 +98,13 @@ export interface IDailyGiftConfig {
     maxActivation: number
 }
 export default {};
+
+
+export interface ICancelInfoGifts {
+    id: number,
+    total_withdrawal_amount: string,
+    current_balance: string,
+    cash_balance: string,
+    bonus_balance: string,
+    bonus_winnings: string,
+}

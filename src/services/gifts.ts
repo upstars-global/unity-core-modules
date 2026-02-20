@@ -17,7 +17,7 @@ import {
     activateBonusesReq,
     activateFreespinsReq,
     cancelBonusesReq,
-    cancelFreespinsReq,
+    cancelFreespinsReq, cancelInfoBonusesReq,
     getDepositBonusesReq,
     getPlayerBonusesReq,
     getPlayerFreespinsReq,
@@ -192,6 +192,17 @@ export async function loadDailyBonusConfig() {
         giftsStore.setDailyBonusConfig(data);
     } catch (err) {
         log.error("LOAD_DAILY_BONUS_CONFIG", err);
+    }
+}
+
+
+export async function loadCancelInfo(id: number) {
+    try {
+        const { data } = await cancelInfoBonusesReq(id);
+
+        return data;
+    } catch (err) {
+        log.error("LOAD_CANCEL_INFO", err);
     }
 }
 

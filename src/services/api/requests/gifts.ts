@@ -1,4 +1,5 @@
 import { log } from "../../../controllers/Logger";
+import { ICancelInfoGifts } from "../DTO/gifts";
 import { http } from "../http";
 
 export async function getPlayerBonusesReq() {
@@ -64,4 +65,8 @@ export function cancelDepositBonusesReq(id: number) {
 
 export function cancelRegistrationBonusesReq(id: number) {
     return http().delete(`/api/bonuses/registration/${ id }`);
+}
+
+export function cancelInfoBonusesReq(id: number) {
+    return http().get<ICancelInfoGifts>(`/api/bonuses/${ id }/cancel_info`);
 }
