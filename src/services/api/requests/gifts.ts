@@ -68,5 +68,5 @@ export function cancelRegistrationBonusesReq(id: number) {
 }
 
 export function cancelInfoBonusesReq(id: number) {
-    return http().get<ICancelInfoGifts>(`/api/bonuses/${ id }/cancel_info`);
+    return http().get<ICancelInfoGifts>(`/api/player/bonuses/${ id }/cancel_info`);
 }
