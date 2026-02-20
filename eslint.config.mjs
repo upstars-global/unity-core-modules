@@ -20,6 +20,7 @@ export default [
             "simple-import-sort": simpleImportSort,
         },
         rules: {
+            "n/no-sync": "off",
             "@typescript-eslint/no-explicit-any": "error",
             "@typescript-eslint/ban-ts-comment": "error",
             "id-length": "off",
