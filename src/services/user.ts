@@ -411,7 +411,11 @@ export async function restorePasswordRestore(payload) {
 }
 
 export async function confirmPlayer(token: string) {
-    return await confirmPlayerReq(token);
+    const userInfoStore = useUserInfo();
+
+    const response = await confirmPlayerReq(token);
+    userInfoStore.setUserData(response.data);
+    return response;
 }
 
 export async function confirmEmailResend(captcha: string) {
