@@ -52,10 +52,17 @@ export interface ICashboxPresets {
     global: Record<Currencies, string[]>
 }
 
+export interface IKycAlertConfig {
+    enabled: boolean
+    geos?: string[]
+}
+
 export interface IManageWithdrawConfig {
     disable: {
         unverifiedUsersGeo: string[]
     }
+    kycAlert?: IKycAlertConfig
+    multiAccAlert?: IKycAlertConfig
 }
 
 export default {};

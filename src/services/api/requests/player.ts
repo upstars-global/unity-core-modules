@@ -299,6 +299,19 @@ export async function loadUserBettingBonuses() {
     }
 }
 
+export interface AvailableBonusesResponse {
+    available_bonuses: boolean;
+}
+
+export async function loadAvailableBonusesReq() {
+    try {
+        const { data } = await http().get<AvailableBonusesResponse>("/api/bonuses/available_bonuses");
+        return data;
+    } catch (err) {
+        log.error("LOAD_AVAILABLE_BONUSES_REQ_ERROR", err);
+    }
+}
+
 export async function loadPlayerFieldsInfoRequest() {
     try {
         const { data } = await http().get<IPlayerFieldsInfo>("/api/info/player_fields");
