@@ -1,4 +1,3 @@
-/* eslint-disable no-console, n/no-sync */
 import { spawnSync } from "node:child_process";
 
 function arg (name, fallback) {

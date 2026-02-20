@@ -20,13 +20,14 @@ export default [
             "simple-import-sort": simpleImportSort,
         },
         rules: {
+            "n/no-sync": "off",
             "@typescript-eslint/no-explicit-any": "error",
             "@typescript-eslint/ban-ts-comment": "error",
             "id-length": "off",
             "n/no-unsupported-features/node-builtins": [
                 "error",
                 {
-                    version: ">=22.4.1",
+                    version: ">=22.22.0",
                     ignores: [ "localStorage" ],
                 },
             ],

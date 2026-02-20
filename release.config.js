@@ -1,5 +1,4 @@
 import { readFileSync } from "node:fs";
-// eslint-disable-next-line n/no-sync
 const commitPartial = readFileSync("./changelog-template-commit.hbs", { encoding: "utf-8" });
 
 function finalizeContext (context) {
