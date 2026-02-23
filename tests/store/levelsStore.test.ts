@@ -74,6 +74,39 @@ describe("useLevelsStore", () => {
         expect(result[1].id).toBe("vip_level_2");
     });
 
+    it("sorts levels when indices are numeric", () => {
+        const store = useLevelsStore();
+        store.levels = [
+            mockLevel({ id: "level_2", levelNumber: 2 }),
+            mockLevel({ id: "level_1", levelNumber: 1 }),
+        ];
+
+        expect(store.getLevelsData[0].id).toBe("level_1");
+    });
+
+    it("keeps sort order when current index is less than next index", () => {
+        const store = useLevelsStore();
+        store.levels = [
+            mockLevel({ id: "level_1", levelNumber: 1 }),
+            mockLevel({ id: "level_2", levelNumber: 2 }),
+        ];
+
+        expect(store.getLevelsData[0].id).toBe("level_1");
+    });
+
+    it("getLevelsData keeps items with undefined id order", () => {
+        const store = useLevelsStore();
+        store.levels = [
+            { ...mockLevel(), id: undefined as never, status: true },
+            mockLevel({ id: "vip_level_2", levelNumber: 2 }),
+        ];
+
+        const result = store.getLevelsData;
+
+        expect(result).toHaveLength(2);
+        expect(result[0].id).toBeUndefined();
+    });
+
     it("getLevels returns all levels", () => {
         const store = useLevelsStore();
         store.levels = [ mockLevel(), mockLevel({ id: "vip_level_2" }) ];

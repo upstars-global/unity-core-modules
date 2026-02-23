@@ -46,6 +46,59 @@ describe("useUserInfo store", () => {
         expect(store.getIsLoadedUsedData).toBe(true);
     });
 
+    it("getUserNickName falls back to email when nickname is missing", () => {
+        const store = useUserInfo();
+        store.setUserData({ id: 1, email: "email@example.com", nickname: null });
+
+        expect(store.getUserNickName).toBe("email@example.com");
+    });
+
+    it("isCryptoUserCurrency detects crypto currency", () => {
+        const store = useUserInfo();
+        const common = useCommon();
+        common.setCurrencies([
+            {
+                code: Currencies.BTC,
+                symbol: "₿",
+                subunits_to_unit: 100000000,
+                fiat: false,
+                default: false,
+                subcurrencies: [],
+            },
+        ]);
+
+        store.setUserData({ id: 1, currency: Currencies.BTC });
+
+        expect(store.isCryptoUserCurrency).toBe(true);
+    });
+
+    it("addUserGroup and removeUserGroup mutate statuses list", () => {
+        const store = useUserInfo();
+        const status: IUserStatus = { id: 1, name: "vip", slug: "vip" };
+
+        store.addUserGroup(status);
+        expect(store.getUserInfo.statuses).toEqual([ status ]);
+
+        store.removeUserGroup(status);
+        expect(store.getUserInfo.statuses).toEqual([]);
+
+        store.removeUserGroup(status);
+        expect(store.getUserInfo.statuses).toEqual([]);
+    });
+
+    it("setUserInfo replaces info data", () => {
+        const store = useUserInfo();
+        store.setUserInfo({ id: 20, email: "new@example.com" } as IUserData);
+        expect(store.getUserInfo.id).toBe(20);
+        expect(store.getUserInfo.email).toBe("new@example.com");
+    });
+
+    it("toggleIsLoadUserProfile updates loading flag", () => {
+        const store = useUserInfo();
+        store.toggleIsLoadUserProfile(true);
+        expect(store.isLoadUserProfile).toBe(true);
+    });
+
     it("clearUserData resets info and login state", () => {
         const store = useUserInfo();
 
@@ -90,6 +143,26 @@ describe("useUserInfo store", () => {
         ]);
 
         expect(store.getSubunitsToUnitsByCode(Currencies.USD)).toBe(100);
+    });
+
+    it("getSubunitsToUnitsByCode uses user currency when no code passed", () => {
+        const store = useUserInfo();
+        const common = useCommon();
+
+        common.setCurrencies([
+            {
+                code: Currencies.EUR,
+                symbol: "€",
+                subunits_to_unit: 100,
+                fiat: true,
+                default: true,
+                subcurrencies: [],
+            },
+        ]);
+
+        store.setUserData({ id: 1, currency: Currencies.EUR });
+
+        expect(store.getSubunitsToUnitsByCode()).toBe(100);
     });
 
     it("setFreshChatRestoreId updates id and loaded flag", () => {
