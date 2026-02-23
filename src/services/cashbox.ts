@@ -18,7 +18,6 @@ import { ActionsTransaction } from "./api/DTO/cashbox";
 import { loadCashboxPresetsReq, loadManageWithdrawConfigReq } from "./api/requests/configs";
 import { cancelWithdrawRequestByID, loadPlayerPayments } from "./api/requests/player";
 import { usePaymentsAPI } from "./paymentsAPI";
-import { loadAvailableBonusesStatus } from "./user";
 
 export function useCashBoxService() {
     const {
@@ -157,7 +156,6 @@ export function useCashBoxService() {
             const data = await loadManageWithdrawConfigReq();
 
             cashboxStore.setManageWithdraw(data);
-            await loadAvailableBonusesStatus();
         } catch (err) {
             log.error("LOAD_MANAGE_WITHDRAW_CONFIG_ERROR", err);
         }
