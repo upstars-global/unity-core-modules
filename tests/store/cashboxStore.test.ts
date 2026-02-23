@@ -152,6 +152,41 @@ describe("cashboxStore", () => {
         expect(store.getWithdrawRequests.length).toEqual(1);
     });
 
+    it("resetHistory clears histories and resets hasMorePages flags", () => {
+        const store = useCashboxStore();
+        store.paymentHistory = historyPayoutsMock;
+        store.historyDeposits = historyPayoutsMock;
+        store.historyPayouts = historyPayoutsMock;
+        store.hasMorePages = {
+            "": false,
+            "deposit": false,
+            "cashout": false,
+        };
+
+        store.resetHistory();
+
+        expect(store.paymentHistory).toEqual([]);
+        expect(store.historyDeposits).toEqual([]);
+        expect(store.historyPayouts).toEqual([]);
+        expect(store.hasMorePages).toEqual({
+            "": true,
+            "deposit": true,
+            "cashout": true,
+        });
+    });
+
+    it("sets cashbox presets and manage withdraw configs", () => {
+        const store = useCashboxStore();
+        const presets = { deposit: { key: "value" } } as const;
+        const manageWithdraw = { availability: { key: "value" } } as const;
+
+        store.setCashboxPresets(presets as never);
+        store.setManageWithdraw(manageWithdraw as never);
+
+        expect(store.cashboxPresets).toEqual(presets);
+        expect(store.manageWithdraw).toEqual(manageWithdraw);
+    });
+
     describe("getPaymentSystems", () => {
         it.each([
             { groups: [ GROUP_HIDE ], expected: 1, desc: "filters hidden brands by group" },
@@ -165,6 +200,16 @@ describe("cashboxStore", () => {
             store.paymentSystems = depositMethodMock;
 
             expect(store.getPaymentSystems.length).toBe(expected);
+        });
+
+        it("returns all when userGroups is falsy", () => {
+            vi.spyOn(userStatusesModule, "useUserStatuses").mockReturnValue({
+                getUserGroups: null as never,
+            });
+            const store = useCashboxStore();
+            store.paymentSystems = depositMethodMock;
+
+            expect(store.getPaymentSystems).toHaveLength(depositMethodMock.length);
         });
     });
 

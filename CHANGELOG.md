@@ -1,3 +1,54 @@
+## [1.72.0](https://github.com/upstars-global/unity-core-modules/compare/v1.71.1...v1.72.0) (2026-02-23)
+
+### 🚀 Features
+
+* **UN-367:** auth service, cleanup all stores from requests, fix dependencies cycle ([#313](https://github.com/upstars-global/unity-core-modules/issues/313))
+ ([ae3f660](https://github.com/upstars-global/unity-core-modules/commit/ae3f660140613c46f93c51bb4f65b8404b4225dd))
+
+
+
+    * feat: refactor auth store
+
+    * feat: games common store requests to service
+
+    * feat: gamesProviders store requests to service
+
+    * feat: gamesFavorite store requests to service
+
+    * feat: cms store requests to service
+
+    * fix: paths
+
+    * feat: gameCurrent store requests to service
+
+    * feat: gamesCategory store requests to service
+
+    * feat: winnersJackpot store requests to service
+
+    * feat: winners store requests to service
+
+    * feat: managePages store requests to service
+
+    * feat: logoStore requests to service
+
+    * feat: banners store requests to service
+
+    * feat: remove fetch services
+
+    * fix: dependencies cycle
+
+    * fix: tests
+
+    * test: winnersJackpot store test
+
+    * test: fix report
+
+    * fix: tests
+
+    * fix: paths
+
+    * fix
+
 ## [1.71.1](https://github.com/upstars-global/unity-core-modules/compare/v1.71.0...v1.71.1) (2026-02-19)
 
 ### 🐛 Bug Fixes

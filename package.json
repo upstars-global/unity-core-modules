@@ -1,6 +1,6 @@
 {
   "name": "unity-core-modules",
-  "version": "1.71.1",
+  "version": "1.72.0",
   "description": "",
   "type": "module",
   "repository": {
@@ -16,7 +16,7 @@
     "ci": "find . -type d -name \"node_modules\" -prune -exec rm -rf {} + && yarn cache clean && yarn",
     "depcruise:test": "depcruise src --include-only '^src'",
     "depcruise:svg": "depcruise --include-only '^src' --output-type dot src | dot -T svg > dependencygraph.svg",
-    "depcruise:check": "node scripts/depcruise-threshold.mjs --config=.dependency-cruiser.cjs --maxErrors=13 --maxWarnings=99"
+    "depcruise:check": "node scripts/depcruise-threshold.mjs --config=.dependency-cruiser.cjs --maxErrors=0 --maxWarnings=99"
   },
   "lint-staged": {
     "**/*": "eslint --fix"
@@ -36,7 +36,7 @@
     "uuid": "^9.0.1",
     "vue": "^3.5.20",
     "vue-i18n": "^9.14.5",
-    "vue-router": "^4.5.1"
+    "vue-router": "^4.6.3"
   },
   "devDependencies": {
     "@octokit/auth-app": "^8.2.0",

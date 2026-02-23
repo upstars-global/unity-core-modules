@@ -2,7 +2,8 @@ import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 
-import { useManagePages, useManagePagesFetchService } from "../../src/store/useManagePages";
+import { loadPagesConfig } from "../../src/services/managePages";
+import { useManagePages } from "../../src/store/useManagePages";
 import { useUserStatuses } from "../../src/store/user/userStatuses";
 
 const userStatusesMock = { isUserTester: ref(false) };
@@ -27,21 +28,21 @@ describe("useManagePages", () => {
 
     it("loads pages config and sets pageConfiguration", async () => {
         const store = useManagePages();
-        await store.loadPagesConfig();
+        await loadPagesConfig();
         expect(store.pageConfiguration).toEqual({ page1: true, page2: false });
     });
 
     it("does not reload config if already loaded", async () => {
         const store = useManagePages();
-        await store.loadPagesConfig();
+        await loadPagesConfig();
         const prevConfig = store.pageConfiguration;
-        await store.loadPagesConfig();
+        await loadPagesConfig();
         expect(store.pageConfiguration).toBe(prevConfig);
     });
 
     it("isEnablePageBySlug returns correct value from config", async () => {
         const store = useManagePages();
-        await store.loadPagesConfig();
+        await loadPagesConfig();
         expect(store.isEnablePageBySlug("page1")).toBe(true);
         expect(store.isEnablePageBySlug("page2")).toBe(false);
         expect(store.isEnablePageBySlug("unknown")).toBe(false);
@@ -53,7 +54,7 @@ describe("useManagePages", () => {
 
 
         const store = useManagePages();
-        await store.loadPagesConfig();
+        await loadPagesConfig();
         expect(store.isEnablePageBySlug("any")).toBe(true);
     });
 });

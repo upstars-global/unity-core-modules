@@ -137,6 +137,11 @@ describe("useCommon store", () => {
         expect(prepared).toHaveLength(countries.length);
     });
 
+    it("getCountries returns empty array when no countries are set", () => {
+        const store = useCommon();
+        expect(store.getCountries).toEqual([]);
+    });
+
     it("exposes helpers for player fields info", () => {
         const store = useCommon();
         const contexts = (Object.values(EnumContextFields) as EnumContextFields[]).reduce((acc, contextKey) => {
