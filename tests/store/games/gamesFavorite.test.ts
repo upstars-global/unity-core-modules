@@ -10,6 +10,7 @@ import {
     fetchDeleteGameFromFavorites,
     fetchFavoriteGames,
 } from "../../../src/services/api/requests/games";
+import { addGameToFavorites, deleteGameFromFavorites, loadFavoriteGames } from "../../../src/services/games";
 import { useGamesFavorite } from "../../../src/store/games/gamesFavorite";
 
 vi.mock("../../../src/controllers/Logger", () => ({
@@ -17,6 +18,7 @@ vi.mock("../../../src/controllers/Logger", () => ({
 }));
 vi.mock("../../../src/helpers/gameHelpers", () => ({
     processGame: vi.fn((game, id) => ({ ...game, processed: true, id })),
+    filterGames: vi.fn((games) => games),
 }));
 vi.mock("../../../src/services/api/requests/games", () => ({
     fetchFavoriteGames: vi.fn(),
@@ -56,7 +58,7 @@ describe("useGamesFavorite", () => {
             .mockResolvedValueOnce(MOCK_IDS); // onlyID
 
         const store = useGamesFavorite();
-        await store.loadFavoriteGames();
+        await loadFavoriteGames();
 
         expect(mockFetchFavorite).toHaveBeenCalledWith(AcceptsGamesVariants.fullData);
         expect(mockFetchFavorite).toHaveBeenCalledWith(AcceptsGamesVariants.onlyID);
@@ -73,7 +75,7 @@ describe("useGamesFavorite", () => {
         mockFetchFavorite.mockRejectedValue(error);
 
         const store = useGamesFavorite();
-        await expect(store.loadFavoriteGames()).rejects.toThrow(error);
+        await expect(loadFavoriteGames()).rejects.toThrow(error);
         expect(log.error).toHaveBeenCalledWith("LOAD_FAVORITE_GAMES_ERROR", error);
     });
 
@@ -84,7 +86,7 @@ describe("useGamesFavorite", () => {
             .mockResolvedValueOnce([ MOCK_ID ]);
 
         const store = useGamesFavorite();
-        await store.addGameToFavorites(MOCK_ID);
+        await addGameToFavorites(MOCK_ID);
 
         expect(mockFetchAddFavorite).toHaveBeenCalledWith(MOCK_ID);
         expect(mockFetchFavorite).toHaveBeenCalledTimes(2);
@@ -96,7 +98,7 @@ describe("useGamesFavorite", () => {
         mockFetchAddFavorite.mockRejectedValue(error);
 
         const store = useGamesFavorite();
-        await expect(store.addGameToFavorites(MOCK_ID)).rejects.toThrow(error);
+        await expect(addGameToFavorites(MOCK_ID)).rejects.toThrow(error);
         expect(mockFetchAddFavorite).toHaveBeenCalledWith(MOCK_ID);
     });
 
@@ -109,7 +111,7 @@ describe("useGamesFavorite", () => {
             { currencies: { USD: { id: MOCK_ID }, EUR: { id: 999 } } },
         ] as unknown as IGameItem[];
 
-        await store.deleteGameFromFavorites(MOCK_ID);
+        await deleteGameFromFavorites(MOCK_ID);
 
         expect(mockFetchDelFavorite).toHaveBeenCalledWith(MOCK_ID);
         expect(store.favoritesId).toEqual([ 102 ]);
@@ -121,7 +123,7 @@ describe("useGamesFavorite", () => {
         mockFetchDelFavorite.mockRejectedValue(error);
 
         const store = useGamesFavorite();
-        await expect(store.deleteGameFromFavorites(MOCK_ID)).rejects.toThrow(error);
+        await expect(deleteGameFromFavorites(MOCK_ID)).rejects.toThrow(error);
         expect(mockFetchDelFavorite).toHaveBeenCalledWith(MOCK_ID);
     });
 

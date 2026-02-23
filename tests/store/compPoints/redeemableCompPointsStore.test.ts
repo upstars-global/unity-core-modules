@@ -23,31 +23,35 @@ vi.mock("@config/compPoints", () => ({
 }));
 vi.mock("@theme/configs/meta", () => ({}));
 
+const isLogged = ref(true);
+const userCurrency = ref(Currencies.EUR);
 vi.mock("../../../src/store/user/userInfo", () => ({
     useUserInfo: () => ({
-        getIsLogged: ref(true),
-        getUserCurrency: ref(Currencies.EUR),
+        getIsLogged: isLogged,
+        getUserCurrency: userCurrency,
     }),
 }));
 vi.mock("../../../src/store/compPoints/statusCompPointsStore", () => ({
     useStatusCompPointsStore: () => ({ getChargeableBalance: ref(200) }),
 }));
+const currentStaticPage = ref({
+    meta: {
+        json: {
+            viewImages: { img: "url" },
+            promo: "promo",
+            gamesTitles: { game: "title" },
+            maxWin: { [Currencies.EUR]: 500 },
+            freeSpinsWager: { wager: 10 },
+            spinRate: { rate: 2 },
+            cards: { [CompPointsTypes.MONEY_REWARD]: [ mockCard() ] },
+        },
+    },
+    slug: "rocket-mart",
+});
+
 vi.mock("../../../src/store/CMS", () => ({
     useCMS: () => ({
-        currentStaticPage: ref({
-            meta: {
-                json: {
-                    viewImages: { img: "url" },
-                    promo: "promo",
-                    gamesTitles: { game: "title" },
-                    maxWin: { [Currencies.EUR]: 500 },
-                    freeSpinsWager: { wager: 10 },
-                    spinRate: { rate: 2 },
-                    cards: { [CompPointsTypes.MONEY_REWARD]: [ mockCard() ] },
-                },
-            },
-            slug: "rocket-mart",
-        }),
+        currentStaticPage,
     }),
 }));
 
@@ -66,6 +70,17 @@ describe("checkHasAvailableCards", () => {
     });
     it("returns false if not enough points for card", () => {
         expect(checkHasAvailableCards([ mockCard() ], true, 50, Currencies.EUR)).toBe(false);
+    });
+
+    it("falls back to EUR rate when user currency is missing", () => {
+        const card = mockCard({
+            type: CompPointRatesTypes.MONEY,
+            rates: [
+                { currency: Currencies.EUR, points: 100, amount_cents: 0 },
+            ],
+        });
+
+        expect(checkHasAvailableCards([ card ], true, 150, Currencies.USD)).toBe(true);
     });
 });
 
@@ -159,5 +174,24 @@ describe("useRedeemableCompPointsStore", () => {
             ],
         });
         expect(store.getTabsAvailable[CompPointsTypes.MONEY_REWARD]).toBe(true);
+    });
+
+    it("getRates returns mock cards when user is not logged", () => {
+        isLogged.value = false;
+        const store = useRedeemableCompPointsStore();
+        const cards = store.getRates?.[CompPointsTypes.MONEY_REWARD] as IRedeemableCards[] | undefined;
+        expect(cards?.[0].rate.points).toBe(100);
+    });
+
+    it("getPageContent returns empty object when no meta json and not coinshop slug", () => {
+        currentStaticPage.value = { slug: "not-coinshop", meta: { json: undefined } };
+        const store = useRedeemableCompPointsStore();
+        expect(store.getViewImages).toEqual({});
+    });
+
+    it("getMaxWin returns empty string when page content is missing", () => {
+        currentStaticPage.value = { slug: "test-slug", meta: { json: undefined } };
+        const store = useRedeemableCompPointsStore();
+        expect(store.getMaxWin).toBe("");
     });
 });
