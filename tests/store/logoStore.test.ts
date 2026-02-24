@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 
 import { loadLogoConfigReq } from "../../src/services/api/requests/logo";
+import { loadLogoConfig } from "../../src/services/logo";
 import { useLogoStore } from "../../src/store/logoStore";
 import { useRootStore } from "../../src/store/root";
 import { useUserInfo } from "../../src/store/user/userInfo";
@@ -56,7 +57,7 @@ describe("store/logoStore", () => {
         loadLogoConfigReq.mockResolvedValue(mockLogoConfig);
 
         const store = useLogoStore();
-        await store.loadLogoConfig();
+        await loadLogoConfig();
 
         expect(store.logoConfig).toEqual(mockLogoConfig);
         expect(store.getFullLogoSrc).toBe(mockLogoConfig.logoUrl.full);
@@ -91,7 +92,7 @@ describe("store/logoStore", () => {
 
         vi.clearAllMocks();
 
-        await store.loadLogoConfig();
+        await loadLogoConfig();
 
         expect(loadLogoConfigReq).not.toHaveBeenCalled();
 
