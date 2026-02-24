@@ -1,3 +1,10 @@
+## [1.72.1](https://github.com/upstars-global/unity-core-modules/compare/v1.72.0...v1.72.1) (2026-02-24)
+
+### ⚡ Performance
+
+* patch/minor update dependencies
+ ([79ec718](https://github.com/upstars-global/unity-core-modules/commit/79ec71894b22f321b33c1f79ece948b5b2147dcf))
+
 ## [1.72.0](https://github.com/upstars-global/unity-core-modules/compare/v1.71.1...v1.72.0) (2026-02-23)
 
 ### 🚀 Features

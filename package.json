@@ -1,6 +1,6 @@
 {
   "name": "unity-core-modules",
-  "version": "1.72.0",
+  "version": "1.72.1",
   "description": "",
   "type": "module",
   "repository": {
@@ -8,7 +8,7 @@
     "url": "https://github.com/upstars-global/unity-core-modules.git"
   },
   "engines": {
-      "node": ">=22.22.0"
+    "node": ">=22.22.0"
   },
   "scripts": {
     "test": "vitest",
