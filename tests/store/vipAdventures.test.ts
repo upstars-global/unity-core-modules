@@ -22,9 +22,11 @@ vi.mock("@config/vip-adventures", () => ({
     formatDateVipAdv: "YYYY-MM-DD",
 }));
 
+let useMockerValue = false;
+
 vi.mock("../../src/store/environments", () => ({
     useEnvironments: () => ({
-        useMocker: false,
+        useMocker: useMockerValue,
     }),
 }));
 
@@ -58,6 +60,10 @@ describe("vipAdventures helpers", () => {
             giftTitle: "Super Gift",
         });
     });
+
+    it("parseGiftAdventureTitle returns string when format doesn't match", () => {
+        expect(parseGiftAdventureTitle("Plain Title")).toBe("Plain Title");
+    });
 });
 
 
@@ -67,6 +73,7 @@ describe("useVipAdventures store", () => {
 
         mockUserStatuses.getUserStatuses = [];
         mockUserStatuses.getUserGroups = [];
+        useMockerValue = false;
     });
 
     it("returns empty values when config is not set", () => {
@@ -153,6 +160,44 @@ describe("useVipAdventures store", () => {
             day: 10,
             today: false,
         });
+    });
+
+    it("uses mocked day when useMocker is enabled", () => {
+        useMockerValue = true;
+        const store = useVipAdventures();
+        store.vipAdventuresConfigFile = [
+            {
+                title: "__1/3__2024-01-01",
+                prize: { bonus: "1" },
+                condition: { minDep: "0", wager: "1", periodActivationDays: "7" },
+            },
+            {
+                title: "__2/3__2024-01-02",
+                prize: { bonus: "2" },
+                condition: { minDep: "0", wager: "1", periodActivationDays: "7" },
+            },
+            {
+                title: "__3/3__2024-01-03",
+                prize: { bonus: "3" },
+                condition: { minDep: "0", wager: "1", periodActivationDays: "7" },
+            },
+        ] as IPrizeConfigItem[];
+
+        expect(store.toDay.format(formatDateVipAdv)).toBe("2024-01-03");
+    });
+
+    it("computes superConfig based on last calendar day", () => {
+        const store = useVipAdventures();
+        store.vipAdventuresConfigFile = [
+            {
+                title: "__1/1__2024-01-10",
+                prize: { bonus: "1" },
+                condition: { minDep: "0", wager: "1", periodActivationDays: "7" },
+            },
+        ] as IPrizeConfigItem[];
+
+        expect(store.superConfig.index).toBe(1);
+        expect(store.superConfig.today).toBe(true);
     });
 
     it("computes superDay correctly", () => {

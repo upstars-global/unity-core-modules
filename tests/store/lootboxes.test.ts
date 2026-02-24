@@ -50,12 +50,14 @@ describe("useLootboxesStore", () => {
     it("updateLootboxList updates existing lootbox", () => {
         const store = useLootboxesStore();
         const lootbox = { id: 1, stage: EnumLootboxState.issued, group_key: "wheel_1" };
-        store.lootboxesList = [ lootbox ];
+        const other = { id: 2, stage: EnumLootboxState.expired, group_key: "wheel_2" };
+        store.lootboxesList = [ lootbox, other ];
 
         const updated = { id: 1, stage: EnumLootboxState.issued, group_key: "wheel_1" };
 
         store.updateLootboxList({ data: updated });
         expect(store.lootboxesList[0]).toEqual(updated);
+        expect(store.lootboxesList[1]).toEqual(other);
     });
 
     it("clearLootboxesUserData resets lootboxesList", () => {
@@ -123,6 +125,13 @@ describe("useLootboxesStore", () => {
         store.mockSectionsWheelSegmentConfigs = { 1: [ { id: "seg" } ] };
 
         expect(store.getMockSegmentWheelUser).toEqual([ { id: "seg" } ]);
+    });
+
+    it("getMockSegmentWheelUser returns empty array when no group matches", () => {
+        const store = useLootboxesStore();
+        store.mockSectionsWheelSegmentConfigs = { 3: [ { id: "seg" } ] };
+
+        expect(store.getMockSegmentWheelUser).toEqual([]);
     });
 
     it("getRedeemableSpinInfo returns redeemableSpinInfo if set", () => {

@@ -1,6 +1,7 @@
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { loadWinners } from "../../src/services/stats";
 import { useWinners } from "../../src/store/winners";
 
 vi.mock("@helpers/gameImage", () => ({
@@ -40,7 +41,7 @@ describe("useWinners store", () => {
         });
 
         const store = useWinners();
-        const winners = await store.loadWinners();
+        const winners = await loadWinners();
 
         expect(winners).toHaveLength(1);
         expect(winners[0]).toMatchObject({
@@ -78,9 +79,9 @@ describe("useWinners store", () => {
         });
 
         const store = useWinners();
-        await store.loadWinners();
+        await loadWinners();
 
-        const winners = await store.loadWinners();
+        const winners = await loadWinners();
 
         expect(mockGet).toHaveBeenCalledTimes(1);
         expect(winners).toHaveLength(1);
@@ -105,8 +106,8 @@ describe("useWinners store", () => {
         });
 
         const store = useWinners();
-        await store.loadWinners();
-        await store.loadWinners(true);
+        await loadWinners();
+        await loadWinners(true);
 
         expect(mockGet).toHaveBeenCalledTimes(2);
     });

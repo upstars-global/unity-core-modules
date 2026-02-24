@@ -1,7 +1,7 @@
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { useEnvironments, useEnvironmentsFetchService } from "../../src/store/environments";
+import { useEnvironments } from "../../src/store/environments";
 
 describe("useEnvironments", () => {
     beforeEach(() => {
@@ -50,38 +50,5 @@ describe("useEnvironments", () => {
         // Change back to production
         store.environment = "production";
         expect(store.isProduction).toBe(true);
-    });
-});
-
-describe("useEnvironmentsFetchService", () => {
-    beforeEach(() => {
-        setActivePinia(createPinia());
-    });
-
-    it("should return a loadEnvironments function", () => {
-        const service = useEnvironmentsFetchService();
-
-        expect(service).toHaveProperty("loadEnvironments");
-        expect(typeof service.loadEnvironments).toBe("function");
-    });
-
-    it("loadEnvironments should return a resolved promise", async () => {
-        const service = useEnvironmentsFetchService();
-
-        const result = await service.loadEnvironments();
-
-        expect(result).toBeUndefined();
-    });
-
-    it("should initialize the environments store", () => {
-        const pinia = createPinia();
-        setActivePinia(pinia);
-
-        // Create the service which should initialize the store
-        useEnvironmentsFetchService(pinia);
-
-        // Verify the store was initialized
-        const store = useEnvironments();
-        expect(store).toBeDefined();
     });
 });
