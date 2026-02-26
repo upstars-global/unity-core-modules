@@ -1,37 +1,20 @@
-import { CONFIG_DEFAULT_COLLECTIONS_MENU_SLUGS } from "@theme/configs/categoryesGames";
-import { SlugCategoriesGames } from "@theme/configs/categoryesGames";
-import { defineStore, type Pinia, storeToRefs } from "pinia";
+import { CONFIG_DEFAULT_COLLECTIONS_MENU_SLUGS, SlugCategoriesGames } from "@theme/configs/categoryesGames";
+import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
-import { log } from "../../controllers/Logger";
 import { currencyView } from "../../helpers/currencyHelper";
 import { processGame } from "../../helpers/gameHelpers";
-import type { IGame, IGamesProvider } from "../../models/game";
-import {
-    loadFilteredGames as loadFilteredGamesReq,
-    loadGamesCategories as loadGamesCategoriesReq,
-    loadGamesJackpots as loadGamesJackpotsReq,
-    loadLastGames as loadLastGamesReq,
-} from "../../services/api/requests/games";
-import { useGamesProviders } from "../games/gamesProviders";
-import { useRootStore } from "../root";
+import { filterGames, findGameBySeoTittleAndProducer } from "../../helpers/gameHelpers";
+import type { IGame, IGamesProvider, IRecentGames } from "../../models/game";
+import { IEnabledGames } from "../../models/game";
+import { type IJackpots } from "../../services/api/DTO/gamesDTO";
+import { useConfigStore } from "../configStore";
 import { useUserInfo } from "../user/userInfo";
-import { findGameBySeoTittleAndProducer } from "./helpers/games";
-import { filterDisabledProviders } from "./helpers/games";
-
 
 interface ISearchCachedGameKey {
     seoTitle?: string;
     producer?: string;
     identifier?: string;
-}
-
-interface IRecentGames {
-    [key: string]: IGame;
-}
-
-interface IJackpots {
-    [currency: string]: number;
 }
 
 interface IGamesCommonStoreDefaultOptions {
@@ -51,14 +34,20 @@ export const useGamesCommon = defineStore("gamesCommon", () => {
     const getGamesCategories = computed(() => gamesCategories.value);
     const menuGameCategories = ref<Record<string, SlugCategoriesGames[]>>({});
     const defaultMenuGameCategories = ref<Record<string, SlugCategoriesGames[]>>(CONFIG_DEFAULT_COLLECTIONS_MENU_SLUGS);
-    const { disabledGamesProviders } = storeToRefs(useGamesProviders());
+    const enabledGamesConfig = ref<IEnabledGames>({});
+    const { disabledGamesProviders } = storeToRefs(useConfigStore());
 
     const getRecentGames = computed(() => {
         let tempGames = [];
         for (const [ id, game ] of Object.entries(recentGames.value)) {
             tempGames.push(processGame(game, id));
         }
-        tempGames = filterDisabledProviders(tempGames, disabledGamesProviders.value);
+
+        tempGames = filterGames(
+            tempGames,
+            disabledGamesProviders.value,
+            enabledGamesConfig.value,
+        );
 
         return tempGames.sort(({ last_activity_at: lastActivityItem }, { last_activity_at: lastActivityNextItem }) => {
             return new Date(lastActivityNextItem).getTime() - new Date(lastActivityItem).getTime();
@@ -111,72 +100,24 @@ export const useGamesCommon = defineStore("gamesCommon", () => {
         }
     }
 
-    async function loadGamesJackpots(): Promise<void> {
-        try {
-            gamesJackpots.value = await loadGamesJackpotsReq();
-        } catch (error) {
-            log.error("Error loading games jackpots", error);
-        }
-    }
-
-    async function loadLastGames(): Promise<void> {
-        try {
-            const lastGamesList = await loadLastGamesReq();
-            if (!lastGamesList.length) {
-                return;
-            }
-
-            const gamesMap: Record<string, IGame> = {};
-            const game_ids: string[] = [];
-            lastGamesList.forEach((game) => {
-                gamesMap[game.identifier] = game;
-                game_ids.push(game.identifier);
-            });
-
-            const { isMobile } = storeToRefs(useRootStore());
-
-            const requestConfig = {
-                game_ids,
-                device: isMobile.value ? "mobile" : "desktop",
-            };
-
-            const recentGamesResponse = await loadFilteredGamesReq(requestConfig);
-
-            for (const gameIdentifier in recentGamesResponse) {
-                if (recentGamesResponse[gameIdentifier]) {
-                    recentGamesResponse[gameIdentifier] = {
-                        ...(gamesMap[gameIdentifier] || {}),
-                        ...recentGamesResponse[gameIdentifier],
-                    };
-                }
-            }
-
-            recentGames.value = recentGamesResponse;
-            log.info("RECENT_GAMES_LOADED", recentGames.value);
-        } catch (error) {
-            log.error("LOAD_LAST_GAMES", error);
-        }
-    }
-
-    async function loadGamesCategories(): Promise<void> {
-        try {
-            const data = await loadGamesCategoriesReq();
-            gamesCategories.value = data.map((category) => {
-                return {
-                    ...category,
-                    provider: category.id,
-                    slug: category.id,
-                    url: `/games/${category.id}`,
-                    name: category.title,
-                };
-            });
-        } catch (error) {
-            log.error("LOAD_GAMES_CATEGORIES", error);
-        }
-    }
-
     function clearRecentGames(): void {
         recentGames.value = {};
+    }
+
+    function setEnableGamesConfig(list: IEnabledGames) {
+        enabledGamesConfig.value = list;
+    }
+
+    function setGamesJackpots(jackpots: IJackpots): void {
+        gamesJackpots.value = jackpots;
+    }
+
+    function setRecentGames(gamesList: IRecentGames): void {
+        recentGames.value = gamesList;
+    }
+
+    function setGamesCategories(categories: IGamesProvider[]): void {
+        gamesCategories.value = categories;
     }
 
     return {
@@ -195,24 +136,17 @@ export const useGamesCommon = defineStore("gamesCommon", () => {
         getGameCategoryNameBySlug,
         getGamesJackpots,
         getJackpotTotalByCurrency,
+        enabledGamesConfig,
 
         setDefaultOptions,
         setMenuGameCategories,
         setGameToCache,
         getGameFromCache,
 
-        loadGamesJackpots,
-        loadLastGames,
-        loadGamesCategories,
         clearRecentGames,
+        setEnableGamesConfig,
+        setGamesJackpots,
+        setGamesCategories,
+        setRecentGames,
     };
 });
-
-export function useGamesCommonFetchService(pinia?: Pinia) {
-    const { setDefaultOptions, loadGamesCategories } = useGamesCommon(pinia);
-
-
-    return {
-        loadGamesCategories,
-    };
-}

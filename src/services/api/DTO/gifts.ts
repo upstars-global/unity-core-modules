@@ -40,9 +40,29 @@ export interface IGiftDeposit {
         {
             title: string;
             type: string;
-            conditions: [];
+            conditions: [
+                {
+                    field: string;
+                    type: string;
+                    value: string[] | [
+                        {
+                            currency: string;
+                            amount_cents: number;
+                        }
+                    ];
+                }
+            ];
             attributes: [];
             result_bonus: [];
+            boxes?: [
+                {
+                    bonuses: [
+                        {
+                            conditions: [];
+                        }
+                    ];
+                }
+            ];
         }
     ];
     group_key?: string;
@@ -73,4 +93,8 @@ export interface IGiftFreeSpins {
 }
 
 export type GiftAllItem = IGift | IGiftDeposit | IGiftFreeSpins;
+
+export interface IDailyGiftConfig {
+    maxActivation: number
+}
 export default {};

@@ -62,23 +62,30 @@ export const useNoticesStore = defineStore("notices", () => {
         headerNotices.value = [ ...newState ];
     }
 
-    function addRealTimeNotification({ data }, type: WSNotificationName | WSBettingNotificationName): void {
+    function addRealTimeNotification(
+        { data }: { data: INotification & { stage?: GiftState } },
+        type: WSNotificationName | WSBettingNotificationName,
+    ): void {
         if (eventsHandlers[type]) {
-            const hasExcludedTitle = excludeNotificationTitles.some((title: string) => data.title.includes(title));
+            const hasExcludedTitle = excludeNotificationTitles.some((title: string) => data.title?.includes(title));
+
             if (hasExcludedTitle) {
                 return;
             }
 
             if (
                 data.stage !== GiftState.issued &&
-                [ WSNotificationName.BONUSES_CHANGES, WSNotificationName.FREESPINS_CHANGES ].includes(type)
+                (
+                    type === WSNotificationName.BONUSES_CHANGES ||
+                    type === WSNotificationName.FREESPINS_CHANGES
+                )
             ) {
                 return;
             }
 
             const dataWithId = {
-                id: uuid(),
                 ...data,
+                id: uuid(),
             };
 
             notifications.value = [ ...notifications.value, { ...dataWithId, type } ];

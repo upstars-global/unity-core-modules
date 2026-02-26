@@ -1,4 +1,6 @@
 import type { IPageItemCMS, IPageItemConfig } from "../services/api/DTO/CMS";
+import { IRedeemableCards } from "../services/api/DTO/compPoints";
+import { Currencies } from "./enums/currencies";
 
 export interface IPageCMSPrepare extends IPageItemConfig {
     slug: string;
@@ -17,13 +19,29 @@ enum EnumCategories {
     topMenu = "top-menu"
 }
 
-export interface ICurrentPageMeta {
+type JsonFields = {
+    maxWin?: Record<Currencies, number>;
+    cards?: Record<string, IRedeemableCards[]>;
+    [key: string]: unknown;
+}
+
+interface ISeoMeta {
+    json?: string;
     metaDescription: string;
-    metaKeywords: string;
     metaTitle: string;
-    json: string;
-    mainContent: string;
-    blocks?: Record<string, unknown>;
+    metaKeywords?: string;
+    content?: string;
+}
+
+export interface ICurrentPageMeta {
+    metaDescription?: string;
+    metaKeywords?: string;
+    metaTitle?: string;
+    json?: string;
+    mainContent?: string;
+    blocks?: string;
+    content?: string;
+
 }
 
 export interface ICurrentPage {
@@ -32,7 +50,7 @@ export interface ICurrentPage {
     slug: string;
     title: string;
     meta: ICurrentPageMeta;
-    json: Record<string, unknown>
+    json: JsonFields;
 }
 
 export interface IStaticPage {
@@ -53,7 +71,7 @@ export class CurrentPage implements ICurrentPage {
     slug: string;
     title: string;
     contentMain: string;
-    json: Record<string, unknown>;
+    json: JsonFields;
     meta: ICurrentPageMeta;
 
     constructor(data: IPageItemCMS) {

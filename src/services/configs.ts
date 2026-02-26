@@ -1,11 +1,11 @@
-import { type IBettingConfig } from "../models/configs";
+import { isExistData } from "../helpers/isExistData";
 import { useCommon } from "../store/common";
 import { useConfigStore } from "../store/configStore";
 import {
     loadBettingConfigReq,
     loadCurrencyConfigReq,
     loadExcludedPromoStagsReq,
-    loadMainWidgetConfigReq,
+    loadMainWidgetConfigReq, loadVipProgramConfigReq,
 } from "./api/requests/configs";
 
 export async function loadExcludedPromoStags() {
@@ -25,7 +25,7 @@ export async function loadExcludedPromoStags() {
 export async function loadCurrencyConfig() {
     const commonStore = useCommon();
 
-    if (commonStore.currencyConfig) {
+    if (isExistData(commonStore.currencyConfig)) {
         return commonStore.currencyConfig;
     }
 
@@ -38,6 +38,11 @@ export async function loadCurrencyConfig() {
 
 export async function loadMainWidgetConfig() {
     const commonStore = useCommon();
+
+    if (isExistData(commonStore.widgetsConfig)) {
+        return commonStore.widgetsConfig;
+    }
+
     const response = await loadMainWidgetConfigReq();
 
     if (response?.widgets) {
@@ -47,9 +52,27 @@ export async function loadMainWidgetConfig() {
 
 export async function loadBettingConfig() {
     const configStore = useConfigStore();
+
+    if (isExistData(configStore.bettingConfig)) {
+        return configStore.bettingConfig;
+    }
+
     const config = await loadBettingConfigReq();
 
     if (config) {
-        configStore.setBettingConfig(config as IBettingConfig);
+        configStore.setBettingConfig(config);
+    }
+}
+
+export async function loadVipProgramConfig() {
+    const configStore = useConfigStore();
+
+    if (isExistData(configStore.vipProgramConfig)) {
+        return configStore.vipProgramConfig;
+    }
+
+    const config = await loadVipProgramConfigReq();
+    if (config) {
+        configStore.setVipProgramConfig(config);
     }
 }

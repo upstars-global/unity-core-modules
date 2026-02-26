@@ -3,12 +3,18 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 
 import { enableCategoriesPage } from "../../src/consts/cms";
+import { CurrentPage } from "../../src/models/CMS";
 import {
     loadCMSPagesReq,
     loadCMSSnippetsReq,
-    loadMetaSEOReq,
     loadPageContentFromCmsReq,
 } from "../../src/services/api/requests/CMS";
+import {
+    loadCMSSnippets,
+    loadCurrentStaticPage,
+    loadMetaSEO,
+    loadStaticPages,
+} from "../../src/services/CMS";
 import { useCMS } from "../../src/store/CMS";
 
 vi.mock("../../src/store/multilang", () => ({
@@ -19,17 +25,19 @@ vi.mock("../../src/store/multilang", () => ({
 
 vi.mock("../../src/helpers/staticPages", () => ({
     prepareMapStaticPages: (pages) => pages,
+    resolveUrlFromRoute: (route) => route?.path || "",
+    normalizeUrl: (url) => url.replace(/^\/+|\/+$/g, ""),
 }));
 
 vi.mock("../../src/services/api/requests/CMS", () => ({
     loadCMSPagesReq: vi.fn(),
     loadCMSSnippetsReq: vi.fn(),
-    loadMetaSEOReq: vi.fn(),
     loadPageContentFromCmsReq: vi.fn(),
 }));
 
 vi.mock("../../src/helpers/replaceStringHelper", () => ({
     default: vi.fn(({ template }) => template),
+    replaceCurrentYearPlaceholder: vi.fn((template) => template),
 }));
 
 vi.mock("../../src/controllers/Logger", () => ({
@@ -44,6 +52,14 @@ vi.mock("@theme/configs/meta", () => ({
         description: "SSR Description",
         content: "SSR Content",
     })),
+}));
+
+vi.mock("@config/banners", () => ({
+    BANNER_CATEGORY_TERMS_CONDITIONS: "terms",
+}));
+
+vi.mock("@i18n", () => ({
+    default: () => ({}),
 }));
 
 vi.mock("@router/routeNames", () => ({
@@ -64,7 +80,7 @@ describe("useCMS store", () => {
 
             store.staticPages = pages;
 
-            const result = await store.loadStaticPages();
+            const result = await loadStaticPages();
 
             expect(loadCMSPagesReq).not.toHaveBeenCalled();
             expect(result).toEqual(pages);
@@ -78,7 +94,7 @@ describe("useCMS store", () => {
             vi.mocked(loadCMSPagesReq)
                 .mockResolvedValue(resolvedPages);
 
-            await store.loadStaticPages({ reload: false });
+            await loadStaticPages({ reload: false });
 
             expect(loadCMSPagesReq).toHaveBeenCalled();
             expect(store.staticPages).toEqual(resolvedPages);
@@ -92,7 +108,7 @@ describe("useCMS store", () => {
             vi.mocked(loadCMSPagesReq)
                 .mockResolvedValue(resolvedPages);
 
-            await store.loadStaticPages({ reload: true });
+            await loadStaticPages({ reload: true });
 
             expect(store.staticPages).toEqual(resolvedPages);
         });
@@ -139,7 +155,7 @@ describe("useCMS store", () => {
 
             store.snippets = [ { id: "footer-content", content: "test" } ];
 
-            const result = await store.loadCMSSnippets();
+            const result = await loadCMSSnippets();
 
             expect(loadCMSSnippetsReq).not.toHaveBeenCalled();
             expect(result).toEqual(store.snippets);
@@ -152,7 +168,7 @@ describe("useCMS store", () => {
 
             vi.mocked(loadCMSSnippetsReq).mockResolvedValue(snippets);
 
-            await store.loadCMSSnippets({ reload: true });
+            await loadCMSSnippets({ reload: true });
 
             expect(loadCMSSnippetsReq).toHaveBeenCalled();
             expect(store.snippets).toEqual(snippets);
@@ -191,7 +207,7 @@ describe("useCMS store", () => {
             const store = useCMS();
             store.staticPages = [ { slug: "a", url: "/a", categories: [], hidden: false } ];
 
-            const result = await store.loadCurrentStaticPage("b");
+            const result = await loadCurrentStaticPage("b");
 
             expect(result).toBe("b page is not StaticPages");
         });
@@ -202,7 +218,7 @@ describe("useCMS store", () => {
 
             vi.mocked(loadPageContentFromCmsReq).mockResolvedValue();
 
-            const result = await store.loadCurrentStaticPage("a");
+            const result = await loadCurrentStaticPage("a");
 
             expect(result).toBe("a page is not found");
         });
@@ -224,73 +240,60 @@ describe("useCMS store", () => {
 
             vi.mocked(loadPageContentFromCmsReq).mockResolvedValue(page);
 
-            const result = await store.loadCurrentStaticPage("a");
+            const result = await loadCurrentStaticPage("a");
 
             expect(store.currentStaticPage).toBeDefined();
-            expect(store.contentCurrentPage).toBe("abc");
+            expect(store.contentCurrentPage).toEqual({ a: new CurrentPage(page) });
             expect(result).toBeDefined();
         });
     });
 
     describe("loadMetaSEO", () => {
-        it("returns cached meta if exists", async () => {
-            const seoMeta = { "/home": { metaTitle: "Title", metaDescription: "Desc", json: "" } };
-            const store = useCMS();
-
-            store.seoMeta = seoMeta;
-
-            const result = await store.loadMetaSEO({ path: "/home", name: "main" });
-
-            expect(loadMetaSEOReq).not.toHaveBeenCalled();
-            expect(result).toEqual(seoMeta["/home"]);
-        });
-
         it("returns not StaticPages if slug not found", async () => {
             const store = useCMS();
             store.staticPages = [ { slug: "a", url: "/a", categories: [], hidden: false } ];
 
-            const result = await store.loadMetaSEO({ path: "/b", name: "other" });
+            const result = await loadMetaSEO({ path: "/b", name: "other" });
 
-            expect(result).toBe("/b page is not StaticPages");
+            expect(result).toBe("b page is not StaticPages");
         });
 
         it("returns not found if API returns null", async () => {
-            vi.mocked(loadMetaSEOReq).mockResolvedValue();
+            vi.mocked(loadPageContentFromCmsReq).mockResolvedValue();
 
             const store = useCMS();
             store.staticPages = [ { slug: "a", url: "/a", categories: [], hidden: false } ];
 
-            const result = await store.loadMetaSEO({ path: "/a", name: "other" });
+            const result = await loadMetaSEO({ path: "/a", name: "other" });
 
-            expect(result).toBe("/a page data is not found");
+            expect(result).toBe("a page data is not found");
         });
 
         it("sets meta and pageContent if blocks exist", async () => {
             const store = useCMS();
             store.staticPages = [ { slug: "a", url: "/a", categories: [], hidden: false } ];
 
-            vi.mocked(loadMetaSEOReq).mockResolvedValue({
+            vi.mocked(loadPageContentFromCmsReq).mockResolvedValue({
                 blocks: { title: "MetaTitle", description: "MetaDesc", json: "{}" },
                 content: "MetaContent",
             });
 
-            const result = await store.loadMetaSEO({ path: "/a", name: "other" });
+            const result = await loadMetaSEO({ path: "/a", name: "other" });
 
             expect(result.metaTitle).toBe("MetaTitle");
             expect(store.seoMeta["/a"]).toBeDefined();
-            expect(store.currentStaticPage).toBeDefined();
         });
 
         it("sets meta from SSR if blocks missing", async () => {
             const store = useCMS();
-            vi.mocked(loadMetaSEOReq).mockResolvedValue({
+            vi.mocked(loadPageContentFromCmsReq).mockResolvedValue({
                 blocks: undefined,
                 content: "MetaContent",
             });
 
             store.staticPages = [ { slug: "a", url: "/a", categories: [], hidden: false } ];
 
-            const result = await store.loadMetaSEO({ path: "/a", name: "other" });
+            const result = await loadMetaSEO({ path: "/a", name: "other" });
 
             expect(result.metaTitle).toBe("SSR Title");
         });

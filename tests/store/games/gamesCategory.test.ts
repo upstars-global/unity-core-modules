@@ -3,9 +3,11 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 
 import { log } from "../../../src/controllers/Logger";
-import { getRandomGame, processGameForNewAPI } from "../../../src/helpers/gameHelpers";
+import { processGameForNewAPI } from "../../../src/helpers/gameHelpers";
 import type { ICollectionItem, IGame, IGamesProvider } from "../../../src/models/game";
+import { IEnabledGames } from "../../../src/models/game";
 import { loadGamesCategory as loadGamesCategoryReq } from "../../../src/services/api/requests/games";
+import { loadGamesCategory } from "../../../src/services/games";
 import { useGamesCategory } from "../../../src/store/games/gamesCategory";
 
 vi.mock("../../../src/controllers/Logger", () => ({
@@ -14,7 +16,20 @@ vi.mock("../../../src/controllers/Logger", () => ({
     },
 }));
 
-vi.mock("../../../src/helpers/gameHelpers");
+vi.mock("../../../src/helpers/gameHelpers", () => ({
+    processGameForNewAPI: vi.fn((game) => game),
+    filterGames: vi.fn((games) => games),
+    defaultCollection: vi.fn(() => ({
+        data: [],
+        pagination: {
+            current_page: 0,
+            next_page: undefined,
+            prev_page: undefined,
+            total_pages: 0,
+            total_count: 0,
+        },
+    })),
+}));
 vi.mock("../../../src/services/api/requests/games");
 
 const mockUserGeo = ref("");
@@ -36,6 +51,11 @@ vi.mock("../../../src/store/user/userInfo", () => ({
 vi.mock("../../../src/store/configStore", () => ({
     useConfigStore: () => ({
         gamesPageLimit: ref(20),
+        $defaultProjectConfig: {
+            featureFlags: {
+                enableAllProviders: false,
+            },
+        },
     }),
 }));
 
@@ -46,9 +66,11 @@ vi.mock("../../../src/store/root", () => ({
 }));
 
 const mockGamesCategories = ref<IGamesProvider[]>([]);
+const mockEnabledGamesConfig = ref<IEnabledGames>({});
 vi.mock("../../../src/store/games/gamesStore", () => ({
     useGamesCommon: () => ({
         gamesCategories: mockGamesCategories,
+        enabledGamesConfig: mockEnabledGamesConfig,
     }),
 }));
 
@@ -106,7 +128,7 @@ describe("store/games/gamesCategory", () => {
 
         it("should call api with correct params and set data", async () => {
             const store = useGamesCategory();
-            await store.loadGamesCategory("slots");
+            await loadGamesCategory("slots");
 
             expect(loadGamesCategoryReq).toHaveBeenCalledWith({
                 device: "desktop",
@@ -131,7 +153,7 @@ describe("store/games/gamesCategory", () => {
                 pagination: { current_page: 1, next_page: null },
             } as ICollectionItem;
 
-            await store.loadGamesCategory("slots", 1);
+            await loadGamesCategory("slots", 1);
             expect(loadGamesCategoryReq).not.toHaveBeenCalled();
         });
 
@@ -140,44 +162,9 @@ describe("store/games/gamesCategory", () => {
             const error = new Error("API Failed");
             vi.mocked(loadGamesCategoryReq).mockRejectedValue(error);
 
-            await store.loadGamesCategory("slots");
+            await loadGamesCategory("slots");
 
             expect(log.error).toHaveBeenCalledWith("LOAD_GAMES_CATEGORY_ERROR", error);
-        });
-    });
-
-    describe("getRandomGameByCategory", () => {
-        const games = [
-            { name: "Game 1", real: { USD: 1 }, categories: [] },
-            { name: "Game 2", real: { EUR: 1 }, categories: [] },
-            { name: "Game 3", real: { USD: 1 }, categories: [ "live" ] },
-        ];
-
-        beforeEach(() => {
-            const store = useGamesCategory();
-            store.collections.slots = { data: games as IGame[] } as ICollectionItem;
-            vi.mocked(getRandomGame).mockImplementation((arr) => arr[0]);
-        });
-
-        it("should filter by user currency when logged in", () => {
-            const store = useGamesCategory();
-            mockIsLogged.value = true;
-            mockUserCurrency.value = "USD";
-
-            const randomGame = store.getRandomGameByCategory("slots");
-
-            const expectedGamesToFilter = [ games[0], games[2] ];
-            expect(getRandomGame).toHaveBeenCalledWith(expectedGamesToFilter, false);
-            expect(randomGame.name).toBe("Game 1");
-        });
-
-        it("should filter by demo availability when not logged in", () => {
-            const store = useGamesCategory();
-            mockIsLogged.value = false;
-
-            const randomGame = store.getRandomGameByCategory("slots");
-            expect(getRandomGame).toHaveBeenCalledWith(expect.any(Array), true);
-            expect(randomGame.name).toBe("Game 1");
         });
     });
 
@@ -193,10 +180,16 @@ describe("store/games/gamesCategory", () => {
             expect(store.collections.new2.data).toEqual([]);
             expect(Object.keys(store.collections)).toHaveLength(3);
         });
+
+        it("returns early when initCollection gets falsy data", () => {
+            const store = useGamesCategory();
+            store.initCollection(undefined as never);
+            expect(store.collections).toEqual({});
+        });
     });
 
     describe("Getters", () => {
-        const games = Array.from({ length: 50 }, (_, i) => ({ name: `Game ${i + 1}` } as IGame));
+        const games = Array.from({ length: 50 }, (_, i) => ({ name: `Game ${ i + 1 }` } as IGame));
 
         beforeEach(() => {
             const store = useGamesCategory();
@@ -280,6 +273,22 @@ describe("store/games/gamesCategory", () => {
                 const store = useGamesCategory();
                 expect(store.getCollectionFullData("slots")?.data).toHaveLength(50);
             });
+        });
+
+        it("setData appends data to existing collection", () => {
+            const store = useGamesCategory();
+            store.collections.slots = {
+                data: [ { identifier: "old" } as IGame ],
+                pagination: { current_page: 1, next_page: 2 },
+            } as ICollectionItem;
+
+            store.setData({
+                data: [ { identifier: "new" } as IGame ],
+                pagination: { current_page: 2, next_page: null },
+            } as ICollectionItem, "slots");
+
+            expect(store.collections.slots.data).toHaveLength(2);
+            expect(store.collections.slots.pagination.next_page).toBeNull();
         });
 
         describe("isLoaded", () => {

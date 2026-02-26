@@ -3,7 +3,7 @@ import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 
-import { EnumLootboxState, Mode } from "../../src/models/lootboxes";
+import { EnumLootboxState, Mode } from "../../src/models/enums/lootboxes";
 import { useLootboxesStore } from "../../src/store/lootboxes";
 import { useRocketLootboxesStore } from "../../src/store/rocketLootboxes";
 
@@ -19,6 +19,8 @@ const mockLootbox = (overrides = {}) => ({
     prize: { prize: true },
     ...overrides,
 });
+
+const currentStaticPage = ref({ meta: { json: { skin: { color: "red" } } } });
 
 vi.mock("../../src/store/lootboxes", () => ({
     useLootboxesStore: vi.fn(() => ({
@@ -44,7 +46,7 @@ vi.mock("../../src/store/lootboxes", () => ({
 }));
 
 vi.mock("../../src/store/CMS", () => ({
-    useCMS: () => ({ currentStaticPage: ref({ meta: { json: { skin: { color: "red" } } } }) }),
+    useCMS: () => ({ currentStaticPage }),
 }));
 
 
@@ -52,6 +54,7 @@ describe("useRocketLootboxesStore", () => {
     beforeEach(() => {
         setActivePinia(createPinia());
         vi.resetAllMocks();
+        currentStaticPage.value = { meta: { json: { skin: { color: "red" } } } };
     });
 
     it("filters valid lootboxes correctly", () => {
@@ -71,6 +74,13 @@ describe("useRocketLootboxesStore", () => {
         const store = useRocketLootboxesStore();
 
         expect(store.skin).toEqual({ color: "red" });
+    });
+
+    it("returns empty skin when CMS does not provide it", () => {
+        currentStaticPage.value = { meta: { json: {} } };
+        const store = useRocketLootboxesStore();
+
+        expect(store.skin).toEqual({});
     });
 
     it("lootbox available/used flags are correct", () => {

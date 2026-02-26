@@ -1,20 +1,30 @@
+import { storeToRefs } from "pinia";
+
+import { isExistData } from "../helpers/isExistData";
 import type { IDisabledGamesProvider } from "../models/game";
-import { IProvidersList } from "../models/providers";
-import { loadDisabledProvidersConfigReq } from "../services/api/requests/configs";
+import { useConfigStore } from "../store/configStore";
 import { useGamesProviders } from "../store/games/gamesProviders";
+import { loadDisabledProvidersConfigReq } from "./api/requests/configs";
 
 export async function loadDisabledGamesProviders(): Promise<void> {
-    const { setDisabledGamesProviders } = useGamesProviders();
+    const gamesProviders = useGamesProviders();
+    const configStore = useConfigStore();
+    const { disabledGamesProviders } = storeToRefs(gamesProviders);
+
+    if (isExistData(disabledGamesProviders.value)) {
+        return;
+    }
 
     const data = await loadDisabledProvidersConfigReq();
 
     if (data) {
-        const first10Props: IProvidersList = {};
+        const first20Props: IDisabledGamesProvider = {};
 
-        Object.keys(data).slice(0, 10).forEach((key) => {
-            first10Props[key] = data[key];
+        Object.keys(data).forEach((key) => {
+            first20Props[key] = data[key];
         });
 
-        setDisabledGamesProviders(first10Props as IDisabledGamesProvider);
+        gamesProviders.setDisabledGamesProviders(first20Props as IDisabledGamesProvider);
+        configStore.setDisabledGamesProviders(first20Props as IDisabledGamesProvider);
     }
 }

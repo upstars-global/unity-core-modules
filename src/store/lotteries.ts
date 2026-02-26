@@ -1,4 +1,3 @@
-import type { Pinia } from "pinia";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
@@ -10,12 +9,6 @@ import type {
     ILotteriesStatusesItem,
     ILotteriesStatusesList,
 } from "../services/api/DTO/lotteriesDTO";
-import {
-    getLotteryByIDReq,
-    getLotteryStatusByIDReq,
-    loadLotteriesListReq,
-    loadLotteriesStatusesReq,
-} from "../services/api/requests/lotteries";
 
 export const useLotteriesStore = defineStore("lotteriesStore", () => {
     const lotteriesList = ref<ILotteriesList>([]);
@@ -27,6 +20,10 @@ export const useLotteriesStore = defineStore("lotteriesStore", () => {
             return accumulator + item.tickets.length;
         }, 0);
     });
+
+    const setLotteriesList = (list: ILotteriesList) => {
+        lotteriesList.value = list;
+    };
 
     const getLotteriesList = computed<ILotteriesList | []>(() => {
         return promoFilterAndSettings<ILotteriesItem>(lotteriesList.value, PromoType.LOTTERY);
@@ -46,43 +43,8 @@ export const useLotteriesStore = defineStore("lotteriesStore", () => {
         return null;
     });
 
-    async function loadLotteriesList(): Promise<ILotteriesList> {
-        const lotteriesResponse = await loadLotteriesListReq();
-        lotteriesList.value = lotteriesResponse;
-        return lotteriesResponse;
-    }
-
-    async function loadLotteryStatuses(): Promise<ILotteriesStatusesList> {
-        const resp = await loadLotteriesStatusesReq();
-
-        const existingIds = new Set(lotteriesStatuses.value.map((item) => item.lottery_id));
-        const uniqueStatuses = resp.filter((item) => !existingIds.has(item.lottery_id));
-        lotteriesStatuses.value = [
-            ...lotteriesStatuses.value,
-            ...uniqueStatuses,
-        ];
-
-        return resp;
-    }
-
-    async function loadLotteryByID(id: number): Promise<ILotteriesItem> {
-        if (currentLottery.value?.id === id) {
-            return Promise.resolve(currentLottery.value);
-        }
-
-        currentLottery.value = null;
-        const resp = await getLotteryByIDReq(id);
-        currentLottery.value = resp;
-        return resp;
-    }
-
-    async function loadLotteryStatusByID(id: number): Promise<void> {
-        const resp = await getLotteryStatusByIDReq(id);
-
-        lotteriesStatuses.value = [
-            ...lotteriesStatuses.value.filter(({ lottery_id }) => lottery_id !== resp.lottery_id),
-            resp,
-        ];
+    function setLotteriesStatuses(list: ILotteriesStatusesList) {
+        lotteriesStatuses.value = list;
     }
 
     function clearLotteriesUserData() {
@@ -90,29 +52,17 @@ export const useLotteriesStore = defineStore("lotteriesStore", () => {
     }
 
     return {
+        lotteriesList,
         lotteriesStatuses,
+        setLotteriesStatuses,
+        currentLottery,
 
         getCommonTicketsBalance,
+        setLotteriesList,
         getLotteriesList,
         getActiveLotteryList,
         getCurrentLottery,
 
-        loadLotteriesList,
-        loadLotteryStatuses,
-        loadLotteryByID,
-        loadLotteryStatusByID,
         clearLotteriesUserData,
     };
 });
-
-export function useLotteriesFetchService(pinia?: Pinia) {
-    const lotteriesStore = useLotteriesStore(pinia);
-
-    function loadLotteriesList() {
-        return lotteriesStore.loadLotteriesList();
-    }
-
-    return {
-        loadLotteriesList,
-    };
-}

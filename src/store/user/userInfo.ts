@@ -1,29 +1,12 @@
-import { usePopupNewProvider } from "@modules/Popups/PopupProviderNew/usePopupNewProviderController";
-import { PROJECT } from "@theme/configs/constantsFreshChat";
-import { getStateByCounty } from "@theme/configs/stateFieldConfig";
-import { defineStore, type Pinia, storeToRefs } from "pinia";
+import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
-import { cioIdentifyUser } from "../../controllers/CustomerIO";
-import { useUserTermsAcceptingPopup } from "../../controllers/userTermsAcceptingPopup";
-import { EnumContextFields, EnumFormFields } from "../../models/common";
 import { Currencies } from "../../models/enums/currencies";
 import { BettingPlayerSettings } from "../../models/player";
-import type { IUserData } from "../../models/user";
-import { EventBus as bus } from "../../plugins/EventBus";
+import type { IUserData, IUserStatus } from "../../models/user";
+import { ISeasonStartPoints } from "../../models/user";
 import type { IPlayerStats, ISubscriptions, IUserSettings } from "../../services/api/DTO/playerDTO";
-import {
-    confirmEmailResendReg, confirmPlayerReq,
-    loadFreshChatRestoreIdReq, loadUserBettingBonuses,
-    loadUserProfileReq,
-    loadUserSettingsReq, loadUserStatsReq, loadUserSubscriptionsReq,
-    putUserSubscriptionReq, restorePasswordRequestReq, restorePasswordRestoreReq, sendFreshChatRestoreIdReq,
-    sendUserDataReq, updateAuthDetailsProvidersReq,
-} from "../../services/api/requests/player";
-import { updateLocale } from "../../services/localization";
-import { loadPlayerFieldsInfo } from "../../services/user";
 import { useCommon } from "../common";
-import { useMultilangStore } from "../multilang";
 
 const defaultUser: IUserData = {
     user_id: "",
@@ -75,71 +58,44 @@ export const useUserInfo = defineStore("userInfo", () => {
     const freshchatRestoreIdLoaded = ref<boolean>(false);
     const freshchatRestoreId = ref<string>("");
     const isLogged = ref<boolean>(false);
+    const isLoadUserProfile = ref(false);
     const subscriptions = ref<ISubscriptions>();
     const notice = ref<unknown[]>([]);
     const stats = ref<IPlayerStats>();
-    const bettingBonuses = ref([]);
+    const bettingBonuses = ref<unknown[]>([]);
     const bettingPlayerSettings = ref<BettingPlayerSettings>({
         oddsTypes: [],
         selectedOddsType: "european",
     });
+    const userStartSeasonInfo = ref<ISeasonStartPoints>();
 
-    const getUserInfo = computed(() => {
-        return info.value;
-    });
+    const getUserInfo = computed(() => info.value);
+    const getUserBettingBonuses = computed(() => bettingBonuses.value);
+    const getUserSumsubVerified = computed(() => getUserInfo.value.sumsub_verified);
+    const getUserVerified = computed(() => getUserInfo.value.verified);
+    const getUserSubscriptions = computed(() => subscriptions.value);
+    const getUserCurrency = computed(() => info.value.currency || getDefaultCurrency.value);
 
-    const getUserBettingBonuses = computed(() => {
-        return bettingBonuses.value;
-    });
+    const getIsLogged = computed(() => isLogged.value);
+    const getNotice = computed(() => notice.value);
+    const getSettings = computed(() => settings.value);
+    const getFreshChatRestoreIdLoaded = computed(() => freshchatRestoreIdLoaded.value);
+    const getFreshChatRestoreId = computed(() => freshchatRestoreId.value);
 
-    const getUserSumsubVerified = computed(() => {
-        return getUserInfo.value.sumsub_verified;
-    });
-    const getUserSubscriptions = computed(() => {
-        return subscriptions.value;
-    });
-    const getUserCurrency = computed(() => {
-        return info.value.currency || getDefaultCurrency.value;
-    });
+    const isCryptoUserCurrency = computed(() => getCurrencyCrypto.value.includes(getUserCurrency.value));
 
-    const getIsLogged = computed(() => {
-        return isLogged.value;
-    });
-    const getNotice = computed(() => {
-        return notice.value;
-    });
-    const getSettings = computed(() => {
-        return settings.value;
-    });
-    const getFreshChatRestoreIdLoaded = computed(() => {
-        return freshchatRestoreIdLoaded.value;
-    });
-    const getFreshChatRestoreId = computed(() => {
-        return freshchatRestoreId.value;
-    });
+    const getIsUserLoadedOneTime = computed(() => info.value.dataUserLoadedOneTime);
+    const getDataIsLoaded = computed(() => info.value.dataIsLoaded);
+    const getUserNickName = computed(() => info.value.nickname || info.value.email);
+    const getIsLoadedUsedData = computed(() => isLoadedUsedData.value);
+    const getPlayerStats = computed(() => stats.value);
+    const getUserStartSeasonInfo = computed(() => userStartSeasonInfo.value);
 
-    const isCryptoUserCurrency = computed(() => {
-        return getCurrencyCrypto.value.includes(getUserCurrency.value);
-    });
+    function setPlayerStats(data: IPlayerStats) {
+        stats.value = data;
+    }
 
-    const getIsUserLoadedOneTime = computed(() => {
-        return info.value.dataUserLoadedOneTime;
-    });
-    const getDataIsLoaded = computed(() => {
-        return info.value.dataIsLoaded;
-    });
-    const getUserNickName = computed(() => {
-        return info.value.nickname ? info.value.nickname : info.value.email;
-    });
-    const getIsLoadedUsedData = computed(() => {
-        return isLoadedUsedData.value;
-    });
-    const getPlayerStats = computed(() => {
-        return stats.value;
-    });
-
-    // @ts-expect-error Parameter 'data' implicitly has an 'any' type.
-    function setUserData(data) {
+    function setUserData(data: Partial<IUserData>) {
         const payload = {
             ...data,
             nick_name: data.nickname || data.email,
@@ -152,9 +108,28 @@ export const useUserInfo = defineStore("userInfo", () => {
         isLoadedUsedData.value = true;
     }
 
-    // @ts-expect-error Parameter 'userGroup' implicitly has an 'any' type.
-    function addUserGroup(userGroup) {
+    function setUserSubscriptions(data: ISubscriptions) {
+        subscriptions.value = data;
+    }
+
+    function setUserInfo(data: IUserData & { subscriptions?: ISubscriptions }) {
+        info.value = data;
+    }
+
+    function addUserGroup(userGroup: IUserStatus) {
         info.value.statuses.push(userGroup);
+    }
+
+    function removeUserGroup(userGroup: IUserStatus) {
+        const indexCurrentGroup = info.value.statuses.findIndex((status) => status.id === userGroup.id);
+
+        if (indexCurrentGroup >= 0) {
+            info.value.statuses.splice(indexCurrentGroup, 1);
+        }
+    }
+
+    function setUserStatuses(userGroups: IUserStatus[]) {
+        info.value.statuses = userGroups;
     }
 
     function clearUserData() {
@@ -171,198 +146,15 @@ export const useUserInfo = defineStore("userInfo", () => {
         freshchatRestoreIdLoaded.value = status;
     }
 
-    // @ts-expect-error Parameter 'newStatus' implicitly has an 'any' type.
-    function addUserStatuses(newStatus) {
+    function setFreshChatRestoreId(restoreId: string) {
+        freshchatRestoreId.value = restoreId;
+    }
+
+    function addUserStatuses(newStatus: IUserStatus) {
         info.value.statuses = [
-            info.value.statuses.filter(({ id }) => {
-                return Number(id) !== newStatus.id;
-            }),
+            ...info.value.statuses.filter(({ id }) => id !== newStatus.id),
             newStatus,
         ];
-    }
-
-    async function checkUserState() {
-        const stateFieldConfig = useCommonStore.getFieldsType(EnumContextFields.edition, EnumFormFields.state);
-        const userState = getUserInfo.value.state;
-        const userPostCode = getUserInfo.value.postal_code;
-
-        if (stateFieldConfig && !userState && userPostCode) {
-            const stateForEdit = getStateByCounty(info.value.country as string, userPostCode);
-            if (stateForEdit) {
-                await sendUserData({
-                    context: "edition",
-                    player: { state: stateForEdit },
-                });
-            }
-        }
-    }
-
-    // @ts-expect-error Parameter 'data' implicitly has an 'any' type.
-    async function putUserSubscription(data) {
-        await putUserSubscriptionReq(data);
-        return loadUserSubscriptions({ reload: true });
-    }
-
-    async function loadUserProfile({ reload = false, route }: { reload?: boolean; route?: string } = {}) {
-        const { checkToShowPopup } = usePopupNewProvider();
-        const { runShowingTermsPopup } = useUserTermsAcceptingPopup();
-        const multilang = useMultilangStore();
-
-        const profile = info.value;
-        if (profile.id && !reload) {
-            cioIdentifyUser(profile);
-            return { data: profile };
-        }
-
-        info.value.dataIsLoaded = false;
-        try {
-            const response = await loadUserProfileReq();
-            if (response) {
-                setUserData(response.data);
-
-                runShowingTermsPopup();
-
-                const responseLang = response.data.language;
-
-                if (responseLang !== multilang.getUserLocale && response.data.id) {
-                    // @ts-expect-error 'route' does not exist in type '{ lang: string; }'
-                    updateLocale({ lang: responseLang, route });
-                }
-
-                if (!response.data.id) {
-                    setFreshChatRestoreIdLoaded();
-                    toggleUserIsLogged(false);
-                    return;
-                }
-                toggleUserIsLogged(true);
-
-                bus.$emit("user.data.received");
-                bus.$emit("user.login", response.data);
-                cioIdentifyUser(response.data);
-                checkToShowPopup();
-
-                loadFreshChatRestoreId(PROJECT);
-
-                loadPlayerFieldsInfo({ reload: true })
-                    .then(checkUserState);
-            }
-
-            return response;
-        } finally {
-            info.value.dataIsLoaded = true;
-            info.value.dataUserLoadedOneTime = true;
-        }
-    }
-
-    async function loadUserSettings() {
-        const data = await loadUserSettingsReq();
-        if (data) {
-            settings.value = data;
-        }
-
-        return data;
-    }
-
-    // @ts-expect-error Parameter 'data' implicitly has an 'any' type.
-    async function sendUserData(data) {
-        const resp = await sendUserDataReq(data);
-        // @ts-expect-error Property 'saved' does not exist on type
-        info.value.saved = true;
-        await loadUserProfile({ reload: true });
-        return resp;
-    }
-
-    // @ts-expect-error Parameter 'data' implicitly has an 'any' type.
-    async function restorePasswordRequest(payload) {
-        try {
-            return await restorePasswordRequestReq(payload);
-        } catch (err) {
-            // @ts-expect-error 'err' is of type 'unknown'.
-            throw err.response;
-        }
-    }
-
-    // @ts-expect-error Parameter 'data' implicitly has an 'any' type.
-    async function restorePasswordRestore(payload) {
-        return await restorePasswordRestoreReq(payload);
-    }
-
-    async function confirmPlayer(token: string) {
-        return await confirmPlayerReq(token);
-    }
-
-    async function confirmEmailResend(captcha: string) {
-        const dataForConfirm = {
-            user: { email: info.value.email },
-        };
-
-        if (captcha) {
-            // @ts-expect-error Property 'captcha' does not exist on type '{ email: string; }'
-            dataForConfirm.user.captcha = captcha;
-        }
-
-        return await confirmEmailResendReg(dataForConfirm);
-    }
-
-    // @ts-expect-error Parameter 'data' implicitly has an 'any' type.
-    async function updateAuthDetailsProviders(data) {
-        return await updateAuthDetailsProvidersReq(data);
-    }
-
-    async function loadFreshChatRestoreId(project: string) {
-        setFreshChatRestoreIdLoaded(false);
-        const { data } = await loadFreshChatRestoreIdReq(info.value.user_id, project);
-
-        const restoreId = data?.restoreId;
-
-        if (restoreId) {
-            freshchatRestoreId.value = restoreId.trim();
-        }
-        setFreshChatRestoreIdLoaded();
-    }
-
-    async function sendFreshChatRestoreId(restoreId: string, project: string) {
-        // to prevent override restore id when it is not initialized yet
-        if (!freshchatRestoreIdLoaded.value || restoreId === freshchatRestoreId.value) {
-            return;
-        }
-
-        freshchatRestoreId.value = restoreId;
-        setFreshChatRestoreIdLoaded();
-        await sendFreshChatRestoreIdReq(info.value.user_id, restoreId, project);
-    }
-
-    async function loadUserSubscriptions({ reload = false }) {
-        if (!reload && subscriptions.value) {
-            return Promise.resolve(subscriptions.value);
-        }
-
-        const data = await loadUserSubscriptionsReq();
-
-        if (data) {
-            subscriptions.value = data;
-            info.value = { ...info.value, ...subscriptions };
-        }
-
-        return data;
-    }
-
-    async function loadUserStats() {
-        const data = await loadUserStatsReq();
-
-        if (data) {
-            stats.value = data;
-        }
-        return data;
-    }
-
-    async function loadUserBonuses() {
-        const data = await loadUserBettingBonuses();
-
-        if (data) {
-            bettingBonuses.value = data;
-        }
-        return data;
     }
 
     const getSubunitsToUnitsByCode = (codeProp?: Currencies) => {
@@ -374,15 +166,45 @@ export const useUserInfo = defineStore("userInfo", () => {
         return currencyInfo?.subunits_to_unit;
     };
 
+    function setUserInfoSavedFlag(flag: boolean = true) {
+        // @ts-expect-error Property 'saved' does not exist on type 'IUserData'.
+        info.value.saved = flag;
+    }
+
+    function updateUserInfo(data: Partial<IUserData>) {
+        info.value = {
+            ...info.value,
+            ...data,
+        };
+    }
+
+    function setBettingBonuses(data: unknown[]) {
+        bettingBonuses.value = data;
+    }
+
     function setBettingPlayerSettings(data: BettingPlayerSettings) {
         bettingPlayerSettings.value = data;
     }
 
+    function setUserSettings(data: IUserSettings) {
+        settings.value = data;
+    }
+
+    function toggleIsLoadUserProfile(value: boolean) {
+        isLoadUserProfile.value = value;
+    }
+
+    function setUserSeasonStartPoints(data: ISeasonStartPoints) {
+        userStartSeasonInfo.value = data;
+    }
+
     return {
         getUserInfo,
+        setUserInfo,
         getUserSumsubVerified,
-        checkUserState,
+        getUserVerified,
         info,
+        updateUserInfo,
         isLogged,
         getUserCurrency,
         isCryptoUserCurrency,
@@ -390,49 +212,34 @@ export const useUserInfo = defineStore("userInfo", () => {
         getNotice,
         getSettings,
         getFreshChatRestoreIdLoaded,
+        setFreshChatRestoreIdLoaded,
         getFreshChatRestoreId,
+        setFreshChatRestoreId,
         getUserSubscriptions,
+        setUserSubscriptions,
         getIsUserLoadedOneTime,
         getDataIsLoaded,
         getUserNickName,
         getIsLoadedUsedData,
         getUserBettingBonuses,
         getPlayerStats,
+        getUserStartSeasonInfo,
+        setPlayerStats,
         getSubunitsToUnitsByCode,
-
         toggleUserIsLogged,
         setUserData,
         addUserGroup,
+        removeUserGroup,
         clearUserData,
         addUserStatuses,
-
-        putUserSubscription,
-        loadUserSettings,
-        loadUserProfile,
-        sendUserData,
-        restorePasswordRequest,
-        restorePasswordRestore,
-        confirmPlayer,
-        confirmEmailResend,
-        updateAuthDetailsProviders,
-        sendFreshChatRestoreId,
-        loadUserBonuses,
-        loadUserStats,
-        loadUserSubscriptions,
-
+        setUserStatuses,
+        setUserInfoSavedFlag,
+        setBettingBonuses,
         bettingPlayerSettings,
         setBettingPlayerSettings,
+        setUserSettings,
+        isLoadUserProfile,
+        toggleIsLoadUserProfile,
+        setUserSeasonStartPoints,
     };
 });
-
-export function useUserInfoFetchService(pinia?: Pinia) {
-    useUserInfo(pinia);
-
-    function loadUserInfo() {
-        return Promise.resolve();
-    }
-
-    return {
-        loadUserInfo,
-    };
-}

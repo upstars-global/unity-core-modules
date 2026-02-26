@@ -1,10 +1,9 @@
-import { LEVELS } from "@config/levels";
-import { defineStore, type Pinia } from "pinia";
+import { mapLevelItem } from "@helpers/lootBoxes";
+import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
-import { log } from "../../controllers/Logger";
-import type { IGroup, ILevels, IUserLevelInfo } from "../../models/levels";
-import { http } from "../../services/api/http";
+import { ILevel } from "../../models/levels";
+import { IStatuses } from "../../services/api/DTO/statuses";
 
 const getIndex = (id: string | undefined): number | undefined => {
     if (!id) {
@@ -15,16 +14,17 @@ const getIndex = (id: string | undefined): number | undefined => {
 
     return Number(stringIndex);
 };
-export const useLevelsStore = defineStore("levelsStore", () => {
-    const levels = ref<IUserLevelInfo[]>([]);
-    const groups = ref<IGroup[]>([]);
 
-    const getLevelsData = computed<IUserLevelInfo[]>(() => {
+export const useLevelsStore = defineStore("levelsStore", () => {
+    const levels = ref<ILevel[]>([]);
+    const groups = ref<IStatuses[]>([]);
+
+    const getLevelsData = computed<ILevel[]>(() => {
         return levels.value
-            .filter((item: IUserLevelInfo) => {
+            .filter((item: ILevel) => {
                 return item.status;
             })
-            .sort((current: IUserLevelInfo, next: IUserLevelInfo) => {
+            .sort((current: ILevel, next: ILevel) => {
                 const currentIndex = getIndex(current.id);
                 const nextIndex = getIndex(next.id);
 
@@ -36,75 +36,47 @@ export const useLevelsStore = defineStore("levelsStore", () => {
             });
     });
 
-    function getLevelsById(id: string): IUserLevelInfo | Record<string, unknown> {
-        return levels.value.find((el: IUserLevelInfo) => {
+    const getLevels = computed(() => {
+        return levels.value;
+    });
+
+    function getLevelsById(id: string): ILevel {
+        return levels.value.find((el: ILevel) => {
             return el.id === id;
-        }) || {};
+        }) || {} as ILevel;
     }
 
-    function getLevelImageById(level: IUserLevelInfo): string {
-        const item = getLevelsData.value.find((el: IUserLevelInfo) => {
+    function getLevelImageById(level: ILevel): string {
+        const item = getLevelsData.value.find((el) => {
             return el.id === level.id;
         });
 
         return item ? item.image : "";
     }
 
-    function createLevelData(mockLevels: ILevels): (someLevel: IUserLevelInfo) => IUserLevelInfo {
-        return (someLevel: IUserLevelInfo) => {
-            const config = mockLevels[someLevel.id];
+    function setLevelsData(data: IStatuses[]) {
+        const levelsList: ILevel[] = [];
+        const groupsList: IStatuses[] = [];
 
-            return {
-                ...someLevel,
-                image: config.image,
-
-                gift_descriptions: config.gift_descriptions,
-            };
-        };
-    }
-
-    function setLevelsData(data) {
-        // Защита от дурака
-        levels.value = data
-            .filter(({ status }) => {
-                return status;
-            })
-            .map(createLevelData(LEVELS));
-
-        groups.value = data.filter(({ status }) => {
-            return !status;
-        });
-    }
-
-    async function loadLevelsData({ reload }: { reload?: boolean } = {}): Promise<IGroup[]> {
-        if (!reload && levels.value.length) {
-            return levels.value;
+        for (const item of data) {
+            if (item.status) {
+                levelsList.push(mapLevelItem(item));
+            } else {
+                groupsList.push(item);
+            }
         }
-        try {
-            const { data } = await http().get("/api/info/statuses");
-            setLevelsData(data);
-            return data;
-        } catch (err) {
-            log.error("LOAD_LEVELS_DATA_ERROR", err);
-            throw err;
-        }
+
+        levels.value = levelsList;
+        groups.value = groupsList;
     }
 
     return {
+        levels,
         groups,
         getLevelsData,
+        getLevels,
         getLevelsById,
         getLevelImageById,
-        createLevelData,
-        loadLevelsData,
+        setLevelsData,
     };
 });
-
-
-export function useLevelsFetchService(pinia?: Pinia) {
-    const { loadLevelsData } = useLevelsStore(pinia);
-
-    return {
-        loadLevelsData,
-    };
-}

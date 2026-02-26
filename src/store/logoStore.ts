@@ -1,10 +1,9 @@
 import logo from "@theme/images/BrandImages/logo.svg";
 import logoMob from "@theme/images/BrandImages/logo-mob.svg";
-import { defineStore, type Pinia, storeToRefs } from "pinia";
+import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
 import { ILogoConfig } from "../services/api/DTO/logo";
-import { loadLogoConfigReq } from "../services/api/requests/logo";
 import { useRootStore } from "./root";
 import { useUserInfo } from "./user/userInfo";
 
@@ -22,11 +21,9 @@ export const useLogoStore = defineStore("logoStore", () => {
     const getLogoSrc = computed(() => {
         return getIsLogged.value && isMobile.value ? getMobileLogoSrc.value : getFullLogoSrc.value;
     });
-    async function loadLogoConfig() {
-        if (logoConfig.value) {
-            return;
-        }
-        logoConfig.value = await loadLogoConfigReq();
+
+    function setLogoConfig(config: ILogoConfig) {
+        logoConfig.value = config;
     }
 
     return {
@@ -34,16 +31,6 @@ export const useLogoStore = defineStore("logoStore", () => {
         logoConfig,
         getMobileLogoSrc,
         getFullLogoSrc,
-        loadLogoConfig,
+        setLogoConfig,
     };
 });
-
-export function useLogoStoreFetchService(pinia?: Pinia) {
-    const {
-        loadLogoConfig,
-    } = useLogoStore(pinia);
-
-    return {
-        loadLogoConfig,
-    };
-}

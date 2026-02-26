@@ -1,3 +1,5 @@
+import { routeNames } from "@router/routeNames";
+
 import { BOTTOM_MENU, CUSTOM_PAGE_TYPE, PAGE, TOP_MENU_TYPE } from "../consts/staticPages";
 import type { IPageCMSPrepare } from "../models/CMS";
 import type { IPageItemConfig } from "../services/api/DTO/CMS";
@@ -42,4 +44,19 @@ export function filterStaticPages(allPages) {
             return STATIC_PAGE_CATEGORIES.includes(categoryItem);
         });
     });
+}
+
+export function resolveUrlFromRoute(route: { path: string; name?: string; meta?: { metaUrl?: string } }): string {
+    if (route?.meta?.metaUrl) {
+        return route.meta.metaUrl;
+    }
+
+    if (route?.name === routeNames.main) {
+        return "/home";
+    }
+    return route?.path ?? "";
+}
+
+export function normalizeUrl(url: string): string {
+    return url.replace(/^\/+|\/+$/g, "");
 }

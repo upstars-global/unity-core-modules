@@ -1,5 +1,7 @@
 import type { IResult } from "ua-parser-js";
 
+import { IbizaKeysValidation } from "./enums/ibiza";
+
 export interface IMapImages {
     img: string;
     imgRetina: string;
@@ -67,7 +69,8 @@ export interface IFieldConfig {
 export interface IPlayerFieldsInfo {
     "fields": IFieldConfig[];
     contexts: {
-        [key: EnumContextFields]: EnumFormFields[];
+        [K in EnumContextFields]: EnumFormFields[];
+    } & {
         payment_systems: Record<string, {
             base: {
                 "deposit": EnumFormFields
@@ -105,3 +108,9 @@ export type OddsType =
     | "american"
     | "indonesian"
     | "malaysian";
+
+export interface IRespIbizaService {
+    errors: {
+        message: IbizaKeysValidation;
+    };
+}

@@ -1,33 +1,37 @@
-import { ID_GROUP_FOR_MULTI_ACC, TEST_GROUP_ID, VIP_STATUSES } from "@config/user-statuses";
-import { STATUSES, VIP_CLUB_STATUSES } from "@config/vip-clubs";
+import {
+    ALL_LEVELS,
+    ID_CASHBOX_ONBOARD_DONE,
+    TEST_GROUP_ID,
+} from "@config/user-statuses";
+import { VIP_CLUB_STATUSES } from "@config/vip-clubs";
+import { getUserIsDiamond, getUserVipGroup } from "@helpers/user";
+import type { ILevel } from "@types/levels";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
-import type { IUserLevelInfo } from "../../models/levels";
 import type { IUserStatus, UserGroup } from "../../models/user";
 import { IVipManager } from "../../models/vipManagers";
-import { loadManagersConfigReq } from "../../services/api/requests/configs";
-import { addPlayerToGroup } from "../../services/api/requests/player";
 import { useLevelsStore } from "../levels/levelsStore";
 import { useUserInfo } from "./userInfo";
 
 export const useUserStatuses = defineStore("userStatuses", () => {
     const userStore = useUserInfo();
     const { getUserInfo } = storeToRefs(userStore);
+    const userManager = ref<IVipManager | null>(null);
+    const socialNetworkAuthGroups = ref<number[]>([]);
+    const availableBonuses = ref<boolean | null>(null);
 
-    const userManager = ref<IVipManager>();
-
-    const getUserLevelInfo = computed<IUserLevelInfo | Record<string, unknown>>(() => {
+    const getUserLevelInfo = computed<ILevel>(() => {
         const levelsStore = useLevelsStore();
         const { id } = getUserInfo.value?.statuses?.find((group) => {
             return !Number(group.id);
-        }) || {} as IUserLevelInfo;
+        }) || {} as IUserStatus;
 
         if (!id) {
-            return {} as IUserLevelInfo;
+            return {} as ILevel;
         }
 
-        return levelsStore.getLevelsById(id) as IUserLevelInfo;
+        return levelsStore.getLevelsById(id);
     });
 
     const getUserStatuses = computed<IUserStatus[]>(() => {
@@ -44,50 +48,57 @@ export const useUserStatuses = defineStore("userStatuses", () => {
     });
 
     const isMultiAccount = computed<boolean>(() => {
-        return getUserGroups.value.includes(ID_GROUP_FOR_MULTI_ACC);
+        if (availableBonuses.value === null) {
+            return false;
+        }
+
+        return !availableBonuses.value;
     });
 
-    const isVip = computed<boolean>(() => {
-        return VIP_STATUSES.some((status) => getUserGroups.value.includes(status));
+    const userVipGroup = computed<string | undefined>(() => {
+        return getUserVipGroup(getUserGroups.value);
+    });
+
+    const isVip = computed<boolean>(() => Boolean(userVipGroup.value));
+
+    const userVipStatus = computed<string | null>(() => {
+        return userVipGroup.value ? VIP_CLUB_STATUSES[userVipGroup.value] : null;
+    });
+
+    const getUserLevelId = computed(() => {
+        return ALL_LEVELS.find((level) => getUserGroups.value.includes(level));
     });
 
     const isDiamond = computed<boolean>(() => {
-        return getUserGroups.value.includes(STATUSES.DIAMOND.id);
+        return getUserIsDiamond(userVipGroup.value);
     });
 
-    const userVipStatus = computed<string>(() => {
-        const statusGroup = VIP_STATUSES.find((status) => getUserGroups.value.includes(status));
-
-        // @ts-expect-error Type 'undefined' cannot be used as an index type
-        return VIP_CLUB_STATUSES[statusGroup];
-    });
-
-    // @ts-expect-error No overload matches this call.
-    const userVipGroup = computed<number>(() => {
-        return VIP_STATUSES.find((status) => getUserGroups.value.includes(status));
+    const isRegisteredViaSocialNetwork = computed<boolean>(() => {
+        return socialNetworkAuthGroups.value.some((status: number) => getUserGroups.value.includes(status));
     });
 
     const getUserManager = computed(() => {
         return userManager.value;
     });
 
-    async function addUserToGroup(groupForAdding: string | number) {
-        if (!getUserGroups.value.includes(groupForAdding)) {
-            await addPlayerToGroup(groupForAdding);
-            userStore.addUserGroup({ id: groupForAdding, name: "" });
-        }
-    }
+    const isCashboxOnboardDone = computed(() => {
+        return getUserGroups.value.includes(ID_CASHBOX_ONBOARD_DONE);
+    });
 
-    async function loadUserManager() {
-        if (userManager.value) {
-            return getUserManager.value;
-        }
-        userManager.value = await loadManagersConfigReq(getUserGroups.value);
-        return userManager.value;
+    function setUserManager(manager: IVipManager) {
+        userManager.value = manager;
     }
 
     function clearUserManager() {
         userManager.value = null;
+    }
+
+    function setSocialNetworkAuthGroups(groups: number[]) {
+        socialNetworkAuthGroups.value = groups;
+    }
+
+    function setAvailableBonuses(value: boolean) {
+        availableBonuses.value = value;
     }
 
     return {
@@ -98,12 +109,16 @@ export const useUserStatuses = defineStore("userStatuses", () => {
         isMultiAccount,
         isVip,
         isDiamond,
+        isCashboxOnboardDone,
+        userManager,
         getUserManager,
+        setUserManager,
         userVipStatus,
         userVipGroup,
-
-        addUserToGroup,
-        loadUserManager,
+        isRegisteredViaSocialNetwork,
+        getUserLevelId,
+        setSocialNetworkAuthGroups,
         clearUserManager,
+        setAvailableBonuses,
     };
 });

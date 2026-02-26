@@ -1,50 +1,23 @@
-import { routeNames } from "@router/routeNames";
-import { metaDataSSR } from "@theme/configs/meta";
-import { defineStore, type Pinia, storeToRefs } from "pinia";
+
+import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
 import { enableCategoriesPage } from "../consts/cms";
-import { log } from "../controllers/Logger";
-import type { TemplateType } from "../helpers/replaceStringHelper";
-import replaceStringHelper from "../helpers/replaceStringHelper";
-import { prepareMapStaticPages } from "../helpers/staticPages";
-import { CurrentPage, type ICurrentPage, type IPageCMSPrepare } from "../models/CMS";
+import { replaceCurrentYearPlaceholder } from "../helpers/replaceStringHelper";
+import { type ICurrentPage, ICurrentPageMeta, type IPageCMSPrepare } from "../models/CMS";
 import type { ISnippetItemCMS } from "../services/api/DTO/CMS";
-import { loadCMSPagesReq, loadCMSSnippetsReq, loadMetaSEOReq, loadPageContentFromCmsReq } from "../services/api/requests/CMS";
-import { useMultilangStore } from "../store/multilang";
+import { loadPageContentFromCmsReq } from "../services/api/requests/CMS";
 
-interface ISeoMeta {
-    json?: string;
-    metaDescription: string;
-    metaTitle: string;
-    metaKeywords?: string;
-    content?: string;
-}
-
-function replaceCurrentYearPlaceholder(template: TemplateType) {
-    return replaceStringHelper({
-        template,
-        replaceString: "{current_year}",
-        replaceValue: new Date().getFullYear().toString(),
-    });
-}
 
 export const useCMS = defineStore("CMS", () => {
     const staticPages = ref<IPageCMSPrepare[]>([]);
     const snippets = ref<ISnippetItemCMS[]>([]);
-    const { getUserLocale } = storeToRefs(useMultilangStore());
-
-    async function loadStaticPages({ reload } = { reload: false }) {
-        if (staticPages.value.length && !reload) {
-            return staticPages.value;
-        }
-
-        const pages = await loadCMSPagesReq(getUserLocale.value);
-        if (pages) {
-            staticPages.value = prepareMapStaticPages(pages);
-        }
-        return pages;
-    }
+    const currentStaticPage = ref<ICurrentPage | null>();
+    const contentCurrentPage = ref<Record<string, ICurrentPage>>({});
+    const seoMeta = ref<Record<string, ICurrentPageMeta>>({});
+    const seoCurrentDescription = ref<string>("");
+    const inflight = new Map<string, ReturnType<typeof loadPageContentFromCmsReq>>();
+    const noIndex = ref<boolean>(false);
 
     const getStaticPages = computed(() => {
         return staticPages.value.filter((page) => {
@@ -72,20 +45,6 @@ export const useCMS = defineStore("CMS", () => {
         });
     });
 
-    async function loadCMSSnippets({ reload = false } = {}) {
-        if (!reload && snippets.value.length) {
-            return snippets.value;
-        }
-
-        const data = await loadCMSSnippetsReq(getUserLocale.value);
-
-        if (data) {
-            snippets.value = data;
-        }
-
-        return data;
-    }
-
     const getSeoMainPageFooter = computed(() => {
         const snippetsId = "footer-content";
 
@@ -96,131 +55,57 @@ export const useCMS = defineStore("CMS", () => {
         return replaceCurrentYearPlaceholder(template);
     });
 
-    const currentStaticPage = ref<ICurrentPage | null>();
-    const contentCurrentPage = ref<string>("");
-    const seoMeta = ref<Record<string, ISeoMeta>>({});
-    const pagesContent = ref<Record<string, ICurrentPage>>({});
 
-    function setSeoMeta({ meta, url }: { meta: ISeoMeta, url: string }) {
+    function setSeoMeta({ meta, url }: { meta: ICurrentPageMeta, url: string }) {
         if (meta && meta.metaTitle) {
             seoMeta.value = { ...seoMeta.value, [url]: meta };
         }
     }
-    function setPageContent({ content, url }: {content: ICurrentPage, url: string}) {
-        pagesContent.value = { ...pagesContent.value, [url]: content };
+
+    function setPageContent({ page, url }: { page: ICurrentPage, url: string }) {
+        contentCurrentPage.value[url] = page;
     }
 
-    async function loadCurrentStaticPage(slug: string) {
-        currentStaticPage.value = null;
+    function setCurrentStaticPage(page: ICurrentPage | null) {
+        currentStaticPage.value = page;
+    }
 
+    function ensureStaticIfReady(slug: string): string | void {
         if (staticPages.value.length && !hasStaticPageInCMS(slug)) {
-            return `${slug} page is not StaticPages`;
+            return `${ slug } page is not StaticPages`;
         }
 
-        try {
-            const data = await loadPageContentFromCmsReq(slug, getUserLocale.value);
-            if (!data) {
-                return `${slug} page is not found`;
-            }
-
-            const page: ICurrentPage = replaceCurrentYearPlaceholder(new CurrentPage(data));
-
-            currentStaticPage.value = page;
-
-            setSeoMeta({ meta: page.meta, url: data.path });
-
-            contentCurrentPage.value = data.content;
-
-            return page;
-        } catch (err) {
-            log.error("LOAD_CURRENT_STATIC_PAGE", err);
-            throw err;
-        }
+        return;
     }
 
-    async function loadMetaSEO(route: { path: string, name: string, meta?: { metaUrl: string } }) {
-        let url = route.path;
-
-        if (route.meta && route.meta.metaUrl) {
-            url = route.meta.metaUrl;
-        }
-
-        if (route.name === routeNames.main) {
-            url = "/home";
-        }
-
-        let meta = seoMeta.value[url];
-        currentStaticPage.value = pagesContent.value[url];
-        if (meta) {
-            return Promise.resolve(meta);
-        }
-
-        const slugPage = url.replace(/\/$/, "");
-        if (!hasStaticPageInCMS(slugPage)) {
-            return `${slugPage} page is not StaticPages`;
-        }
-
-        try {
-            const data = await loadMetaSEOReq(url, getUserLocale.value);
-
-            if (!data) {
-                return `${slugPage} page data is not found`;
-            }
-
-            const blocks = data.blocks;
-
-            if (blocks) {
-                meta = {
-                    metaTitle: blocks.title,
-                    metaDescription: blocks.description,
-                    content: data.content,
-                    json: blocks.json,
-                };
-            } else {
-                const metaDataSSRPrepare = metaDataSSR(getUserLocale.value);
-
-                meta = {
-                    metaTitle: metaDataSSRPrepare?.title,
-                    metaDescription: metaDataSSRPrepare?.description,
-                    content: metaDataSSRPrepare?.content,
-                };
-            }
-
-            meta = replaceCurrentYearPlaceholder(meta) as ISeoMeta;
-            const pageContent = replaceCurrentYearPlaceholder(new CurrentPage(data));
-
-            setSeoMeta({ meta, url });
-            setPageContent({ content: pageContent, url });
-            currentStaticPage.value = pageContent;
-
-            return meta;
-        } catch (err) {
-            log.error("LOAD_SEO_META", err);
-        }
-    }
-
-    // research: what is it and why this is? it is legacy and maybe we can use `currentStaticPage.metaDescription`
-    const seoCurrentDescription = ref<string>("");
-
+    // research: what is this and for what it is/it is legacy and maybe we can use `currentStaticPage.metaDescription`
     function setCurrentPageSeoDescription(description: string) {
         seoCurrentDescription.value = description;
     }
-
-    const noIndex = ref<boolean>(false);
 
     function setNoIndex(noIndexData: boolean) {
         noIndex.value = noIndexData;
     }
 
+    function setStaticPages(pages: IPageCMSPrepare[]) {
+        staticPages.value = pages;
+    }
+
+    function setSnippets(snippetsData: ISnippetItemCMS[]) {
+        snippets.value = snippetsData;
+    }
+
     return {
         staticPages,
         snippets,
+        inflight,
 
-        loadStaticPages,
-        loadCMSSnippets,
-        loadCurrentStaticPage,
+        setStaticPages,
+        setSnippets,
+        setCurrentStaticPage,
         currentStaticPage,
         contentCurrentPage,
+        setPageContent,
 
         setSeoMeta,
         seoMeta,
@@ -228,8 +113,7 @@ export const useCMS = defineStore("CMS", () => {
         getStaticPageBySlug,
         getUnhiddenStaticPages,
         getSeoMainPageFooter,
-
-        loadMetaSEO,
+        ensureStaticIfReady,
 
         seoCurrentDescription,
         setCurrentPageSeoDescription,
@@ -238,12 +122,3 @@ export const useCMS = defineStore("CMS", () => {
         setNoIndex,
     };
 });
-
-export function useCMSFetchService(pinia?: Pinia) {
-    const { loadStaticPages, loadCMSSnippets } = useCMS(pinia);
-
-    return {
-        loadStaticPages,
-        loadCMSSnippets,
-    };
-}

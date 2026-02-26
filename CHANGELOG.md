@@ -1,3 +1,946 @@
+## [1.73.0](https://github.com/upstars-global/unity-core-modules/compare/v1.72.1...v1.73.0) (2026-02-26)
+
+### 🚀 Features
+
+* **UN-2181:** new way to detect multiacc block ([#319](https://github.com/upstars-global/unity-core-modules/issues/319))
+ ([432f3fc](https://github.com/upstars-global/unity-core-modules/commit/432f3fc6b5abfed0dd1a520137366f4e37d33eb6))
+
+
+
+    * UN-2181 DTO update
+
+    * UN-2181 new multiacc endpoint
+
+    * UN-2181 replace unit test
+
+    * UN-2181 educe api call on withdraw tab
+
+## [1.72.1](https://github.com/upstars-global/unity-core-modules/compare/v1.72.0...v1.72.1) (2026-02-24)
+
+### ⚡ Performance
+
+* patch/minor update dependencies
+ ([79ec718](https://github.com/upstars-global/unity-core-modules/commit/79ec71894b22f321b33c1f79ece948b5b2147dcf))
+
+## [1.72.0](https://github.com/upstars-global/unity-core-modules/compare/v1.71.1...v1.72.0) (2026-02-23)
+
+### 🚀 Features
+
+* **UN-367:** auth service, cleanup all stores from requests, fix dependencies cycle ([#313](https://github.com/upstars-global/unity-core-modules/issues/313))
+ ([ae3f660](https://github.com/upstars-global/unity-core-modules/commit/ae3f660140613c46f93c51bb4f65b8404b4225dd))
+
+
+
+    * feat: refactor auth store
+
+    * feat: games common store requests to service
+
+    * feat: gamesProviders store requests to service
+
+    * feat: gamesFavorite store requests to service
+
+    * feat: cms store requests to service
+
+    * fix: paths
+
+    * feat: gameCurrent store requests to service
+
+    * feat: gamesCategory store requests to service
+
+    * feat: winnersJackpot store requests to service
+
+    * feat: winners store requests to service
+
+    * feat: managePages store requests to service
+
+    * feat: logoStore requests to service
+
+    * feat: banners store requests to service
+
+    * feat: remove fetch services
+
+    * fix: dependencies cycle
+
+    * fix: tests
+
+    * test: winnersJackpot store test
+
+    * test: fix report
+
+    * fix: tests
+
+    * fix: paths
+
+    * fix
+
+## [1.71.1](https://github.com/upstars-global/unity-core-modules/compare/v1.71.0...v1.71.1) (2026-02-19)
+
+### 🐛 Bug Fixes
+
+* UN-2365 set player info after confirm email ([#318](https://github.com/upstars-global/unity-core-modules/issues/318))
+ ([f54614e](https://github.com/upstars-global/unity-core-modules/commit/f54614eb40fa45dffeca78b5216617b4eab0925b))
+
+## [1.71.0](https://github.com/upstars-global/unity-core-modules/compare/v1.70.1...v1.71.0) (2026-02-17)
+
+### 🚀 Features
+
+* (UN-2288): replace featureFlags with $defaultProjectConfig and add ConfigPlugin ([#314](https://github.com/upstars-global/unity-core-modules/issues/314))
+ ([3f94149](https://github.com/upstars-global/unity-core-modules/commit/3f94149afee8365e93c524d0c083b4fd5f563d66))
+
+
+
+    * feat: (UN-2288): replace featureFlags with $defaultProjectConfig and add ConfigPlugin
+
+    * refactor: remove debug console logs and adjust test mocks for `$defaultProjectConfig`
+
+    * refactor: remove unused featureFlags import and update test mocks
+
+    * refactor: remove redundant newline in test mock setup
+
+## [1.70.1](https://github.com/upstars-global/unity-core-modules/compare/v1.70.0...v1.70.1) (2026-02-10)
+
+### 🐛 Bug Fixes
+
+* UN-2318 send SeasonInfo request only for vip users ([#317](https://github.com/upstars-global/unity-core-modules/issues/317))
+ ([c684264](https://github.com/upstars-global/unity-core-modules/commit/c684264ba86d81bfc0b66ce4296ce15750eb8401))
+
+## [1.70.0](https://github.com/upstars-global/unity-core-modules/compare/v1.69.0...v1.70.0) (2026-02-09)
+
+### 🚀 Features
+
+* **UN-2146:** check user access request and service  ([#309](https://github.com/upstars-global/unity-core-modules/issues/309))
+ ([7b4ecd6](https://github.com/upstars-global/unity-core-modules/commit/7b4ecd64c5d550691a4d1a28f0bf7b44da3c2bef))
+
+
+
+    * feat(UN-2146): check user access request and service
+* **UN-2146:** check user access request and service ([#315](https://github.com/upstars-global/unity-core-modules/issues/315))
+ ([9f8621d](https://github.com/upstars-global/unity-core-modules/commit/9f8621ded0fcc00a7765cdc3e622cc8252e55a05))
+
+
+
+    * fix: yarn lock
+* **UN-2146:** check user access request and service ([#316](https://github.com/upstars-global/unity-core-modules/issues/316))
+ ([e920c14](https://github.com/upstars-global/unity-core-modules/commit/e920c1420dacc32cd18945aa12e54c7dc1271e64))
+
+## [1.69.0](https://github.com/upstars-global/unity-core-modules/compare/v1.68.1...v1.69.0) (2026-02-09)
+
+### 🚀 Features
+
+* UN-1988 add PORTOFRANCO season-start api ([#312](https://github.com/upstars-global/unity-core-modules/issues/312))
+ ([fedc6da](https://github.com/upstars-global/unity-core-modules/commit/fedc6da6d60240d62784d9530993baead848a3b1))
+
+
+
+    * feat: UN-1988 add PORTOFRANCO season-start api
+
+    * feat: UN-1988 add PORTOFRANCO season-start api
+
+## [1.68.1](https://github.com/upstars-global/unity-core-modules/compare/v1.68.0...v1.68.1) (2026-01-29)
+
+### 🔨 Refactoring
+
+* UN-2102 refactor loot box interfaces ([#307](https://github.com/upstars-global/unity-core-modules/issues/307))
+ ([3ab174a](https://github.com/upstars-global/unity-core-modules/commit/3ab174af0958a9f015e0f71393841267b5c7d94f))
+
+
+
+    * refactor: UN-2102 refactor loot box interfaces
+
+## [1.68.0](https://github.com/upstars-global/unity-core-modules/compare/v1.67.0...v1.68.0) (2026-01-27)
+
+### 🚀 Features
+
+* UN-2105 Доробки по ачівкам + доставити на прод ([#299](https://github.com/upstars-global/unity-core-modules/issues/299))
+ ([221a716](https://github.com/upstars-global/unity-core-modules/commit/221a716d29f0f4df67d8af6533c22de44de4c0b1))
+
+## [1.67.0](https://github.com/upstars-global/unity-core-modules/compare/v1.66.4...v1.67.0) (2026-01-26)
+
+### 🚀 Features
+
+* **UN-348:** refactor tournamentsStore and cover it with tests ([#304](https://github.com/upstars-global/unity-core-modules/issues/304))
+ ([7e570c9](https://github.com/upstars-global/unity-core-modules/commit/7e570c9a368ab2a758a997a939fcb84d20308886))
+
+## [1.66.4](https://github.com/upstars-global/unity-core-modules/compare/v1.66.3...v1.66.4) (2026-01-20)
+
+### 🐛 Bug Fixes
+
+* userBalance.ts minor ([#308](https://github.com/upstars-global/unity-core-modules/issues/308))
+ ([00eb3ac](https://github.com/upstars-global/unity-core-modules/commit/00eb3ac7aed9c6116d3a107debe5876875745410))
+
+
+
+    userBalance.ts fix minor
+
+## [1.66.3](https://github.com/upstars-global/unity-core-modules/compare/v1.66.2...v1.66.3) (2026-01-20)
+
+### 🧪 Testing
+
+* UN-1958 [unit-tests] userBalance
+ ([dceda7e](https://github.com/upstars-global/unity-core-modules/commit/dceda7ef32046b24fd757638d8b363aa40d0a157))
+
+## [1.66.2](https://github.com/upstars-global/unity-core-modules/compare/v1.66.1...v1.66.2) (2026-01-20)
+
+### 🐛 Bug Fixes
+
+* **UN-2143:** promisify addScript method to reject error on script load for cashbox metrics feature  ([#306](https://github.com/upstars-global/unity-core-modules/issues/306))
+ ([805a407](https://github.com/upstars-global/unity-core-modules/commit/805a4071a2421c33984cc735ba0608c3850c8217))
+
+
+
+    fix: metrics
+
+## [1.66.1](https://github.com/upstars-global/unity-core-modules/compare/v1.66.0...v1.66.1) (2026-01-19)
+
+### 🐛 Bug Fixes
+
+* **UN-2113:** use only less than 0 current_value_amount_cents for limit ([#298](https://github.com/upstars-global/unity-core-modules/issues/298))
+ ([f52f5d6](https://github.com/upstars-global/unity-core-modules/commit/f52f5d6ea814fc590258541573ba1780617dfb85))
+
+
+
+    fix(UN-2113): use only less than 0 current_value_amount_cents for limit reach calculation
+
+## [1.66.0](https://github.com/upstars-global/unity-core-modules/compare/v1.65.0...v1.66.0) (2026-01-15)
+
+### 🚀 Features
+
+* **UN-1959:** refactor userInfo store and cover it with tests ([#277](https://github.com/upstars-global/unity-core-modules/issues/277))
+ ([a2920be](https://github.com/upstars-global/unity-core-modules/commit/a2920beca65739b9ae306c2e27528d7bcea4ac47))
+
+
+
+    * feat(UN-1959): refactor userInfo store and cover it with tests
+
+    * fix: review comments
+
+    * fix: tests
+
+    * fix: review comments
+
+    * fix
+
+    * fix: user service
+
+    * fix: tests
+
+## [1.65.0](https://github.com/upstars-global/unity-core-modules/compare/v1.64.0...v1.65.0) (2026-01-15)
+
+### 🚀 Features
+
+* UN-1997 add manageWithdraw config ([#295](https://github.com/upstars-global/unity-core-modules/issues/295))
+ ([d06bc25](https://github.com/upstars-global/unity-core-modules/commit/d06bc256982c9e6f9f46eefe41a891d208de9064))
+
+
+
+    * feat: UN-1997 add manageWithdraw config
+
+## [1.64.0](https://github.com/upstars-global/unity-core-modules/compare/v1.63.0...v1.64.0) (2026-01-14)
+
+### 🚀 Features
+
+* UN-2000 add daily-bonus-config ([#292](https://github.com/upstars-global/unity-core-modules/issues/292))
+ ([8ab8ed4](https://github.com/upstars-global/unity-core-modules/commit/8ab8ed411a57f7976e99acb383de505ab9495aee))
+
+
+
+    * feat: UN-2000 add daily-bonus-config
+
+## [1.63.0](https://github.com/upstars-global/unity-core-modules/compare/v1.62.2...v1.63.0) (2026-01-13)
+
+### 🚀 Features
+
+* **UN-1921:** cache configs ([#273](https://github.com/upstars-global/unity-core-modules/issues/273))
+ ([3f3dddb](https://github.com/upstars-global/unity-core-modules/commit/3f3dddb63f7f2b3af0b4a2101a0517da31e7463c))
+
+
+
+    * UN-1921 cache configs
+
+    * added log
+
+    * added log
+
+    * remove log
+
+## [1.62.2](https://github.com/upstars-global/unity-core-modules/compare/v1.62.1...v1.62.2) (2026-01-13)
+
+### 🧪 Testing
+
+* UN-1962 [unit-tests] vipAdventures ([#290](https://github.com/upstars-global/unity-core-modules/issues/290))
+ ([8ecaa39](https://github.com/upstars-global/unity-core-modules/commit/8ecaa39867c7cf5510b2d80e54f5ea3657b9c649))
+
+## [1.62.1](https://github.com/upstars-global/unity-core-modules/compare/v1.62.0...v1.62.1) (2026-01-12)
+
+### ⏪ Reverts
+
+* "UN-2035 fix and refactor achiemvents conditions" ([#301](https://github.com/upstars-global/unity-core-modules/issues/301))
+ ([ade3f2a](https://github.com/upstars-global/unity-core-modules/commit/ade3f2a89473a76fac79d1fb3d300ec21cd56570))
+
+, closes [#296](https://github.com/upstars-global/unity-core-modules/issues/)
+
+## [1.62.0](https://github.com/upstars-global/unity-core-modules/compare/v1.61.2...v1.62.0) (2026-01-12)
+
+### 🚀 Features
+
+* (UN-2035) fix and refactor achiemvents conditions ([#296](https://github.com/upstars-global/unity-core-modules/issues/296))
+ ([05a5c4c](https://github.com/upstars-global/unity-core-modules/commit/05a5c4c5994ffde42f88cb6777d53829d8e57e4d))
+
+
+
+    * UN-2035 add debug info
+
+    * UN-2035 simplify conditions
+
+## [1.61.2](https://github.com/upstars-global/unity-core-modules/compare/v1.61.1...v1.61.2) (2026-01-12)
+
+### 🔨 Refactoring
+
+* UN-2066: chore: update API endpoints to use `/api-fe` prefix and appl… ([#284](https://github.com/upstars-global/unity-core-modules/issues/284))
+ ([27281a5](https://github.com/upstars-global/unity-core-modules/commit/27281a54a266ed9aea785947701772b0873264d4))
+
+
+
+    UN-2066: chore: update API endpoints to use `/api-fe` prefix and apply consistent code formatting
+
+    Co-authored-by: d-tashchi <kabak133@gmail.com>
+
+## [1.61.0](https://github.com/upstars-global/unity-core-modules/compare/v1.60.0...v1.61.0) (2026-01-08)
+
+### 🚀 Features
+
+* **UN-1961:** refactor userStatuses store and cover it with tests ([#281](https://github.com/upstars-global/unity-core-modules/issues/281))
+ ([e1101e5](https://github.com/upstars-global/unity-core-modules/commit/e1101e56d696a410e9ff13a8ae5b9478e5244be8))
+
+## [1.60.0](https://github.com/upstars-global/unity-core-modules/compare/v1.59.0...v1.60.0) (2026-01-06)
+
+### 🚀 Features
+
+* **UN-1960:** refactore userLimits store and cover it with tests ([#294](https://github.com/upstars-global/unity-core-modules/issues/294))
+ ([87b5d1e](https://github.com/upstars-global/unity-core-modules/commit/87b5d1e403450d5afdc07f8e54f67f36fa41cd46))
+
+, closes [#286](https://github.com/upstars-global/unity-core-modules/issues/)
+
+## [1.59.0](https://github.com/upstars-global/unity-core-modules/compare/v1.58.0...v1.59.0) (2026-01-05)
+
+### 🚀 Features
+
+* (UN-2089) adventure - compare without hours ([#293](https://github.com/upstars-global/unity-core-modules/issues/293))
+ ([8bbbb15](https://github.com/upstars-global/unity-core-modules/commit/8bbbb15bc669e4e47a1fab06c03126a2da57758a))
+
+## [1.58.0](https://github.com/upstars-global/unity-core-modules/compare/v1.57.0...v1.58.0) (2025-12-30)
+
+### ⏪ Reverts
+
+* 1.57.0 ([#286](https://github.com/upstars-global/unity-core-modules/issues/286))
+ ([26063e1](https://github.com/upstars-global/unity-core-modules/commit/26063e16be1f3fdc8ef452f36389dff31bab7b23))
+
+, closes [#279](https://github.com/upstars-global/unity-core-modules/issues/)
+
+### 🚀 Features
+
+* enforce dependency cruise thresholds ([#289](https://github.com/upstars-global/unity-core-modules/issues/289))
+ ([a9a43b5](https://github.com/upstars-global/unity-core-modules/commit/a9a43b5ca574cfffbc650f78377ace0ebd2b59c2))
+
+
+
+    * feat: enforce dependency cruise thresholds
+
+    - Add `depcruise-threshold.mjs` script to validate `depcruise` results against defined error and warning limits.
+
+    - Integrate `depcruise:check` script into pre-commit and CI workflows.
+
+    - Update `package.json` with `depcruise:check` command definition.
+
+    * refactor: clean up logging in `depcruise-threshold.mjs` script
+
+## [1.56.0](https://github.com/upstars-global/unity-core-modules/compare/v1.55.3...v1.56.0) (2025-12-23)
+
+### 🚀 Features
+
+* UN-1995 add cashbox presets
+ ([8aba5c0](https://github.com/upstars-global/unity-core-modules/commit/8aba5c01c34b3c3d3e5d035866a1267dfb372d8e))
+
+## [1.55.3](https://github.com/upstars-global/unity-core-modules/compare/v1.55.2...v1.55.3) (2025-12-23)
+
+### 🐛 Bug Fixes
+
+* UN-2049 modify loadStaticPages ([#280](https://github.com/upstars-global/unity-core-modules/issues/280))
+ ([e63e792](https://github.com/upstars-global/unity-core-modules/commit/e63e79217632933d7dd36cd63a061ccca77fbcec))
+
+## [1.55.2](https://github.com/upstars-global/unity-core-modules/compare/v1.55.1...v1.55.2) (2025-12-22)
+
+### 🐛 Bug Fixes
+
+* UN-2060 check if variables exist in vip adventure config ([#282](https://github.com/upstars-global/unity-core-modules/issues/282))
+ ([5d4c4d8](https://github.com/upstars-global/unity-core-modules/commit/5d4c4d80bb2908d90e0335ec534d283f16c5265e))
+
+## [1.55.1](https://github.com/upstars-global/unity-core-modules/compare/v1.55.0...v1.55.1) (2025-12-19)
+
+### 🔧 Maintenance
+
+* UN-1967 add seasonInfo to vip config ([#276](https://github.com/upstars-global/unity-core-modules/issues/276))
+ ([0876880](https://github.com/upstars-global/unity-core-modules/commit/087688096591aa263faa02b48f9925cbd4b8f6e8))
+
+
+
+    chore: UN-1967 add seasonInfo to vip config
+
+## [1.55.0](https://github.com/upstars-global/unity-core-modules/compare/v1.54.0...v1.55.0) (2025-12-15)
+
+### 🚀 Features
+
+* **UN-349:** move user stores requests to user service and cover them with tests ([#271](https://github.com/upstars-global/unity-core-modules/issues/271))
+ ([8e21e02](https://github.com/upstars-global/unity-core-modules/commit/8e21e02dd8da316036eac3d2efd3c1f5719458bb))
+
+
+
+    * feat: refactor user stores and cover them with tests
+
+    * refactor: move requests from userSecurity and userBonusesAndCoupon stores to user service
+
+    * fix: tests
+
+    * fix: review comments
+
+## [1.54.0](https://github.com/upstars-global/unity-core-modules/compare/v1.53.1...v1.54.0) (2025-12-08)
+
+### 🚀 Features
+
+* **UN-1679:** vip adventures variables ([#272](https://github.com/upstars-global/unity-core-modules/issues/272))
+ ([8f1d54d](https://github.com/upstars-global/unity-core-modules/commit/8f1d54d4b6300c09ec59b01f738e07f15dbb3c33))
+
+
+
+    * UN-1679 vip adventure config variables
+
+    * UN-1679 export config
+
+    * UN-1679 update type
+
+    * UN-1679 update types
+
+    * fix: loadVipAdventuresConfig
+
+## [1.53.1](https://github.com/upstars-global/unity-core-modules/compare/v1.53.0...v1.53.1) (2025-12-04)
+
+### 🔧 Maintenance
+
+* UN-1832 - update interface ([#270](https://github.com/upstars-global/unity-core-modules/issues/270))
+ ([8aff95a](https://github.com/upstars-global/unity-core-modules/commit/8aff95a0b128597d2292486c839dd0f058db3fe8))
+
+## [1.53.0](https://github.com/upstars-global/unity-core-modules/compare/v1.52.0...v1.53.0) (2025-12-03)
+
+### 🚀 Features
+
+* **UN-351:** refactor jackpots store and cover it with tests ([#269](https://github.com/upstars-global/unity-core-modules/issues/269))
+ ([e326eb1](https://github.com/upstars-global/unity-core-modules/commit/e326eb1cd0fa0b6a14f559f7429e70e54f6600d0))
+
+
+
+    feat: refactor jackpots store and cover it with tests
+
+## [1.52.0](https://github.com/upstars-global/unity-core-modules/compare/v1.51.0...v1.52.0) (2025-11-25)
+
+### 🚀 Features
+
+* **UN-365:** refactor common store by moving requests to separate service file ([#263](https://github.com/upstars-global/unity-core-modules/issues/263))
+ ([8dc5ea5](https://github.com/upstars-global/unity-core-modules/commit/8dc5ea50bc141d2a44d5b904ebd0151de6d682c6))
+
+
+
+    feat: refactor common store by moving requests to separate service file
+
+## [1.51.0](https://github.com/upstars-global/unity-core-modules/compare/v1.50.2...v1.51.0) (2025-11-25)
+
+### 🚀 Features
+
+* **UN-1897:** fiat converter rates
+ ([88c5908](https://github.com/upstars-global/unity-core-modules/commit/88c59084f5cb40f1e6931b337f82ef213c88360c))
+
+
+
+    UN-1897 fix isCryptoCurrency
+
+## [1.50.2](https://github.com/upstars-global/unity-core-modules/compare/v1.50.1...v1.50.2) (2025-11-24)
+
+### 🧪 Testing
+
+* **UN-346:** achievements store types and tests ([#267](https://github.com/upstars-global/unity-core-modules/issues/267))
+ ([13dfaa8](https://github.com/upstars-global/unity-core-modules/commit/13dfaa8eed9d4669c39e2326ac1e5a0a7cdbac86))
+
+, closes [#260](https://github.com/upstars-global/unity-core-modules/issues/) [#265](https://github.com/upstars-global/unity-core-modules/issues/)
+
+## [1.50.1](https://github.com/upstars-global/unity-core-modules/compare/v1.50.0...v1.50.1) (2025-11-21)
+
+### 🐛 Bug Fixes
+
+* change test config ([#268](https://github.com/upstars-global/unity-core-modules/issues/268))
+ ([067500f](https://github.com/upstars-global/unity-core-modules/commit/067500f05ef2f87c69a4fdbd69c3c0bea8d6ca98))
+
+## [1.50.0](https://github.com/upstars-global/unity-core-modules/compare/v1.49.5...v1.50.0) (2025-11-21)
+
+### 🚀 Features
+
+* UN-1502 add config for enabled games ([#251](https://github.com/upstars-global/unity-core-modules/issues/251))
+ ([ee56db0](https://github.com/upstars-global/unity-core-modules/commit/ee56db07985676cab741ee46bd276b2764963a2d))
+
+
+
+    * UN-1502 add config for enabled games
+
+    * UN-1502 add config for enabled games
+
+    * UN-1502 add config for enabled games
+
+    * UN-1502 delete slice for test
+
+    * UN-1502 fix
+
+    * UN-1502 fix test
+
+## [1.49.5](https://github.com/upstars-global/unity-core-modules/compare/v1.49.4...v1.49.5) (2025-11-21)
+
+### 🐛 Bug Fixes
+
+* 422 по api/groups
+ ([50c4531](https://github.com/upstars-global/unity-core-modules/commit/50c4531616db7e4c4043cbcdce65701681da8b2c))
+
+
+
+    fix and refactor changeUserToGroup
+
+## [1.49.4](https://github.com/upstars-global/unity-core-modules/compare/v1.49.3...v1.49.4) (2025-11-20)
+
+### ⏪ Reverts
+
+* "test: achievements store tests ([#260](https://github.com/upstars-global/unity-core-modules/issues/260))" ([#265](https://github.com/upstars-global/unity-core-modules/issues/265))
+ ([a0bcfb3](https://github.com/upstars-global/unity-core-modules/commit/a0bcfb34bb085ec70406952a01c1c36a35a19eca))
+
+## [1.49.3](https://github.com/upstars-global/unity-core-modules/compare/v1.49.2...v1.49.3) (2025-11-20)
+
+### 🐛 Bug Fixes
+
+* UN-1930 fix get random game ([#264](https://github.com/upstars-global/unity-core-modules/issues/264))
+ ([b8ea9dd](https://github.com/upstars-global/unity-core-modules/commit/b8ea9dde5a674456bfb54c3d611851faf528e45e))
+
+## [1.49.2](https://github.com/upstars-global/unity-core-modules/compare/v1.49.1...v1.49.2) (2025-11-19)
+
+### 🧪 Testing
+
+* achievements store tests ([#260](https://github.com/upstars-global/unity-core-modules/issues/260))
+ ([cc6fdb6](https://github.com/upstars-global/unity-core-modules/commit/cc6fdb63ba9626f7c45539fd054fcc8706c2bdc6))
+
+
+
+    * test: achievements store tests
+
+    * fix
+
+## [1.49.1](https://github.com/upstars-global/unity-core-modules/compare/v1.49.0...v1.49.1) (2025-11-19)
+
+### 🧪 Testing
+
+* add log for 422 status code in changePlayerGroup
+ ([52aff57](https://github.com/upstars-global/unity-core-modules/commit/52aff573a85d908d53f8f32e2c7ee09f91569645))
+
+## [1.49.0](https://github.com/upstars-global/unity-core-modules/compare/v1.48.2...v1.49.0) (2025-11-17)
+
+### 🚀 Features
+
+* **UN-1775:** run terms popup in a main product ([#244](https://github.com/upstars-global/unity-core-modules/issues/244))
+ ([69acd24](https://github.com/upstars-global/unity-core-modules/commit/69acd24fa3d0e471cc0a8f29ff1a17af001b3629))
+
+
+
+    * feat(UN-1775): run terms popup in a main product
+
+    * fix: Pass the accept terms handler as a prop to the accept terms modal.
+
+## [1.48.2](https://github.com/upstars-global/unity-core-modules/compare/v1.48.1...v1.48.2) (2025-11-14)
+
+### 🐛 Bug Fixes
+
+* minor changeUserToGroup
+ ([ade8451](https://github.com/upstars-global/unity-core-modules/commit/ade8451973c0407facd72d6ad2eefe20faf33eb4))
+
+
+
+    UN-1902: fix 422 по api/groups
+
+## [1.48.1](https://github.com/upstars-global/unity-core-modules/compare/v1.48.0...v1.48.1) (2025-11-14)
+
+### 🐛 Bug Fixes
+
+* 422 api/groups and minor refactor
+ ([24d92dd](https://github.com/upstars-global/unity-core-modules/commit/24d92dd6caa5204be7647b16484b734e68c3c8e5))
+
+
+
+    UN-1902: 422 по api/groups
+
+## [1.48.0](https://github.com/upstars-global/unity-core-modules/compare/v1.47.0...v1.48.0) (2025-11-12)
+
+### 🚀 Features
+
+* add log for /api/player/groups
+ ([57cca86](https://github.com/upstars-global/unity-core-modules/commit/57cca8621844029daf6798628d1600667aebc0e3))
+
+, closes [#256](https://github.com/upstars-global/unity-core-modules/issues/)
+
+## [1.47.0](https://github.com/upstars-global/unity-core-modules/compare/v1.46.1...v1.47.0) (2025-11-12)
+
+### 🚀 Features
+
+* Un 1776 ([#249](https://github.com/upstars-global/unity-core-modules/issues/249))
+ ([6bfc95b](https://github.com/upstars-global/unity-core-modules/commit/6bfc95b28c7aa4ac41bcc503de0e722bff18115c))
+
+
+
+    * UN-1776 mart for king
+
+    * UN-1776 mart for king
+
+    * UN-1874 UN-1871 add sort for comp point rates
+
+    * UN-1874 UN-1871 add sort for comp point rates
+
+    * UN-1776 disable rates sort
+
+## [1.46.1](https://github.com/upstars-global/unity-core-modules/compare/v1.46.0...v1.46.1) (2025-11-10)
+
+### 🐛 Bug Fixes
+
+* add filter for getDepositGiftGroupID ([#255](https://github.com/upstars-global/unity-core-modules/issues/255))
+ ([9a068df](https://github.com/upstars-global/unity-core-modules/commit/9a068df9afaaffb8a286db0f33edc21c63ebb667))
+
+## [1.46.0](https://github.com/upstars-global/unity-core-modules/compare/v1.45.0...v1.46.0) (2025-11-10)
+
+### 🚀 Features
+
+* add choosing bonus cashbox
+ ([6a5063e](https://github.com/upstars-global/unity-core-modules/commit/6a5063e1aa96746231a34810edd0c96163089f55))
+
+
+
+    https://upstars.atlassian.net/browse/UN-1733
+
+## [1.45.0](https://github.com/upstars-global/unity-core-modules/compare/v1.44.2...v1.45.0) (2025-11-07)
+
+### 🚀 Features
+
+* **UN-1804:** Replace payment endpoint with pagination ([#250](https://github.com/upstars-global/unity-core-modules/issues/250))
+ ([fdc5530](https://github.com/upstars-global/unity-core-modules/commit/fdc5530a3b862e2d5b25fff3315133b1f44fc263))
+
+
+
+    * UN-1804 WIP
+
+    * UN-1804 WIP
+
+    * UN-1804
+
+    * UN-1804
+
+    * UN-1804
+
+    * UN-1804 correct pagination size
+
+    * UN-1804 default 50 size
+
+    * UN-1804 logs
+
+    * UN-1804 change to 20
+
+    * UN-1804
+
+    * UN-1804
+
+## [1.44.2](https://github.com/upstars-global/unity-core-modules/compare/v1.44.1...v1.44.2) (2025-11-06)
+
+### 🐛 Bug Fixes
+
+* UN-1874 fix disabled provider config ([#254](https://github.com/upstars-global/unity-core-modules/issues/254))
+ ([1f52704](https://github.com/upstars-global/unity-core-modules/commit/1f527041a35e6a4912d4f89b27e205e3c657e48c))
+
+## [1.44.1](https://github.com/upstars-global/unity-core-modules/compare/v1.44.0...v1.44.1) (2025-11-06)
+
+### ⏪ Reverts
+
+* Revert "[#242](https://github.com/upstars-global/unity-core-modules/issues/242)" ([#252](https://github.com/upstars-global/unity-core-modules/issues/252))
+ ([eb29c91](https://github.com/upstars-global/unity-core-modules/commit/eb29c9190502ce0152c01f368c6334f531bb110f))
+
+
+
+### 🐛 Bug Fixes
+
+* filter games devices by user device ([#242](https://github.com/upstars-global/unity-core-modules/issues/242))
+ ([5d39f00](https://github.com/upstars-global/unity-core-modules/commit/5d39f00cddedaf8ea5bb9d21e0b65c7985597fb8))
+
+
+
+    * fix: filter games by device
+
+    * fix: game orientation detection
+* **UN-1797:** filter games devices by user device ([#253](https://github.com/upstars-global/unity-core-modules/issues/253))
+ ([2aaf465](https://github.com/upstars-global/unity-core-modules/commit/2aaf465930abb837d3e77ab9b1ece7bfb238a76d))
+
+## [1.44.0](https://github.com/upstars-global/unity-core-modules/compare/v1.43.1...v1.44.0) (2025-11-05)
+
+### 🚀 Features
+
+* Un 113 ([#248](https://github.com/upstars-global/unity-core-modules/issues/248))
+ ([86fcfae](https://github.com/upstars-global/unity-core-modules/commit/86fcfae6bc41701b30cd237c91ad92ed1d8b1fd9))
+
+## [1.43.1](https://github.com/upstars-global/unity-core-modules/compare/v1.43.0...v1.43.1) (2025-10-30)
+
+### ⏪ Reverts
+
+* Revert "Un 113" ([#247](https://github.com/upstars-global/unity-core-modules/issues/247))
+ ([0b944e3](https://github.com/upstars-global/unity-core-modules/commit/0b944e3729a98c9693a5fec6251a41b5f707f71e))
+
+, closes [#238](https://github.com/upstars-global/unity-core-modules/issues/)
+
+## [1.43.0](https://github.com/upstars-global/unity-core-modules/compare/v1.42.2...v1.43.0) (2025-10-30)
+
+### 🚀 Features
+
+* Un 113 ([#238](https://github.com/upstars-global/unity-core-modules/issues/238))
+ ([55b1b5c](https://github.com/upstars-global/unity-core-modules/commit/55b1b5c79fef968df792ee6e2d62a66bd9c594a9))
+
+
+
+    * UN-113 WIP ensureStoreData
+
+## [1.42.2](https://github.com/upstars-global/unity-core-modules/compare/v1.42.1...v1.42.2) (2025-10-29)
+
+### 🐛 Bug Fixes
+
+* **UN-1791:** execute cms store request once and cache response  ([#246](https://github.com/upstars-global/unity-core-modules/issues/246))
+ ([96f0bca](https://github.com/upstars-global/unity-core-modules/commit/96f0bcadfc095909783f0988c49d8bdeb53474ed))
+
+, closes [#243](https://github.com/upstars-global/unity-core-modules/issues/) [#245](https://github.com/upstars-global/unity-core-modules/issues/)
+
+## [1.42.1](https://github.com/upstars-global/unity-core-modules/compare/v1.42.0...v1.42.1) (2025-10-29)
+
+### ⏪ Reverts
+
+* Revert "fix(UN-1791) ([#243](https://github.com/upstars-global/unity-core-modules/issues/243))" ([#245](https://github.com/upstars-global/unity-core-modules/issues/245))
+ ([d6b0cf8](https://github.com/upstars-global/unity-core-modules/commit/d6b0cf89aa104ee8cf21baf9e622c32db7d1c3a3))
+
+
+
+    This reverts commit 2bae7157d1fee2649fabc4a456aabc9193747f8e.
+
+## [1.42.0](https://github.com/upstars-global/unity-core-modules/compare/v1.41.2...v1.42.0) (2025-10-23)
+
+### 🚀 Features
+
+* move requests from levelsStore to service and cover it with tests ([#239](https://github.com/upstars-global/unity-core-modules/issues/239))
+ ([d9f6dc3](https://github.com/upstars-global/unity-core-modules/commit/d9f6dc343c9718b20ba00ec984b02eb3fb4b1b6e))
+
+
+
+    * refactor: move requests from levelsStore to service and cover it with tests
+
+    * fix: paths
+
+## [1.41.2](https://github.com/upstars-global/unity-core-modules/compare/v1.41.1...v1.41.2) (2025-10-22)
+
+### 🧪 Testing
+
+* cover notices store with tests ([#241](https://github.com/upstars-global/unity-core-modules/issues/241))
+ ([80191d0](https://github.com/upstars-global/unity-core-modules/commit/80191d0e1241cdb6a15e7cca68ca106e23d54547))
+
+## [1.41.1](https://github.com/upstars-global/unity-core-modules/compare/v1.41.0...v1.41.1) (2025-10-21)
+
+### 🧪 Testing
+
+* cover useManagePages store with tests ([#240](https://github.com/upstars-global/unity-core-modules/issues/240))
+ ([deec804](https://github.com/upstars-global/unity-core-modules/commit/deec8040627e8605d6759f51908b8ffb7442a134))
+
+## [1.41.0](https://github.com/upstars-global/unity-core-modules/compare/v1.40.0...v1.41.0) (2025-10-21)
+
+### 🚀 Features
+
+* **UN-364:** refactor redeemableCompPointsStore & statusCompPointsStore and cover them with tests  ([#236](https://github.com/upstars-global/unity-core-modules/issues/236))
+ ([462a1b6](https://github.com/upstars-global/unity-core-modules/commit/462a1b61698e2922aa57aaebe496b5a480af88e3))
+
+
+
+    * fix: types
+
+    * refactor: move requests from redeemableCompPointsStore to service
+
+    * refactor: move requests from statusCompPointsStore to service
+
+    * test: redeemableCompPointsStore
+
+    * test: statusCompPointsStore
+
+    * fix: checkHasAvailableCards
+
+    * fix: import
+
+## [1.40.0](https://github.com/upstars-global/unity-core-modules/compare/v1.39.0...v1.40.0) (2025-10-20)
+
+### 🚀 Features
+
+* **UN-1506:** Social registration via Google (MVP Logic) ([#220](https://github.com/upstars-global/unity-core-modules/issues/220))
+ ([0728035](https://github.com/upstars-global/unity-core-modules/commit/0728035c19af275088b4cfc4054729138e4b2845))
+
+
+
+    * feat: UN-1506
+
+    * fix
+
+    * feat: accept terms for social regs
+
+    * feat: add check for user group who set password
+
+    * fix(UN-1749): accept country filed when registered via social media
+
+    * fix: imports for another product
+
+## [1.39.0](https://github.com/upstars-global/unity-core-modules/compare/v1.38.0...v1.39.0) (2025-10-15)
+
+### 🚀 Features
+
+* refactor questsStore, add tests for promoHelpers, questsStore, questHelpers  ([#231](https://github.com/upstars-global/unity-core-modules/issues/231))
+ ([e521c14](https://github.com/upstars-global/unity-core-modules/commit/e521c1437ecd818cf52f45739d81145e697c261e))
+
+
+
+    feat: refactor questsStore, add tests for questStore, promoHelpers, questHelpers
+
+## [1.38.0](https://github.com/upstars-global/unity-core-modules/compare/v1.37.1...v1.38.0) (2025-10-06)
+
+### 🚀 Features
+
+* remove axios usage ([#229](https://github.com/upstars-global/unity-core-modules/issues/229))
+ ([8352b2a](https://github.com/upstars-global/unity-core-modules/commit/8352b2a4dc371ebb6d4d138ad3d85ff3f72e8a0b))
+
+## [1.37.1](https://github.com/upstars-global/unity-core-modules/compare/v1.37.0...v1.37.1) (2025-10-06)
+
+### ⏪ Reverts
+
+* Revert "test: context & winners stores unit tests ([#232](https://github.com/upstars-global/unity-core-modules/issues/232))" ([#234](https://github.com/upstars-global/unity-core-modules/issues/234))
+ ([e3b80a9](https://github.com/upstars-global/unity-core-modules/commit/e3b80a960a666a3b0f2411f0b6ed6cbf2f775c12))
+
+
+
+    This reverts commit 3a59714e429fed4531d2d0c9886ad5326e43c273.
+
+### 🧪 Testing
+
+* context & winners stores unit tests ([#232](https://github.com/upstars-global/unity-core-modules/issues/232))
+ ([3a59714](https://github.com/upstars-global/unity-core-modules/commit/3a59714e429fed4531d2d0c9886ad5326e43c273))
+
+
+
+    * feat: add winners store tests
+
+    * test: add context store test
+* context & winners stores unit tests ([#235](https://github.com/upstars-global/unity-core-modules/issues/235))
+ ([92b15a4](https://github.com/upstars-global/unity-core-modules/commit/92b15a482523c85ca3c1cfa31631f99e0de70551))
+
+## [1.37.0](https://github.com/upstars-global/unity-core-modules/compare/v1.36.1...v1.37.0) (2025-10-02)
+
+### 🚀 Features
+
+* Vip program ([#230](https://github.com/upstars-global/unity-core-modules/issues/230))
+ ([e334acb](https://github.com/upstars-global/unity-core-modules/commit/e334acb9ad55dea753e8334ea0f4e3753db2c909))
+
+, closes [#225](https://github.com/upstars-global/unity-core-modules/issues/) [#227](https://github.com/upstars-global/unity-core-modules/issues/)
+
+    * UN-1405 vip-program
+
+    * UN-1405 vip-program
+
+    * feat: load vip-program rewards config
+
+    * fix: add rewards export to levelsStore
+
+    * fix: rewards interface
+
+    * UN-1405 vip-program
+
+    * UN-1405 vip-program
+
+    * added levelCards
+
+    * UN-1527 vip-program
+
+    * UN-1527 vip-program
+
+    * UN-1533 refactor vip computeds and level interfaces
+
+    * Revert "UN-1533 refactor vip computeds and level interfaces"
+
+    This reverts commit 01cfadc042c71c96808cc18a737e5213f9bf117b.
+
+    * UN-1533 refactor vip computeds and level interfaces
+
+    * add levelBonusesCount, getUserVerified
+
+    * add levelBonusesCount, getUserVerified
+
+    * fix
+
+## [1.36.0](https://github.com/upstars-global/unity-core-modules/compare/v1.35.1...v1.36.0) (2025-09-29)
+
+### 🚀 Features
+
+* refactor & tests of lotteries store ([#222](https://github.com/upstars-global/unity-core-modules/issues/222))
+ ([0b9b713](https://github.com/upstars-global/unity-core-modules/commit/0b9b713eed3b009ca243c72bb2a2539fe358cf1b))
+
+## [1.35.1](https://github.com/upstars-global/unity-core-modules/compare/v1.35.0...v1.35.1) (2025-09-25)
+
+### 🐛 Bug Fixes
+
+* mapping levels for new vip program levels ([#226](https://github.com/upstars-global/unity-core-modules/issues/226))
+ ([038d25d](https://github.com/upstars-global/unity-core-modules/commit/038d25d8a25df077777f6304cc8a144fa23c55fa))
+
+## [1.35.0](https://github.com/upstars-global/unity-core-modules/compare/v1.34.2...v1.35.0) (2025-09-24)
+
+### 🚀 Features
+
+* UN-1598: new random game logic ([#223](https://github.com/upstars-global/unity-core-modules/issues/223))
+ ([b4aee7f](https://github.com/upstars-global/unity-core-modules/commit/b4aee7f0833a2c4102d769deecb7f5a922c892c4))
+
+
+
+    * new random game logic
+
+    * done
+
+    * fix minor
+
+    * remove test data
+
+## [1.34.2](https://github.com/upstars-global/unity-core-modules/compare/v1.34.1...v1.34.2) (2025-09-22)
+
+### 🔨 Refactoring
+
+* UN-1449: refactor minor UTM params ([#224](https://github.com/upstars-global/unity-core-modules/issues/224))
+ ([374c13f](https://github.com/upstars-global/unity-core-modules/commit/374c13f567a958182c0f5688c61b5637ad5de191))
+
+
+
+    done
+
+## [1.34.1](https://github.com/upstars-global/unity-core-modules/compare/v1.34.0...v1.34.1) (2025-09-12)
+
+### 🧪 Testing
+
+* add unit test for multilang
+ ([3322ad1](https://github.com/upstars-global/unity-core-modules/commit/3322ad116851643406ee0248e5621d30be9d5f33))
+
+
+
+    add unit test for multilang
+
 ## [1.33.0](https://github.com/upstars-global/unity-core-modules/compare/v1.32.1...v1.33.0) (2025-09-02)
 
 ### ⏪ Reverts

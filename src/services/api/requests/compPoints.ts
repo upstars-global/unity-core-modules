@@ -1,6 +1,8 @@
 import { log } from "../../../controllers/Logger";
+import { type ICompPoints, type IExchangeMoneyRate } from "../DTO/compPoints";
 import { http } from "../http";
-export async function exchangeToMoney(exchange) {
+
+export async function exchangeToMoneyReq(exchange) {
     try {
         const { data } = await http().post<void>(
             "/api/comp_points/exchange/money",
@@ -10,23 +12,22 @@ export async function exchangeToMoney(exchange) {
         return data;
     } catch (err) {
         log.error("EXCHANGE_TO_MONEY_ERROR", err);
-        throw err;
     }
 }
 
-export async function loadRatesMoney() {
+export async function loadRatesMoneyReq() {
     try {
-        const { data } = await http().get<void>("/api/comp_points/rates/money");
+        const { data } = await http().get<IExchangeMoneyRate[]>("/api/comp_points/rates/money");
+
         return data;
     } catch (err) {
-        log.error("EXCHANGE_TO_MONEY_ERROR", err);
-        throw err;
+        log.error("LOAD_RATES_MONEY_ERROR", err);
     }
 }
 
-export async function loadUserCompPoints() {
+export async function loadUserCompPointsReq() {
     try {
-        const { data } = await http().get("/api/player/comp_points");
+        const { data } = await http().get<ICompPoints>("/api/player/comp_points");
         return data;
     } catch (err) {
         log.error("LOAD_USER_COMP_POINTS", err);

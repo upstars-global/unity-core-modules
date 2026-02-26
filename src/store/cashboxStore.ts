@@ -9,6 +9,7 @@ import type { ICoinspaidAddresses } from "../models/cashbox";
 import type { IPaymentsMethod } from "../models/PaymentsLib";
 import type { UserGroup } from "../models/user";
 import type { IPlayerPayment } from "../services/api/DTO/cashbox";
+import { type ICashboxPresets, IManageWithdrawConfig } from "../services/api/DTO/cashbox";
 import { TypeSystemPayment } from "../services/api/DTO/cashbox";
 import { useUserStatuses } from "./user/userStatuses";
 
@@ -36,6 +37,33 @@ export const useCashboxStore = defineStore("cashboxStore", () => {
     const paymentSystems = ref<IPaymentsMethod[]>([]);
     const payoutSystems = ref<IPaymentsMethod[]>([]);
     const coinspaidAddresses = ref<ICoinspaidAddresses>();
+    const cashboxPresets = ref<ICashboxPresets>();
+    const manageWithdraw = ref<IManageWithdrawConfig>();
+
+    const hasMorePages = ref<Record<string, boolean>>({
+        "": true,
+        "deposit": true,
+        "cashout": true,
+    });
+
+    function resetHistory() {
+        paymentHistory.value = [];
+        historyDeposits.value = [];
+        historyPayouts.value = [];
+        hasMorePages.value = {
+            "": true,
+            "deposit": true,
+            "cashout": true,
+        };
+    }
+
+    function setCashboxPresets(value: ICashboxPresets) {
+        cashboxPresets.value = value;
+    }
+
+    function setManageWithdraw(value: IManageWithdrawConfig) {
+        manageWithdraw.value = value;
+    }
 
     const getWithdrawRequests = computed<IPlayerPayment[]>(() => {
         return historyPayouts.value.filter((item) => {
@@ -77,13 +105,20 @@ export const useCashboxStore = defineStore("cashboxStore", () => {
         paymentHistory,
         historyDeposits,
         historyPayouts,
+        manageWithdraw,
 
 
         paymentSystems,
         payoutSystems,
         coinspaidAddresses,
+        hasMorePages,
+        cashboxPresets,
         getPaymentSystems,
         getPayoutSystems,
         getSavedMethodsByType,
+
+        resetHistory,
+        setCashboxPresets,
+        setManageWithdraw,
     };
 });

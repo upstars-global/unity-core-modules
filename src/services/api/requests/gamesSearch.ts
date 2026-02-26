@@ -1,14 +1,18 @@
+import { storeToRefs } from "pinia";
+
 import { log } from "../../../controllers/Logger";
 import { processGameForNewAPI } from "../../../helpers/gameHelpers";
-import { http } from "../../../services/api/http";
+import { filterGames } from "../../../helpers/gameHelpers";
 import { useGamesProviders } from "../../../store/games/gamesProviders";
-import { filterDisabledProviders } from "../../../store/games/helpers/games";
+import { useGamesCommon } from "../../../store/games/gamesStore";
 import { useRootStore } from "../../../store/root";
+import { http } from "../http";
 
 export async function loadFoundGames(searchString: string) {
     try {
         const { isMobile } = useRootStore();
-        const { disabledGamesProviders } = useGamesProviders();
+        const { disabledGamesProviders } = storeToRefs(useGamesProviders());
+        const { enabledGamesConfig } = storeToRefs(useGamesCommon());
 
         const { data } = await http().post("/api/games_filter", {
             device: isMobile ? "mobile" : "desktop",
@@ -17,7 +21,11 @@ export async function loadFoundGames(searchString: string) {
             },
         });
 
-        return filterDisabledProviders(data.data.map(processGameForNewAPI), disabledGamesProviders);
+        return filterGames(
+            data.data.map(processGameForNewAPI),
+            disabledGamesProviders.value,
+            enabledGamesConfig.value,
+        );
     } catch (err) {
         log.error("LOAD_FOUND_GAMES_ERROR", err);
     }

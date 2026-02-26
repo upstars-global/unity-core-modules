@@ -1,27 +1,62 @@
-interface IPersistentCompPoints {
-    type: string;
-    exclude_end: boolean;
-    min: number;
-    max: number;
+import { type Currencies } from "./enums/currencies";
+
+type LifetimeLevel = `lifetime_level_${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8}`;
+type VipLevel = `vip_level_${1 | 2 | 3 | 4 | 5 | 6}`;
+
+export type Level = LifetimeLevel | VipLevel;
+
+export interface ILevelCard {
+    reward: string,
+    rewards: Record<string, string>
 }
 
-interface ILevelConditions {
-    persistent_comp_points: IPersistentCompPoints;
+export type RewardConfig = {
+    level: Level;
+    image?: string;
+    eventLink?: string;
+    bonusLink?: string;
+    bonus?: boolean;
+    variables?: Record<string, Record<Currencies, string>>;
+    details?: {
+        conditions?: Array<{
+            id: string;
+            link?: string;
+        }>;
+    };
+    isVIPManagerReward?: boolean
 }
 
-interface IGiftDescriptions {
-    type: string;
+export type Reward = RewardConfig & {
+    id: string;
+}
+
+export type Rewards = Record<Level, Reward[]>;
+
+export type LevelConfig = {
+    image: {
+        src: string,
+        srcRetina: string
+    },
+    saveTarget: number
+}
+export interface IVipProgramConfig {
+    rewards: Rewards,
+    levelsConfig: Record<Level, LevelConfig>,
+    levelCards: Record<Level, ILevelCard>,
+    levelBonusesCount: Record<Level, number>,
+    seasonInfo: {
+        dateEnd: string,
+        dateStart: string,
+    }
+}
+export interface ILevel {
     name: string;
-}
-
-export interface IUserLevelInfo {
-    name: string;
-    conditions: ILevelConditions[];
     status: boolean;
     id: string;
-    writable: boolean;
+    levelNumber: number;
+    min: number;
+    max: number;
     image: string;
-    gift_descriptions: IGiftDescriptions[];
 }
 
 export interface IGroup {
@@ -30,14 +65,4 @@ export interface IGroup {
     status: boolean;
     id: number | string;
     writable: boolean;
-}
-
-export interface ILevels {
-    [level: string]: {
-        gift_descriptions: Array<{
-            name: string;
-            type: string;
-        }>;
-        image: string;
-    };
 }

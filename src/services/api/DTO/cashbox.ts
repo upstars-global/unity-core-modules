@@ -44,4 +44,25 @@ export interface TransactionMetricInfo {
     amount: string,
     currency: string
 }
+
+export interface ICashboxPresets {
+    userGroups: {
+      [userID: string]: Record<Currencies, string[]>,
+    },
+    global: Record<Currencies, string[]>
+}
+
+export interface IKycAlertConfig {
+    enabled: boolean
+    geos?: string[]
+}
+
+export interface IManageWithdrawConfig {
+    disable: {
+        unverifiedUsersGeo: string[]
+    }
+    kycAlert?: IKycAlertConfig
+    multiAccAlert?: IKycAlertConfig
+}
+
 export default {};

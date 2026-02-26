@@ -3,10 +3,10 @@ import dayjs from "dayjs";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
-import type { UserGroup } from "../../models/user";
+import { type Currencies } from "../../models/enums/currencies";
+import type { IUserStatus, UserGroup } from "../../models/user";
 import type { IVipAdventuresDayConfig } from "../../models/vipAdventures";
 import type { IPrizeConfigItem, IVipProgress } from "../../services/api/DTO/vipAdventuresDTO";
-import { loadVipAdventuresConfigFile, loadVipStatusProgress } from "../../services/api/requests/vipAdventures";
 import { useEnvironments } from "../../store/environments";
 import { useUserStatuses } from "./userStatuses";
 
@@ -14,7 +14,7 @@ const USER_INCLUDES_ADVENTURES = {
     [VIP_ADV_GROUP]: "vip_adv",
 };
 
-function prepareVipAdventureCollectionDays(configDays: IPrizeConfigItem[], userStatuses): IVipAdventuresDayConfig[] {
+function prepareVipAdventureCollectionDays(configDays: IPrizeConfigItem[], userStatuses: IUserStatus[]): IVipAdventuresDayConfig[] {
     return configDays.map((configDayItem) => {
         const { day, step, stepTotal } = parseAdventuresTitleDayConfig(configDayItem.title);
         return {
@@ -42,7 +42,7 @@ export function parseAdventuresTitleDayConfig(title: string): {
     };
 }
 
-export function parseGiftAdventureTitle(title): {
+export function parseGiftAdventureTitle(title: string): {
     step: number;
     giftTitle: string;
     day: string
@@ -61,6 +61,7 @@ export function parseGiftAdventureTitle(title): {
 export const useVipAdventures = defineStore("vipAdventures", () => {
     const userStatuses = useUserStatuses();
     const vipAdventuresConfigFile = ref<IPrizeConfigItem[]>();
+    const vipAdventuresVariables = ref<Record<string, Record<Currencies, string>>>({});
     const userVipStatusProgress = ref<IVipProgress>();
 
     const toDay = computed(() => {
@@ -95,9 +96,10 @@ export const useVipAdventures = defineStore("vipAdventures", () => {
     const superConfig = computed(() => {
         const calendarLength = calendarConfig.value.length;
         const lastCalendarDay = calendarConfig.value[calendarLength - 1];
+
         return {
             index: calendarConfig.value.length,
-            today: dayjs(lastCalendarDay.fullDate, formatDateVipAdv).isBefore(toDay.value),
+            today: dayjs(lastCalendarDay.fullDate, formatDateVipAdv).isBefore(toDay.value, "day"),
         };
     });
 
@@ -126,33 +128,14 @@ export const useVipAdventures = defineStore("vipAdventures", () => {
         return userStatuses.getUserGroups.find((userGroupItem) => USER_INCLUDES_ADVENTURES[userGroupItem]);
     });
 
-    async function loadVipProgress() {
-        const statusProgress = await loadVipStatusProgress();
-
-        userVipStatusProgress.value = statusProgress;
-        return statusProgress;
-    }
-
-    async function loadVipAdventuresConfig(): Promise<IPrizeConfigItem[]> {
-        if (vipAdventuresConfigFile.value) {
-            return vipAdventuresConfigFile.value;
-        }
-
-        const config = await loadVipAdventuresConfigFile();
-        vipAdventuresConfigFile.value = userGroupForAdventure.value ?
-            config.prizes[userGroupForAdventure.value] :
-            Object.values(config.prizes)[0];
-        return vipAdventuresConfigFile.value;
-    }
-
     return {
-        loadVipAdventuresConfig,
-        loadVipProgress,
         vipAdventuresConfigFile,
+        vipAdventuresVariables,
 
         vipAdventuresDays,
         superDay,
         userVipStatusProgress,
+        userGroupForAdventure,
 
         calendarConfig,
         superConfig,

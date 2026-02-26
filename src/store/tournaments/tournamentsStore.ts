@@ -1,4 +1,3 @@
-import type { Pinia } from "pinia";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
@@ -10,14 +9,6 @@ import { isQuest } from "../../helpers/questHelpers";
 import { PromoType } from "../../models/enums/tournaments";
 import type { ISnippetItemCMS } from "../../services/api/DTO/CMS";
 import type { IPlayersList, ITournament, ITournamentsList } from "../../services/api/DTO/tournamentsDTO";
-import {
-    chooseTournamentReq,
-    loadRecentTournamentsReq,
-    loadTournamentByIdReq,
-    loadTournamentsListReq,
-    loadUserStatusesReq,
-    loadUserTournamentsReq,
-} from "../../services/api/requests/tournaments";
 import { useBannerStore } from "../banners";
 import { useCMS } from "../CMS";
 
@@ -27,6 +18,8 @@ export const useTournamentsStore = defineStore("tournamentsStore", () => {
     const recentTournaments = ref<ITournamentsList>([]);
     const tournamentsList = ref<ITournamentsList>([]);
     const userTournaments = ref<ITournamentsList>([]);
+    const { snippets } = storeToRefs(useCMS());
+    const { banners } = storeToRefs(useBannerStore());
 
     const getAllTournamentsOnlyUser = computed(() => {
         return promoFilterAndSettings(tournamentsList.value, PromoType.TOURNAMENT);
@@ -39,7 +32,6 @@ export const useTournamentsStore = defineStore("tournamentsStore", () => {
         return promoFilterAndSettings(tournaments, PromoType.TOURNAMENT);
     });
 
-    const { snippets } = storeToRefs(useCMS());
     const getCustomTournamentsList = computed(() => {
         try {
             const tournaments = snippets.value
@@ -70,7 +62,6 @@ export const useTournamentsStore = defineStore("tournamentsStore", () => {
         });
     });
 
-    const { banners } = storeToRefs(useBannerStore());
     const getCurrentTournament = computed(() => {
         if (!currentTournament.value?.frontend_identifier) {
             return {};
@@ -121,8 +112,9 @@ export const useTournamentsStore = defineStore("tournamentsStore", () => {
     });
     const getRecentTournaments = computed(() => {
         return recentTournaments.value.map((tour) => {
-            const image = tournamentsFiles.value.filter(({ id }) => {
-                return currentTournament.value?.frontend_identifier && id.includes(currentTournament.value?.frontend_identifier);
+            const image = tournamentsList.value.filter(({ id }) => {
+                return currentTournament.value?.frontend_identifier &&
+                    String(id).includes(currentTournament.value?.frontend_identifier);
             });
 
             return {
@@ -136,60 +128,8 @@ export const useTournamentsStore = defineStore("tournamentsStore", () => {
         });
     });
 
-    async function loadTournaments(): Promise<ITournamentsList> {
-        const tournamentsResponse = await loadTournamentsListReq();
-        tournamentsList.value = tournamentsResponse
-            .filter(({ frontend_identifier }) => frontend_identifier !== "nonvisible");
-        return tournamentsResponse;
-    }
-
-    async function loadTournamentBySlug(slug: number): Promise<Partial<ITournament>> {
-        if (currentTournament.value?.id === slug) {
-            return Promise.resolve(currentTournament.value);
-        }
-
-        currentTournament.value = {};
-        if (Number(slug)) {
-            currentTournament.value = await loadTournamentByIdReq(slug) ?? {};
-        }
-
-        return Promise.resolve(currentTournament.value);
-    }
-
     function reloadTournaments(): void {
         currentTournament.value = null;
-    }
-
-    function sanitizeUserTourStatuses(newStatuses: IPlayersList): IPlayersList {
-        return [
-            ...currentUserTournamentsStatuses.value
-                .filter(({ tournament_id }) => {
-                    return !newStatuses.some(({ tournament_id: newID }) => {
-                        return newID === tournament_id;
-                    });
-                }),
-            ...newStatuses,
-        ];
-    }
-
-    async function loadCurrentUserTourStatuses(): Promise<void> {
-        const hasUserTourStatuses = Boolean(currentUserTournamentsStatuses.value.length);
-
-        const statuses = await Promise.all(getAllTournamentsOnlyUser.value.map((tourItem: ITournament) => {
-            return loadUserStatusesReq(tourItem.id);
-        }));
-
-        currentUserTournamentsStatuses.value = hasUserTourStatuses ? sanitizeUserTourStatuses(statuses) : statuses;
-    }
-
-    async function loadUserTournaments(): Promise<void> {
-        userTournaments.value = await loadUserTournamentsReq();
-        await loadCurrentUserTourStatuses();
-    }
-
-    async function chooseTournament(id: number): Promise<void> {
-        await chooseTournamentReq(id);
-        await loadUserTournaments();
     }
 
     function clearTournamentUserData(): void {
@@ -198,26 +138,28 @@ export const useTournamentsStore = defineStore("tournamentsStore", () => {
         tournamentsList.value = [];
     }
 
-    async function loadRecentTournaments(): Promise<void> {
-        recentTournaments.value = await loadRecentTournamentsReq();
+    function setRecentTournaments(newList: ITournamentsList): void {
+        recentTournaments.value = newList;
     }
 
-    async function updateUserTourStatuses(data: IPlayersList): Promise<void> {
-        currentUserTournamentsStatuses.value = sanitizeUserTourStatuses(data);
+    function setTournamentsList(newList: ITournamentsList): void {
+        tournamentsList.value = newList;
+    }
 
-        data.forEach((newStatus) => {
-            const indexTourForUpdate = userTournaments.value.findIndex(({ id }) => {
-                return id === newStatus.tournament_id;
-            });
+    function setCurrentTournament(tournament: Partial<ITournament> | null): void {
+        currentTournament.value = tournament;
+    }
 
-            const indexUserForUpdate = userTournaments.value[indexTourForUpdate]?.top_players?.findIndex((item) => {
-                return item.award_place === newStatus.award_place && item.nickname === newStatus.nickname;
-            });
+    function setCurrentUserTournamentsStatuses(statuses: IPlayersList): void {
+        currentUserTournamentsStatuses.value = statuses;
+    }
 
-            if (indexTourForUpdate >= 0 && indexUserForUpdate >= 0) {
-                userTournaments.value[indexTourForUpdate].top_players[indexUserForUpdate] = newStatus;
-            }
-        });
+    function setUserTournaments(tournaments: ITournamentsList): void {
+        userTournaments.value = tournaments;
+    }
+
+    function updateUserTournament(indexTourForUpdate: number, indexUserForUpdate: number, newStatus: IPlayersList[number]): void {
+        userTournaments.value[indexTourForUpdate].top_players[indexUserForUpdate] = newStatus;
     }
 
     return {
@@ -238,25 +180,13 @@ export const useTournamentsStore = defineStore("tournamentsStore", () => {
         getStatusTournamentById,
         getRecentTournaments,
 
-        loadTournaments,
-        loadTournamentBySlug,
+        setTournamentsList,
+        setCurrentTournament,
+        setCurrentUserTournamentsStatuses,
         reloadTournaments,
-        chooseTournament,
-        loadUserTournaments,
+        setUserTournaments,
+        setRecentTournaments,
         clearTournamentUserData,
-        loadRecentTournaments,
-        updateUserTourStatuses,
+        updateUserTournament,
     };
 });
-
-export function useTournamentsFetchService(pinia?: Pinia) {
-    const tournamentsStore = useTournamentsStore(pinia);
-
-    function loadTournaments() {
-        return tournamentsStore.loadTournaments();
-    }
-
-    return {
-        loadTournaments,
-    };
-}

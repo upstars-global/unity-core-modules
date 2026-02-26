@@ -1,6 +1,5 @@
-import { type AxiosError } from "axios";
-
 import { log } from "../../../controllers/Logger";
+import { type ICurrentUserQuestsStatus } from "../../../models/quest";
 import { IPlayer, IPlayerConfirmation, IPlayersList, ITournament, ITournamentsList } from "../DTO/tournamentsDTO";
 import { http } from "../http";
 
@@ -10,7 +9,7 @@ export async function loadTournamentsListReq(): Promise<ITournamentsList> {
         return data;
     } catch (err: unknown) {
         log.error("LOAD_USER_TOURNAMENTS_ERROR", err);
-        throw (err as AxiosError).response;
+        throw err;
     }
 }
 
@@ -32,7 +31,7 @@ export async function chooseTournamentReq(id: number): Promise<IPlayerConfirmati
         return data;
     } catch (err: unknown) {
         log.error("CHOOSE_TOURNAMENT_ERROR", err);
-        throw (err as AxiosError).response;
+        throw err;
     }
 }
 
@@ -42,7 +41,7 @@ export async function loadUserTournamentsReq(): Promise<ITournamentsList> {
         return data;
     } catch (err: unknown) {
         log.error("LOAD_USER_TOURNAMENTS_ERROR", err);
-        throw (err as AxiosError).response;
+        throw err;
     }
 }
 
@@ -52,11 +51,11 @@ export async function loadUserStatusesReq(id: number): Promise<IPlayer> {
         return data;
     } catch (err: unknown) {
         log.error("LOAD_CURRENT_USER_TOUR_STATUSES_ERROR", err);
-        throw (err as AxiosError).response;
+        throw err;
     }
 }
 
-export async function loadQuestDataReq(questList: ITournament[]) {
+export async function loadQuestDataReq(questList: ITournament[]): Promise<ICurrentUserQuestsStatus[] | void> {
     try {
         const statuses = await Promise.allSettled(
             questList.map((questItem) => {
@@ -70,7 +69,7 @@ export async function loadQuestDataReq(questList: ITournament[]) {
             }
 
             return {};
-        });
+        }) as ICurrentUserQuestsStatus[];
     } catch (err) {
         log.error("LOAD_QUESTS_DATA_ERROR", err);
     }
@@ -82,7 +81,7 @@ export async function updateUserStatusesReq(id: number): Promise<IPlayersList> {
         return data;
     } catch (err: unknown) {
         log.error("LOAD_CURRENT_USER_TOUR_STATUSES_ERROR", err);
-        throw (err as AxiosError).response;
+        throw err;
     }
 }
 
@@ -92,6 +91,6 @@ export async function loadRecentTournamentsReq(): Promise<ITournamentsList> {
         return data;
     } catch (err: unknown) {
         log.error("LOAD_RECENT_TOURNAMENTS_ERROR", err);
-        throw (err as AxiosError).response;
+        throw err;
     }
 }

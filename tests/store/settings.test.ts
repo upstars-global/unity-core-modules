@@ -1,10 +1,10 @@
 import { createPinia, setActivePinia } from "pinia";
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useSettings } from "../../src/store/settings";
 
 describe("useSettings", () => {
-    beforeEach(() => {
+    beforeEach(async () => {
         setActivePinia(createPinia());
     });
 

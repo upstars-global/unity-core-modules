@@ -1,32 +1,25 @@
-import { type Pinia, storeToRefs } from "pinia";
+import { storeToRefs } from "pinia";
 import { defineStore } from "pinia";
 import { ref, toRefs } from "vue";
 
-import { log } from "../../controllers/Logger";
-import { getRandomGame, processGameForNewAPI } from "../../helpers/gameHelpers";
+import { processGameForNewAPI } from "../../helpers/gameHelpers";
+import { defaultCollection, filterGames } from "../../helpers/gameHelpers";
 import type { ICollectionItem, IGame } from "../../models/game";
-import type { ICollectionRecord, IGameFilter } from "../../services/api/DTO/gamesDTO";
-import { loadGamesCategory as loadGamesCategoryReq } from "../../services/api/requests/games";
+import type { ICollectionRecord } from "../../services/api/DTO/gamesDTO";
 import { useConfigStore } from "../configStore";
-import { useGamesProviders } from "../games/gamesProviders";
 import { useMultilangStore } from "../multilang";
-import { useRootStore } from "../root";
-import { useUserInfo } from "../user/userInfo";
+import { useGamesProviders } from "./gamesProviders";
 import { useGamesCommon } from "./gamesStore";
-import { defaultCollection } from "./helpers/games";
-import { filterDisabledProviders } from "./helpers/games";
 
 const DEFAULT_COLLECTION_NAME = "default";
 
 export const useGamesCategory = defineStore("gamesCategory", () => {
     const collections = ref<ICollectionRecord>({});
     const { getUserGeo } = toRefs(useMultilangStore());
-    const { getIsLogged, getUserCurrency } = storeToRefs(useUserInfo());
     const { gamesPageLimit } = storeToRefs(useConfigStore());
-    const { disabledGamesProviders } = storeToRefs(useGamesProviders());
 
     const categoryGeo = (slug: string): string => {
-        const slugWithGeo = getUserGeo.value ? `${slug}:${getUserGeo.value.toLocaleLowerCase()}` : "";
+        const slugWithGeo = getUserGeo.value ? `${ slug }:${ getUserGeo.value.toLocaleLowerCase() }` : "";
         const { gamesCategories } = storeToRefs(useGamesCommon());
         const hasCategory = gamesCategories.value.find((catItem) => {
             return catItem.id === slugWithGeo;
@@ -62,7 +55,14 @@ export const useGamesCategory = defineStore("gamesCategory", () => {
 
     function setData(data: ICollectionItem, slug: string): void {
         const propsGame = { ...data };
-        propsGame.data = filterDisabledProviders(data.data.map(processGameForNewAPI), disabledGamesProviders.value);
+        const { disabledGamesProviders } = storeToRefs(useGamesProviders());
+        const { enabledGamesConfig } = storeToRefs(useGamesCommon());
+
+        propsGame.data = filterGames(
+            data.data.map(processGameForNewAPI),
+            disabledGamesProviders.value,
+            enabledGamesConfig.value,
+        );
 
         if (!collections.value[slug]) {
             collections.value = {
@@ -87,72 +87,15 @@ export const useGamesCategory = defineStore("gamesCategory", () => {
         });
     }
 
-    async function loadGamesCategory(slug: string, page: number = 1): Promise<ICollectionItem | undefined> {
-        const slugCollection = categoryGeo(slug);
-        const loaded = isLoaded(slugCollection, page);
-
-        if (loaded) {
-            return collections.value[slugCollection];
-        }
-
-        try {
-            const { isMobile } = storeToRefs(useRootStore());
-
-            const device = isMobile.value ? "mobile" : "desktop";
-
-            const reqConfig: IGameFilter = {
-                device,
-                filter: {
-                    categories: {
-                        identifiers: [ slugCollection ],
-                        strategy: "OR",
-                    },
-                },
-                page,
-                page_size: gamesPageLimit.value,
-            };
-
-            const data = await loadGamesCategoryReq(reqConfig);
-            setData(data, slugCollection);
-        } catch (err) {
-            log.error("LOAD_GAMES_CATEGORY_ERROR", err);
-        }
-    }
-
-    function getRandomGameByCategory(slugCategory: string) {
-        const gamesCollection = getCollection(slugCategory, 100);
-        const isLogged = getIsLogged.value;
-        const userCurrency = getUserCurrency.value;
-
-        const filteredGames = gamesCollection.filter((game) => {
-            if (isLogged) {
-                return game.real?.[userCurrency];
-            }
-            return true;
-        });
-
-        return getRandomGame(filteredGames, !isLogged);
-    }
 
     return {
         collections,
-
         categoryGeo,
         getCollection,
         getCollectionFullData,
         getCollectionPagination,
-        getRandomGameByCategory,
         isLoaded,
-
-        loadGamesCategory,
         initCollection,
+        setData,
     };
 });
-
-export function useGamesCategoryFetchService(pinia?: Pinia) {
-    const { initCollection } = useGamesCategory(pinia);
-
-    return {
-        initCollection,
-    };
-}
