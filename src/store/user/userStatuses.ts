@@ -1,7 +1,6 @@
 import {
     ALL_LEVELS,
     ID_CASHBOX_ONBOARD_DONE,
-    ID_GROUP_FOR_MULTI_ACC,
     TEST_GROUP_ID,
 } from "@config/user-statuses";
 import { VIP_CLUB_STATUSES } from "@config/vip-clubs";
@@ -20,6 +19,7 @@ export const useUserStatuses = defineStore("userStatuses", () => {
     const { getUserInfo } = storeToRefs(userStore);
     const userManager = ref<IVipManager | null>(null);
     const socialNetworkAuthGroups = ref<number[]>([]);
+    const availableBonuses = ref<boolean | null>(null);
 
     const getUserLevelInfo = computed<ILevel>(() => {
         const levelsStore = useLevelsStore();
@@ -48,7 +48,11 @@ export const useUserStatuses = defineStore("userStatuses", () => {
     });
 
     const isMultiAccount = computed<boolean>(() => {
-        return getUserGroups.value.includes(ID_GROUP_FOR_MULTI_ACC);
+        if (availableBonuses.value === null) {
+            return false;
+        }
+
+        return !availableBonuses.value;
     });
 
     const userVipGroup = computed<string | undefined>(() => {
@@ -93,6 +97,10 @@ export const useUserStatuses = defineStore("userStatuses", () => {
         socialNetworkAuthGroups.value = groups;
     }
 
+    function setAvailableBonuses(value: boolean) {
+        availableBonuses.value = value;
+    }
+
     return {
         getUserLevelInfo,
         getUserStatuses,
@@ -111,5 +119,6 @@ export const useUserStatuses = defineStore("userStatuses", () => {
         getUserLevelId,
         setSocialNetworkAuthGroups,
         clearUserManager,
+        setAvailableBonuses,
     };
 });
