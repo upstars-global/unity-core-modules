@@ -1,3 +1,27 @@
+## [1.73.0](https://github.com/upstars-global/unity-core-modules/compare/v1.72.1...v1.73.0) (2026-02-26)
+
+### 🚀 Features
+
+* **UN-2181:** new way to detect multiacc block ([#319](https://github.com/upstars-global/unity-core-modules/issues/319))
+ ([432f3fc](https://github.com/upstars-global/unity-core-modules/commit/432f3fc6b5abfed0dd1a520137366f4e37d33eb6))
+
+
+
+    * UN-2181 DTO update
+
+    * UN-2181 new multiacc endpoint
+
+    * UN-2181 replace unit test
+
+    * UN-2181 educe api call on withdraw tab
+
+## [1.72.1](https://github.com/upstars-global/unity-core-modules/compare/v1.72.0...v1.72.1) (2026-02-24)
+
+### ⚡ Performance
+
+* patch/minor update dependencies
+ ([79ec718](https://github.com/upstars-global/unity-core-modules/commit/79ec71894b22f321b33c1f79ece948b5b2147dcf))
+
 ## [1.72.0](https://github.com/upstars-global/unity-core-modules/compare/v1.71.1...v1.72.0) (2026-02-23)
 
 ### 🚀 Features

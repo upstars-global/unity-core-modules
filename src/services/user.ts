@@ -37,6 +37,7 @@ import {
     deleteTwoFactorReq,
     IPlayerGroup,
     leadPlayerStartSeasonInfoReq,
+    loadAvailableBonusesReq,
     loadBettingPlayerSettingsRequest,
     loadFreshChatRestoreIdReq,
     loadPlayerFieldsInfoRequest,
@@ -446,6 +447,17 @@ export async function loadUserBonuses() {
     return data;
 }
 
+export async function loadAvailableBonusesStatus() {
+    const userStatusesStore = useUserStatuses();
+    const data = await loadAvailableBonusesReq();
+
+    if (typeof data?.available_bonuses === "boolean") {
+        userStatusesStore.setAvailableBonuses(data.available_bonuses);
+    }
+
+    return data;
+}
+
 export async function updateAuthDetailsProviders(data: { user: Record<string, unknown> }) {
     const userInfoStore = useUserInfo();
     const response = await updateAuthDetailsProvidersReq(data);
@@ -540,6 +552,7 @@ export async function loadUserProfile({ reload = false, route }: { reload?: bool
             }
 
             userInfoStore.toggleUserIsLogged(true);
+            await loadAvailableBonusesStatus();
 
             bus.$emit("user.data.received");
             bus.$emit("user.login", response.data);
