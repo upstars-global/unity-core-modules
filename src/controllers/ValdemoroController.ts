@@ -7,9 +7,9 @@ interface IValdemoroConfig {
 }
 
 function pingValdemoro(config: IValdemoroConfig): void {
-    if (!config.enabled) {
-        return;
-    }
+    // if (!config.enabled) {
+    //     return;
+    // }
     const script = document.createElement("script");
     script.async = true;
     script.type = "text/javascript";
