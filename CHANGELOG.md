@@ -1,3 +1,10 @@
+## [1.74.0](https://github.com/upstars-global/unity-core-modules/compare/v1.73.0...v1.74.0) (2026-03-02)
+
+### 🚀 Features
+
+* UN-919 add ValdemoroController
+ ([e058b7f](https://github.com/upstars-global/unity-core-modules/commit/e058b7f9c2cecff8ac1f05417318572af8d0ec7c))
+
 ## [1.73.0](https://github.com/upstars-global/unity-core-modules/compare/v1.72.1...v1.73.0) (2026-02-26)
 
 ### 🚀 Features
