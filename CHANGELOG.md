@@ -1,3 +1,14 @@
+## [1.75.0](https://github.com/upstars-global/unity-core-modules/compare/v1.74.0...v1.75.0) (2026-03-03)
+
+### 🚀 Features
+
+* Un 2277 ([#322](https://github.com/upstars-global/unity-core-modules/issues/322)) add info for cancel bonus
+ ([53887a8](https://github.com/upstars-global/unity-core-modules/commit/53887a86b16e98826721c4b8c4cb19b5e53f6319))
+
+
+
+    * feat: UN-2277 add info for cancel bonus
+
 ## [1.74.0](https://github.com/upstars-global/unity-core-modules/compare/v1.73.0...v1.74.0) (2026-03-02)
 
 ### 🚀 Features
