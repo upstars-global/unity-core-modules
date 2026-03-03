@@ -71,11 +71,10 @@ describe("useUserStatuses", () => {
         expect(store.isCashboxOnboardDone).toBe(false);
     });
 
-    it("maps user groups and detects tester, multiaccount and cashbox flags", () => {
+    it("maps user groups and detects tester and cashbox flags", () => {
         mockUserInfo.value = {
             statuses: [
                 { id: TEST_GROUP_ID, name: "tester" },
-                { id: ID_GROUP_FOR_MULTI_ACC, name: "multi" },
                 { id: ID_CASHBOX_ONBOARD_DONE, name: "cashbox" },
                 { id: "vip_level_1", name: "vip" },
             ],
@@ -85,13 +84,23 @@ describe("useUserStatuses", () => {
 
         expect(store.getUserGroups).toEqual([
             TEST_GROUP_ID,
-            ID_GROUP_FOR_MULTI_ACC,
             ID_CASHBOX_ONBOARD_DONE,
             "vip_level_1",
         ]);
         expect(store.isUserTester).toBe(true);
-        expect(store.isMultiAccount).toBe(true);
         expect(store.isCashboxOnboardDone).toBe(true);
+    });
+
+    it("detects multiaccount via setAvailableBonuses", () => {
+        const store = useUserStatuses();
+
+        expect(store.isMultiAccount).toBe(false);
+
+        store.setAvailableBonuses(false);
+        expect(store.isMultiAccount).toBe(true);
+
+        store.setAvailableBonuses(true);
+        expect(store.isMultiAccount).toBe(false);
     });
 
     it("returns level info for the first non-numeric status id", () => {
