@@ -318,7 +318,6 @@ export function http({ headers, locale }: IHttpParams = {}): HttpClient {
         if (error.response?.status === 503) {
             if (error.response.headers?.get("x-maintenance-mode")) {
                 EventBus.$emit(BUS_EVENTS.MAINTENANCE_MODE);
-                console.log({ error });
             }
         }
 
