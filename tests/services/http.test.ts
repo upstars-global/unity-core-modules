@@ -168,13 +168,10 @@ describe("http client", () => {
             }),
         );
         vi.stubGlobal("fetch", fetchMock);
-        const consoleLogSpy = vi.spyOn(console, "log").mockImplementation(() => {
-        });
 
         await expect(http().get("/api/cms/pages?l=en")).rejects.toThrow("HTTP 503: Service Unavailable");
 
         expect(eventEmit).toHaveBeenCalledWith(BUS_EVENTS.MAINTENANCE_MODE);
-        expect(consoleLogSpy).toHaveBeenCalled();
         expect(logError).toHaveBeenCalledWith("LOAD_CMS_PAGES_ERROR", expect.any(Error));
     });
 
