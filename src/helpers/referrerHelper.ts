@@ -17,7 +17,7 @@ export const getAIReferrer = (queryParams: URLSearchParams): string | undefined 
     const regexRef: RegExp = /chat\.openai\.com|chatgpt\.com|perplexity\.ai|claude\.ai|gemini\.google\.com|copilot\.microsoft\.com|chat\.mistral\.ai|x\.ai/;
 
     const utmSourceQuery = queryParams?.get("utm_source");
-    const referrer = getReferrer();
+    const referrer = getDocumentReferrer();
 
     return utmSourceQuery?.match(regexUTM)?.[0] || referrer?.match(regexRef)?.[0];
 };
