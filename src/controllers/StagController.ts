@@ -8,7 +8,7 @@ import {
 } from "@theme/configs/stagConsts";
 import { storeToRefs } from "pinia";
 
-import { referrerHelper } from "../helpers/referrerHelper";
+import { getAIReferrer, getDocumentReferrer } from "../helpers/referrerHelper";
 import { isServer } from "../helpers/ssrHelpers";
 import type { IStagByReferName } from "../models/configs";
 import { loadStagByReferName } from "../services/common";
@@ -152,10 +152,10 @@ function init(): void {
         return;
     }
 
-    const referrer = referrerHelper() || "";
     const url = new URL(window.location.href);
     const path = url.pathname;
     const queryParams = new URLSearchParams(url.search);
+    const referrer = getAIReferrer(queryParams) ? "ai" : getDocumentReferrer() || "";
 
     if (AFFB_ID_COOKIE) {
         initAffbId(queryParams, referrer);

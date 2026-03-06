@@ -24,6 +24,7 @@ export default defineConfig({
     },
     plugins: [],
     test: {
+        environment: "happy-dom",
         reporters: process.env.GITHUB_ACTIONS ? [ "dot", "github-actions" ] : [ "dot" ],
         setupFiles: "./tests/vitest.setup.ts",
         coverage: {
