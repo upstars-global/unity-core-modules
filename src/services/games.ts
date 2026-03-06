@@ -77,6 +77,12 @@ export async function loadEnableGamesConfig() {
 export async function loadGamesJackpots(): Promise<void> {
     try {
         const gamesStore = useGamesCommon();
+        const { gamesJackpots } = storeToRefs(gamesStore);
+
+        if (isExistData(gamesJackpots.value)) {
+            return;
+        }
+
         const jackpots = await loadGamesJackpotsReq();
 
         gamesStore.setGamesJackpots(jackpots);
@@ -213,7 +219,11 @@ export function initCollection(data: IGamesProvider[]) {
 export async function loadGamesProviders(): Promise<IGamesProvider[]> {
     try {
         const gamesProvidersStore = useGamesProviders();
-        const { disabledGamesProviders } = storeToRefs(gamesProvidersStore);
+        const { gamesProviders, disabledGamesProviders } = storeToRefs(gamesProvidersStore);
+
+        if (isExistData(gamesProviders.value)) {
+            return gamesProviders.value;
+        }
 
         const providers = await loadGamesProvidersReq();
 
