@@ -11,7 +11,7 @@ const URL_PART_BEFORE_QUERY = 0;
 
 const RETRY_CONDITION = {
     "Network Error": true,
-    [`timeout of ${CLIENT_TIMEOUT}ms exceeded`]: true,
+    [`timeout of ${ CLIENT_TIMEOUT }ms exceeded`]: true,
     "timeout of 1ms exceeded": true,
 };
 
@@ -45,6 +45,7 @@ export interface HttpError extends Error {
         status: number;
         statusText: string;
         data: unknown;
+        headers: Headers;
     };
     config?: RequestConfig;
 }
@@ -84,7 +85,7 @@ class HttpClient {
             });
         } catch (error) {
             if ((error as Error).name === "AbortError") {
-                throw new Error(`timeout of ${this.timeout}ms exceeded`);
+                throw new Error(`timeout of ${ this.timeout }ms exceeded`);
             }
             throw error;
         } finally {
@@ -124,11 +125,11 @@ class HttpClient {
 
         // If baseURL is "/" (client-side), use relative URLs
         if (this.baseURL === "/") {
-            return url.startsWith("/") ? url : `/${url}`;
+            return url.startsWith("/") ? url : `/${ url }`;
         }
 
         // For server-side (localhost:2004), append the URL to baseURL
-        return `${this.baseURL}${url.startsWith("/") ? url : `/${url}`}`;
+        return `${ this.baseURL }${ url.startsWith("/") ? url : `/${ url }` }`;
     }
 
     private async parseResponse(response: Response): Promise<unknown> {
@@ -163,7 +164,7 @@ class HttpClient {
             }
             const queryString = params.toString();
             if (queryString) {
-                url = `${url }${url.includes("?") ? "&" : "?"}${queryString}`;
+                url = `${ url }${ url.includes("?") ? "&" : "?" }${ queryString }`;
             }
         }
 
@@ -203,11 +204,12 @@ class HttpClient {
             };
 
             if (!response.ok) {
-                const error = new Error(`HTTP ${response.status}: ${response.statusText}`) as HttpError;
+                const error = new Error(`HTTP ${ response.status }: ${ response.statusText }`) as HttpError;
                 error.response = {
                     status: response.status,
                     statusText: response.statusText,
                     data: responseData,
+                    headers: response.headers,
                 };
                 error.config = config;
                 throw error;
@@ -297,7 +299,7 @@ export function http({ headers, locale }: IHttpParams = {}): HttpClient {
     };
 
     if (isServer && locale) {
-        clientHeaders.Cookie = `locale=${COOKIE_BY_LOCALE[locale]};`;
+        clientHeaders.Cookie = `locale=${ COOKIE_BY_LOCALE[locale] };`;
     }
 
     const client = new HttpClient({
@@ -313,12 +315,18 @@ export function http({ headers, locale }: IHttpParams = {}): HttpClient {
             EventBus.$emit(BUS_EVENTS.AUTH_ERROR);
         }
 
+        if (error.response?.status === 503) {
+            if (error.response.headers?.get("x-maintenance-mode")) {
+                EventBus.$emit(BUS_EVENTS.MAINTENANCE_MODE);
+            }
+        }
+
         if (error?.config?.url) {
             let apiLabel = error.config.url.replace("/api/", "").replace(/\//g, "_").toUpperCase();
             if (apiLabel.indexOf("?") > -1) {
                 apiLabel = apiLabel.split("?")[URL_PART_BEFORE_QUERY];
             }
-            log.error(`LOAD_${apiLabel}_ERROR`, error);
+            log.error(`LOAD_${ apiLabel }_ERROR`, error);
         }
 
         return Promise.reject(error);
