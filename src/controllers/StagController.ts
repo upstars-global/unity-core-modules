@@ -147,7 +147,7 @@ function initAffbId(queryParams: URLSearchParams, referrer: string): void {
 }
 
 
-function init(): void {
+async function init(): Promise<void> {
     if (isServer) {
         return;
     }
@@ -161,7 +161,7 @@ function init(): void {
         initAffbId(queryParams, referrer);
     }
 
-    initStag(queryParams, path, referrer);
+    await initStag(queryParams, path, referrer);
 }
 
 export const StagController = {
