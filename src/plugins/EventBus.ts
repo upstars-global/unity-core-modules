@@ -32,6 +32,7 @@ export const BUS_EVENTS = {
     ADVENTURE_CALENDAR_SET_INDEX: "adventure.calendar.set.index",
     CHAT_SUPPORT_TOGGLE: "chat.toggle",
     AUTH_ERROR: "auth-error",
+    MAINTENANCE_MODE: "maintenance-mode",
 };
 
 export const eventBusPlugin = {
