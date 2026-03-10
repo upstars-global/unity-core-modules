@@ -1,3 +1,37 @@
+## [1.76.0](https://github.com/upstars-global/unity-core-modules/compare/v1.75.0...v1.76.0) (2026-03-09)
+
+### 🚀 Features
+
+* (UN-2397) introduce maintenance mode handling and enhance error reporting ([#323](https://github.com/upstars-global/unity-core-modules/issues/323))
+ ([d0c6e07](https://github.com/upstars-global/unity-core-modules/commit/d0c6e07a4e4f74634afb3e5b77cb736dbdeda395))
+
+
+
+    * feat: introduce maintenance mode handling and enhance error reporting
+
+    - Add new `BUS_EVENTS.MAINTENANCE_MODE` for handling maintenance mode events.
+
+    - Include response headers in `HttpError`.
+
+    - Update error handling logic to emit `MAINTENANCE_MODE` event for 503 responses with proper headers.
+
+    - Adjust formatting for consistency in string interpolation.
+
+    * test: add unit tests for EventBus and http client functionality
+
+    * test: remove unnecessary console.log spy in http client tests
+
+## [1.75.0](https://github.com/upstars-global/unity-core-modules/compare/v1.74.0...v1.75.0) (2026-03-03)
+
+### 🚀 Features
+
+* Un 2277 ([#322](https://github.com/upstars-global/unity-core-modules/issues/322)) add info for cancel bonus
+ ([53887a8](https://github.com/upstars-global/unity-core-modules/commit/53887a86b16e98826721c4b8c4cb19b5e53f6319))
+
+
+
+    * feat: UN-2277 add info for cancel bonus
+
 ## [1.74.0](https://github.com/upstars-global/unity-core-modules/compare/v1.73.0...v1.74.0) (2026-03-02)
 
 ### 🚀 Features
