@@ -1,3 +1,10 @@
+## [1.76.1](https://github.com/upstars-global/unity-core-modules/compare/v1.76.0...v1.76.1) (2026-03-18)
+
+### 🐛 Bug Fixes
+
+* UN-2322 fix reload user data ([#326](https://github.com/upstars-global/unity-core-modules/issues/326))
+ ([f30c921](https://github.com/upstars-global/unity-core-modules/commit/f30c9214af991574566fa2044668accc2b9cbb17))
+
 ## [1.76.0](https://github.com/upstars-global/unity-core-modules/compare/v1.75.0...v1.76.0) (2026-03-09)
 
 ### 🚀 Features
