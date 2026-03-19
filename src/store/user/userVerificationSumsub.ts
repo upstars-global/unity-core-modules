@@ -63,7 +63,7 @@ export const useUserVerificationSumsub = defineStore("UserVerificationSumsub", (
 
     const isPending = computed(() => {
         const status = getReviewStatus.value;
-        return status === "pending" || status === "queued" || status === "prechecked";
+        return status === "pending" || status === "queued" || status === "prechecked" || status === "onHold";
     });
 
     const isRejected = computed(() => {
