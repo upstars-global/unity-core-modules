@@ -155,7 +155,7 @@ function init(): void {
     const url = new URL(window.location.href);
     const path = url.pathname;
     const queryParams = new URLSearchParams(url.search);
-    const referrer = getAIReferrer(queryParams) ? "ai" : getDocumentReferrer() || "";
+    const referrer = getAIReferrer(queryParams) ? REFERRER.AI : getDocumentReferrer() || "";
 
     if (AFFB_ID_COOKIE) {
         initAffbId(queryParams, referrer);
