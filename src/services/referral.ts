@@ -21,11 +21,11 @@ type LoadReferralCodesResult = ReferralServiceResult<ReferralCodesLoadErrorCode>
 type CreateReferralCodeResult = ReferralServiceResult<ReferralCodeCreateErrorCode>;
 type ClaimReferralCodeResult = ReferralServiceResult<ReferralCodeClaimErrorCode>;
 
-export async function loadReferralCodes(): Promise<LoadReferralCodesResult> {
+export async function loadReferralCodes(currency?: string): Promise<LoadReferralCodesResult> {
     const referralStore = useReferral();
 
     try {
-        const referralCodesResponse = await loadReferralCodesReq();
+        const referralCodesResponse = await loadReferralCodesReq(currency);
 
         referralStore.setReferralCodes(referralCodesResponse.referral_codes);
         referralStore.setStatistics(referralCodesResponse.aggregated_data);

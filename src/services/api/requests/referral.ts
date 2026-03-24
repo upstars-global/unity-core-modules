@@ -30,9 +30,11 @@ export class ClaimReferralCodeError extends Error {
     }
 }
 
-export async function loadReferralCodesReq(): Promise<IReferralCodesResponseDTO> {
+export async function loadReferralCodesReq(currency?: string): Promise<IReferralCodesResponseDTO> {
     try {
-        const { data } = await http().get<IReferralCodesResponseDTO>("/api/player/referral_system/list");
+        const { data } = await http().get<IReferralCodesResponseDTO>("/api/player/referral_system/list", {
+            params: { currency },
+        });
         return data;
     } catch (error) {
         if (isHttpError(error) && error.response?.status === 422) {
