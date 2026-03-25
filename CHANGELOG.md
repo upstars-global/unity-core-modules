@@ -1,3 +1,10 @@
+## [1.78.0](https://github.com/upstars-global/unity-core-modules/compare/v1.77.0...v1.78.0) (2026-03-25)
+
+### 🚀 Features
+
+* **UN-2535:** trigger ([#330](https://github.com/upstars-global/unity-core-modules/issues/330))
+ ([cc3664f](https://github.com/upstars-global/unity-core-modules/commit/cc3664fbcf9c74ed5ed92dfa8739d2c53e1573eb))
+
 ## [1.77.0](https://github.com/upstars-global/unity-core-modules/compare/v1.76.1...v1.77.0) (2026-03-24)
 
 ### 🚀 Features
