@@ -35,6 +35,7 @@ import {
     confirmPlayerReq,
     deleteDepositBonusCodeReq,
     deleteTwoFactorReq,
+    depositInsuranceStatusReq,
     IPlayerGroup,
     leadPlayerStartSeasonInfoReq,
     loadAvailableBonusesReq,
@@ -735,5 +736,29 @@ export async function leadPlayerStartSeasonInfo() {
         } catch (err) {
             log.error("PORTOFRANCO_VIP_STATUS_ERROR", err);
         }
+    }
+}
+
+export async function loadDepositInsuranceStatus() {
+    const userInfo = useUserInfo();
+    const { getIsLogged } = storeToRefs(userInfo);
+
+    if (!getIsLogged.value) {
+        userInfo.setDepositInsuranceStatus(undefined);
+
+        return;
+    }
+
+    try {
+        const data = await depositInsuranceStatusReq();
+
+        if (data) {
+            userInfo.setDepositInsuranceStatus(data);
+        } else {
+            userInfo.setDepositInsuranceStatus(undefined);
+        }
+    } catch (err) {
+        log.error("PORTOFRANCO_DEPOSIT_INSURANCE_STATUS_ERROR", err);
+        userInfo.setDepositInsuranceStatus(undefined);
     }
 }

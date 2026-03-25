@@ -111,3 +111,27 @@ export interface ISeasonStartPoints {
     compointsStart: number
     userId: number
 }
+
+export interface IDepositInsuranceConditionState {
+    value: number | null;
+    valid: boolean;
+}
+
+export interface IDepositInsuranceStatus {
+    activatedAmount: number;
+    dailyLimit: number;
+    percentage: number;
+    minDeposit: number;
+    maxBonus: number;
+    wager: number;
+    currencyIso: string;
+    conditions: {
+        lowBalance: IDepositInsuranceConditionState;
+        vipSpentAmount: IDepositInsuranceConditionState;
+        noActiveBonus: IDepositInsuranceConditionState;
+        noPendingWithdrawals: IDepositInsuranceConditionState;
+        noDeposits: IDepositInsuranceConditionState;
+        cashoutAfterDeposit: IDepositInsuranceConditionState;
+        belowMinDeposit: IDepositInsuranceConditionState;
+    };
+}

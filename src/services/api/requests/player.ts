@@ -6,6 +6,7 @@ import { IAuthProvider, IUserAuthProvider } from "../../../models/authProviders"
 import { type IPlayerFieldsInfo } from "../../../models/common";
 import {
     type IDataForUpdatePass,
+    type IDepositInsuranceStatus,
     type ISeasonStartPoints,
     type ITwoFactorAuthData,
     type IUserData,
@@ -464,5 +465,17 @@ export async function leadPlayerStartSeasonInfoReq() {
         return data;
     } catch (error) {
         log.error("PORTOFRANCO_VIP_STATUS_REQ_ERROR", error);
+    }
+}
+
+export async function depositInsuranceStatusReq(): Promise<IDepositInsuranceStatus | undefined> {
+    try {
+        const { data } = await http().get<IDepositInsuranceStatus>(
+            `${ FE_API_PREFIX }/pf/bonuses/deposit-insurance/status`,
+        );
+
+        return data;
+    } catch (error) {
+        log.error("PORTOFRANCO_DEPOSIT_INSURANCE_STATUS_ERROR", error);
     }
 }
