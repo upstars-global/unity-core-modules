@@ -1,5 +1,5 @@
 /* eslint-disable n/no-unsupported-features/node-builtins */
-function promocodeObjGenerate(name) {
+function storageObjGenerate(name) {
     return {
         set(value) {
             sessionStorage.setItem(name, value);
@@ -13,17 +13,20 @@ function promocodeObjGenerate(name) {
     };
 }
 
-const depositPromocodeStorage = promocodeObjGenerate("depositPromocode");
-const depositPromocodeShowedStorage = promocodeObjGenerate("depositPromocodeShowed");
-const giftPromocodeStorage = promocodeObjGenerate("giftPromocode");
+const depositPromocodeStorage = storageObjGenerate("depositPromocode");
+const depositPromocodeShowedStorage = storageObjGenerate("depositPromocodeShowed");
+const depositMinValueStorage = storageObjGenerate("depositMinValue");
+const giftPromocodeStorage = storageObjGenerate("giftPromocode");
 
 function clearAllDepositePromocodeStorage() {
     depositPromocodeStorage.remove();
     depositPromocodeShowedStorage.remove();
+    depositMinValueStorage.remove();
 }
 
 export {
     clearAllDepositePromocodeStorage,
+    depositMinValueStorage,
     depositPromocodeShowedStorage,
     depositPromocodeStorage,
     giftPromocodeStorage,
