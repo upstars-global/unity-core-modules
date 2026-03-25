@@ -9,19 +9,28 @@ export enum REFERRER {
     GOOGLE = "google",
     BING = "bing",
     YAHOO = "yahoo",
+    AI = "ai",
 }
 
 export const REFERRER_NAME = {
     google: REFERRER.GOOGLE,
     bing: REFERRER.BING,
     yahoo: REFERRER.YAHOO,
+    ai: REFERRER.AI,
 };
 
 export const DEFAULT_STAGS_COUNTRY_REFER: Record<string, Record<REFERRER, string>> = {
     [COUNTRIES.CANADA]: {
-        [REFERRER.GOOGLE]: "111111",
-        [REFERRER.BING]: "111111",
-        [REFERRER.YAHOO]: "111111",
+        [REFERRER.GOOGLE]: "google_111111",
+        [REFERRER.BING]: "bing_111111",
+        [REFERRER.YAHOO]: "yahoo_111111",
+        [REFERRER.AI]: "ai_111111",
+    },
+    others: {
+        [REFERRER.GOOGLE]: "google_222222",
+        [REFERRER.BING]: "bing_222222",
+        [REFERRER.YAHOO]: "yahoo_222222",
+        [REFERRER.AI]: "ai_222222",
     },
 };
 
