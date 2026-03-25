@@ -175,7 +175,7 @@ describe("useBannerStore", () => {
         expect(store.getBannersData).toEqual([]);
     });
 
-    it("does not show banner when start time not reached (Casino Time UTC)", () => {
+    it("does not show banner when start time not reached  (Casino Time UTC)", () => {
         vi.setSystemTime(new Date("2026-03-17T14:02:00Z"));
         const store = useBannerStore();
         userGroups.value = [];
