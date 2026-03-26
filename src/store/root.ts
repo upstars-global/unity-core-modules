@@ -5,6 +5,8 @@ import { getBrowserName, isAndroidUserAgent, isIOSUserAgent } from "../helpers/p
 import type { IPlatformState } from "../helpers/userAgentPlatform";
 
 export const useRootStore = defineStore("rootStore", () => {
+    console.log("log fot test https://upstars.atlassian.net/browse/UN-1517");
+
     const platform = ref<IPlatformState | null>(null);
     const gamePage = ref(false);
     const guest = ref(false);
