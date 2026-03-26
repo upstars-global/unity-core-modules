@@ -49,7 +49,7 @@ const defaultUser: IUserData = {
 };
 
 export const useUserInfo = defineStore("userInfo", () => {
-    console.log("defineStore(\"userInfo\"", 2);
+    console.log("defineStore(\"userInfo\"", 3);
     const useCommonStore = useCommon();
     const { getDefaultCurrency, getCurrencyCrypto } = storeToRefs(useCommonStore);
 
