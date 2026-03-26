@@ -156,11 +156,12 @@ export async function cancelsFreespins(id: number) {
     }
 }
 
-export function activationFreespins(id: number) {
+export async function activationFreespins(id: number) {
     try {
-        return activateFreespinsReq(id);
+        return await activateFreespinsReq(id);
     } catch (err) {
         log.error("ACTIVATION_FREESPINS", err);
+        throw err;
     }
 }
 
@@ -205,4 +206,3 @@ export async function loadCancelInfo(id: number) {
         log.error("LOAD_CANCEL_INFO", err);
     }
 }
-
