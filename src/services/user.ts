@@ -1,4 +1,5 @@
 import { ID_GROUP_FOR_PAIRED_ID, ID_GROUP_FOR_UNPAIRED_ID } from "@config/groupAB";
+import { IRON_STATUS } from "@config/user-statuses";
 import { PROJECT } from "@theme/configs/constantsFreshChat";
 import { getStateByCounty } from "@theme/configs/stateFieldConfig";
 import { storeToRefs } from "pinia";
@@ -739,26 +740,49 @@ export async function leadPlayerStartSeasonInfo() {
     }
 }
 
-export async function loadDepositInsuranceStatus() {
-    const userInfo = useUserInfo();
-    const { getIsLogged } = storeToRefs(userInfo);
+let depositInsuranceStatusLoad: Promise<void> | null = null;
 
-    if (!getIsLogged.value) {
-        userInfo.setDepositInsuranceStatus(undefined);
-
-        return;
+export async function loadDepositInsuranceStatus(): Promise<void> {
+    if (depositInsuranceStatusLoad) {
+        return depositInsuranceStatusLoad;
     }
 
-    try {
-        const data = await depositInsuranceStatusReq();
+    depositInsuranceStatusLoad = (async () => {
+        const userInfo = useUserInfo();
+        const giftsStore = useGiftsStore();
+        const { getIsLogged } = storeToRefs(userInfo);
+        const { isVip, userVipGroup } = storeToRefs(useUserStatuses());
 
-        if (data) {
-            userInfo.setDepositInsuranceStatus(data);
-        } else {
-            userInfo.setDepositInsuranceStatus(undefined);
+        if (!getIsLogged.value) {
+            giftsStore.setDepositInsuranceGift(undefined);
+
+            return;
         }
-    } catch (err) {
-        log.error("PORTOFRANCO_DEPOSIT_INSURANCE_STATUS_ERROR", err);
-        userInfo.setDepositInsuranceStatus(undefined);
-    }
+
+        const eligibleForDepositInsurance =
+            Boolean(isVip.value) && userVipGroup.value !== IRON_STATUS;
+
+        if (!eligibleForDepositInsurance) {
+            giftsStore.setDepositInsuranceGift(undefined);
+
+            return;
+        }
+
+        try {
+            const data = await depositInsuranceStatusReq();
+
+            if (data) {
+                giftsStore.setDepositInsuranceGift(data);
+            } else {
+                giftsStore.setDepositInsuranceGift(undefined);
+            }
+        } catch (err) {
+            log.error("PORTOFRANCO_DEPOSIT_INSURANCE_STATUS_ERROR", err);
+            giftsStore.setDepositInsuranceGift(undefined);
+        }
+    })().finally(() => {
+        depositInsuranceStatusLoad = null;
+    });
+
+    return depositInsuranceStatusLoad;
 }

@@ -3,7 +3,7 @@ import { computed, ref } from "vue";
 
 import { Currencies } from "../../models/enums/currencies";
 import { BettingPlayerSettings } from "../../models/player";
-import type { IDepositInsuranceStatus, IUserData, IUserStatus } from "../../models/user";
+import type { IUserData, IUserStatus } from "../../models/user";
 import { ISeasonStartPoints } from "../../models/user";
 import type { IPlayerStats, ISubscriptions, IUserSettings } from "../../services/api/DTO/playerDTO";
 import { useCommon } from "../common";
@@ -68,7 +68,6 @@ export const useUserInfo = defineStore("userInfo", () => {
         selectedOddsType: "european",
     });
     const userStartSeasonInfo = ref<ISeasonStartPoints>();
-    const depositInsuranceStatus = ref<IDepositInsuranceStatus>();
 
     const getUserInfo = computed(() => info.value);
     const getUserBettingBonuses = computed(() => bettingBonuses.value);
@@ -91,7 +90,6 @@ export const useUserInfo = defineStore("userInfo", () => {
     const getIsLoadedUsedData = computed(() => isLoadedUsedData.value);
     const getPlayerStats = computed(() => stats.value);
     const getUserStartSeasonInfo = computed(() => userStartSeasonInfo.value);
-    const getDepositInsuranceStatus = computed(() => depositInsuranceStatus.value);
 
     function setPlayerStats(data: IPlayerStats) {
         stats.value = data;
@@ -138,7 +136,6 @@ export const useUserInfo = defineStore("userInfo", () => {
         info.value = defaultUser;
         isLogged.value = false;
         notice.value = [];
-        depositInsuranceStatus.value = undefined;
     }
 
     function toggleUserIsLogged(status: boolean) {
@@ -201,10 +198,6 @@ export const useUserInfo = defineStore("userInfo", () => {
         userStartSeasonInfo.value = data;
     }
 
-    function setDepositInsuranceStatus(data: IDepositInsuranceStatus | undefined) {
-        depositInsuranceStatus.value = data;
-    }
-
     return {
         getUserInfo,
         setUserInfo,
@@ -231,8 +224,6 @@ export const useUserInfo = defineStore("userInfo", () => {
         getUserBettingBonuses,
         getPlayerStats,
         getUserStartSeasonInfo,
-        getDepositInsuranceStatus,
-        setDepositInsuranceStatus,
         setPlayerStats,
         getSubunitsToUnitsByCode,
         toggleUserIsLogged,
