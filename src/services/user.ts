@@ -532,7 +532,9 @@ export async function loadUserProfile({ reload = false, route }: { reload?: bool
         return { data: profile };
     }
 
-    userInfoStore.updateUserInfo({ dataIsLoaded: false });
+    if (!profile.id) {
+        userInfoStore.updateUserInfo({ dataIsLoaded: false });
+    }
 
     try {
         const response = await loadUserProfileReq();

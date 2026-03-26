@@ -1,3 +1,28 @@
+## [1.78.0](https://github.com/upstars-global/unity-core-modules/compare/v1.77.0...v1.78.0) (2026-03-25)
+
+### 🚀 Features
+
+* **UN-2535:** trigger ([#330](https://github.com/upstars-global/unity-core-modules/issues/330))
+ ([cc3664f](https://github.com/upstars-global/unity-core-modules/commit/cc3664fbcf9c74ed5ed92dfa8739d2c53e1573eb))
+
+## [1.77.0](https://github.com/upstars-global/unity-core-modules/compare/v1.76.1...v1.77.0) (2026-03-24)
+
+### 🚀 Features
+
+* UN-2447 Доработать текущий функционал проставления stag который находится в кор модуле в StagController.ts ([#324](https://github.com/upstars-global/unity-core-modules/issues/324))
+ ([aa781b4](https://github.com/upstars-global/unity-core-modules/commit/aa781b4f75df04138b02b31a3f8159f18d318c82))
+
+
+
+    Добавлено отслеживание AI трафика
+
+## [1.76.1](https://github.com/upstars-global/unity-core-modules/compare/v1.76.0...v1.76.1) (2026-03-18)
+
+### 🐛 Bug Fixes
+
+* UN-2322 fix reload user data ([#326](https://github.com/upstars-global/unity-core-modules/issues/326))
+ ([f30c921](https://github.com/upstars-global/unity-core-modules/commit/f30c9214af991574566fa2044668accc2b9cbb17))
+
 ## [1.76.0](https://github.com/upstars-global/unity-core-modules/compare/v1.75.0...v1.76.0) (2026-03-09)
 
 ### 🚀 Features
