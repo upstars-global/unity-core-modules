@@ -63,7 +63,9 @@ describe("referral requests", () => {
         getMock.mockResolvedValue(response);
 
         await expect(loadReferralCodesReq()).resolves.toEqual(response.data);
-        expect(getMock).toHaveBeenCalledWith("/api/player/referral_system/list");
+        expect(getMock).toHaveBeenCalledWith("/api/player/referral_system/list", {
+            params: { currency: undefined },
+        });
     });
 
     it("maps 422 load error to LoadReferralCodesError", async () => {
