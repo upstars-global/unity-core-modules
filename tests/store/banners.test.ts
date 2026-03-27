@@ -1,5 +1,5 @@
 import { createPinia, setActivePinia } from "pinia";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 
 import { useBannerStore } from "../../src/store/banners";
@@ -11,6 +11,16 @@ const isCryptoUserCurrency = ref(false);
 const isLogged = ref(false);
 
 const nowMs = Date.parse("2024-01-02T00:00:00Z");
+
+function parseDDMMYYYYHHmm(str: string): number {
+    const match = str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2})$/);
+    if (!match) {
+        return Date.parse(str);
+    }
+    const [ , day, month, year, hour, minute ] = match;
+    return Date.UTC(Number(year), Number(month) - 1, Number(day), Number(hour), Number(minute));
+}
+
 const makeDay = (ms: number) => ({
     __ms: ms,
     isAfter(other: { __ms: number }) {
@@ -23,7 +33,8 @@ const makeDay = (ms: number) => ({
 
 vi.mock("dayjs", () => {
     const dayjs = (input?: string) => makeDay(input ? Date.parse(input) : nowMs);
-    dayjs.utc = () => makeDay(nowMs);
+    dayjs.utc = (dateStr?: string, _format?: string) =>
+        makeDay(dateStr ? parseDDMMYYYYHHmm(dateStr) : Date.now());
     dayjs.extend = vi.fn();
     return { default: dayjs };
 });
@@ -73,12 +84,18 @@ vi.mock("../../src/store/settings", () => ({
 
 describe("useBannerStore", () => {
     beforeEach(() => {
+        vi.useFakeTimers();
+        vi.setSystemTime(new Date("2024-01-02T00:00:00Z"));
         setActivePinia(createPinia());
         showWelcomePack.value = true;
         userGroups.value = [];
         isCryptoDomain.value = false;
         isCryptoUserCurrency.value = false;
         isLogged.value = false;
+    });
+
+    afterEach(() => {
+        vi.useRealTimers();
     });
 
     it("filters banners by welcome pack, groups, live time, and registration logic", () => {
@@ -91,8 +108,8 @@ describe("useBannerStore", () => {
                 categories: [ "welcome_show", "jackpots" ],
                 groups: [ 2 ],
                 liveTime: {
-                    start: "2024-01-01T00:00:00Z",
-                    end: "2024-01-03T00:00:00Z",
+                    start: "01/01/2024 00:00",
+                    end: "03/01/2024 00:00",
                 },
             },
             {
@@ -109,8 +126,8 @@ describe("useBannerStore", () => {
                 id: "time-expired",
                 categories: [],
                 liveTime: {
-                    start: "2023-12-01T00:00:00Z",
-                    end: "2023-12-31T00:00:00Z",
+                    start: "01/12/2023 00:00",
+                    end: "31/12/2023 00:00",
                 },
             },
             {
@@ -149,8 +166,28 @@ describe("useBannerStore", () => {
                 categories: [],
                 groups: [ 2 ],
                 liveTime: {
-                    start: "2025-01-01T00:00:00Z",
-                    end: "2025-02-01T00:00:00Z",
+                    start: "01/01/2025 00:00",
+                    end: "01/02/2025 00:00",
+                },
+            },
+        ] as never);
+
+        expect(store.getBannersData).toEqual([]);
+    });
+
+    it("does not show banner when start time not reached  (Casino Time UTC)", () => {
+        vi.setSystemTime(new Date("2026-03-17T14:02:00Z"));
+        const store = useBannerStore();
+        userGroups.value = [];
+
+        store.setBanners([
+            {
+                id: "future-banner",
+                categories: [],
+                groups: [],
+                liveTime: {
+                    start: "17/03/2026 17:00",
+                    end: "19/03/2026 01:59",
                 },
             },
         ] as never);
