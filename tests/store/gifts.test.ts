@@ -2,8 +2,30 @@ import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { reactive, ref } from "vue";
 
+import type { IDepositInsuranceStatus } from "../../src/models/user";
 import { GiftState } from "../../src/services/api/DTO/gifts";
 import { useGiftsStore } from "../../src/store/gifts";
+
+function minimalDepositInsuranceStatus(): IDepositInsuranceStatus {
+    return {
+        activatedAmount: 0,
+        dailyLimit: 100,
+        percentage: 10,
+        minDeposit: 10,
+        maxBonus: 100,
+        wager: 35,
+        currencyIso: "USD",
+        conditions: {
+            lowBalance: { value: 100, valid: true },
+            vipSpentAmount: { value: 50, valid: true },
+            noActiveBonus: { value: null, valid: true },
+            noPendingWithdrawals: { value: null, valid: true },
+            noDeposits: { value: null, valid: true },
+            cashoutAfterDeposit: { value: null, valid: true },
+            belowMinDeposit: { value: null, valid: true },
+        },
+    };
+}
 
 vi.mock("@theme/configs/constantsFreshChat", () => ({ PROJECT: "mocked" }));
 
@@ -426,6 +448,7 @@ describe("useGiftsStore", () => {
         store.setDepositGiftsAll([ { id: "d1" } ] as never);
         store.setRegistrationGiftsAll([ { id: "r1" } ] as never);
         store.setFSGiftsAll([ { id: 1 } ] as never);
+        store.setDepositInsuranceGift(minimalDepositInsuranceStatus());
 
         store.giftsStoreClear();
 
@@ -433,6 +456,26 @@ describe("useGiftsStore", () => {
         expect(store.depositGiftsAll).toEqual([]);
         expect(store.registrationGiftsAll).toEqual([]);
         expect(store.fsGiftsAll).toEqual([]);
+        expect(store.depositInsuranceGift).toBeUndefined();
+    });
+
+    it("sets and exposes deposit insurance gift", () => {
+        const store = useGiftsStore();
+        const data = minimalDepositInsuranceStatus();
+
+        store.setDepositInsuranceGift(data);
+
+        expect(store.depositInsuranceGift).toEqual(data);
+        expect(store.getDepositInsuranceGift).toEqual(data);
+    });
+
+    it("clears deposit insurance gift when set to undefined", () => {
+        const store = useGiftsStore();
+
+        store.setDepositInsuranceGift(minimalDepositInsuranceStatus());
+        store.setDepositInsuranceGift(undefined);
+
+        expect(store.depositInsuranceGift).toBeUndefined();
     });
 
     it("updates misc flags and configs", () => {
