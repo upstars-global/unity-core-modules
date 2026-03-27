@@ -8,6 +8,7 @@ import {
 import { log } from "../controllers/Logger";
 import { useGiftsStore } from "../store/gifts";
 import type { IGift, IGiftDeposit, IGiftFreeSpins } from "./api/DTO/gifts";
+import { isHttpError } from "./api/http";
 import {
     loadAdditionalDepositGiftsConfigReq, loadDailyBonusConfigReq,
     loadDisabledBonusesConfigReq,
@@ -156,11 +157,28 @@ export async function cancelsFreespins(id: number) {
     }
 }
 
-export function activationFreespins(id: number) {
+export async function activationFreespins(id: number) {
     try {
-        return activateFreespinsReq(id);
+        return await activateFreespinsReq(id);
     } catch (err) {
         log.error("ACTIVATION_FREESPINS", err);
+
+        if (isHttpError(err)) {
+            const errorObject = err.response.data?.errors;
+            const currentApiErrorText = errorObject ? String(Object.values(errorObject)[0]) : null;
+
+            if (currentApiErrorText) {
+                const defaultPwaErrorText = "The bonus can be activated only in Progressive web app";
+                const isPwaError = currentApiErrorText === defaultPwaErrorText;
+
+                if (isPwaError) {
+                    throw new Error("isPwaInstallError");
+                } else {
+                    throw new Error(currentApiErrorText);
+                }
+            }
+        }
+
         throw err;
     }
 }
