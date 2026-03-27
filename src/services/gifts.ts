@@ -156,9 +156,9 @@ export async function cancelsFreespins(id: number) {
     }
 }
 
-export async function activationFreespins(id: number) {
+export function activationFreespins(id: number) {
     try {
-        return await activateFreespinsReq(id);
+        return activateFreespinsReq(id);
     } catch (err) {
         log.error("ACTIVATION_FREESPINS", err);
         throw err;
