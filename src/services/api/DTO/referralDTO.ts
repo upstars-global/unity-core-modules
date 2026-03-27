@@ -1,6 +1,7 @@
 export interface IReferralCodeDTO {
     refcode: string;
     claimed_amount: number;
+    users_count: number;
     completed_users_count: number;
     to_claim_amount: number;
 }

@@ -15,7 +15,7 @@ export const useReferral = defineStore("referral", () => {
     }
 
     function setStatistics(stats: IReferralCodesResponseDTO["aggregated_data"]) {
-        referralStatistic.value = stats;
+        referralStatistic.value = { ...referralStatistic.value, ...stats };
     }
 
     function addReferralCode(code: IReferralCodeDTO) {
