@@ -1,21 +1,23 @@
 import { ORGANIZATION_ID, PRODUCT_ID, YOUR_SITE_ID } from "@config/customerIO";
 
+import { onesignalId } from "../helpers/oneSignalHelper";
+
 declare global {
-  interface Window {
-      _cio: unknown;
-  }
+    interface Window {
+        _cio: unknown;
+    }
 }
 
 /* eslint-disable*/
 function init() {
     if (typeof window !== "undefined") {
         window._cio = window._cio || [];
-        (function() {
+        (function () {
             let a, b, c;
-            a = function(f) {
-                return function() {
+            a = function (f) {
+                return function () {
                     _cio.push([ f ]
-                        .concat(Array.prototype.slice.call(arguments, 0)));
+                    .concat(Array.prototype.slice.call(arguments, 0)));
                 };
             };
             b = [ "load", "identify", "sidentify", "track", "page", "on", "off" ];
@@ -40,13 +42,14 @@ function init() {
     }
 }
 
-function cioIdentify({ id: idUser, email, created_at: createdProfile, ...data }) {
+function cioIdentify({id: idUser, email, created_at: createdProfile, ...data}) {
     const created_at = new Date(createdProfile).getTime() / 1000;
 
     _cio.identify({
         id: `${ PRODUCT_ID }:${ idUser }`,
         email,
         created_at,
+        onesignal_id_web: onesignalId(),
         ...data,
     });
 }
@@ -62,4 +65,3 @@ export function cioIdentifyUser(userInfo) {
 
     cioIdentify(userInfo);
 }
-
