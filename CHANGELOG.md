@@ -1,3 +1,28 @@
+## [1.79.0](https://github.com/upstars-global/unity-core-modules/compare/v1.78.0...v1.79.0) (2026-04-06)
+
+### 🚀 Features
+
+* **UN-1928:** referral program api and store ([#329](https://github.com/upstars-global/unity-core-modules/issues/329))
+ ([481e3c9](https://github.com/upstars-global/unity-core-modules/commit/481e3c930c06d3217c159ec0bf2bcefe0eded218))
+
+
+
+    * feat(UN-1928): referral program api and store
+
+    * chore: cover feature with tests
+
+    * fix: add currency param for referral request
+
+    * fix: add currency param for referral request
+
+    # Conflicts:
+
+    #	src/services/referral.ts
+
+    * fix
+
+    * fix: tests
+
 ## [1.78.0](https://github.com/upstars-global/unity-core-modules/compare/v1.77.0...v1.78.0) (2026-03-25)
 
 ### 🚀 Features
