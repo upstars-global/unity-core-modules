@@ -1,3 +1,10 @@
+## [1.80.1](https://github.com/upstars-global/unity-core-modules/compare/v1.80.0...v1.80.1) (2026-04-07)
+
+### 🐛 Bug Fixes
+
+* Добавить проверку на корректный json в tournamentsStore.ts ([#334](https://github.com/upstars-global/unity-core-modules/issues/334))
+ ([d932b28](https://github.com/upstars-global/unity-core-modules/commit/d932b28a2d2010fe63cb9023e6e95a4fb9f7d8ab))
+
 ## [1.80.0](https://github.com/upstars-global/unity-core-modules/compare/v1.79.0...v1.80.0) (2026-04-07)
 
 ### 🚀 Features
