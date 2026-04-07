@@ -1,3 +1,16 @@
+## [1.80.0](https://github.com/upstars-global/unity-core-modules/compare/v1.79.0...v1.80.0) (2026-04-07)
+
+### 🚀 Features
+
+* **UN-2409:** cache for games endpoints ([#325](https://github.com/upstars-global/unity-core-modules/issues/325))
+ ([8e3a9b0](https://github.com/upstars-global/unity-core-modules/commit/8e3a9b0040ed8a25de53f55b8f8fd126ad092a34))
+
+
+
+    * UN-2409 cache for games endpoints
+
+    * UN-2409 save jackpot by currency
+
 ## [1.79.0](https://github.com/upstars-global/unity-core-modules/compare/v1.78.0...v1.79.0) (2026-04-06)
 
 ### 🚀 Features
