@@ -43,12 +43,14 @@ export const useTournamentsStore = defineStore("tournamentsStore", () => {
                 });
 
             return tournaments.map((tour: ITournament) => {
-                return {
-                    ...tour,
-                    custom: true,
-                    status: statusForTournament(tour),
-                    type: PromoType.TOURNAMENT,
-                };
+                if (tour) {
+                    return {
+                        ...tour,
+                        custom: true,
+                        status: statusForTournament(tour),
+                        type: PromoType.TOURNAMENT,
+                    };
+                }
             });
         } catch (error) {
             log.error("GET_CUSTOM_TOURNAMENTS_LIST_ERROR", error);
@@ -117,14 +119,16 @@ export const useTournamentsStore = defineStore("tournamentsStore", () => {
                     String(id).includes(currentTournament.value?.frontend_identifier);
             });
 
-            return {
-                ...tour,
-                status: statusForTournament(tour),
-                type: PromoType.TOURNAMENT,
-                // @ts-expect-error Property 'url' does not exist on typer .
-                image: image?.url,
-                file: image,
-            };
+            if (tour) {
+                return {
+                    ...tour,
+                    status: statusForTournament(tour),
+                    type: PromoType.TOURNAMENT,
+                    // @ts-expect-error Property 'url' does not exist on typer .
+                    image: image?.url,
+                    file: image,
+                };
+            }
         });
     });
 
