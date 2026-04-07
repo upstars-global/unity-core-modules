@@ -1,6 +1,3 @@
-/**
- * @vitest-environment happy-dom
- */
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { CookieController } from "../../src/controllers/CookieController";
@@ -20,6 +17,9 @@ vi.mock("../../src/controllers/CookieController", () => ({
 describe("getDocumentReferrer", () => {
     beforeEach(() => {
         vi.clearAllMocks();
+        vi.stubGlobal("document", {
+            referrer: "",
+        });
     });
 
     it("returns document.referrer if exists", () => {
@@ -49,6 +49,9 @@ describe("getDocumentReferrer", () => {
 describe("getAIReferrer", () => {
     beforeEach(() => {
         vi.clearAllMocks();
+        vi.stubGlobal("document", {
+            referrer: "",
+        });
     });
 
     it("returns utm_source if it matches AI regex", () => {
