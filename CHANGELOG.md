@@ -1,3 +1,12 @@
+## [1.80.2](https://github.com/upstars-global/unity-core-modules/compare/v1.80.1...v1.80.2) (2026-04-08)
+
+### ⏪ Reverts
+
+* "UN-2409 cache for games endpoints" ([#336](https://github.com/upstars-global/unity-core-modules/issues/336))
+ ([e0d910f](https://github.com/upstars-global/unity-core-modules/commit/e0d910faf15fe29e63077173d764459b95a1544c))
+
+, closes [#325](https://github.com/upstars-global/unity-core-modules/issues/)
+
 ## [1.80.1](https://github.com/upstars-global/unity-core-modules/compare/v1.80.0...v1.80.1) (2026-04-07)
 
 ### 🐛 Bug Fixes
