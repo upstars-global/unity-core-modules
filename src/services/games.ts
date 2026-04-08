@@ -74,20 +74,12 @@ export async function loadEnableGamesConfig() {
     }
 }
 
-/**
- * @param currency - When provided, only this currency is stored (reduces context size ~10x).
- *                   Use for SSR/static gen; omit for client to get full data (all currencies).
- */
-export async function loadGamesJackpots(currency?: string): Promise<void> {
+export async function loadGamesJackpots(): Promise<void> {
     try {
         const gamesStore = useGamesCommon();
         const jackpots = await loadGamesJackpotsReq();
 
-        const toStore = currency
-            ? { [currency]: jackpots[currency] ?? {} }
-            : jackpots;
-
-        gamesStore.setGamesJackpots(toStore);
+        gamesStore.setGamesJackpots(jackpots);
     } catch (error) {
         log.error("Error loading games jackpots", error);
     }
@@ -221,11 +213,7 @@ export function initCollection(data: IGamesProvider[]) {
 export async function loadGamesProviders(): Promise<IGamesProvider[]> {
     try {
         const gamesProvidersStore = useGamesProviders();
-        const { gamesProviders, disabledGamesProviders } = storeToRefs(gamesProvidersStore);
-
-        if (isExistData(gamesProviders.value)) {
-            return gamesProviders.value;
-        }
+        const { disabledGamesProviders } = storeToRefs(gamesProvidersStore);
 
         const providers = await loadGamesProvidersReq();
 
