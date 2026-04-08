@@ -1,3 +1,18 @@
+## [1.81.0](https://github.com/upstars-global/unity-core-modules/compare/v1.80.2...v1.81.0) (2026-04-08)
+
+### 🚀 Features
+
+* (UN-1999) sumsub integration ([#320](https://github.com/upstars-global/unity-core-modules/issues/320))
+ ([b9a8af5](https://github.com/upstars-global/unity-core-modules/commit/b9a8af560b3262f673971f3a78f6495df59a5f10))
+
+
+
+    * UN-1999 subsub improvements
+
+    * UN-1999 sumsub integration
+
+    * UN-1999 add onHold status support
+
 ## [1.80.2](https://github.com/upstars-global/unity-core-modules/compare/v1.80.1...v1.80.2) (2026-04-08)
 
 ### ⏪ Reverts
