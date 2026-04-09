@@ -1,3 +1,10 @@
+## [1.82.0](https://github.com/upstars-global/unity-core-modules/compare/v1.81.0...v1.82.0) (2026-04-09)
+
+### 🚀 Features
+
+* **UN-2591:** filter user wallets by disabled currencies ([#335](https://github.com/upstars-global/unity-core-modules/issues/335))
+ ([e0421ff](https://github.com/upstars-global/unity-core-modules/commit/e0421ff4ad022b974e60c25e00a44102e70ba1a9))
+
 ## [1.81.0](https://github.com/upstars-global/unity-core-modules/compare/v1.80.2...v1.81.0) (2026-04-08)
 
 ### 🚀 Features
