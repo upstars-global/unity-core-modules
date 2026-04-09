@@ -134,6 +134,10 @@ export const useUserBalance = defineStore("userBalance", () => {
         balance.value = [];
     }
 
+    function setUserBalance(data: IUserAccount[]) {
+        balance.value = data;
+    }
+
     return {
         clearState,
 
@@ -155,5 +159,6 @@ export const useUserBalance = defineStore("userBalance", () => {
         getUserTotalWagering,
         getUserWager,
         getCurrencies,
+        setUserBalance,
     };
 });

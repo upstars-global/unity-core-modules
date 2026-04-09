@@ -1,17 +1,22 @@
-import { storeToRefs } from "pinia";
-
 import { log } from "../controllers/Logger";
 import { Currencies } from "../models/enums/currencies";
 import { loadUserBalanceReq, selectUserWalletReq } from "../services/api/requests/player";
 import { loadUserLimits, loadUserProfile } from "../services/user";
+import { useConfigStore } from "../store/configStore";
 import { useUserBalance } from "../store/user/userBalance";
 
 export function useUserBalanceService() {
-    const { balance } = storeToRefs(useUserBalance());
+    const { setUserBalance } = useUserBalance();
 
     async function loadUserBalance() {
         try {
-            balance.value = await loadUserBalanceReq();
+            const balanceData = await loadUserBalanceReq();
+            const { $defaultProjectConfig } = useConfigStore();
+            const disabledCurrencies = $defaultProjectConfig?.disabledCurrencies || [];
+            const filteredBalanceData = balanceData
+                .filter((balanceItem) => !disabledCurrencies.includes(balanceItem.currency));
+
+            setUserBalance(filteredBalanceData);
         } catch (err) {
             log.error("SERVICE_LOAD_USER_BALANCE_ERROR", err);
         }
