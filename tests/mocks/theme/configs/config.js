@@ -43,7 +43,7 @@ export default {
     ],
     paymentsEE: [
         "visa_mastercard", "skrill", "neteller",
-        "interac_finteqhub", "mifinity", "muchbetter",
+        "interac_ffp", "mifinity", "muchbetter",
         "paysafecard", "inpay",
     ],
     PROMO_TOOLTIP_TIMER_MINUTES: 10,
