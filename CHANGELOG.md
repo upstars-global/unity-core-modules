@@ -1,3 +1,10 @@
+## [1.83.0](https://github.com/upstars-global/unity-core-modules/compare/v1.82.0...v1.83.0) (2026-04-09)
+
+### 🚀 Features
+
+* **UN-2177:** add storage obj for minimum deposit value ([#331](https://github.com/upstars-global/unity-core-modules/issues/331))
+ ([09f1143](https://github.com/upstars-global/unity-core-modules/commit/09f1143fed5ff6a5624a1c7e3735c310a2511408))
+
 ## [1.82.0](https://github.com/upstars-global/unity-core-modules/compare/v1.81.0...v1.82.0) (2026-04-09)
 
 ### 🚀 Features
