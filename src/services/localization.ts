@@ -12,20 +12,29 @@ import { loadLocalesReq, updateLocalesReq } from "./api/requests/multilang";
 function getRequestQueryParams() {
     const requestQueryParams = new URLSearchParams();
     const urlSearchParams = getUrlSearchParams();
-
     const ref_code = urlSearchParams?.get("ref_code");
+    const affb_id = StagController.getAffbId();
+    const referralStag = "224448_69d4c6b3e69e08fffd0bb573";
+
     if (ref_code) {
         requestQueryParams.set("ref_code", ref_code);
+
+        const stag = StagController.getStag();
+        const stagHold = StagController.getStagHold();
+
+        if ((!stag || !stagHold) && referralStag) {
+            StagController.setStag(referralStag);
+        }
     }
 
-    const affb_id = StagController.getAffbId();
     if (affb_id) {
         requestQueryParams.set(AFFB_ID_KEY, affb_id);
     }
 
-    const stag = StagController.getStag();
-    if (stag) {
-        requestQueryParams.set(STAG_PARTNER_KEY, stag);
+    const actualStag = StagController.getStag();
+
+    if (actualStag) {
+        requestQueryParams.set(STAG_PARTNER_KEY, actualStag);
     }
 
     return requestQueryParams;
