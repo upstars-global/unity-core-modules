@@ -33,7 +33,6 @@ interface IStagInfo {
 const expires = 30 * 86400; // 30 days
 const stagHoldExpires = 8 * 3600; // 8 hours
 
-
 function getReferSearchEnginesMatch(referrer: string): string {
     return Object.values(REFERRER).find((refItem) => referrer.includes(refItem as string)) || "";
 }

@@ -5,6 +5,7 @@ import type { Composer, VueI18n } from "vue-i18n";
 import { StagController } from "../controllers/StagController";
 import { redirectToLang } from "../helpers/redirectToLang";
 import { getUrlSearchParams } from "../helpers/urlHelpers";
+import { useConfigStore } from "../store/configStore";
 import { useMultilangStore } from "../store/multilang";
 import type { LocaleName, Locales } from "./api/DTO/multilang";
 import { loadLocalesReq, updateLocalesReq } from "./api/requests/multilang";
@@ -14,13 +15,14 @@ function getRequestQueryParams() {
     const urlSearchParams = getUrlSearchParams();
     const ref_code = urlSearchParams?.get("ref_code");
     const affb_id = StagController.getAffbId();
-    const referralStag = "224448_69d4c6b3e69e08fffd0bb573";
 
     if (ref_code) {
         requestQueryParams.set("ref_code", ref_code);
 
         const stag = StagController.getStag();
         const stagHold = StagController.getStagHold();
+        const { $defaultProjectConfig } = useConfigStore();
+        const referralStag = $defaultProjectConfig?.referralStag;
 
         if ((!stag || !stagHold) && referralStag) {
             StagController.setStag(referralStag);
