@@ -16,7 +16,7 @@ import { useMultilangStore } from "../store/multilang";
 import { CookieController } from "./CookieController";
 import { log } from "./Logger";
 
-const STAG_PARTNER_HOLD_COOKIE = "partner-stag-hold";
+const STAG_PARTNER_HOLD_COOKIE = `${STAG_PARTNER_COOKIE}-hold`;
 
 interface IGetStagParams {
     referrer?: string;
