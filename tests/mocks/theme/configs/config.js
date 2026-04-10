@@ -41,11 +41,6 @@ export default {
         "combined", "flexepin", "volt", "directbankingeu",
         "rapidtransfer", "bankintl",
     ],
-    paymentsEE: [
-        "visa_mastercard", "skrill", "neteller",
-        "interac_ffp", "mifinity", "muchbetter",
-        "paysafecard", "inpay",
-    ],
     PROMO_TOOLTIP_TIMER_MINUTES: 10,
     socials: [],
     awardsNominations: [],
