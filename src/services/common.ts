@@ -2,6 +2,7 @@ import { storeToRefs } from "pinia";
 
 import { isExistData } from "../helpers/isExistData";
 import { isServer } from "../helpers/ssrHelpers";
+import { getUrlSearchParams } from "../helpers/urlHelpers";
 import { useCommon } from "../store/common";
 import { usePWA } from "../store/pwa";
 import { useUserInfo } from "../store/user/userInfo";
@@ -20,10 +21,8 @@ export async function loadCurrentIP() {
 }
 
 export function checkIsNativePWA() {
-    if (!isServer) {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get("pwaType") === "native";
-    }
+    const urlParams = getUrlSearchParams();
+    return urlParams?.get("pwaType") === "native";
 }
 
 export async function subscribeToStandaloneMQL() {

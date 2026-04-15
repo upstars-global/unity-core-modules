@@ -1,3 +1,86 @@
+## [1.83.0](https://github.com/upstars-global/unity-core-modules/compare/v1.82.0...v1.83.0) (2026-04-09)
+
+### 🚀 Features
+
+* **UN-2177:** add storage obj for minimum deposit value ([#331](https://github.com/upstars-global/unity-core-modules/issues/331))
+ ([09f1143](https://github.com/upstars-global/unity-core-modules/commit/09f1143fed5ff6a5624a1c7e3735c310a2511408))
+
+## [1.82.0](https://github.com/upstars-global/unity-core-modules/compare/v1.81.0...v1.82.0) (2026-04-09)
+
+### 🚀 Features
+
+* **UN-2591:** filter user wallets by disabled currencies ([#335](https://github.com/upstars-global/unity-core-modules/issues/335))
+ ([e0421ff](https://github.com/upstars-global/unity-core-modules/commit/e0421ff4ad022b974e60c25e00a44102e70ba1a9))
+
+## [1.81.0](https://github.com/upstars-global/unity-core-modules/compare/v1.80.2...v1.81.0) (2026-04-08)
+
+### 🚀 Features
+
+* (UN-1999) sumsub integration ([#320](https://github.com/upstars-global/unity-core-modules/issues/320))
+ ([b9a8af5](https://github.com/upstars-global/unity-core-modules/commit/b9a8af560b3262f673971f3a78f6495df59a5f10))
+
+
+
+    * UN-1999 subsub improvements
+
+    * UN-1999 sumsub integration
+
+    * UN-1999 add onHold status support
+
+## [1.80.2](https://github.com/upstars-global/unity-core-modules/compare/v1.80.1...v1.80.2) (2026-04-08)
+
+### ⏪ Reverts
+
+* "UN-2409 cache for games endpoints" ([#336](https://github.com/upstars-global/unity-core-modules/issues/336))
+ ([e0d910f](https://github.com/upstars-global/unity-core-modules/commit/e0d910faf15fe29e63077173d764459b95a1544c))
+
+, closes [#325](https://github.com/upstars-global/unity-core-modules/issues/)
+
+## [1.80.1](https://github.com/upstars-global/unity-core-modules/compare/v1.80.0...v1.80.1) (2026-04-07)
+
+### 🐛 Bug Fixes
+
+* Добавить проверку на корректный json в tournamentsStore.ts ([#334](https://github.com/upstars-global/unity-core-modules/issues/334))
+ ([d932b28](https://github.com/upstars-global/unity-core-modules/commit/d932b28a2d2010fe63cb9023e6e95a4fb9f7d8ab))
+
+## [1.80.0](https://github.com/upstars-global/unity-core-modules/compare/v1.79.0...v1.80.0) (2026-04-07)
+
+### 🚀 Features
+
+* **UN-2409:** cache for games endpoints ([#325](https://github.com/upstars-global/unity-core-modules/issues/325))
+ ([8e3a9b0](https://github.com/upstars-global/unity-core-modules/commit/8e3a9b0040ed8a25de53f55b8f8fd126ad092a34))
+
+
+
+    * UN-2409 cache for games endpoints
+
+    * UN-2409 save jackpot by currency
+
+## [1.79.0](https://github.com/upstars-global/unity-core-modules/compare/v1.78.0...v1.79.0) (2026-04-06)
+
+### 🚀 Features
+
+* **UN-1928:** referral program api and store ([#329](https://github.com/upstars-global/unity-core-modules/issues/329))
+ ([481e3c9](https://github.com/upstars-global/unity-core-modules/commit/481e3c930c06d3217c159ec0bf2bcefe0eded218))
+
+
+
+    * feat(UN-1928): referral program api and store
+
+    * chore: cover feature with tests
+
+    * fix: add currency param for referral request
+
+    * fix: add currency param for referral request
+
+    # Conflicts:
+
+    #	src/services/referral.ts
+
+    * fix
+
+    * fix: tests
+
 ## [1.78.0](https://github.com/upstars-global/unity-core-modules/compare/v1.77.0...v1.78.0) (2026-03-25)
 
 ### 🚀 Features
