@@ -46,7 +46,6 @@ function minimalDepositInsuranceStatus(): IDepositInsuranceStatus {
             lowBalance: { value: 100, valid: true },
             vipSpentAmount: { value: 50, valid: true },
             noActiveBonus: { value: null, valid: true },
-            noPendingWithdrawals: { value: null, valid: true },
             noDeposits: { value: null, valid: true },
             cashoutAfterDeposit: { value: null, valid: true },
             belowMinDeposit: { value: null, valid: true },

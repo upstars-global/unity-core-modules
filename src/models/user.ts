@@ -129,7 +129,6 @@ export interface IDepositInsuranceStatus {
         lowBalance: IDepositInsuranceConditionState;
         vipSpentAmount: IDepositInsuranceConditionState;
         noActiveBonus: IDepositInsuranceConditionState;
-        noPendingWithdrawals: IDepositInsuranceConditionState;
         noDeposits: IDepositInsuranceConditionState;
         cashoutAfterDeposit: IDepositInsuranceConditionState;
         belowMinDeposit: IDepositInsuranceConditionState;
