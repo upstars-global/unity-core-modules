@@ -31,7 +31,7 @@ export type Reward = RewardConfig & {
     id: string;
 }
 
-export type Rewards = Record<Level, Reward[]>;
+export type Rewards = Record<Level | VipLevelSave, Reward[]>;
 
 export type LevelConfig = {
     image: {

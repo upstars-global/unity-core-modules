@@ -3,7 +3,7 @@ import { ref, shallowRef } from "vue";
 
 import { type IBettingConfig } from "../models/configs";
 import { IDisabledGamesProvider } from "../models/game";
-import type { IVipProgramConfig, Level, Rewards } from "../models/levels";
+import type { IVipProgramConfig, Level, Rewards, VipLevelSave } from "../models/levels";
 import { type IVipProgramConfigDTO } from "../services/api/DTO/levels";
 
 export const useConfigStore = defineStore("configStore", () => {
@@ -34,7 +34,7 @@ export const useConfigStore = defineStore("configStore", () => {
             rewards: Object
                 .entries(levelRewards)
                 .reduce((acc, [ level, rewardIds ]) => {
-                    acc[level as Level] = rewardIds
+                    acc[level as Level | VipLevelSave] = rewardIds
                         .map((id) => {
                             return rewardCards[id] && { ...rewardCards[id], id };
                         })
