@@ -1,3 +1,18 @@
+## [1.84.0](https://github.com/upstars-global/unity-core-modules/compare/v1.83.0...v1.84.0) (2026-04-16)
+
+### 🚀 Features
+
+* **UN-2604:** add custom stag for ref program ([#339](https://github.com/upstars-global/unity-core-modules/issues/339))
+ ([5d3225f](https://github.com/upstars-global/unity-core-modules/commit/5d3225fb9a290b265ac4d93dbec232af1f76c8c4))
+
+
+
+    * feat(UN-2604): add custom stag for ref program
+
+    * feat: read referralStag from defaultProjectConfig
+
+    * tests
+
 ## [1.83.0](https://github.com/upstars-global/unity-core-modules/compare/v1.82.0...v1.83.0) (2026-04-09)
 
 ### 🚀 Features
