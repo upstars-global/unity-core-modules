@@ -2,6 +2,7 @@ import { type Currencies } from "./enums/currencies";
 
 type LifetimeLevel = `lifetime_level_${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8}`;
 type VipLevel = `vip_level_${1 | 2 | 3 | 4 | 5 | 6}`;
+export type VipLevelSave = `vip_level_${ 2 | 3 | 4 | 5 | 6}_save`;
 
 export type Level = LifetimeLevel | VipLevel;
 
