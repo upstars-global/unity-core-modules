@@ -98,7 +98,7 @@ const loadDailyBonusConfigReq = () => loadConfig<Record<string, IDailyGiftConfig
     "LOAD_DAILY_BONUS_CONFIG_ERROR",
 );
 const loadLimitsDepositConfigReq = () => loadConfig<LimitsDepositConfigData>(
-    `${ FE_API_PREFIX }/config/limits`,
+    `${ FE_API_PREFIX }/config/limits-config`,
     "LOAD_LIMITS_DEPOSIT_CONFIG_ERROR",
 );
 
