@@ -16,6 +16,8 @@ import { useMultilangStore } from "../store/multilang";
 import { CookieController } from "./CookieController";
 import { log } from "./Logger";
 
+const STAG_PARTNER_HOLD_COOKIE = `${STAG_PARTNER_COOKIE}-hold`;
+
 interface IGetStagParams {
     referrer?: string;
     stagsByReferName: IStagByReferName;
@@ -29,7 +31,7 @@ interface IStagInfo {
 }
 
 const expires = 30 * 86400; // 30 days
-
+const stagHoldExpires = 8 * 3600; // 8 hours
 
 function getReferSearchEnginesMatch(referrer: string): string {
     return Object.values(REFERRER).find((refItem) => referrer.includes(refItem as string)) || "";
@@ -61,6 +63,7 @@ function getStagByReferrerName({ referrer, stagsByReferName, path, country } = {
 function setStag(stag: string): void {
     try {
         CookieController.set(STAG_PARTNER_COOKIE, stag, { expires, path: "/" });
+        CookieController.set(STAG_PARTNER_HOLD_COOKIE, stag, { expires: stagHoldExpires, path: "/" });
     } catch (error) {
         log.error("STAG_ERROR_SET_COOKIE", error);
     }
@@ -68,6 +71,10 @@ function setStag(stag: string): void {
 
 function getStag(): string | undefined {
     return CookieController.get(STAG_PARTNER_COOKIE);
+}
+
+function getStagHold(): string | undefined {
+    return CookieController.get(STAG_PARTNER_HOLD_COOKIE);
 }
 
 function getStagInfo(): IStagInfo | null {
@@ -166,8 +173,10 @@ function init(): void {
 
 export const StagController = {
     init,
+    setStag,
     getAffbId,
     getStag,
+    getStagHold,
     getStagInfo,
     getStagByReferrerName,
 };
