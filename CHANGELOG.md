@@ -1,3 +1,10 @@
+## [1.84.1](https://github.com/upstars-global/unity-core-modules/compare/v1.84.0...v1.84.1) (2026-04-20)
+
+### 🔧 Maintenance
+
+* Зміна неймінгу для finteqhub
+ ([04c80ea](https://github.com/upstars-global/unity-core-modules/commit/04c80ea22211ea0e58240fa84f8af8e877f1a79d))
+
 ## [1.84.0](https://github.com/upstars-global/unity-core-modules/compare/v1.83.0...v1.84.0) (2026-04-16)
 
 ### 🚀 Features
