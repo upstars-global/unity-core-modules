@@ -1,3 +1,10 @@
+## [1.85.0](https://github.com/upstars-global/unity-core-modules/compare/v1.84.1...v1.85.0) (2026-04-21)
+
+### 🚀 Features
+
+* **UN-2605:** add welcome offer config handling ([#340](https://github.com/upstars-global/unity-core-modules/issues/340))
+ ([ae5e0f2](https://github.com/upstars-global/unity-core-modules/commit/ae5e0f28bfffda1127b6364a50a6a7c83e640af0))
+
 ## [1.84.1](https://github.com/upstars-global/unity-core-modules/compare/v1.84.0...v1.84.1) (2026-04-20)
 
 ### 🔧 Maintenance
