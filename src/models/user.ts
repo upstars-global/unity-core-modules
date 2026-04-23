@@ -129,9 +129,9 @@ export interface IDepositInsuranceStatus {
         lowBalance: IDepositInsuranceConditionState;
         vipSpentAmount: IDepositInsuranceConditionState;
         noActiveBonus: IDepositInsuranceConditionState;
-        noDeposits: IDepositInsuranceConditionState;
-        cashoutAfterDeposit: IDepositInsuranceConditionState;
-        belowMinDeposit: IDepositInsuranceConditionState;
+        hasDeposits: IDepositInsuranceConditionState;
+        hasNoCashoutAfterDeposit: IDepositInsuranceConditionState;
+        aboveMinDeposit: IDepositInsuranceConditionState;
     };
 }
 
