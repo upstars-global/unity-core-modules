@@ -2,10 +2,11 @@ import { v4 as uuid } from "uuid";
 
 import { FE_API_PREFIX } from "../../../consts/apiConfig";
 import { log } from "../../../controllers/Logger";
-import { IAuthProvider, IUserAuthProvider } from "../../../models/authProviders";
+import { type IAuthProvider, type IUserAuthProvider } from "../../../models/authProviders";
 import { type IPlayerFieldsInfo } from "../../../models/common";
 import {
     type IDataForUpdatePass,
+    type IDepositInsuranceClaimResponse,
     type IDepositInsuranceStatus,
     type ISeasonStartPoints,
     type ITwoFactorAuthData,
@@ -15,9 +16,15 @@ import {
     type IUserSession,
 } from "../../../models/user";
 import { type IBettingBonus } from "../DTO/bets";
-import { IPlayerPayment } from "../DTO/cashbox";
+import { type IPlayerPayment } from "../DTO/cashbox";
 import { type UserCouponStatuses } from "../DTO/couponePromoCodes";
-import { BettingPlayerSettingsDTO, IPlayerStats, ISubscriptions, IUserAccount, IUserSettings } from "../DTO/playerDTO";
+import {
+    type BettingPlayerSettingsDTO,
+    type IPlayerStats,
+    type ISubscriptions,
+    type IUserAccount,
+    type IUserSettings,
+} from "../DTO/playerDTO";
 import { http } from "../http";
 
 export type IPlayerGroup = string | number | null;
@@ -468,14 +475,32 @@ export async function leadPlayerStartSeasonInfoReq() {
     }
 }
 
-export async function depositInsuranceStatusReq(): Promise<IDepositInsuranceStatus | undefined> {
+export async function depositInsuranceStatusReq(currency: string): Promise<IDepositInsuranceStatus | undefined> {
     try {
         const { data } = await http().get<IDepositInsuranceStatus>(
             `${ FE_API_PREFIX }/pf/bonuses/deposit-insurance/status`,
+            { params: { currency } },
         );
 
         return data;
     } catch (error) {
         log.error("PORTOFRANCO_DEPOSIT_INSURANCE_STATUS_ERROR", error);
+    }
+}
+
+export async function depositInsuranceClaimReq(
+    currency: string,
+): Promise<IDepositInsuranceClaimResponse | undefined> {
+    try {
+        const { data } = await http().post<IDepositInsuranceClaimResponse>(
+            `${ FE_API_PREFIX }/pf/bonuses/deposit-insurance/claim`,
+            {},
+            { params: { currency } },
+        );
+
+        return data;
+    } catch (error) {
+        log.error("PORTOFRANCO_DEPOSIT_INSURANCE_CLAIM_ERROR", error);
+        throw error;
     }
 }

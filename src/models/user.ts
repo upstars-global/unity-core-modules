@@ -134,3 +134,10 @@ export interface IDepositInsuranceStatus {
         belowMinDeposit: IDepositInsuranceConditionState;
     };
 }
+
+export interface IDepositInsuranceClaimResponse {
+    depositId: number;
+    currencyIso: string;
+    externalId: string;
+    apiResponse: string;
+}

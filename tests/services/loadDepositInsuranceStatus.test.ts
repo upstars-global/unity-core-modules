@@ -7,13 +7,15 @@ import type { IDepositInsuranceStatus } from "../../src/models/user";
 import { useGiftsStore } from "../../src/store/gifts";
 
 const getIsLogged = ref(true);
+const getUserCurrency = ref("EUR");
 const isVip = ref(true);
 const userVipGroup = ref<string | undefined>("gold");
 
 const depositInsuranceStatusReqMock = vi.fn();
+const depositInsuranceClaimReqMock = vi.fn();
 
 vi.mock("../../src/store/user/userInfo", () => ({
-    useUserInfo: () => ({ getIsLogged }),
+    useUserInfo: () => ({ getIsLogged, getUserCurrency }),
 }));
 
 vi.mock("../../src/store/user/userStatuses", () => ({
@@ -30,6 +32,7 @@ vi.mock("../../src/services/api/requests/player", async (importOriginal) => {
     return {
         ...actual,
         depositInsuranceStatusReq: (...args: unknown[]) => depositInsuranceStatusReqMock(...args),
+        depositInsuranceClaimReq: (...args: unknown[]) => depositInsuranceClaimReqMock(...args),
     };
 });
 
@@ -41,7 +44,7 @@ function minimalDepositInsuranceStatus(): IDepositInsuranceStatus {
         minDeposit: 10,
         maxBonus: 100,
         wager: 35,
-        currencyIso: "USD",
+        currencyIso: "EUR",
         conditions: {
             lowBalance: { value: 100, valid: true },
             vipSpentAmount: { value: 50, valid: true },
@@ -60,7 +63,9 @@ describe("loadDepositInsuranceStatus", () => {
         getIsLogged.value = true;
         isVip.value = true;
         userVipGroup.value = "gold";
+        getUserCurrency.value = "EUR";
         depositInsuranceStatusReqMock.mockReset();
+        depositInsuranceClaimReqMock.mockReset();
         depositInsuranceStatusReqMock.mockResolvedValue(minimalDepositInsuranceStatus());
 
         const { log } = await import("../../src/controllers/Logger");
@@ -156,5 +161,25 @@ describe("loadDepositInsuranceStatus", () => {
         await loadDepositInsuranceStatus();
 
         expect(depositInsuranceStatusReqMock).toHaveBeenCalledTimes(2);
+    });
+
+    it("passes currency to depositInsuranceStatusReq", async () => {
+        getUserCurrency.value = "EUR";
+        const { loadDepositInsuranceStatus } = await import("../../src/services/user");
+
+        await loadDepositInsuranceStatus();
+
+        expect(depositInsuranceStatusReqMock).toHaveBeenCalledWith("EUR");
+    });
+});
+
+describe("claimDepositInsurance", () => {
+    it("calls depositInsuranceClaimReq with currency", async () => {
+        getUserCurrency.value = "CAD";
+        const { claimDepositInsurance } = await import("../../src/services/user");
+
+        await claimDepositInsurance();
+
+        expect(depositInsuranceClaimReqMock).toHaveBeenCalledWith("CAD");
     });
 });

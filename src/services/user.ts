@@ -9,7 +9,7 @@ import { cioIdentifyUser } from "../controllers/CustomerIO";
 import { log } from "../controllers/Logger";
 import { isApiError } from "../helpers/apiErrors";
 import { EnumContextFields, EnumFormFields, type IPlayerFieldsInfo } from "../models/common";
-import type { IDataForUpdatePass, ITwoFactorAuthData } from "../models/user";
+import { type IDataForUpdatePass, type IDepositInsuranceClaimResponse, type ITwoFactorAuthData } from "../models/user";
 import { EventBus as bus } from "../plugins/EventBus";
 import { useCommon } from "../store/common";
 import { useGiftsStore } from "../store/gifts";
@@ -36,8 +36,9 @@ import {
     confirmPlayerReq,
     deleteDepositBonusCodeReq,
     deleteTwoFactorReq,
+    depositInsuranceClaimReq,
     depositInsuranceStatusReq,
-    IPlayerGroup,
+    type IPlayerGroup,
     leadPlayerStartSeasonInfoReq,
     loadAvailableBonusesReq,
     loadBettingPlayerSettingsRequest,
@@ -778,7 +779,7 @@ export async function loadDepositInsuranceStatus(): Promise<void> {
     depositInsuranceStatusLoad = (async () => {
         const userInfo = useUserInfo();
         const giftsStore = useGiftsStore();
-        const { getIsLogged } = storeToRefs(userInfo);
+        const { getIsLogged, getUserCurrency } = storeToRefs(userInfo);
         const { isVip, userVipGroup } = storeToRefs(useUserStatuses());
 
         if (!getIsLogged.value) {
@@ -797,7 +798,7 @@ export async function loadDepositInsuranceStatus(): Promise<void> {
         }
 
         try {
-            const data = await depositInsuranceStatusReq();
+            const data = await depositInsuranceStatusReq(getUserCurrency.value);
 
             if (data) {
                 giftsStore.setDepositInsuranceGift(data);
@@ -813,4 +814,11 @@ export async function loadDepositInsuranceStatus(): Promise<void> {
     });
 
     return depositInsuranceStatusLoad;
+}
+
+export async function claimDepositInsurance(): Promise<IDepositInsuranceClaimResponse | undefined> {
+    const userInfo = useUserInfo();
+    const { getUserCurrency } = storeToRefs(userInfo);
+
+    return await depositInsuranceClaimReq(getUserCurrency.value);
 }
