@@ -15,18 +15,32 @@ describe("useConfigStore", () => {
         expect(store.bettingConfig).toBeNull();
         expect(store.vipProgramConfig).toBeNull();
         expect(store.disabledGamesProviders).toEqual({});
+        expect(store.welcomeOfferConfig).toEqual({});
     });
 
     it("updates simple configs via setters", () => {
         const store = useConfigStore();
+        const welcomeOfferConfig = {
+            stag: {
+                test: {
+                    image: {
+                        src: "/welcome.png",
+                        srcRetina: "/welcome@2x.png",
+                    },
+                },
+            },
+            geoIp: {},
+        };
 
         store.setGamesPageLimit(60);
         store.setBettingConfig({ allowed_bets: [ "one" ] } as never);
         store.setDisabledGamesProviders({ provider1: [ "game1" ] });
+        store.setWelcomeOfferConfig(welcomeOfferConfig);
 
         expect(store.gamesPageLimit).toBe(60);
         expect(store.bettingConfig).toEqual({ allowed_bets: [ "one" ] });
         expect(store.disabledGamesProviders).toEqual({ provider1: [ "game1" ] });
+        expect(store.welcomeOfferConfig).toEqual(welcomeOfferConfig);
     });
 
     it("maps vip program config from DTO format", () => {
