@@ -17,6 +17,15 @@ const RETRY_CONDITION = {
 
 const timeout = isServer ? SERVER_TIMEOUT : CLIENT_TIMEOUT;
 
+function isCloudflareChallengeHeaders(headers?: Headers): boolean {
+    if (!headers) {
+        return false;
+    }
+
+    return headers.get("cf-mitigated") === "challenge" ||
+        headers.get("x-cf-challenge-detected") === "1";
+}
+
 interface IHttpParams {
     headers?: Record<string, string>;
     locale?: string;
@@ -312,6 +321,13 @@ export function http({ headers, locale }: IHttpParams = {}): HttpClient {
     client.interceptors.response.use((response) => {
         return response;
     }, (error) => {
+        if (!isServer && isCloudflareChallengeHeaders(error.response?.headers)) {
+            EventBus.$emit(BUS_EVENTS.CF_CHALLENGE_REQUIRED, {
+                status: error.response?.status,
+                url: error.config?.url,
+            });
+        }
+
         if (error.response?.status === 401) {
             EventBus.$emit(BUS_EVENTS.AUTH_ERROR);
         }
