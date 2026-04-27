@@ -7,6 +7,7 @@ import {
     loadExcludedPromoStagsReq,
     loadLimitsDepositConfigReq,
     loadMainWidgetConfigReq, loadVipProgramConfigReq,
+    loadWelcomeOfferConfigReq,
 } from "./api/requests/configs";
 
 export async function loadExcludedPromoStags() {
@@ -89,5 +90,19 @@ export async function loadVipProgramConfig() {
     const config = await loadVipProgramConfigReq();
     if (config) {
         configStore.setVipProgramConfig(config);
+    }
+}
+
+export async function loadWelcomeOfferConfig() {
+    const configStore = useConfigStore();
+
+    if (isExistData(configStore.welcomeOfferConfig)) {
+        return;
+    }
+
+    const config = await loadWelcomeOfferConfigReq();
+
+    if (config) {
+        configStore.setWelcomeOfferConfig(config);
     }
 }

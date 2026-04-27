@@ -1,3 +1,32 @@
+## [1.85.0](https://github.com/upstars-global/unity-core-modules/compare/v1.84.1...v1.85.0) (2026-04-21)
+
+### 🚀 Features
+
+* **UN-2605:** add welcome offer config handling ([#340](https://github.com/upstars-global/unity-core-modules/issues/340))
+ ([ae5e0f2](https://github.com/upstars-global/unity-core-modules/commit/ae5e0f28bfffda1127b6364a50a6a7c83e640af0))
+
+## [1.84.1](https://github.com/upstars-global/unity-core-modules/compare/v1.84.0...v1.84.1) (2026-04-20)
+
+### 🔧 Maintenance
+
+* Зміна неймінгу для finteqhub
+ ([04c80ea](https://github.com/upstars-global/unity-core-modules/commit/04c80ea22211ea0e58240fa84f8af8e877f1a79d))
+
+## [1.84.0](https://github.com/upstars-global/unity-core-modules/compare/v1.83.0...v1.84.0) (2026-04-16)
+
+### 🚀 Features
+
+* **UN-2604:** add custom stag for ref program ([#339](https://github.com/upstars-global/unity-core-modules/issues/339))
+ ([5d3225f](https://github.com/upstars-global/unity-core-modules/commit/5d3225fb9a290b265ac4d93dbec232af1f76c8c4))
+
+
+
+    * feat(UN-2604): add custom stag for ref program
+
+    * feat: read referralStag from defaultProjectConfig
+
+    * tests
+
 ## [1.83.0](https://github.com/upstars-global/unity-core-modules/compare/v1.82.0...v1.83.0) (2026-04-09)
 
 ### 🚀 Features

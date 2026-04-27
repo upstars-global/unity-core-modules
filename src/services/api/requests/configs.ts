@@ -10,6 +10,7 @@ import { type IProvidersList } from "../../../models/providers";
 import { type UserGroup } from "../../../models/user";
 import { type IVipManager } from "../../../models/vipManagers";
 import { type ICashboxPresets, IManageWithdrawConfig } from "../DTO/cashbox";
+import { type IWelcomeOfferConfigDTO } from "../DTO/configsDTO";
 import { IDailyGiftConfig, type IGiftModifyConfig } from "../DTO/gifts";
 import { type IVipProgramConfigDTO } from "../DTO/levels";
 import { type IVipAdventuresConfig } from "../DTO/vipAdventuresDTO";
@@ -101,6 +102,10 @@ const loadLimitsDepositConfigReq = () => loadConfig<LimitsDepositConfigData>(
     `${ FE_API_PREFIX }/config/limits-config`,
     "LOAD_LIMITS_DEPOSIT_CONFIG_ERROR",
 );
+const loadWelcomeOfferConfigReq = () => loadConfig<IWelcomeOfferConfigDTO>(
+    `${ FE_API_PREFIX }/config/welcome-offer-config`,
+    "LOAD_WELCOME_OFFER_CONFIG_ERROR",
+);
 
 export {
     loadAdditionalDepositGiftsConfigReq,
@@ -122,4 +127,5 @@ export {
     loadSurveyConfigReq,
     loadVipAdventuresConfigReq,
     loadVipProgramConfigReq,
+    loadWelcomeOfferConfigReq,
 };
