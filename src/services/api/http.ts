@@ -59,6 +59,12 @@ export interface HttpError extends Error {
     config?: RequestConfig;
 }
 
+export interface CloudflareChallengeRequiredPayload {
+    method?: string;
+    status?: number;
+    url?: string;
+}
+
 export const isHttpError = (error: unknown): error is HttpError => {
     if (!error || typeof error !== "object") {
         return false;
@@ -322,10 +328,13 @@ export function http({ headers, locale }: IHttpParams = {}): HttpClient {
         return response;
     }, (error) => {
         if (!isServer && isCloudflareChallengeHeaders(error.response?.headers)) {
-            EventBus.$emit(BUS_EVENTS.CF_CHALLENGE_REQUIRED, {
+            const challengePayload: CloudflareChallengeRequiredPayload = {
+                method: error.config?.method,
                 status: error.response?.status,
                 url: error.config?.url,
-            });
+            };
+
+            EventBus.$emit(BUS_EVENTS.CF_CHALLENGE_REQUIRED, challengePayload);
         }
 
         if (error.response?.status === 401) {
