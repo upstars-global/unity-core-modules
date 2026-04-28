@@ -1,6 +1,6 @@
 export type LimitsDepositMinDep = {
     minDep?: {
-        day?: number;
+        daily?: number;
         weekly?: number;
         monthly?: number;
     };
