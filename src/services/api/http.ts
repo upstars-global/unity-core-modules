@@ -31,6 +31,13 @@ interface IHttpParams {
     locale?: string;
 }
 
+export type CloudflareChallengeReason = "login" | "registration";
+
+export interface CloudflareChallengeContext {
+    reason?: CloudflareChallengeReason;
+    returnTo?: string;
+}
+
 export interface RequestConfig {
     method?: string;
     headers?: Record<string, string>;
@@ -39,6 +46,7 @@ export interface RequestConfig {
     timeout?: number;
     url?: string;
     params?: Record<string, unknown>;
+    challengeContext?: CloudflareChallengeContext;
 }
 
 export interface HttpResponse<T = unknown> {
@@ -59,7 +67,7 @@ export interface HttpError extends Error {
     config?: RequestConfig;
 }
 
-export interface CloudflareChallengeRequiredPayload {
+export interface CloudflareChallengeRequiredPayload extends CloudflareChallengeContext {
     method?: string;
     status?: number;
     url?: string;
@@ -332,6 +340,8 @@ export function http({ headers, locale }: IHttpParams = {}): HttpClient {
                 method: error.config?.method,
                 status: error.response?.status,
                 url: error.config?.url,
+                reason: error.config?.challengeContext?.reason,
+                returnTo: error.config?.challengeContext?.returnTo,
             };
 
             EventBus.$emit(BUS_EVENTS.CF_CHALLENGE_REQUIRED, challengePayload);

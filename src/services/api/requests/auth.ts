@@ -2,7 +2,7 @@ import { FE_API_PREFIX } from "../../../consts/apiConfig";
 import { log } from "../../../controllers/Logger";
 import { IRespIbizaService } from "../../../models/common";
 import { IUserFormData } from "../../../models/user";
-import { http, isHttpError } from "../http";
+import { http, RequestConfig } from "../http";
 
 export async function checkEmail(email: string) {
     try {
@@ -15,11 +15,13 @@ export async function checkEmail(email: string) {
     }
 }
 
-export async function signIn(user: IUserFormData) {
+type SignInRequestConfig = Omit<RequestConfig, "method" | "url" | "body">;
+
+export async function signIn(user: IUserFormData, config?: SignInRequestConfig) {
     try {
         const { data } = await http().post("/api/users/sign_in", {
             user,
-        });
+        }, config);
 
         return data;
     } catch (error) {

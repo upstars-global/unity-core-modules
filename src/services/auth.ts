@@ -10,6 +10,10 @@ import { useUserInfo } from "../store/user/userInfo";
 import { checkEmail, registerUser, signIn, signOut } from "./api/requests/auth";
 import { changeUserToGroup } from "./user";
 
+function resolveLoginChallengeReason(customLoginReg?: string) {
+    return customLoginReg === "yes" ? "registration" : "login";
+}
+
 export async function checkEmailVerify(email: string): Promise<IRespIbizaService> {
     return checkEmail(email);
 }
@@ -68,6 +72,10 @@ export function createLogin({ loadAuthData, clearFreshChatUser }: LoginDeps) {
                 dfpc: CoveryController.deviceFingerprint(),
                 captcha,
                 custom_login_reg,
+            }, {
+                challengeContext: {
+                    reason: resolveLoginChallengeReason(custom_login_reg),
+                },
             });
 
             await loadAuthData({ route });
