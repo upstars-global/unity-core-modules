@@ -44,7 +44,7 @@ describe("auth services", () => {
         toggleUserIsLoggedMock.mockReset();
     });
 
-    it("marks registration auto-login challenges as registration", async () => {
+    it("forwards explicit challenge context from registration auto-login", async () => {
         const { createLogin } = await import("../../src/services/auth");
         const login = createLogin({
             clearFreshChatUser: clearFreshChatUserMock,
@@ -53,6 +53,8 @@ describe("auth services", () => {
 
         await login({
             captcha: "captcha-token",
+            challengeReason: "registration",
+            challengeReturnTo: "/registration?cfChallenge=registration",
             custom_login_reg: "yes",
             email: "qa@example.com",
             password: "password",
@@ -68,6 +70,7 @@ describe("auth services", () => {
         }, {
             challengeContext: {
                 reason: "registration",
+                returnTo: "/registration?cfChallenge=registration",
             },
         });
     });
