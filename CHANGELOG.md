@@ -1,3 +1,18 @@
+## [1.86.0](https://github.com/upstars-global/unity-core-modules/compare/v1.85.0...v1.86.0) (2026-04-29)
+
+### 🚀 Features
+
+* **UN-2465-config:** config for limits ([#341](https://github.com/upstars-global/unity-core-modules/issues/341))
+ ([becbe24](https://github.com/upstars-global/unity-core-modules/commit/becbe2442fbb1cdbad93e16194d05cf8bd707c07))
+
+
+
+    * feat(UN-2465-config): config for limits
+
+    * rename route
+
+    * UN-2465 update 'day'
+
 ## [1.85.0](https://github.com/upstars-global/unity-core-modules/compare/v1.84.1...v1.85.0) (2026-04-21)
 
 ### 🚀 Features
