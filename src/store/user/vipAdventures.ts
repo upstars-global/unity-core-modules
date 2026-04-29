@@ -1,4 +1,4 @@
-import { formatDateVipAdv, VIP_ADV_GROUP } from "@config/vip-adventures";
+import { formatDateVipAdv, VIP_ADV_GROUPS } from "@config/vip-adventures";
 import dayjs from "dayjs";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
@@ -10,9 +10,6 @@ import type { IPrizeConfigItem, IVipProgress } from "../../services/api/DTO/vipA
 import { useEnvironments } from "../../store/environments";
 import { useUserStatuses } from "./userStatuses";
 
-const USER_INCLUDES_ADVENTURES = {
-    [VIP_ADV_GROUP]: "vip_adv",
-};
 
 function prepareVipAdventureCollectionDays(configDays: IPrizeConfigItem[], userStatuses: IUserStatus[]): IVipAdventuresDayConfig[] {
     return configDays.map((configDayItem) => {
@@ -125,7 +122,7 @@ export const useVipAdventures = defineStore("vipAdventures", () => {
     });
 
     const userGroupForAdventure = computed<UserGroup | undefined>(() => {
-        return userStatuses.getUserGroups.find((userGroupItem) => USER_INCLUDES_ADVENTURES[userGroupItem]);
+        return VIP_ADV_GROUPS.find((groupId) => userStatuses.getUserGroups.includes(groupId));
     });
 
     return {
