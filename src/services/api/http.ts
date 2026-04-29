@@ -17,9 +17,25 @@ const RETRY_CONDITION = {
 
 const timeout = isServer ? SERVER_TIMEOUT : CLIENT_TIMEOUT;
 
+function isCloudflareChallengeHeaders(headers?: Headers): boolean {
+    if (!headers) {
+        return false;
+    }
+
+    return headers.get("cf-mitigated") === "challenge" ||
+        headers.get("x-cf-challenge-detected") === "1";
+}
+
 interface IHttpParams {
     headers?: Record<string, string>;
     locale?: string;
+}
+
+export type CloudflareChallengeReason = "login" | "registration";
+
+export interface CloudflareChallengeContext {
+    reason?: CloudflareChallengeReason;
+    returnTo?: string;
 }
 
 export interface RequestConfig {
@@ -30,6 +46,7 @@ export interface RequestConfig {
     timeout?: number;
     url?: string;
     params?: Record<string, unknown>;
+    challengeContext?: CloudflareChallengeContext;
 }
 
 export interface HttpResponse<T = unknown> {
@@ -48,6 +65,12 @@ export interface HttpError extends Error {
         headers: Headers;
     };
     config?: RequestConfig;
+}
+
+export interface CloudflareChallengeRequiredPayload extends CloudflareChallengeContext {
+    method?: string;
+    status?: number;
+    url?: string;
 }
 
 export const isHttpError = (error: unknown): error is HttpError => {
@@ -312,6 +335,18 @@ export function http({ headers, locale }: IHttpParams = {}): HttpClient {
     client.interceptors.response.use((response) => {
         return response;
     }, (error) => {
+        if (!isServer && isCloudflareChallengeHeaders(error.response?.headers)) {
+            const challengePayload: CloudflareChallengeRequiredPayload = {
+                method: error.config?.method,
+                status: error.response?.status,
+                url: error.config?.url,
+                reason: error.config?.challengeContext?.reason,
+                returnTo: error.config?.challengeContext?.returnTo,
+            };
+
+            EventBus.$emit(BUS_EVENTS.CF_CHALLENGE_REQUIRED, challengePayload);
+        }
+
         if (error.response?.status === 401) {
             EventBus.$emit(BUS_EVENTS.AUTH_ERROR);
         }
