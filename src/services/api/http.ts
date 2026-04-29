@@ -2,6 +2,10 @@ import { COOKIE_BY_LOCALE } from "@theme/configs/constsLocales";
 
 import { log } from "../../controllers/Logger";
 import { isServer } from "../../helpers/ssrHelpers";
+import {
+    type CloudflareChallengeContext,
+    type CloudflareChallengeRequiredPayload,
+} from "../../models/cloudflareChallenge";
 import { BUS_EVENTS, EventBus } from "../../plugins/EventBus";
 
 const SERVER_TIMEOUT = 8000;
@@ -31,13 +35,6 @@ interface IHttpParams {
     locale?: string;
 }
 
-export type CloudflareChallengeReason = "login" | "registration";
-
-export interface CloudflareChallengeContext {
-    reason?: CloudflareChallengeReason;
-    returnTo?: string;
-}
-
 export interface RequestConfig {
     method?: string;
     headers?: Record<string, string>;
@@ -65,12 +62,6 @@ export interface HttpError extends Error {
         headers: Headers;
     };
     config?: RequestConfig;
-}
-
-export interface CloudflareChallengeRequiredPayload extends CloudflareChallengeContext {
-    method?: string;
-    status?: number;
-    url?: string;
 }
 
 export const isHttpError = (error: unknown): error is HttpError => {

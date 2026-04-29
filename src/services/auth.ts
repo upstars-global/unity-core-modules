@@ -3,16 +3,18 @@ import { type NavigationFailure } from "vue-router";
 import ABTestController from "../controllers/ABTest/ABTestController";
 import CoveryController from "../controllers/CoveryController";
 import { log } from "../controllers/Logger";
+import { CloudflareChallengeReason } from "../models/cloudflareChallenge";
 import { IRespIbizaService } from "../models/common";
 import { IUserFormData, IUserInfo } from "../models/user";
 import { EventBus as bus } from "../plugins/EventBus";
 import { useUserInfo } from "../store/user/userInfo";
-import type { CloudflareChallengeReason } from "./api/http";
 import { checkEmail, registerUser, signIn, signOut } from "./api/requests/auth";
 import { changeUserToGroup } from "./user";
 
-function resolveLoginChallengeReason(customLoginReg?: string) {
-    return customLoginReg === "yes" ? "registration" : "login";
+function resolveLoginChallengeReason(customLoginReg?: string): CloudflareChallengeReason {
+    return customLoginReg === "yes"
+        ? CloudflareChallengeReason.Registration
+        : CloudflareChallengeReason.Login;
 }
 
 interface LoginFormData extends IUserFormData {
