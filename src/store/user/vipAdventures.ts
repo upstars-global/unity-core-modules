@@ -1,4 +1,4 @@
-import { formatDateVipAdv, VIP_ADV_GROUP } from "@config/vip-adventures";
+import { formatDateVipAdv, VIP_ADV_GROUPS } from "@config/vip-adventures";
 import dayjs from "dayjs";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
@@ -8,11 +8,9 @@ import type { IUserStatus, UserGroup } from "../../models/user";
 import type { IVipAdventuresDayConfig } from "../../models/vipAdventures";
 import type { IPrizeConfigItem, IVipProgress } from "../../services/api/DTO/vipAdventuresDTO";
 import { useEnvironments } from "../../store/environments";
+import { useConfigStore } from "../configStore";
 import { useUserStatuses } from "./userStatuses";
 
-const USER_INCLUDES_ADVENTURES = {
-    [VIP_ADV_GROUP]: "vip_adv",
-};
 
 function prepareVipAdventureCollectionDays(configDays: IPrizeConfigItem[], userStatuses: IUserStatus[]): IVipAdventuresDayConfig[] {
     return configDays.map((configDayItem) => {
@@ -60,6 +58,7 @@ export function parseGiftAdventureTitle(title: string): {
 }
 export const useVipAdventures = defineStore("vipAdventures", () => {
     const userStatuses = useUserStatuses();
+    const { $defaultProjectConfig } = useConfigStore();
     const vipAdventuresConfigFile = ref<IPrizeConfigItem[]>();
     const vipAdventuresVariables = ref<Record<string, Record<Currencies, string>>>({});
     const userVipStatusProgress = ref<IVipProgress>();
@@ -125,7 +124,8 @@ export const useVipAdventures = defineStore("vipAdventures", () => {
     });
 
     const userGroupForAdventure = computed<UserGroup | undefined>(() => {
-        return userStatuses.getUserGroups.find((userGroupItem) => USER_INCLUDES_ADVENTURES[userGroupItem]);
+        const vipAdventuresGroups = $defaultProjectConfig?.vipAdventuresGroups || VIP_ADV_GROUPS;
+        return vipAdventuresGroups.find((groupId) => userStatuses.getUserGroups.includes(groupId));
     });
 
     return {
