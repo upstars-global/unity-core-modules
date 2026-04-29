@@ -1,4 +1,4 @@
-import { formatDateVipAdv, VIP_ADV_GROUP } from "@config/vip-adventures";
+import { formatDateVipAdv, VIP_ADV_GROUPS } from "@config/vip-adventures";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import weekday from "dayjs/plugin/weekday";
@@ -18,7 +18,7 @@ dayjs.extend(utc);
 
 
 vi.mock("@config/vip-adventures", () => ({
-    VIP_ADV_GROUP: "vip_adv_group",
+    VIP_ADV_GROUPS: [ "vip_adv_group", "vip_adv_group_2" ],
     formatDateVipAdv: "YYYY-MM-DD",
 }));
 
@@ -230,8 +230,24 @@ describe("useVipAdventures store", () => {
     it("resolves userGroupForAdventure", () => {
         const store = useVipAdventures();
 
-        mockUserStatuses.getUserGroups = [ "regular", VIP_ADV_GROUP ];
+        mockUserStatuses.getUserGroups = [ "regular", VIP_ADV_GROUPS[0] ];
 
-        expect(store.userGroupForAdventure).toBe(VIP_ADV_GROUP);
+        expect(store.userGroupForAdventure).toBe(VIP_ADV_GROUPS[0]);
+    });
+
+    it("resolves first matching group by VIP_ADV_GROUPS order", () => {
+        const store = useVipAdventures();
+
+        mockUserStatuses.getUserGroups = [ "regular", VIP_ADV_GROUPS[1], VIP_ADV_GROUPS[0] ];
+
+        expect(store.userGroupForAdventure).toBe(VIP_ADV_GROUPS[0]);
+    });
+
+    it("returns undefined when user has no adventure groups", () => {
+        const store = useVipAdventures();
+
+        mockUserStatuses.getUserGroups = [ "regular", "another_group" ];
+
+        expect(store.userGroupForAdventure).toBeUndefined();
     });
 });
