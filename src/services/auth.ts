@@ -3,12 +3,25 @@ import { type NavigationFailure } from "vue-router";
 import ABTestController from "../controllers/ABTest/ABTestController";
 import CoveryController from "../controllers/CoveryController";
 import { log } from "../controllers/Logger";
+import { CloudflareChallengeReason } from "../models/cloudflareChallenge";
 import { IRespIbizaService } from "../models/common";
 import { IUserFormData, IUserInfo } from "../models/user";
 import { EventBus as bus } from "../plugins/EventBus";
 import { useUserInfo } from "../store/user/userInfo";
 import { checkEmail, registerUser, signIn, signOut } from "./api/requests/auth";
 import { changeUserToGroup } from "./user";
+
+function resolveLoginChallengeReason(customLoginReg?: string): CloudflareChallengeReason {
+    return customLoginReg === "yes"
+        ? CloudflareChallengeReason.Registration
+        : CloudflareChallengeReason.Login;
+}
+
+interface LoginFormData extends IUserFormData {
+    route?: string;
+    challengeReason?: CloudflareChallengeReason;
+    challengeReturnTo?: string;
+}
 
 export async function checkEmailVerify(email: string): Promise<IRespIbizaService> {
     return checkEmail(email);
@@ -55,9 +68,17 @@ export function createLoginTwoFactor({ loadAuthData }: LoginTwoFactorDeps) {
 }
 
 export function createLogin({ loadAuthData, clearFreshChatUser }: LoginDeps) {
-    return async function login(formData: IUserFormData & { route: string }) {
+    return async function login(formData: LoginFormData) {
         try {
-            const { email, password, captcha, route, custom_login_reg } = formData;
+            const {
+                email,
+                password,
+                captcha,
+                route,
+                custom_login_reg,
+                challengeReason,
+                challengeReturnTo,
+            } = formData;
             const { toggleUserIsLogged } = useUserInfo();
 
             await clearFreshChatUser();
@@ -68,6 +89,11 @@ export function createLogin({ loadAuthData, clearFreshChatUser }: LoginDeps) {
                 dfpc: CoveryController.deviceFingerprint(),
                 captcha,
                 custom_login_reg,
+            }, {
+                challengeContext: {
+                    reason: challengeReason || resolveLoginChallengeReason(custom_login_reg),
+                    returnTo: challengeReturnTo,
+                },
             });
 
             await loadAuthData({ route });
