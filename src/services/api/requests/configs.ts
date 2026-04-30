@@ -4,7 +4,6 @@ import { type CurrencyData } from "../../../models/cashbox";
 import { type IStagByReferName, type ISurveyConfig } from "../../../models/configs";
 import { type IBettingConfig } from "../../../models/configs";
 import { type IEnabledGames } from "../../../models/game";
-import { type LimitsDepositConfigData } from "../../../models/limitsDepositConfig";
 import { type MainWidgetItem } from "../../../models/mainWidget";
 import { type IProvidersList } from "../../../models/providers";
 import { type UserGroup } from "../../../models/user";
@@ -98,10 +97,6 @@ const loadDailyBonusConfigReq = () => loadConfig<Record<string, IDailyGiftConfig
     `${ FE_API_PREFIX }/config/daily-bonus-config`,
     "LOAD_DAILY_BONUS_CONFIG_ERROR",
 );
-const loadLimitsDepositConfigReq = () => loadConfig<LimitsDepositConfigData>(
-    `${ FE_API_PREFIX }/config/limits-config`,
-    "LOAD_LIMITS_DEPOSIT_CONFIG_ERROR",
-);
 const loadWelcomeOfferConfigReq = () => loadConfig<IWelcomeOfferConfigDTO>(
     `${ FE_API_PREFIX }/config/welcome-offer-config`,
     "LOAD_WELCOME_OFFER_CONFIG_ERROR",
@@ -118,7 +113,6 @@ export {
     loadEnabledGamesConfigReq,
     loadExcludedPromoStagsReq,
     loadFooterPaymentsConfigReq,
-    loadLimitsDepositConfigReq,
     loadMainWidgetConfigReq,
     loadManagersConfigReq,
     loadManageWithdrawConfigReq,

@@ -9,7 +9,6 @@ import { CurrencyData } from "../models/cashbox";
 import type { EnumContextFields, EnumFormFields, IPlayerFieldsInfo } from "../models/common";
 import type { IStagByReferName } from "../models/configs";
 import { Currencies } from "../models/enums/currencies";
-import type { LimitsDepositConfigData } from "../models/limitsDepositConfig";
 import type { MainWidgetItem } from "../models/mainWidget";
 import type { ICurrentIP } from "../services/api/DTO/current-ip";
 import type { ICountries, ICryptoExchangeRates, ICurrencies, IProjectInfo } from "../services/api/DTO/info";
@@ -29,7 +28,6 @@ export const useCommon = defineStore("common", () => {
     const playerFieldsInfo = ref<IPlayerFieldsInfo>();
     const excludedPromoStags = ref<string[]>([]);
     const currencyConfig = ref<null | CurrencyData>(null);
-    const limitsDepositConfig = ref<null | LimitsDepositConfigData>(null);
     const widgetsConfig = ref<MainWidgetItem[]>([]);
     const stagsByReferName = ref<IStagByReferName>();
     const countries = ref<ICountries[]>([]);
@@ -126,10 +124,6 @@ export const useCommon = defineStore("common", () => {
         currencyConfig.value = data;
     }
 
-    function setLimitsDepositConfig(data: LimitsDepositConfigData) {
-        limitsDepositConfig.value = data;
-    }
-
     function setMainWidgetConfig(data: MainWidgetItem[]) {
         widgetsConfig.value = data;
     }
@@ -177,9 +171,6 @@ export const useCommon = defineStore("common", () => {
 
         currencyConfig,
         setCurrencyConfig,
-
-        limitsDepositConfig,
-        setLimitsDepositConfig,
 
         widgetsConfig,
         setMainWidgetConfig,
