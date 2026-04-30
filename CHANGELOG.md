@@ -1,3 +1,12 @@
+## [1.86.1](https://github.com/upstars-global/unity-core-modules/compare/v1.86.0...v1.86.1) (2026-04-30)
+
+### ⏪ Reverts
+
+* "UN-2465-config for limits" ([#345](https://github.com/upstars-global/unity-core-modules/issues/345))
+ ([4000774](https://github.com/upstars-global/unity-core-modules/commit/400077426ad7871b72cfd03313549ec190f18ca1))
+
+, closes [#341](https://github.com/upstars-global/unity-core-modules/issues/)
+
 ## [1.86.0](https://github.com/upstars-global/unity-core-modules/compare/v1.85.0...v1.86.0) (2026-04-29)
 
 ### 🚀 Features
