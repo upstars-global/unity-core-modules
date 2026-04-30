@@ -1,4 +1,3 @@
-import { formatDateVipAdv, VIP_ADV_GROUPS } from "@config/vip-adventures";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import weekday from "dayjs/plugin/weekday";
@@ -16,10 +15,19 @@ import {
 dayjs.extend(weekday);
 dayjs.extend(utc);
 
+const formatDateVipAdv = "YYYY-MM-DD";
+const VIP_ADV_GROUPS = [ 791, 992 ];
+const defaultProjectConfig = {
+    vipAdventures: {
+        groups: VIP_ADV_GROUPS,
+        formatDateVipAdv,
+    },
+};
 
-vi.mock("@config/vip-adventures", () => ({
-    VIP_ADV_GROUPS: [ "vip_adv_group", "vip_adv_group_2" ],
-    formatDateVipAdv: "YYYY-MM-DD",
+vi.mock("../../src/store/configStore", () => ({
+    useConfigStore: () => ({
+        $defaultProjectConfig: defaultProjectConfig,
+    }),
 }));
 
 let useMockerValue = false;
@@ -32,7 +40,7 @@ vi.mock("../../src/store/environments", () => ({
 
 const mockUserStatuses = {
     getUserStatuses: [] as { name: string }[],
-    getUserGroups: [] as string[],
+    getUserGroups: [] as Array<string | number>,
 };
 
 vi.mock("../../src/store/user/userStatuses", () => ({
