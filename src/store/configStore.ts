@@ -3,7 +3,7 @@ import { ref, shallowRef } from "vue";
 
 import { type IBettingConfig } from "../models/configs";
 import { IDisabledGamesProvider } from "../models/game";
-import type { IVipProgramConfig, Level, Rewards } from "../models/levels";
+import type { IVipProgramConfig, Level, Rewards, VipLevelSave } from "../models/levels";
 import { IWelcomeOfferConfigDTO } from "../services/api/DTO/configsDTO";
 import { type IVipProgramConfigDTO } from "../services/api/DTO/levels";
 
@@ -12,7 +12,7 @@ export const useConfigStore = defineStore("configStore", () => {
     const bettingConfig = ref<IBettingConfig | null>(null);
     const vipProgramConfig = shallowRef<IVipProgramConfig | null>(null);
     const disabledGamesProviders = ref<IDisabledGamesProvider>({});
-    const welcomeOfferConfig = ref<IWelcomeOfferConfigDTO>({});
+    const welcomeOfferConfig = ref<IWelcomeOfferConfigDTO | null>(null);
 
     function setGamesPageLimit(limit: number) {
         gamesPageLimit.value = limit;
@@ -36,7 +36,7 @@ export const useConfigStore = defineStore("configStore", () => {
             rewards: Object
                 .entries(levelRewards)
                 .reduce((acc, [ level, rewardIds ]) => {
-                    acc[level as Level] = rewardIds
+                    acc[level as Level | VipLevelSave] = rewardIds
                         .map((id) => {
                             return rewardCards[id] && { ...rewardCards[id], id };
                         })
