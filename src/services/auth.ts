@@ -57,10 +57,13 @@ export function createLoginTwoFactor({ loadAuthData }: LoginTwoFactorDeps) {
 export function createLogin({ loadAuthData, clearFreshChatUser }: LoginDeps) {
     return async function login(formData: IUserFormData & { route: string }) {
         try {
+            console.log("login function");
             const { email, password, captcha, route, custom_login_reg } = formData;
+            console.log(email, password, captcha, route, custom_login_reg);
             const { toggleUserIsLogged } = useUserInfo();
-
+            console.log("before clearFreshChatUser");
             await clearFreshChatUser();
+            console.log("after clearFreshChatUser");
 
             const data = await signIn({
                 email,
@@ -69,13 +72,16 @@ export function createLogin({ loadAuthData, clearFreshChatUser }: LoginDeps) {
                 captcha,
                 custom_login_reg,
             });
+            console.log("data: ", data);
 
             await loadAuthData({ route });
+            console.log("before set user logged");
             toggleUserIsLogged(true);
 
             return data;
         // @ts-expect-error Property 'response' does not exist on type 'unknown'
         } catch ({ response }) {
+            console.log("catch, ", response);
             log.error("LOGIN_ERROR", response);
             throw response;
         }
