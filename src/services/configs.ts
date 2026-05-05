@@ -5,6 +5,7 @@ import {
     loadBettingConfigReq,
     loadCurrencyConfigReq,
     loadExcludedPromoStagsReq,
+    loadLimitsDepositConfigReq,
     loadMainWidgetConfigReq, loadVipProgramConfigReq,
     loadWelcomeOfferConfigReq,
 } from "./api/requests/configs";
@@ -34,6 +35,20 @@ export async function loadCurrencyConfig() {
 
     if (data) {
         commonStore.setCurrencyConfig(data);
+    }
+}
+
+export async function loadLimitsDepositConfig() {
+    const commonStore = useCommon();
+
+    if (isExistData(commonStore.limitsDepositConfig)) {
+        return commonStore.limitsDepositConfig;
+    }
+
+    const data = await loadLimitsDepositConfigReq();
+
+    if (data) {
+        commonStore.setLimitsDepositConfig(data);
     }
 }
 
