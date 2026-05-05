@@ -1,4 +1,5 @@
 import { ID_GROUP_FOR_PAIRED_ID, ID_GROUP_FOR_UNPAIRED_ID } from "@config/groupAB";
+import { IRON_STATUS } from "@config/user-statuses";
 import { PROJECT } from "@theme/configs/constantsFreshChat";
 import { getStateByCounty } from "@theme/configs/stateFieldConfig";
 import { storeToRefs } from "pinia";
@@ -8,7 +9,7 @@ import { cioIdentifyUser } from "../controllers/CustomerIO";
 import { log } from "../controllers/Logger";
 import { isApiError } from "../helpers/apiErrors";
 import { EnumContextFields, EnumFormFields, type IPlayerFieldsInfo } from "../models/common";
-import type { IDataForUpdatePass, ITwoFactorAuthData } from "../models/user";
+import { type IDataForUpdatePass, type IDepositInsuranceClaimResponse, type ITwoFactorAuthData } from "../models/user";
 import { EventBus as bus } from "../plugins/EventBus";
 import { useCommon } from "../store/common";
 import { useGiftsStore } from "../store/gifts";
@@ -35,7 +36,9 @@ import {
     confirmPlayerReq,
     deleteDepositBonusCodeReq,
     deleteTwoFactorReq,
-    IPlayerGroup,
+    depositInsuranceClaimReq,
+    depositInsuranceStatusReq,
+    type IPlayerGroup,
     leadPlayerStartSeasonInfoReq,
     loadAvailableBonusesReq,
     loadBettingPlayerSettingsRequest,
@@ -764,4 +767,58 @@ export async function leadPlayerStartSeasonInfo() {
             log.error("PORTOFRANCO_VIP_STATUS_ERROR", err);
         }
     }
+}
+
+let depositInsuranceStatusLoad: Promise<void> | null = null;
+
+export async function loadDepositInsuranceStatus(): Promise<void> {
+    if (depositInsuranceStatusLoad) {
+        return depositInsuranceStatusLoad;
+    }
+
+    depositInsuranceStatusLoad = (async () => {
+        const userInfo = useUserInfo();
+        const giftsStore = useGiftsStore();
+        const { getIsLogged, getUserCurrency } = storeToRefs(userInfo);
+        const { isVip, userVipGroup } = storeToRefs(useUserStatuses());
+
+        if (!getIsLogged.value) {
+            giftsStore.setDepositInsuranceGift(undefined);
+
+            return;
+        }
+
+        const eligibleForDepositInsurance =
+            Boolean(isVip.value) && userVipGroup.value !== IRON_STATUS;
+
+        if (!eligibleForDepositInsurance) {
+            giftsStore.setDepositInsuranceGift(undefined);
+
+            return;
+        }
+
+        try {
+            const data = await depositInsuranceStatusReq(getUserCurrency.value);
+
+            if (data) {
+                giftsStore.setDepositInsuranceGift(data);
+            } else {
+                giftsStore.setDepositInsuranceGift(undefined);
+            }
+        } catch (err) {
+            log.error("PORTOFRANCO_DEPOSIT_INSURANCE_STATUS_ERROR", err);
+            giftsStore.setDepositInsuranceGift(undefined);
+        }
+    })().finally(() => {
+        depositInsuranceStatusLoad = null;
+    });
+
+    return depositInsuranceStatusLoad;
+}
+
+export async function claimDepositInsurance(): Promise<IDepositInsuranceClaimResponse | undefined> {
+    const userInfo = useUserInfo();
+    const { getUserCurrency } = storeToRefs(userInfo);
+
+    return await depositInsuranceClaimReq(getUserCurrency.value);
 }
