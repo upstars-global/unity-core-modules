@@ -4,11 +4,14 @@ import { http } from "../http";
 
 export async function loadWebsocketTokenReq() {
     try {
-        const { data } = await http().post<IToken>("/api/v2/websocket/token", {
-            headers: {
-                "X-Api-Target": "sport",
+        const { data } = await http().post<IToken>("/api/v2/websocket/token",
+            null,
+            {
+                headers: {
+                    "X-Api-Target": "sport",
+                },
             },
-        });
+        );
 
         return data;
     } catch (err) {
