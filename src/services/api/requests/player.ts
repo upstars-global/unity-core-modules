@@ -292,7 +292,11 @@ export async function loadUserStatsReq() {
 
 export async function loadUserBettingBonuses() {
     try {
-        const { data } = await http().get<IBettingBonus[]>("/api/v2/bonuses");
+        const { data } = await http().get<IBettingBonus[]>("/api/v2/bonuses", {
+            headers: {
+                "X-Api-Target": "sport",
+            },
+        });
         return data;
     } catch (err) {
         log.error("LOAD_USER_BETTING_BONUSES_ERROR", err);
@@ -325,7 +329,11 @@ export async function loadPlayerFieldsInfoRequest() {
 
 export async function loadBettingPlayerSettingsRequest(): Promise<BettingPlayerSettingsDTO | undefined> {
     try {
-        const { data } = await http().get("/api/v2/settings");
+        const { data } = await http().get("/api/v2/settings", {
+            headers: {
+                "X-Api-Target": "sport",
+            },
+        });
 
         return data;
     } catch (err) {
