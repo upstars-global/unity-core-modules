@@ -1,3 +1,10 @@
+## [1.88.0](https://github.com/upstars-global/unity-core-modules/compare/v1.87.0...v1.88.0) (2026-05-11)
+
+### 🚀 Features
+
+* UN-2713 migrate payments ([#348](https://github.com/upstars-global/unity-core-modules/issues/348))
+ ([c6d4b9f](https://github.com/upstars-global/unity-core-modules/commit/c6d4b9f00485e9ef362c6de7c52725dc1cb00765))
+
 ## [1.87.0](https://github.com/upstars-global/unity-core-modules/compare/v1.86.2...v1.87.0) (2026-05-05)
 
 ### 🚀 Features
