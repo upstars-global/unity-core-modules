@@ -4,7 +4,14 @@ import { http } from "../http";
 
 export async function activeCouponReq(code: string): Promise<IActiveCouponResp> {
     try {
-        const { data } = await http().post<IActiveCouponResp>("/api/v2/bonuses/promo-code", { code });
+        const { data } = await http().post<IActiveCouponResp>(
+            "/api/v2/bonuses/promo-code",
+            { code },
+            {
+                headers: {
+                    "X-Api-Target": "sport",
+                },
+            });
         return data;
     } catch (err) {
         log.error("ACTIVE_COUPON_ERROR", err);

@@ -1,3 +1,21 @@
+## [1.88.0](https://github.com/upstars-global/unity-core-modules/compare/v1.87.0...v1.88.0) (2026-05-11)
+
+### 🚀 Features
+
+* UN-2713 migrate payments ([#348](https://github.com/upstars-global/unity-core-modules/issues/348))
+ ([c6d4b9f](https://github.com/upstars-global/unity-core-modules/commit/c6d4b9f00485e9ef362c6de7c52725dc1cb00765))
+
+## [1.87.0](https://github.com/upstars-global/unity-core-modules/compare/v1.86.2...v1.87.0) (2026-05-05)
+
+### 🚀 Features
+
+* UN-2707 new api version for two_factor ([#347](https://github.com/upstars-global/unity-core-modules/issues/347))
+ ([ce07243](https://github.com/upstars-global/unity-core-modules/commit/ce072438220900d353a15b7614a3ca6213e11367))
+
+
+
+    * feat: UN-2707 new api version for two_factor
+
 ## [1.86.2](https://github.com/upstars-global/unity-core-modules/compare/v1.86.1...v1.86.2) (2026-04-30)
 
 ### ⏪ Reverts

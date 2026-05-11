@@ -300,7 +300,11 @@ export async function loadUserStatsReq() {
 
 export async function loadUserBettingBonuses() {
     try {
-        const { data } = await http().get<IBettingBonus[]>("/api/v2/bonuses");
+        const { data } = await http().get<IBettingBonus[]>("/api/v2/bonuses", {
+            headers: {
+                "X-Api-Target": "sport",
+            },
+        });
         return data;
     } catch (err) {
         log.error("LOAD_USER_BETTING_BONUSES_ERROR", err);
@@ -333,7 +337,11 @@ export async function loadPlayerFieldsInfoRequest() {
 
 export async function loadBettingPlayerSettingsRequest(): Promise<BettingPlayerSettingsDTO | undefined> {
     try {
-        const { data } = await http().get("/api/v2/settings");
+        const { data } = await http().get("/api/v2/settings", {
+            headers: {
+                "X-Api-Target": "sport",
+            },
+        });
 
         return data;
     } catch (err) {
@@ -424,7 +432,7 @@ export async function updateUserPasswordReq(data: IDataForUpdatePass) {
 
 export async function loadTwoFactorReq() {
     try {
-        const { data, status } = await http().get<ITwoFactorAuthData>("/api/player/two_factor");
+        const { data, status } = await http().get<ITwoFactorAuthData>("/api/v2/player/two_factor");
         return { data, status };
     } catch (err) {
         log.error("LOAD_TWO_FACTOR_REQ_ERROR", err);
@@ -441,7 +449,7 @@ export async function activateTwoFactorReq(twoFactor: ITwoFactorAuthData, code: 
             },
         };
 
-        const { data } = await http().post<ITwoFactorAuthData>("/api/player/two_factor", payload);
+        const { data } = await http().post<ITwoFactorAuthData>("/api/v2/player/two_factor", payload);
         return data;
     } catch (err) {
         log.error("ACTIVATE_TWO_FACTOR_REQ_ERROR", err);
@@ -451,7 +459,7 @@ export async function activateTwoFactorReq(twoFactor: ITwoFactorAuthData, code: 
 
 export async function deleteTwoFactorReq(code: string) {
     try {
-        const { data } = await http().delete("/api/player/two_factor", {
+        const { data } = await http().delete("/api/v2/player/two_factor", {
             data: {
                 two_factor: {
                     authentication_code: code,
