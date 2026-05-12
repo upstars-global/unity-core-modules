@@ -16,7 +16,8 @@ dayjs.extend(weekday);
 dayjs.extend(utc);
 
 const formatDateVipAdv = "YYYY-MM-DD";
-const VIP_ADV_GROUPS = [ 791, 992 ];
+
+
 const defaultProjectConfig = {
     vipAdventures: {
         formatDateVipAdv,
@@ -243,18 +244,18 @@ describe("useVipAdventures store", () => {
         const store = useVipAdventures();
 
         store.vipAdventuresFullConfig = { prizes: { 791: [], 992: [] }, variables: {} } as unknown as IVipAdventuresConfig;
-        mockUserStatuses.getUserGroups = [ "regular", VIP_ADV_GROUPS[0] ];
+        mockUserStatuses.getUserGroups = [ "regular", 791 ];
 
-        expect(store.userGroupForAdventure).toBe(VIP_ADV_GROUPS[0]);
+        expect(store.userGroupForAdventure).toBe(791);
     });
 
     it("resolves first matching group by config keys order", () => {
         const store = useVipAdventures();
 
         store.vipAdventuresFullConfig = { prizes: { 791: [], 992: [] }, variables: {} } as unknown as IVipAdventuresConfig;
-        mockUserStatuses.getUserGroups = [ "regular", VIP_ADV_GROUPS[1], VIP_ADV_GROUPS[0] ];
+        mockUserStatuses.getUserGroups = [ "regular", 992, 791 ];
 
-        expect(store.userGroupForAdventure).toBe(VIP_ADV_GROUPS[0]);
+        expect(store.userGroupForAdventure).toBe(791);
     });
 
     it("returns undefined when user has no adventure groups", () => {
@@ -264,5 +265,47 @@ describe("useVipAdventures store", () => {
         mockUserStatuses.getUserGroups = [ "regular", "another_group" ];
 
         expect(store.userGroupForAdventure).toBeUndefined();
+    });
+
+    it("falls back to first config item when user group is not in config", () => {
+        const store = useVipAdventures();
+
+        const config791 = [ { title: "791" } as IPrizeConfigItem ];
+        const config992 = [ { title: "992" } as IPrizeConfigItem ];
+
+        store.vipAdventuresFullConfig = {
+            prizes: { 791: config791, 992: config992 },
+            variables: {},
+        } as unknown as IVipAdventuresConfig;
+        mockUserStatuses.getUserGroups = [ "regular", 12345 ]; // 12345 is not in config
+
+        expect(store.userGroupForAdventure).toBeUndefined();
+        expect(store.vipAdventuresConfigFile).toEqual(config791);
+    });
+
+    it("falls back to first variables item when user group is not in config", () => {
+        const store = useVipAdventures();
+
+        const vars791 = { adv_1: { USD: "100" } } as unknown as Record<string, Record<Currencies, string>>;
+        const vars992 = { adv_1: { USD: "200" } } as unknown as Record<string, Record<Currencies, string>>;
+
+        store.vipAdventuresFullConfig = {
+            prizes: { 791: [], 992: [] },
+            variables: { 791: vars791, 992: vars992 },
+        } as unknown as IVipAdventuresConfig;
+        mockUserStatuses.getUserGroups = [ "regular" ]; // no group match
+
+        expect(store.vipAdventuresVariables).toEqual(vars791);
+    });
+
+    it("returns empty values when config is partially malformed or nullish", () => {
+        const store = useVipAdventures();
+
+        store.vipAdventuresFullConfig = { prizes: undefined, variables: undefined } as unknown as IVipAdventuresConfig;
+        mockUserStatuses.getUserGroups = [ 791 ];
+
+        expect(store.userGroupForAdventure).toBeUndefined();
+        expect(store.vipAdventuresConfigFile).toBeUndefined();
+        expect(store.vipAdventuresVariables).toEqual({});
     });
 });
