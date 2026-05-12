@@ -7,6 +7,7 @@ import { computed, ref } from "vue";
 
 import { currencyView } from "../helpers/currencyHelper";
 import { Currencies } from "../models/enums/currencies";
+import type { IDepositInsuranceStatus } from "../models/user";
 import type { GiftAllItem, IGift, IGiftDeposit, IGiftFreeSpins, IGiftModifyConfig } from "../services/api/DTO/gifts";
 import { IDailyGiftConfig } from "../services/api/DTO/gifts";
 import { useUserInfo } from "./user/userInfo";
@@ -26,6 +27,9 @@ export const useGiftsStore = defineStore("giftsStore", () => {
     const registrationGiftsAll = ref<IGiftDeposit[]>([]);
     const fsGiftsAll = ref<IGiftFreeSpins[]>([] as IGiftFreeSpins[]);
     const dailyBonusConfig = ref<Record<string, IDailyGiftConfig>>();
+    const depositInsuranceGift = ref<IDepositInsuranceStatus | undefined>();
+
+    const getDepositInsuranceGift = computed(() => depositInsuranceGift.value);
 
     const fsGifts = computed<IGiftFreeSpins[]>(() => {
         return fsGiftsAll.value.filter((giftFs) => {
@@ -227,11 +231,16 @@ export const useGiftsStore = defineStore("giftsStore", () => {
         fsGiftsAll.value = value;
     }
 
+    function setDepositInsuranceGift(data: IDepositInsuranceStatus | undefined): void {
+        depositInsuranceGift.value = data;
+    }
+
     function giftsStoreClear(): void {
         gifts.value = [];
         depositGiftsAll.value = [];
         registrationGiftsAll.value = [];
         fsGiftsAll.value = [];
+        depositInsuranceGift.value = undefined;
     }
 
     function setDailyBonusConfig (value: Record<string, IDailyGiftConfig>) {
@@ -263,6 +272,10 @@ export const useGiftsStore = defineStore("giftsStore", () => {
         fsGifts,
 
         giftsStoreClear,
+
+        depositInsuranceGift,
+        getDepositInsuranceGift,
+        setDepositInsuranceGift,
 
         disabledBonuses,
         setDisabledBonuses,

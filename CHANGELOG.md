@@ -1,3 +1,42 @@
+## [1.89.0](https://github.com/upstars-global/unity-core-modules/compare/v1.88.0...v1.89.0) (2026-05-12)
+
+### 🚀 Features
+
+* **UN-2508:** BO insurance bonus ([#332](https://github.com/upstars-global/unity-core-modules/issues/332))
+ ([b1b7bf2](https://github.com/upstars-global/unity-core-modules/commit/b1b7bf23a1300931066cd4099bd0f3e5110e8d25))
+
+
+
+    * feat(UN-2508): BO insurance bonus
+
+    * feat(UN-2508): BO insurance bonus
+
+    * feat(UN-2508): BO insurance bonus / unit tests
+
+    * feat(UN-2508): remove noPendingWithdrawals
+
+    * UN-2508 with activation
+
+    * UN-2508 rename variables
+
+## [1.88.0](https://github.com/upstars-global/unity-core-modules/compare/v1.87.0...v1.88.0) (2026-05-11)
+
+### 🚀 Features
+
+* UN-2713 migrate payments ([#348](https://github.com/upstars-global/unity-core-modules/issues/348))
+ ([c6d4b9f](https://github.com/upstars-global/unity-core-modules/commit/c6d4b9f00485e9ef362c6de7c52725dc1cb00765))
+
+## [1.87.0](https://github.com/upstars-global/unity-core-modules/compare/v1.86.2...v1.87.0) (2026-05-05)
+
+### 🚀 Features
+
+* UN-2707 new api version for two_factor ([#347](https://github.com/upstars-global/unity-core-modules/issues/347))
+ ([ce07243](https://github.com/upstars-global/unity-core-modules/commit/ce072438220900d353a15b7614a3ca6213e11367))
+
+
+
+    * feat: UN-2707 new api version for two_factor
+
 ## [1.86.2](https://github.com/upstars-global/unity-core-modules/compare/v1.86.1...v1.86.2) (2026-04-30)
 
 ### ⏪ Reverts
