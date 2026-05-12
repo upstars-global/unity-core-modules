@@ -8,6 +8,7 @@ import { useVipAdventures } from "../store/user/vipAdventures";
 
 export function useVipAdventuresService() {
     const {
+        vipAdventuresFullConfig,
         vipAdventuresConfigFile,
         vipAdventuresVariables,
         userVipStatusProgress,
@@ -27,22 +28,14 @@ export function useVipAdventuresService() {
 
     async function loadVipAdventuresConfig(): Promise<void> {
         try {
-            if (vipAdventuresConfigFile.value) {
+            if (vipAdventuresFullConfig.value) {
                 return;
             }
 
             const config = await loadVipAdventuresConfigFile();
 
             if (config) {
-                vipAdventuresConfigFile.value = userGroupForAdventure.value
-                    ? config.prizes[userGroupForAdventure.value]
-                    : Object.values(config.prizes)[0];
-
-                if (config.variables) {
-                    vipAdventuresVariables.value = userGroupForAdventure.value
-                        ? config.variables[userGroupForAdventure.value]
-                        : Object.values(config.variables)[0];
-                }
+                vipAdventuresFullConfig.value = config;
             }
         } catch (err) {
             log.error("LOAD_VIP_ADVENTURES_CONFIG_ERROR", err);

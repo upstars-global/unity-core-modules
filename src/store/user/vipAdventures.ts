@@ -5,7 +5,7 @@ import { computed, ref } from "vue";
 import { type Currencies } from "../../models/enums/currencies";
 import type { IUserStatus, UserGroup } from "../../models/user";
 import type { IVipAdventuresDayConfig } from "../../models/vipAdventures";
-import type { IPrizeConfigItem, IVipProgress } from "../../services/api/DTO/vipAdventuresDTO";
+import type { IPrizeConfigItem, IVipAdventuresConfig, IVipProgress } from "../../services/api/DTO/vipAdventuresDTO";
 import { useConfigStore } from "../../store/configStore";
 import { useEnvironments } from "../../store/environments";
 import { useUserStatuses } from "./userStatuses";
@@ -58,11 +58,36 @@ export function parseGiftAdventureTitle(title: string): {
 export const useVipAdventures = defineStore("vipAdventures", () => {
     const configStore = useConfigStore();
     const userStatuses = useUserStatuses();
-    const vipAdventuresConfigFile = ref<IPrizeConfigItem[]>();
-    const vipAdventuresVariables = ref<Record<string, Record<Currencies, string>>>({});
-    const userVipStatusProgress = ref<IVipProgress>();
-    const formatDateVipAdv = computed(() => configStore.$defaultProjectConfig.vipAdventures.formatDateVipAdv);
-    const vipAdvGroups = computed(() => configStore.$defaultProjectConfig.vipAdventures.groups);
+    const vipAdventuresFullConfig = ref<IVipAdventuresConfig>();
+
+    const vipAdvGroups = computed<number[]>(() => {
+        const prizes = vipAdventuresFullConfig.value?.prizes;
+        return prizes ? Object.keys(prizes).map(Number) : [];
+    });
+
+    const userGroupForAdventure = computed<number | undefined>(() => {
+        return vipAdvGroups.value.find((id) => userStatuses.getUserGroups.includes(id));
+    });
+
+    const vipAdventuresConfigFile = computed<IPrizeConfigItem[] | undefined>(() => {
+        const prizes = vipAdventuresFullConfig.value?.prizes;
+        if (!prizes) {
+            return;
+        }
+
+        const groupId = userGroupForAdventure.value ?? -1;
+        return prizes[groupId] ?? Object.values(prizes)[0];
+    });
+
+    const vipAdventuresVariables = computed<Record<string, Record<Currencies, string>>>(() => {
+        const variables = vipAdventuresFullConfig.value?.variables;
+        if (!variables) {
+            return {};
+        }
+
+        const groupId = userGroupForAdventure.value ?? -1;
+        return variables[groupId] ?? Object.values(variables)[0] ?? {};
+    });
 
     const toDay = computed(() => {
         const { useMocker } = useEnvironments();
@@ -124,11 +149,11 @@ export const useVipAdventures = defineStore("vipAdventures", () => {
         };
     });
 
-    const userGroupForAdventure = computed<UserGroup | undefined>(() => {
-        return vipAdvGroups.value.find((groupId) => userStatuses.getUserGroups.includes(groupId));
-    });
+    const userVipStatusProgress = ref<IVipProgress>();
+    const formatDateVipAdv = computed(() => configStore.$defaultProjectConfig.vipAdventures.formatDateVipAdv);
 
     return {
+        vipAdventuresFullConfig,
         vipAdventuresConfigFile,
         vipAdventuresVariables,
 

@@ -4,7 +4,7 @@ import weekday from "dayjs/plugin/weekday";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import type { IPrizeConfigItem } from "../../src/services/api/DTO/vipAdventuresDTO";
+import type { IPrizeConfigItem, IVipAdventuresConfig } from "../../src/services/api/DTO/vipAdventuresDTO";
 import {
     parseAdventuresTitleDayConfig,
     parseGiftAdventureTitle,
@@ -19,7 +19,6 @@ const formatDateVipAdv = "YYYY-MM-DD";
 const VIP_ADV_GROUPS = [ 791, 992 ];
 const defaultProjectConfig = {
     vipAdventures: {
-        groups: VIP_ADV_GROUPS,
         formatDateVipAdv,
     },
 };
@@ -120,7 +119,8 @@ describe("useVipAdventures store", () => {
             },
         ];
 
-        store.vipAdventuresConfigFile = config;
+        store.vipAdventuresFullConfig = { prizes: { 791: config }, variables: {} } as unknown as IVipAdventuresConfig;
+        mockUserStatuses.getUserGroups = [ 791 ];
 
         mockUserStatuses.getUserStatuses = [
             { name: "__1/3__2024-01-01" },
@@ -157,7 +157,8 @@ describe("useVipAdventures store", () => {
             },
         ];
 
-        store.vipAdventuresConfigFile = config;
+        store.vipAdventuresFullConfig = { prizes: { 791: config }, variables: {} } as unknown as IVipAdventuresConfig;
+        mockUserStatuses.getUserGroups = [ 791 ];
 
         const calendar = store.calendarConfig;
 
@@ -173,7 +174,7 @@ describe("useVipAdventures store", () => {
     it("uses mocked day when useMocker is enabled", () => {
         useMockerValue = true;
         const store = useVipAdventures();
-        store.vipAdventuresConfigFile = [
+        store.vipAdventuresFullConfig = { prizes: { 791: [
             {
                 title: "__1/3__2024-01-01",
                 prize: { bonus: "1" },
@@ -189,20 +190,22 @@ describe("useVipAdventures store", () => {
                 prize: { bonus: "3" },
                 condition: { minDep: "0", wager: "1", periodActivationDays: "7" },
             },
-        ] as IPrizeConfigItem[];
+        ] as IPrizeConfigItem[] }, variables: {} } as unknown as IVipAdventuresConfig;
+        mockUserStatuses.getUserGroups = [ 791 ];
 
         expect(store.toDay.format(formatDateVipAdv)).toBe("2024-01-03");
     });
 
     it("computes superConfig based on last calendar day", () => {
         const store = useVipAdventures();
-        store.vipAdventuresConfigFile = [
+        store.vipAdventuresFullConfig = { prizes: { 791: [
             {
                 title: "__1/1__2024-01-10",
                 prize: { bonus: "1" },
                 condition: { minDep: "0", wager: "1", periodActivationDays: "7" },
             },
-        ] as IPrizeConfigItem[];
+        ] as IPrizeConfigItem[] }, variables: {} } as unknown as IVipAdventuresConfig;
+        mockUserStatuses.getUserGroups = [ 791 ];
 
         expect(store.superConfig.index).toBe(1);
         expect(store.superConfig.today).toBe(true);
@@ -211,7 +214,7 @@ describe("useVipAdventures store", () => {
     it("computes superDay correctly", () => {
         const store = useVipAdventures();
 
-        store.vipAdventuresConfigFile = [
+        store.vipAdventuresFullConfig = { prizes: { 791: [
             {
                 title: "__1/1__2024-01-10",
                 prize: {
@@ -223,7 +226,8 @@ describe("useVipAdventures store", () => {
                     periodActivationDays: "7",
                 },
             },
-        ];
+        ] as IPrizeConfigItem[] }, variables: {} } as unknown as IVipAdventuresConfig;
+        mockUserStatuses.getUserGroups = [ 791 ];
 
         const superDay = store.superDay!;
 
@@ -238,14 +242,16 @@ describe("useVipAdventures store", () => {
     it("resolves userGroupForAdventure", () => {
         const store = useVipAdventures();
 
+        store.vipAdventuresFullConfig = { prizes: { 791: [], 992: [] }, variables: {} } as unknown as IVipAdventuresConfig;
         mockUserStatuses.getUserGroups = [ "regular", VIP_ADV_GROUPS[0] ];
 
         expect(store.userGroupForAdventure).toBe(VIP_ADV_GROUPS[0]);
     });
 
-    it("resolves first matching group by VIP_ADV_GROUPS order", () => {
+    it("resolves first matching group by config keys order", () => {
         const store = useVipAdventures();
 
+        store.vipAdventuresFullConfig = { prizes: { 791: [], 992: [] }, variables: {} } as unknown as IVipAdventuresConfig;
         mockUserStatuses.getUserGroups = [ "regular", VIP_ADV_GROUPS[1], VIP_ADV_GROUPS[0] ];
 
         expect(store.userGroupForAdventure).toBe(VIP_ADV_GROUPS[0]);
@@ -254,6 +260,7 @@ describe("useVipAdventures store", () => {
     it("returns undefined when user has no adventure groups", () => {
         const store = useVipAdventures();
 
+        store.vipAdventuresFullConfig = { prizes: { 791: [], 992: [] }, variables: {} } as unknown as IVipAdventuresConfig;
         mockUserStatuses.getUserGroups = [ "regular", "another_group" ];
 
         expect(store.userGroupForAdventure).toBeUndefined();
