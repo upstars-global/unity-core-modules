@@ -1,3 +1,24 @@
+## [1.89.0](https://github.com/upstars-global/unity-core-modules/compare/v1.88.0...v1.89.0) (2026-05-12)
+
+### 🚀 Features
+
+* **UN-2508:** BO insurance bonus ([#332](https://github.com/upstars-global/unity-core-modules/issues/332))
+ ([b1b7bf2](https://github.com/upstars-global/unity-core-modules/commit/b1b7bf23a1300931066cd4099bd0f3e5110e8d25))
+
+
+
+    * feat(UN-2508): BO insurance bonus
+
+    * feat(UN-2508): BO insurance bonus
+
+    * feat(UN-2508): BO insurance bonus / unit tests
+
+    * feat(UN-2508): remove noPendingWithdrawals
+
+    * UN-2508 with activation
+
+    * UN-2508 rename variables
+
 ## [1.88.0](https://github.com/upstars-global/unity-core-modules/compare/v1.87.0...v1.88.0) (2026-05-11)
 
 ### 🚀 Features
