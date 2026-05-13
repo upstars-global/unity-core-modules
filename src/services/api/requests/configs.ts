@@ -39,7 +39,7 @@ const loadBettingConfigReq = () => loadConfig<IBettingConfig>(
     "LOAD_BETTING_CONFIG_ERROR",
 );
 const loadVipAdventuresConfigReq = () => loadConfig<IVipAdventuresConfig>(
-    `${ FE_API_PREFIX }/config/vip-adventures-config-test`,
+    `${ FE_API_PREFIX }/config/vip-adventures`,
     "LOAD_VIP_ADVENTURES_CONFIG_ERROR",
 );
 const loadDisabledBonusesConfigReq = () => loadConfig<{ group_keys: string[] }>(
