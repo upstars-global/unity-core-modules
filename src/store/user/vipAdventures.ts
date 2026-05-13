@@ -60,33 +60,33 @@ export const useVipAdventures = defineStore("vipAdventures", () => {
     const userStatuses = useUserStatuses();
     const vipAdventuresFullConfig = ref<IVipAdventuresConfig>();
 
-    const vipAdvGroups = computed<number[]>(() => {
+    const vipAdvGroups = computed<string[]>(() => {
         const prizes = vipAdventuresFullConfig.value?.prizes;
-        return prizes ? Object.keys(prizes).map(Number) : [];
+        return prizes ? Object.keys(prizes) : [];
     });
 
-    const userGroupForAdventure = computed<number | undefined>(() => {
-        return vipAdvGroups.value.find((id) => userStatuses.getUserGroups.includes(id));
+    const userGroupForAdventure = computed<string | undefined>(() => {
+        return vipAdvGroups.value.find((id) =>
+            userStatuses.getUserGroups.some((groupId) => String(groupId) === String(id)),
+        );
     });
 
     const vipAdventuresConfigFile = computed<IPrizeConfigItem[] | undefined>(() => {
         const prizes = vipAdventuresFullConfig.value?.prizes;
-        if (!prizes) {
+        if (!prizes || userGroupForAdventure.value === undefined) {
             return;
         }
 
-        const groupId = userGroupForAdventure.value ?? -1;
-        return prizes[groupId] ?? Object.values(prizes)[0];
+        return prizes[userGroupForAdventure.value];
     });
 
     const vipAdventuresVariables = computed<Record<string, Record<Currencies, string>>>(() => {
         const variables = vipAdventuresFullConfig.value?.variables;
-        if (!variables) {
+        if (!variables || userGroupForAdventure.value === undefined) {
             return {};
         }
 
-        const groupId = userGroupForAdventure.value ?? -1;
-        return variables[groupId] ?? Object.values(variables)[0] ?? {};
+        return variables[userGroupForAdventure.value] ?? {};
     });
 
     const toDay = computed(() => {
@@ -94,7 +94,7 @@ export const useVipAdventures = defineStore("vipAdventures", () => {
 
         const dayMocker = parseAdventuresTitleDayConfig(vipAdventuresConfigFile.value?.[2]?.title || "__")?.day;
         return useMocker && dayMocker ?
-            dayjs(dayMocker, formatDateVipAdv.value) :
+            dayjs(dayMocker, "DD/MM/YYYY") :
             dayjs().utc();
     });
 
@@ -105,7 +105,7 @@ export const useVipAdventures = defineStore("vipAdventures", () => {
 
         return vipAdventuresConfigFile.value.map((item, index) => {
             const { day } = parseAdventuresTitleDayConfig(item.title);
-            const date = dayjs(day, formatDateVipAdv.value);
+            const date = dayjs(day, "DD/MM/YYYY");
 
             return {
                 index,
@@ -113,7 +113,7 @@ export const useVipAdventures = defineStore("vipAdventures", () => {
                 day: date.date(),
                 weekday: date.weekday(),
                 month: date.month(),
-                today: toDay.value.format(formatDateVipAdv.value) === day,
+                today: toDay.value.format("DD/MM/YYYY") === day,
                 isCompleted: userStatuses.getUserStatuses.some(({ name }) => name === item.title),
             };
         });
@@ -124,7 +124,7 @@ export const useVipAdventures = defineStore("vipAdventures", () => {
 
         return {
             index: calendarConfig.value.length,
-            today: dayjs(lastCalendarDay.fullDate, formatDateVipAdv.value).isBefore(toDay.value, "day"),
+            today: dayjs(lastCalendarDay.fullDate, "DD/MM/YYYY").isBefore(toDay.value, "day"),
         };
     });
 
@@ -144,13 +144,12 @@ export const useVipAdventures = defineStore("vipAdventures", () => {
 
         return {
             ...lastCalendarDay,
-            day: dayjs(lastCalendarDay.day, formatDateVipAdv.value).add(1, "day").format(formatDateVipAdv.value),
+            day: dayjs(lastCalendarDay.day, "DD/MM/YYYY").add(1, "day").format("DD/MM/YYYY"),
             step: lastCalendarDay.step + 1,
         };
     });
 
     const userVipStatusProgress = ref<IVipProgress>();
-    const formatDateVipAdv = computed(() => configStore.$defaultProjectConfig.vipAdventures.formatDateVipAdv);
 
     return {
         vipAdventuresFullConfig,
