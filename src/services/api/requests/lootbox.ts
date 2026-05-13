@@ -48,7 +48,11 @@ export async function activateLootboxReq(id: number) {
 
 export async function loadBetBonusReq(type: string, id: string) {
     try {
-        const { data } = await http().get(`/api/v2/bonuses/${ type }/${ id }`);
+        const { data } = await http().get(`/api/v2/bonuses/${ type }/${ id }`, {
+            headers: {
+                "X-Api-Target": "sport",
+            },
+        });
         return data;
     } catch (err) {
         log.error("LOAD_BET_BONUS_ERROR", err);
