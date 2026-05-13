@@ -4,7 +4,14 @@ import { http } from "../http";
 
 export async function loadWebsocketTokenReq() {
     try {
-        const { data } = await http().post<IToken>("/api/v2/websocket/token");
+        const { data } = await http().post<IToken>("/api/v2/websocket/token",
+            null,
+            {
+                headers: {
+                    "X-Api-Target": "sport",
+                },
+            },
+        );
 
         return data;
     } catch (err) {
@@ -15,12 +22,20 @@ export async function loadWebsocketTokenReq() {
 
 export async function loadWebsocketAuthorizeReq(client: string, locale: string) {
     try {
-        const { data } = await http().post<IAuthData>("/api/v2/websocket/authorize", {
-            client: client.toString(),
-            channels: [
-                `$private:${locale}.platform_user.${client}`,
-            ],
-        });
+        const { data } = await http().post<IAuthData>(
+            "/api/v2/websocket/authorize",
+            {
+                client: client.toString(),
+                channels: [
+                    `$private:${locale}.platform_user.${client}`,
+                ],
+            },
+            {
+                headers: {
+                    "X-Api-Target": "sport",
+                },
+            },
+        );
 
         return data.channels;
     } catch (err) {
