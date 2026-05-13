@@ -61,18 +61,18 @@ export const useRedeemableCompPointsStore = defineStore("redeemableCompPointsSto
         return getPageContent.value?.gamesTitles || {};
     });
     const getMaxWin = computed(() => {
-        if (!getPageContent.value) {
+        const maxWin = getPageContent.value?.maxWin;
+        if (!maxWin) {
             return "";
         }
 
-        const maxWin = getPageContent.value?.maxWin;
         const maxWinByUserCurrency = maxWin[getUserCurrency.value as Currencies];
         const data = {
-            maxMin: maxWinByUserCurrency || currentStaticPage.value.meta.json.maxWin[Currencies.EUR],
+            maxMin: maxWinByUserCurrency || currentStaticPage.value?.meta?.json?.maxWin?.[Currencies.EUR] || "",
             currency: maxWinByUserCurrency ? getUserCurrency.value : Currencies.EUR,
         };
 
-        return `${data.maxMin} ${data.currency}`;
+        return `${data.maxMin} ${data.currency}`.trim();
     });
     const getFreeSpinsWager = computed(() => {
         return getPageContent.value?.freeSpinsWager || {};

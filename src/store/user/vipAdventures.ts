@@ -3,10 +3,9 @@ import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
 import { type Currencies } from "../../models/enums/currencies";
-import type { IUserStatus, UserGroup } from "../../models/user";
+import type { IUserStatus } from "../../models/user";
 import type { IVipAdventuresDayConfig } from "../../models/vipAdventures";
 import type { IPrizeConfigItem, IVipAdventuresConfig, IVipProgress } from "../../services/api/DTO/vipAdventuresDTO";
-import { useConfigStore } from "../../store/configStore";
 import { useEnvironments } from "../../store/environments";
 import { useUserStatuses } from "./userStatuses";
 
@@ -56,7 +55,6 @@ export function parseGiftAdventureTitle(title: string): {
     return title;
 }
 export const useVipAdventures = defineStore("vipAdventures", () => {
-    const configStore = useConfigStore();
     const userStatuses = useUserStatuses();
     const vipAdventuresFullConfig = ref<IVipAdventuresConfig>();
 
@@ -120,10 +118,14 @@ export const useVipAdventures = defineStore("vipAdventures", () => {
     });
     const superConfig = computed(() => {
         const calendarLength = calendarConfig.value.length;
+        if (!calendarLength) {
+            return { index: 0, today: false };
+        }
+
         const lastCalendarDay = calendarConfig.value[calendarLength - 1];
 
         return {
-            index: calendarConfig.value.length,
+            index: calendarLength,
             today: dayjs(lastCalendarDay.fullDate, "DD/MM/YYYY").isBefore(toDay.value, "day"),
         };
     });
@@ -135,7 +137,7 @@ export const useVipAdventures = defineStore("vipAdventures", () => {
         return prepareVipAdventureCollectionDays(vipAdventuresConfigFile.value, userStatuses.getUserStatuses);
     });
     const superDay = computed<IVipAdventuresDayConfig | void>(() => {
-        if (!vipAdventuresConfigFile.value) {
+        if (!vipAdventuresConfigFile.value || !vipAdventuresDays.value.length) {
             return;
         }
 
