@@ -56,6 +56,7 @@ export function parseGiftAdventureTitle(title: string): {
 }
 export const useVipAdventures = defineStore("vipAdventures", () => {
     const userStatuses = useUserStatuses();
+    const userVipStatusProgress = ref<IVipProgress>();
     const vipAdventuresFullConfig = ref<IVipAdventuresConfig>();
     const isConfigLoaded = ref<boolean>(false);
 
@@ -72,7 +73,7 @@ export const useVipAdventures = defineStore("vipAdventures", () => {
 
     const vipAdventuresConfigFile = computed<IPrizeConfigItem[] | undefined>(() => {
         const prizes = vipAdventuresFullConfig.value?.prizes;
-        if (!prizes || userGroupForAdventure.value === undefined) {
+        if (!prizes || !userGroupForAdventure.value) {
             return;
         }
 
@@ -81,7 +82,7 @@ export const useVipAdventures = defineStore("vipAdventures", () => {
 
     const vipAdventuresVariables = computed<Record<string, Record<Currencies, string>>>(() => {
         const variables = vipAdventuresFullConfig.value?.variables;
-        if (!variables || userGroupForAdventure.value === undefined) {
+        if (!variables || !userGroupForAdventure.value) {
             return {};
         }
 
@@ -151,8 +152,6 @@ export const useVipAdventures = defineStore("vipAdventures", () => {
             step: lastCalendarDay.step + 1,
         };
     });
-
-    const userVipStatusProgress = ref<IVipProgress>();
 
     return {
         vipAdventuresFullConfig,
