@@ -57,6 +57,7 @@ export function parseGiftAdventureTitle(title: string): {
 export const useVipAdventures = defineStore("vipAdventures", () => {
     const userStatuses = useUserStatuses();
     const vipAdventuresFullConfig = ref<IVipAdventuresConfig>();
+    const isConfigLoaded = ref<boolean>(false);
 
     const vipAdvGroups = computed<string[]>(() => {
         const prizes = vipAdventuresFullConfig.value?.prizes;
@@ -166,5 +167,6 @@ export const useVipAdventures = defineStore("vipAdventures", () => {
         calendarConfig,
         superConfig,
         toDay,
+        isConfigLoaded,
     };
 });

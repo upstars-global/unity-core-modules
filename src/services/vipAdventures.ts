@@ -13,6 +13,7 @@ export function useVipAdventuresService() {
         vipAdventuresVariables,
         userVipStatusProgress,
         userGroupForAdventure,
+        isConfigLoaded,
     } = storeToRefs(useVipAdventures());
 
     async function loadVipProgress(): Promise<IVipProgress | void> {
@@ -29,6 +30,7 @@ export function useVipAdventuresService() {
     async function loadVipAdventuresConfig(): Promise<void> {
         try {
             if (vipAdventuresFullConfig.value) {
+                isConfigLoaded.value = true;
                 return;
             }
 
@@ -39,6 +41,8 @@ export function useVipAdventuresService() {
             }
         } catch (err) {
             log.error("LOAD_VIP_ADVENTURES_CONFIG_ERROR", err);
+        } finally {
+            isConfigLoaded.value = true;
         }
     }
 
