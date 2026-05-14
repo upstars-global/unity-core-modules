@@ -15,7 +15,7 @@ describe("useConfigStore", () => {
         expect(store.bettingConfig).toBeNull();
         expect(store.vipProgramConfig).toBeNull();
         expect(store.disabledGamesProviders).toEqual({});
-        expect(store.welcomeOfferConfig).toEqual({});
+        expect(store.welcomeOfferConfig).toBeNull();
     });
 
     it("updates simple configs via setters", () => {

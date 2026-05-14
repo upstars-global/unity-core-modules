@@ -1,3 +1,18 @@
+## [1.89.1](https://github.com/upstars-global/unity-core-modules/compare/v1.89.0...v1.89.1) (2026-05-13)
+
+### 🔧 Maintenance
+
+* **UN-2555:** types for vip program ([#342](https://github.com/upstars-global/unity-core-modules/issues/342))
+ ([182b58b](https://github.com/upstars-global/unity-core-modules/commit/182b58b4f5eaea4a29fa88699268e6266d0d40cf))
+
+
+
+    * chore: add types for vip program
+
+    * chore: types for vip program
+
+    * fix: tests
+
 ## [1.89.0](https://github.com/upstars-global/unity-core-modules/compare/v1.88.0...v1.89.0) (2026-05-12)
 
 ### 🚀 Features
