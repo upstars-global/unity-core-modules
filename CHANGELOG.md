@@ -1,3 +1,14 @@
+## [1.90.1](https://github.com/upstars-global/unity-core-modules/compare/v1.90.0...v1.90.1) (2026-05-14)
+
+### 🐛 Bug Fixes
+
+* (UN-2409) fix game providers ([#349](https://github.com/upstars-global/unity-core-modules/issues/349))
+ ([5fefd3e](https://github.com/upstars-global/unity-core-modules/commit/5fefd3e2821f74015879ce0b8ed5cd2364b225cb))
+
+
+
+    UN-2409 fix game providers
+
 ## [1.90.0](https://github.com/upstars-global/unity-core-modules/compare/v1.89.1...v1.90.0) (2026-05-14)
 
 ### 🚀 Features
