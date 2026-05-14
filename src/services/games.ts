@@ -221,11 +221,7 @@ export function initCollection(data: IGamesProvider[]) {
 export async function loadGamesProviders(): Promise<IGamesProvider[]> {
     try {
         const gamesProvidersStore = useGamesProviders();
-        const { gamesProviders, disabledGamesProviders } = storeToRefs(gamesProvidersStore);
-
-        if (isExistData(gamesProviders.value)) {
-            return gamesProviders.value;
-        }
+        const { disabledGamesProviders } = storeToRefs(gamesProvidersStore);
 
         const providers = await loadGamesProvidersReq();
 
