@@ -1,3 +1,10 @@
+## [1.90.0](https://github.com/upstars-global/unity-core-modules/compare/v1.89.1...v1.90.0) (2026-05-14)
+
+### 🚀 Features
+
+* **UN-2409v2:** cache for games endpoints ([#325](https://github.com/upstars-global/unity-core-modules/issues/325)) ([#337](https://github.com/upstars-global/unity-core-modules/issues/337))
+ ([69682e8](https://github.com/upstars-global/unity-core-modules/commit/69682e88ea4695b61db778a34bbaad8acb4dedaa))
+
 ## [1.89.1](https://github.com/upstars-global/unity-core-modules/compare/v1.89.0...v1.89.1) (2026-05-13)
 
 ### 🔧 Maintenance

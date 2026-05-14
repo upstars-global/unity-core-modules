@@ -59,7 +59,6 @@ export function createLogin({ loadAuthData, clearFreshChatUser }: LoginDeps) {
         try {
             const { email, password, captcha, route, custom_login_reg } = formData;
             const { toggleUserIsLogged } = useUserInfo();
-
             await clearFreshChatUser();
 
             const data = await signIn({
