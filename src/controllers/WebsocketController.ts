@@ -6,9 +6,11 @@ import { storeToRefs } from "pinia";
 import log from "../controllers/Logger";
 import { type INotificationCenterSubscription } from "../services/api/DTO/notificationCenter";
 import { loadNotificationCenterSubscriptionReq } from "../services/api/requests/notificationCenter";
+import { addBonusNotificationItem, loadSocketConnection } from "../services/betting";
 import { loadProjectInfo } from "../services/common";
 import { useCommon } from "../store/common";
 import { useEnvironments } from "../store/environments";
+import { useMultilangStore } from "../store/multilang";
 import { useUserInfo } from "../store/user/userInfo";
 
 let sock: LegacyCentrifugeClient | null = null;
@@ -140,8 +142,8 @@ function subscribeNotificationCenterChannels(
 
         const sub = client.newSubscription(channelName, {});
 
-        sub.on("publication", (ctx) => {
-            $bus.$emit?.(`websocket.${channel}`, ctx.data);
+        sub.on("publication", (pub) => {
+            $bus.$emit?.(`websocket.${channel}`, pub.data);
         });
 
         sub.subscribe();
@@ -190,7 +192,7 @@ async function start() {
 
     disconnect();
 
-    const shouldUseNotificationCenter = false;// await shouldUseNotificationCenterFlow();
+    const shouldUseNotificationCenter = await shouldUseNotificationCenterFlow();
 
     if (shouldUseNotificationCenter) {
         const isStarted = await startNotificationCenterFlow();
@@ -224,7 +226,39 @@ function disconnect() {
     notificationCenterClient = null;
 }
 
+
+async function startBetting(url: string) {
+    try {
+        const { getUserInfo } = storeToRefs(useUserInfo());
+        const { getUserLocale } = storeToRefs(useMultilangStore());
+        const { token, channels } = await loadSocketConnection(getUserInfo.value.user_id, getUserLocale.value);
+        const [ channelItem ] = channels;
+
+        if (!channelItem) {
+            throw new Error("Socket channel is missing");
+        }
+
+        const cent = new Centrifuge(url, {
+            ...token,
+        });
+        const sub = cent.newSubscription(channelItem.channel, {
+            token: channelItem.token,
+        });
+
+        sub.on("publication", ({ data }) => {
+            if (data.event_name === "bonus_issued") {
+                addBonusNotificationItem(data.message.type, data.message.id);
+            }
+        });
+
+        sub.subscribe();
+        cent.connect();
+    } catch (err) {
+        log.error("BETTING_WEBSOCKET_CONNECTION", err);
+    }
+}
 export default {
     init,
     start,
+    startBetting,
 };
