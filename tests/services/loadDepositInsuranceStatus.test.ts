@@ -51,7 +51,6 @@ function minimalDepositInsuranceStatus(): IDepositInsuranceStatus {
             noActiveBonus: { value: null, valid: true },
             hasDeposits: { value: null, valid: true },
             hasNoCashoutAfterDeposit: { value: null, valid: true },
-            aboveMinDeposit: { value: null, valid: true },
         },
     };
 }
