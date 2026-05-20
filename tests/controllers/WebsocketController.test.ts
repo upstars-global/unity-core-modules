@@ -22,9 +22,12 @@ const mocks = vi.hoisted(() => {
         connect: ReturnType<typeof vi.fn>;
         disconnect: ReturnType<typeof vi.fn>;
         newSubscription: ReturnType<typeof vi.fn>;
+        on: ReturnType<typeof vi.fn>;
+        handlers: Record<string, (ctx?: unknown) => void>;
         subscriptions: Array<{
             channel: string;
             on: ReturnType<typeof vi.fn>;
+            handlers: Record<string, (ctx?: unknown) => void>;
             subscribe: ReturnType<typeof vi.fn>;
             publicationHandler?: (ctx: { data: unknown }) => void;
         }>;
@@ -46,6 +49,15 @@ vi.mock("@config/gift", () => ({
 
 vi.mock("@helpers/generateNotifications", () => ({
     eventsHandlers: {},
+}));
+
+vi.mock("../../src/controllers/Logger", () => ({
+    default: {
+        error: vi.fn(),
+    },
+    log: {
+        error: vi.fn(),
+    },
 }));
 
 vi.mock("centrifuge-legacy/centrifuge", () => ({
@@ -73,17 +85,25 @@ vi.mock("centrifuge", () => ({
             subscriptions: [] as Array<{
                 channel: string;
                 on: ReturnType<typeof vi.fn>;
+                handlers: Record<string, (ctx?: unknown) => void>;
                 subscribe: ReturnType<typeof vi.fn>;
                 publicationHandler?: (ctx: { data: unknown }) => void;
             }>,
+            handlers: {} as Record<string, (ctx?: unknown) => void>,
             connect: vi.fn(),
             disconnect: vi.fn(),
+            on: vi.fn((event: string, handler: (ctx?: unknown) => void) => {
+                instance.handlers[event] = handler;
+            }),
             newSubscription: vi.fn((channel: string) => {
                 const subscription = {
                     channel,
-                    on: vi.fn((event: string, handler: (ctx: { data: unknown }) => void) => {
+                    handlers: {} as Record<string, (ctx?: unknown) => void>,
+                    on: vi.fn((event: string, handler: (ctx?: unknown) => void) => {
+                        subscription.handlers[event] = handler;
+
                         if (event === "publication") {
-                            subscription.publicationHandler = handler;
+                            subscription.publicationHandler = handler as (ctx: { data: unknown }) => void;
                         }
                     }),
                     subscribe: vi.fn(),
@@ -165,6 +185,8 @@ describe("WebsocketController", () => {
 
         const client = mocks.notificationInstances[0];
         expect(client.connect).toHaveBeenCalledTimes(1);
+        expect(client.on).toHaveBeenCalledWith("error", expect.any(Function));
+        expect(client.on).toHaveBeenCalledWith("disconnected", expect.any(Function));
         expect(client.subscriptions.map(({ channel }) => channel)).toEqual(expect.arrayContaining([
             "ws:client-a:public:wins",
             "ws:client-a:public:jackpots_changes",
@@ -205,6 +227,47 @@ describe("WebsocketController", () => {
 
         expect(loadNotificationCenterSubscriptionReq).toHaveBeenCalledTimes(1);
         expect(mocks.notificationInstances).toHaveLength(0);
+        expect(mocks.legacyInstances).toHaveLength(1);
+        expect(mocks.legacyInstances[0].connect).toHaveBeenCalledTimes(1);
+    });
+
+    it("falls back to legacy flow when notification center connection emits an async error", async () => {
+        useCommon().setProjectInfo(projectInfoWithNotificationFlow(true));
+        vi.mocked(loadNotificationCenterSubscriptionReq).mockResolvedValue({
+            user: "user-1",
+            url: "wss://centrifugo.example.test",
+            client_name: "client-a",
+            token: "bad-token",
+        });
+
+        const { default: WebsocketController } = await importController();
+
+        await WebsocketController.start();
+        mocks.notificationInstances[0].handlers.error?.({ error: new Error("connection rejected") });
+
+        expect(mocks.notificationInstances).toHaveLength(1);
+        expect(mocks.notificationInstances[0].disconnect).toHaveBeenCalledTimes(1);
+        expect(mocks.legacyInstances).toHaveLength(1);
+        expect(mocks.legacyInstances[0].connect).toHaveBeenCalledTimes(1);
+    });
+
+    it("falls back to legacy flow when notification center client is disconnected asynchronously", async () => {
+        useCommon().setProjectInfo(projectInfoWithNotificationFlow(true));
+        vi.mocked(loadNotificationCenterSubscriptionReq).mockResolvedValue({
+            user: "user-1",
+            url: "wss://centrifugo.example.test",
+            client_name: "client-a",
+            token: "notification-token",
+        });
+
+        const { default: WebsocketController } = await importController();
+
+        await WebsocketController.start();
+        expect(mocks.legacyInstances).toHaveLength(0);
+
+        mocks.notificationInstances[0].handlers.disconnected?.({});
+
+        expect(mocks.notificationInstances[0].disconnect).toHaveBeenCalledTimes(1);
         expect(mocks.legacyInstances).toHaveLength(1);
         expect(mocks.legacyInstances[0].connect).toHaveBeenCalledTimes(1);
     });

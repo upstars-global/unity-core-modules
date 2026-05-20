@@ -15,6 +15,7 @@ import { useUserInfo } from "../store/user/userInfo";
 
 let sock: LegacyCentrifugeClient | null = null;
 let notificationCenterClient: Centrifuge | null = null;
+let bettingClient: Centrifuge | null = null;
 let $bus: Partial<IBus> = {};
 
 interface LegacyCentrifugeClient {
@@ -150,6 +151,24 @@ function subscribeNotificationCenterChannels(
     });
 }
 
+function stopNotificationCenterFlow() {
+    if (!notificationCenterClient) {
+        return;
+    }
+
+    notificationCenterClient.disconnect();
+    notificationCenterClient = null;
+}
+
+function fallbackToLegacyFlow(client: Centrifuge) {
+    if (notificationCenterClient !== client) {
+        return;
+    }
+
+    stopNotificationCenterFlow();
+    startLegacyFlow();
+}
+
 async function startNotificationCenterFlow() {
     try {
         const settings = await loadNotificationCenterSubscriptionReq();
@@ -169,11 +188,15 @@ async function startNotificationCenterFlow() {
             subscribeNotificationCenterChannels(client, CHANNELS_TYPE_PRIVATE, settings);
         }
 
-        client.connect();
+        client.on("error", () => fallbackToLegacyFlow(client));
+        client.on("disconnected", () => fallbackToLegacyFlow(client));
+
         notificationCenterClient = client;
+        client.connect();
 
         return true;
     } catch (err) {
+        stopNotificationCenterFlow();
         log.error("START_NOTIFICATION_CENTER_REALTIME_ERROR", err);
         return false;
     }
@@ -216,19 +239,25 @@ async function shouldUseNotificationCenterFlow() {
 function disconnect() {
     if (sock?._clientID) {
         sock.disconnect();
+        sock = null;
     }
 
-    if (notificationCenterClient) {
-        notificationCenterClient.disconnect();
-    }
-
-    sock = null;
-    notificationCenterClient = null;
+    stopNotificationCenterFlow();
 }
 
+function stopBetting() {
+    if (!bettingClient) {
+        return;
+    }
+
+    bettingClient.disconnect();
+    bettingClient = null;
+}
 
 async function startBetting(url: string) {
     try {
+        stopBetting();
+
         const { getUserInfo } = storeToRefs(useUserInfo());
         const { getUserLocale } = storeToRefs(useMultilangStore());
         const { token, channels } = await loadSocketConnection(getUserInfo.value.user_id, getUserLocale.value);
