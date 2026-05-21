@@ -5,6 +5,7 @@ import type { IVipProgress } from "../services/api/DTO/vipAdventuresDTO";
 import { loadVipAdventuresConfigFile, loadVipStatusProgress } from "../services/api/requests/vipAdventures";
 import { useVipAdventures } from "../store/user/vipAdventures";
 
+let loadVipAdventuresConfigPromise: Promise<void> | null = null;
 
 export function useVipAdventuresService() {
     const {
@@ -28,22 +29,30 @@ export function useVipAdventuresService() {
     }
 
     async function loadVipAdventuresConfig(): Promise<void> {
-        try {
-            if (vipAdventuresFullConfig.value) {
-                isConfigLoaded.value = true;
-                return;
-            }
-
-            const config = await loadVipAdventuresConfigFile();
-
-            if (config) {
-                vipAdventuresFullConfig.value = config;
-            }
-        } catch (err) {
-            log.error("LOAD_VIP_ADVENTURES_CONFIG_ERROR", err);
-        } finally {
+        if (vipAdventuresFullConfig.value) {
             isConfigLoaded.value = true;
+            return;
         }
+
+        if (loadVipAdventuresConfigPromise) {
+            return await loadVipAdventuresConfigPromise;
+        }
+
+        loadVipAdventuresConfigPromise = loadVipAdventuresConfigFile()
+            .then((config) => {
+                if (config) {
+                    vipAdventuresFullConfig.value = config;
+                }
+            })
+            .catch((err) => {
+                log.error("LOAD_VIP_ADVENTURES_CONFIG_ERROR", err);
+            })
+            .finally(() => {
+                isConfigLoaded.value = true;
+                loadVipAdventuresConfigPromise = null;
+            });
+
+        return await loadVipAdventuresConfigPromise;
     }
 
     return {
