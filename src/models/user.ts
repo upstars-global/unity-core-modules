@@ -131,7 +131,6 @@ export interface IDepositInsuranceStatus {
         noActiveBonus: IDepositInsuranceConditionState;
         hasDeposits: IDepositInsuranceConditionState;
         hasNoCashoutAfterDeposit: IDepositInsuranceConditionState;
-        aboveMinDeposit: IDepositInsuranceConditionState;
     };
 }
 
