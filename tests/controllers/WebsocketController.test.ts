@@ -217,7 +217,7 @@ describe("WebsocketController", () => {
         expect(legacyClient.subscribe).toHaveBeenCalledWith("balance#user-1", expect.any(Function));
     });
 
-    it("falls back to legacy flow when notification center subscription settings are missing", async () => {
+    it("does not start legacy flow when notification center settings are missing and new flow is enabled", async () => {
         useCommon().setProjectInfo(projectInfoWithNotificationFlow(true));
         vi.mocked(loadNotificationCenterSubscriptionReq).mockResolvedValue(undefined);
 
@@ -227,11 +227,10 @@ describe("WebsocketController", () => {
 
         expect(loadNotificationCenterSubscriptionReq).toHaveBeenCalledTimes(1);
         expect(mocks.notificationInstances).toHaveLength(0);
-        expect(mocks.legacyInstances).toHaveLength(1);
-        expect(mocks.legacyInstances[0].connect).toHaveBeenCalledTimes(1);
+        expect(mocks.legacyInstances).toHaveLength(0);
     });
 
-    it("falls back to legacy flow when notification center connection emits an async error", async () => {
+    it("stops notification center flow without legacy fallback when client emits an async error", async () => {
         useCommon().setProjectInfo(projectInfoWithNotificationFlow(true));
         vi.mocked(loadNotificationCenterSubscriptionReq).mockResolvedValue({
             user: "user-1",
@@ -247,11 +246,10 @@ describe("WebsocketController", () => {
 
         expect(mocks.notificationInstances).toHaveLength(1);
         expect(mocks.notificationInstances[0].disconnect).toHaveBeenCalledTimes(1);
-        expect(mocks.legacyInstances).toHaveLength(1);
-        expect(mocks.legacyInstances[0].connect).toHaveBeenCalledTimes(1);
+        expect(mocks.legacyInstances).toHaveLength(0);
     });
 
-    it("falls back to legacy flow when notification center client is disconnected asynchronously", async () => {
+    it("stops notification center flow without legacy fallback when client is disconnected asynchronously", async () => {
         useCommon().setProjectInfo(projectInfoWithNotificationFlow(true));
         vi.mocked(loadNotificationCenterSubscriptionReq).mockResolvedValue({
             user: "user-1",
@@ -268,7 +266,6 @@ describe("WebsocketController", () => {
         mocks.notificationInstances[0].handlers.disconnected?.({});
 
         expect(mocks.notificationInstances[0].disconnect).toHaveBeenCalledTimes(1);
-        expect(mocks.legacyInstances).toHaveLength(1);
-        expect(mocks.legacyInstances[0].connect).toHaveBeenCalledTimes(1);
+        expect(mocks.legacyInstances).toHaveLength(0);
     });
 });

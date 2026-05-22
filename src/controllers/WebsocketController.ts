@@ -160,13 +160,12 @@ function stopNotificationCenterFlow() {
     notificationCenterClient = null;
 }
 
-function fallbackToLegacyFlow(client: Centrifuge) {
+function handleNotificationCenterDisconnect(client: Centrifuge) {
     if (notificationCenterClient !== client) {
         return;
     }
 
     stopNotificationCenterFlow();
-    startLegacyFlow();
 }
 
 async function startNotificationCenterFlow() {
@@ -188,8 +187,11 @@ async function startNotificationCenterFlow() {
             subscribeNotificationCenterChannels(client, CHANNELS_TYPE_PRIVATE, settings);
         }
 
-        client.on("error", () => fallbackToLegacyFlow(client));
-        client.on("disconnected", () => fallbackToLegacyFlow(client));
+        client.on("error", (err) => {
+            handleNotificationCenterDisconnect(client);
+            log.error("NOTIFICATION_CENTER_REALTIME_ERROR", err);
+        });
+        client.on("disconnected", () => handleNotificationCenterDisconnect(client));
 
         notificationCenterClient = client;
         client.connect();
@@ -218,11 +220,8 @@ async function start() {
     const shouldUseNotificationCenter = await shouldUseNotificationCenterFlow();
 
     if (shouldUseNotificationCenter) {
-        const isStarted = await startNotificationCenterFlow();
-
-        if (isStarted) {
-            return;
-        }
+        await startNotificationCenterFlow();
+        return;
     }
 
     startLegacyFlow();
