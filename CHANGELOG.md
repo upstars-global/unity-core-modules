@@ -1,3 +1,14 @@
+## [1.91.0](https://github.com/upstars-global/unity-core-modules/compare/v1.90.1...v1.91.0) (2026-05-21)
+
+### 🚀 Features
+
+* (UN-2760) BO remove field aboveMinDeposit ([#352](https://github.com/upstars-global/unity-core-modules/issues/352))
+ ([daa9db7](https://github.com/upstars-global/unity-core-modules/commit/daa9db7175cef1ac53a64d4228e34b12cbfd9383))
+
+
+
+    UN-2760 remove field
+
 ## [1.90.1](https://github.com/upstars-global/unity-core-modules/compare/v1.90.0...v1.90.1) (2026-05-14)
 
 ### 🐛 Bug Fixes
