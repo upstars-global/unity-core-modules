@@ -12,7 +12,7 @@ import { CurrentPage, ICurrentPage, ICurrentPageMeta } from "../models/CMS";
 import { useBannerStore } from "../store/banners";
 import { useCMS } from "../store/CMS";
 import { useMultilangStore } from "../store/multilang";
-import { IFileCMS } from "./api/DTO/CMS";
+import { IFileCMS, IPageItemCMS } from "./api/DTO/CMS";
 import {
     loadAllFilesFromCMSReq,
     loadCMSPagesReq,
@@ -80,10 +80,57 @@ export async function fetchCmsPageOnce(slug: string, locale?: string): ReturnTyp
     return promise;
 }
 
-export async function loadCurrentStaticPage(slug: string) {
+type StaticPageRoute = { path: string; name?: string; meta?: { metaUrl?: string } };
+type StaticPageExplicitSource = { slug: string; seoUrl?: string };
+type StaticPageSource = string | StaticPageRoute | StaticPageExplicitSource;
+
+function isExplicitStaticPageSource(source: StaticPageSource): source is StaticPageExplicitSource {
+    return typeof source !== "string" && "slug" in source;
+}
+
+function resolveStaticPageSource(source: StaticPageSource, seoUrl?: string) {
+    if (isExplicitStaticPageSource(source)) {
+        return {
+            slug: normalizeUrl(source.slug),
+            seoUrl: source.seoUrl || seoUrl || normalizeUrl(source.slug),
+        };
+    }
+
+    const url = typeof source === "string" ? source : resolveUrlFromRoute(source);
+    const slug = normalizeUrl(url);
+
+    return {
+        slug,
+        seoUrl: seoUrl || (typeof source === "string" ? slug : url),
+    };
+}
+
+function buildMetaSEO(data: IPageItemCMS, locale: string): ICurrentPageMeta {
+    const blocks = data.blocks;
+
+    if (blocks) {
+        return {
+            metaTitle: blocks.title,
+            metaDescription: blocks.description,
+            content: data.content,
+            json: blocks.json,
+        };
+    }
+
+    const fallback = metaDataSSR(locale);
+
+    return {
+        metaTitle: fallback?.title,
+        metaDescription: fallback?.description,
+        content: fallback?.content,
+    };
+}
+
+export async function loadCurrentStaticPage(source: StaticPageSource, seoUrl?: string) {
     const cmsStore = useCMS();
-    const { contentCurrentPage } = storeToRefs(cmsStore);
+    const { contentCurrentPage, seoMeta } = storeToRefs(cmsStore);
     const { getUserLocale } = storeToRefs(useMultilangStore());
+    const { slug, seoUrl: resolvedSeoUrl } = resolveStaticPageSource(source, seoUrl);
 
     cmsStore.setCurrentStaticPage(null);
 
@@ -98,6 +145,10 @@ export async function loadCurrentStaticPage(slug: string) {
     if (cached) {
         cmsStore.setCurrentStaticPage(cached);
 
+        if (!seoMeta.value[resolvedSeoUrl]) {
+            cmsStore.setSeoMeta({ meta: seoMeta.value[slug] || cached.meta, url: resolvedSeoUrl });
+        }
+
         return cached;
     }
 
@@ -109,76 +160,16 @@ export async function loadCurrentStaticPage(slug: string) {
         }
 
         const page = replaceCurrentYearPlaceholder<ICurrentPage>(new CurrentPage(data));
+        const meta = replaceCurrentYearPlaceholder<ICurrentPageMeta>(buildMetaSEO(data, getUserLocale.value));
 
         cmsStore.setCurrentStaticPage(page);
         cmsStore.setPageContent({ page, url: slug });
+        cmsStore.setSeoMeta({ meta, url: resolvedSeoUrl });
 
         return page;
     } catch (err) {
         log.error("LOAD_CURRENT_STATIC_PAGE", err);
         throw err;
-    }
-}
-
-export async function loadMetaSEO(route: { path: string; name: string; meta?: { metaUrl: string } }) {
-    const cmsStore = useCMS();
-    const { seoMeta, contentCurrentPage } = storeToRefs(cmsStore);
-    const { getUserLocale } = storeToRefs(useMultilangStore());
-    const url = resolveUrlFromRoute(route);
-    const slug = normalizeUrl(url);
-
-    const staticErr = cmsStore.ensureStaticIfReady(slug);
-
-    if (staticErr) {
-        return staticErr;
-    }
-
-    const cachedMeta = seoMeta.value[url];
-    const cachedPage = contentCurrentPage.value[slug];
-
-    if (cachedMeta && cachedPage) {
-        cmsStore.setCurrentStaticPage(cachedPage);
-
-        return;
-    }
-
-    try {
-        const data = await fetchCmsPageOnce(slug, getUserLocale.value);
-
-        if (!data) {
-            return `${ slug } page data is not found`;
-        }
-
-        const blocks = data.blocks;
-        let meta: ICurrentPageMeta | null = null;
-
-        if (blocks) {
-            meta = {
-                metaTitle: blocks.title,
-                metaDescription: blocks.description,
-                content: data.content,
-                json: blocks.json,
-            };
-        } else {
-            const fallback = metaDataSSR(getUserLocale.value);
-            meta = {
-                metaTitle: fallback?.title,
-                metaDescription: fallback?.description,
-                content: fallback?.content,
-            };
-        }
-
-        meta = replaceCurrentYearPlaceholder<ICurrentPageMeta>(meta);
-        const page = replaceCurrentYearPlaceholder<ICurrentPage>(new CurrentPage(data));
-
-        cmsStore.setSeoMeta({ meta, url });
-        cmsStore.setPageContent({ page, url: slug });
-        cmsStore.setCurrentStaticPage(page);
-
-        return meta;
-    } catch (err) {
-        log.error("LOAD_SEO_META", err);
-        return String(err);
     }
 }
 
