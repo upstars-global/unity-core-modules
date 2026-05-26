@@ -1,3 +1,40 @@
+## [1.92.0](https://github.com/upstars-global/unity-core-modules/compare/v1.91.0...v1.92.0) (2026-05-26)
+
+### 🚀 Features
+
+* (UN-1031) vipadventures with array of groups ([#344](https://github.com/upstars-global/unity-core-modules/issues/344))
+ ([96823ca](https://github.com/upstars-global/unity-core-modules/commit/96823ca4e4048727798cffa216964ab62092c35f))
+
+
+
+    * UN-1031 vipadventures with array of groups
+
+    * UN-1031 fix test
+
+    * UN-1031
+
+    * UN-1031 dynamic groups from config keys / terms for groups
+
+    * UN-1031 improve unit tests
+
+    * UN-1031 improve unit tests
+
+    * UN-1031
+
+    * UN-1031 config test
+
+    * UN-1031 config test
+
+    * UN-1031
+
+    * UN-1031
+
+    * UN-1031
+
+    * UN-1031
+
+    * UN-1031
+
 ## [1.91.0](https://github.com/upstars-global/unity-core-modules/compare/v1.90.1...v1.91.0) (2026-05-21)
 
 ### 🚀 Features
