@@ -111,9 +111,9 @@ export async function loadProjectInfo(): Promise<void> {
     const commonStore = useCommon();
     const { infoProject } = storeToRefs(commonStore);
 
-    if (isExistData(infoProject.value)) {
-        return;
-    }
+    // if (isExistData(infoProject.value)) {
+    //     return;
+    // }
 
     const data = await loadProjectInfoReq();
 
