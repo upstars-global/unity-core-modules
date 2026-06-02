@@ -9,10 +9,11 @@ import { updateAuthDetailsProviders } from "../services/user";
 import { useMultilangStore } from "../store/multilang";
 import { useUserInfo } from "../store/user/userInfo";
 
-export function useUserTermsAcceptingPopup() {
+export function useUserTermsAcceptingPopup(options: {
+    getAcceptTermsExtraFields?: () => Record<string, unknown>;
+} = {}) {
     const userInfoStore = useUserInfo();
     const multilangStore = useMultilangStore();
-
 
     const isUserTermsAccepted = computed(() => {
         return userInfoStore.getUserInfo.auth_fields_missed?.includes("terms_acceptance");
@@ -39,11 +40,13 @@ export function useUserTermsAcceptingPopup() {
 
     function acceptTerms() {
         const country = multilangStore.getUserGeo;
+        const extraFields = options.getAcceptTermsExtraFields?.() || {};
 
         return updateAuthDetailsProviders({
             user: {
                 terms_acceptance: true,
                 ...(isUserCountryFieldMissing.value ? { country } : {}),
+                ...extraFields,
             },
         });
     }
