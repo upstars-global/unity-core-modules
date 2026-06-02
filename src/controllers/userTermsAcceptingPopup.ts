@@ -2,11 +2,11 @@ const supportPopup = defineAsyncComponent(() => {
     return import("@modules/Popups/SupportPopup/SupportPopup.vue");
 });
 
-import Modal from "@plugins/Modal";
 import { computed, defineAsyncComponent } from "vue";
 
 import { updateAuthDetailsProviders } from "../services/user";
 import { useMultilangStore } from "../store/multilang";
+import { useUIStore } from "../store/ui";
 import { useUserInfo } from "../store/user/userInfo";
 
 export function useUserTermsAcceptingPopup(options: {
@@ -14,6 +14,7 @@ export function useUserTermsAcceptingPopup(options: {
 } = {}) {
     const userInfoStore = useUserInfo();
     const multilangStore = useMultilangStore();
+    const uiStore = useUIStore();
 
     const isUserTermsAccepted = computed(() => {
         return userInfoStore.getUserInfo.auth_fields_missed?.includes("terms_acceptance");
@@ -52,7 +53,7 @@ export function useUserTermsAcceptingPopup(options: {
     }
 
     function showAcceptTermsPopup() {
-        Modal.show({
+        uiStore.setShowModal({
             name: "modal-support",
             component: supportPopup,
             mobileFriendly: true,
