@@ -1,3 +1,16 @@
+## [1.93.0](https://github.com/upstars-global/unity-core-modules/compare/v1.92.0...v1.93.0) (2026-06-03)
+
+### 🚀 Features
+
+* **UN-681:** unify loadCurrentStaticPage service method to set seo m… ([#353](https://github.com/upstars-global/unity-core-modules/issues/353))
+ ([f4cc4e6](https://github.com/upstars-global/unity-core-modules/commit/f4cc4e627603f08cb791bd949884e272f09123ef))
+
+
+
+    * feat(UN-681): unify loadCurrentStaticPage service method to set seo meta data
+
+    * chore: force actions
+
 ## [1.92.0](https://github.com/upstars-global/unity-core-modules/compare/v1.91.0...v1.92.0) (2026-05-26)
 
 ### 🚀 Features
