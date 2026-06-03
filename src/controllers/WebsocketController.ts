@@ -8,7 +8,6 @@ import { useUserInfo } from "../store/user/userInfo";
 let sock = {},
     $bus = {};
 
-
 export const CHANNELS_TYPE_PUBLIC = "public";
 export const CHANNELS_TYPE_PRIVATE = "private";
 
