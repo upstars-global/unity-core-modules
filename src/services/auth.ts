@@ -80,7 +80,6 @@ export function createLogin({ loadAuthData, clearFreshChatUser }: LoginDeps) {
                 challengeReturnTo,
             } = formData;
             const { toggleUserIsLogged } = useUserInfo();
-
             await clearFreshChatUser();
 
             const data = await signIn({

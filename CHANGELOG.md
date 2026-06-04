@@ -1,3 +1,169 @@
+## [1.93.0](https://github.com/upstars-global/unity-core-modules/compare/v1.92.0...v1.93.0) (2026-06-03)
+
+### 🚀 Features
+
+* **UN-681:** unify loadCurrentStaticPage service method to set seo m… ([#353](https://github.com/upstars-global/unity-core-modules/issues/353))
+ ([f4cc4e6](https://github.com/upstars-global/unity-core-modules/commit/f4cc4e627603f08cb791bd949884e272f09123ef))
+
+
+
+    * feat(UN-681): unify loadCurrentStaticPage service method to set seo meta data
+
+    * chore: force actions
+
+## [1.92.0](https://github.com/upstars-global/unity-core-modules/compare/v1.91.0...v1.92.0) (2026-05-26)
+
+### 🚀 Features
+
+* (UN-1031) vipadventures with array of groups ([#344](https://github.com/upstars-global/unity-core-modules/issues/344))
+ ([96823ca](https://github.com/upstars-global/unity-core-modules/commit/96823ca4e4048727798cffa216964ab62092c35f))
+
+
+
+    * UN-1031 vipadventures with array of groups
+
+    * UN-1031 fix test
+
+    * UN-1031
+
+    * UN-1031 dynamic groups from config keys / terms for groups
+
+    * UN-1031 improve unit tests
+
+    * UN-1031 improve unit tests
+
+    * UN-1031
+
+    * UN-1031 config test
+
+    * UN-1031 config test
+
+    * UN-1031
+
+    * UN-1031
+
+    * UN-1031
+
+    * UN-1031
+
+    * UN-1031
+
+## [1.91.0](https://github.com/upstars-global/unity-core-modules/compare/v1.90.1...v1.91.0) (2026-05-21)
+
+### 🚀 Features
+
+* (UN-2760) BO remove field aboveMinDeposit ([#352](https://github.com/upstars-global/unity-core-modules/issues/352))
+ ([daa9db7](https://github.com/upstars-global/unity-core-modules/commit/daa9db7175cef1ac53a64d4228e34b12cbfd9383))
+
+
+
+    UN-2760 remove field
+
+## [1.90.1](https://github.com/upstars-global/unity-core-modules/compare/v1.90.0...v1.90.1) (2026-05-14)
+
+### 🐛 Bug Fixes
+
+* (UN-2409) fix game providers ([#349](https://github.com/upstars-global/unity-core-modules/issues/349))
+ ([5fefd3e](https://github.com/upstars-global/unity-core-modules/commit/5fefd3e2821f74015879ce0b8ed5cd2364b225cb))
+
+
+
+    UN-2409 fix game providers
+
+## [1.90.0](https://github.com/upstars-global/unity-core-modules/compare/v1.89.1...v1.90.0) (2026-05-14)
+
+### 🚀 Features
+
+* **UN-2409v2:** cache for games endpoints ([#325](https://github.com/upstars-global/unity-core-modules/issues/325)) ([#337](https://github.com/upstars-global/unity-core-modules/issues/337))
+ ([69682e8](https://github.com/upstars-global/unity-core-modules/commit/69682e88ea4695b61db778a34bbaad8acb4dedaa))
+
+## [1.89.1](https://github.com/upstars-global/unity-core-modules/compare/v1.89.0...v1.89.1) (2026-05-13)
+
+### 🔧 Maintenance
+
+* **UN-2555:** types for vip program ([#342](https://github.com/upstars-global/unity-core-modules/issues/342))
+ ([182b58b](https://github.com/upstars-global/unity-core-modules/commit/182b58b4f5eaea4a29fa88699268e6266d0d40cf))
+
+
+
+    * chore: add types for vip program
+
+    * chore: types for vip program
+
+    * fix: tests
+
+## [1.89.0](https://github.com/upstars-global/unity-core-modules/compare/v1.88.0...v1.89.0) (2026-05-12)
+
+### 🚀 Features
+
+* **UN-2508:** BO insurance bonus ([#332](https://github.com/upstars-global/unity-core-modules/issues/332))
+ ([b1b7bf2](https://github.com/upstars-global/unity-core-modules/commit/b1b7bf23a1300931066cd4099bd0f3e5110e8d25))
+
+
+
+    * feat(UN-2508): BO insurance bonus
+
+    * feat(UN-2508): BO insurance bonus
+
+    * feat(UN-2508): BO insurance bonus / unit tests
+
+    * feat(UN-2508): remove noPendingWithdrawals
+
+    * UN-2508 with activation
+
+    * UN-2508 rename variables
+
+## [1.88.0](https://github.com/upstars-global/unity-core-modules/compare/v1.87.0...v1.88.0) (2026-05-11)
+
+### 🚀 Features
+
+* UN-2713 migrate payments ([#348](https://github.com/upstars-global/unity-core-modules/issues/348))
+ ([c6d4b9f](https://github.com/upstars-global/unity-core-modules/commit/c6d4b9f00485e9ef362c6de7c52725dc1cb00765))
+
+## [1.87.0](https://github.com/upstars-global/unity-core-modules/compare/v1.86.2...v1.87.0) (2026-05-05)
+
+### 🚀 Features
+
+* UN-2707 new api version for two_factor ([#347](https://github.com/upstars-global/unity-core-modules/issues/347))
+ ([ce07243](https://github.com/upstars-global/unity-core-modules/commit/ce072438220900d353a15b7614a3ca6213e11367))
+
+
+
+    * feat: UN-2707 new api version for two_factor
+
+## [1.86.2](https://github.com/upstars-global/unity-core-modules/compare/v1.86.1...v1.86.2) (2026-04-30)
+
+### ⏪ Reverts
+
+* "revert UN-2465-config for limits" ([#346](https://github.com/upstars-global/unity-core-modules/issues/346))
+ ([be0c431](https://github.com/upstars-global/unity-core-modules/commit/be0c431125300b45c7d1dec8d6596f9cae5ac878))
+
+, closes [#345](https://github.com/upstars-global/unity-core-modules/issues/)
+
+## [1.86.1](https://github.com/upstars-global/unity-core-modules/compare/v1.86.0...v1.86.1) (2026-04-30)
+
+### ⏪ Reverts
+
+* "UN-2465-config for limits" ([#345](https://github.com/upstars-global/unity-core-modules/issues/345))
+ ([4000774](https://github.com/upstars-global/unity-core-modules/commit/400077426ad7871b72cfd03313549ec190f18ca1))
+
+, closes [#341](https://github.com/upstars-global/unity-core-modules/issues/)
+
+## [1.86.0](https://github.com/upstars-global/unity-core-modules/compare/v1.85.0...v1.86.0) (2026-04-29)
+
+### 🚀 Features
+
+* **UN-2465-config:** config for limits ([#341](https://github.com/upstars-global/unity-core-modules/issues/341))
+ ([becbe24](https://github.com/upstars-global/unity-core-modules/commit/becbe2442fbb1cdbad93e16194d05cf8bd707c07))
+
+
+
+    * feat(UN-2465-config): config for limits
+
+    * rename route
+
+    * UN-2465 update 'day'
+
 ## [1.85.0](https://github.com/upstars-global/unity-core-modules/compare/v1.84.1...v1.85.0) (2026-04-21)
 
 ### 🚀 Features

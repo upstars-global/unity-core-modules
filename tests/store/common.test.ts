@@ -72,6 +72,7 @@ describe("useCommon store", () => {
         expect(store.countries).toEqual([]);
         expect(store.widgetsConfig).toEqual([]);
         expect(store.currencyConfig).toBeNull();
+        expect(store.limitsDepositConfig).toBeNull();
         expect(store.getDefaultCurrency).toBe(config.currencyDefault);
     });
 

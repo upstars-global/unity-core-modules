@@ -2,10 +2,12 @@ import { v4 as uuid } from "uuid";
 
 import { FE_API_PREFIX } from "../../../consts/apiConfig";
 import { log } from "../../../controllers/Logger";
-import { IAuthProvider, IUserAuthProvider } from "../../../models/authProviders";
+import { type IAuthProvider, type IUserAuthProvider } from "../../../models/authProviders";
 import { type IPlayerFieldsInfo } from "../../../models/common";
 import {
     type IDataForUpdatePass,
+    type IDepositInsuranceClaimResponse,
+    type IDepositInsuranceStatus,
     type ISeasonStartPoints,
     type ITwoFactorAuthData,
     type IUserData,
@@ -14,9 +16,15 @@ import {
     type IUserSession,
 } from "../../../models/user";
 import { type IBettingBonus } from "../DTO/bets";
-import { IPlayerPayment } from "../DTO/cashbox";
+import { type IPlayerPayment } from "../DTO/cashbox";
 import { type UserCouponStatuses } from "../DTO/couponePromoCodes";
-import { BettingPlayerSettingsDTO, IPlayerStats, ISubscriptions, IUserAccount, IUserSettings } from "../DTO/playerDTO";
+import {
+    type BettingPlayerSettingsDTO,
+    type IPlayerStats,
+    type ISubscriptions,
+    type IUserAccount,
+    type IUserSettings,
+} from "../DTO/playerDTO";
 import { http } from "../http";
 
 export type IPlayerGroup = string | number | null;
@@ -292,7 +300,11 @@ export async function loadUserStatsReq() {
 
 export async function loadUserBettingBonuses() {
     try {
-        const { data } = await http().get<IBettingBonus[]>("/api/v2/bonuses");
+        const { data } = await http().get<IBettingBonus[]>("/api/v2/bonuses", {
+            headers: {
+                "X-Api-Target": "sport",
+            },
+        });
         return data;
     } catch (err) {
         log.error("LOAD_USER_BETTING_BONUSES_ERROR", err);
@@ -325,7 +337,11 @@ export async function loadPlayerFieldsInfoRequest() {
 
 export async function loadBettingPlayerSettingsRequest(): Promise<BettingPlayerSettingsDTO | undefined> {
     try {
-        const { data } = await http().get("/api/v2/settings");
+        const { data } = await http().get("/api/v2/settings", {
+            headers: {
+                "X-Api-Target": "sport",
+            },
+        });
 
         return data;
     } catch (err) {
@@ -416,7 +432,7 @@ export async function updateUserPasswordReq(data: IDataForUpdatePass) {
 
 export async function loadTwoFactorReq() {
     try {
-        const { data, status } = await http().get<ITwoFactorAuthData>("/api/player/two_factor");
+        const { data, status } = await http().get<ITwoFactorAuthData>("/api/v2/player/two_factor");
         return { data, status };
     } catch (err) {
         log.error("LOAD_TWO_FACTOR_REQ_ERROR", err);
@@ -433,7 +449,7 @@ export async function activateTwoFactorReq(twoFactor: ITwoFactorAuthData, code: 
             },
         };
 
-        const { data } = await http().post<ITwoFactorAuthData>("/api/player/two_factor", payload);
+        const { data } = await http().post<ITwoFactorAuthData>("/api/v2/player/two_factor", payload);
         return data;
     } catch (err) {
         log.error("ACTIVATE_TWO_FACTOR_REQ_ERROR", err);
@@ -443,7 +459,7 @@ export async function activateTwoFactorReq(twoFactor: ITwoFactorAuthData, code: 
 
 export async function deleteTwoFactorReq(code: string) {
     try {
-        const { data } = await http().delete("/api/player/two_factor", {
+        const { data } = await http().delete("/api/v2/player/two_factor", {
             data: {
                 two_factor: {
                     authentication_code: code,
@@ -464,5 +480,35 @@ export async function leadPlayerStartSeasonInfoReq() {
         return data;
     } catch (error) {
         log.error("PORTOFRANCO_VIP_STATUS_REQ_ERROR", error);
+    }
+}
+
+export async function depositInsuranceStatusReq(currency: string): Promise<IDepositInsuranceStatus | undefined> {
+    try {
+        const { data } = await http().get<IDepositInsuranceStatus>(
+            `${ FE_API_PREFIX }/pf/bonuses/deposit-insurance/status`,
+            { params: { currency } },
+        );
+
+        return data;
+    } catch (error) {
+        log.error("PORTOFRANCO_DEPOSIT_INSURANCE_STATUS_ERROR", error);
+    }
+}
+
+export async function depositInsuranceClaimReq(
+    currency: string,
+): Promise<IDepositInsuranceClaimResponse | undefined> {
+    try {
+        const { data } = await http().post<IDepositInsuranceClaimResponse>(
+            `${ FE_API_PREFIX }/pf/bonuses/deposit-insurance/claim`,
+            {},
+            { params: { currency } },
+        );
+
+        return data;
+    } catch (error) {
+        log.error("PORTOFRANCO_DEPOSIT_INSURANCE_CLAIM_ERROR", error);
+        throw error;
     }
 }

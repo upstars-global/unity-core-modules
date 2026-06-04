@@ -1,4 +1,7 @@
-/* eslint camelcase: ["error", {allow: ["level_name", "remote_addr"]}] */
+/* eslint camelcase: ["error", {allow: [
+    "level_name", "remote_addr", "http_status", "http_status_text",
+    "request_url", "request_method", "request_duration_ms", "request_start_time", "is_ssr"
+]}] */
 
 
 /* eslint-disable no-new */
@@ -84,9 +87,26 @@ class Logger {
             message: error.message,
         };
 
-        if (error.response && error.response.data) {
-            obj.phpError = this.processValue(error.response.data.error);
+        if (error.response) {
+            obj.http_status = error.response.status;
+            obj.http_status_text = error.response.statusText;
+
+            if (error.response.data) {
+                obj.phpError = this.processValue(error.response.data.error);
+            }
         }
+
+        if (error.config) {
+            obj.request_url = error.config.url;
+            obj.request_method = error.config.method;
+
+            if (error.config.request_start_time) {
+                obj.request_duration_ms = Date.now() - error.config.request_start_time;
+                obj.request_start_time = error.config.request_start_time;
+            }
+        }
+
+        obj.is_ssr = this.$isServer;
 
         obj.context = this.processValue(this.$context);
 

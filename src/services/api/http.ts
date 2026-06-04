@@ -165,6 +165,7 @@ class HttpClient {
     }
 
     private async request<T = unknown>(config: RequestConfig): Promise<HttpResponse<T>> {
+        const requestStartTime = Date.now();
         let url = this.buildUrl(config.url || "");
         const headers = { ...this.defaultHeaders, ...config.headers };
 
@@ -203,6 +204,9 @@ class HttpClient {
             body,
         };
 
+        // Добавляем timestamp для диагностики длительности запроса
+        const configWithTiming = { ...config, request_start_time: requestStartTime };
+
         try {
             const response = isServer
                 ? await this.fetchWithTimeout(url, options)
@@ -214,7 +218,7 @@ class HttpClient {
                 status: response.status,
                 statusText: response.statusText,
                 headers: response.headers,
-                config,
+                config: configWithTiming,
             };
 
             if (!response.ok) {
@@ -225,14 +229,14 @@ class HttpClient {
                     data: responseData,
                     headers: response.headers,
                 };
-                error.config = config;
+                error.config = configWithTiming;
                 throw error;
             }
 
             return this.applyResponseInterceptors(httpResponse);
         } catch (error) {
             const httpError = error as HttpError;
-            httpError.config = config;
+            httpError.config = configWithTiming;
             throw await this.applyErrorInterceptors(httpError);
         }
     }
@@ -309,7 +313,7 @@ export function http({ headers, locale }: IHttpParams = {}): HttpClient {
     const clientHeaders: Record<string, string> = {
         "Accept": "application/json, text/plain, */*",
         "X-Requested-With": "XMLHttpRequest",
-        "X-Content-Policy": "1",
+        "X-Content-Policy": "3",
         ...(headers || {}),
     };
 
