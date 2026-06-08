@@ -130,6 +130,10 @@ export const useStreakRewards = defineStore("streakRewards", () => {
         return daysDetails.value.length > 0 && completedDaysCount.value === daysDetails.value.length;
     });
 
+    const currentDayNumber = computed<number>(() => {
+        return daysDetails.value.find((day) => day.isToday)?.dayNumber ?? 1;
+    });
+
     const hasClaimedReward = computed<boolean>(() => {
         return Boolean(winnerGroup.value) && userGroupNames.value.includes(winnerGroup.value as string);
     });
@@ -194,6 +198,7 @@ export const useStreakRewards = defineStore("streakRewards", () => {
         daysDetails,
         completedDaysCount,
         allDaysCompleted,
+        currentDayNumber,
         hasClaimedReward,
         isStreakOver,
         showDays,
