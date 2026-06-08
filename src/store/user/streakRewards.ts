@@ -27,11 +27,11 @@ export interface IStreakDay {
 }
 
 export enum StreakWidgetState {
-    FirstDayIdle = 1,
-    InProgressIdle = 2,
+    FirstDay = 1,
+    Broken = 2,
     InProgress = 3,
     Completed = 4,
-    Failed = 5,
+    Lost = 5,
     Claimed = 6,
 }
 
@@ -156,7 +156,7 @@ export const useStreakRewards = defineStore("streakRewards", () => {
         const streak = activeStreak.value;
 
         if (!streak) {
-            return StreakWidgetState.FirstDayIdle;
+            return StreakWidgetState.FirstDay;
         }
 
         if (hasClaimedReward.value) {
@@ -167,17 +167,19 @@ export const useStreakRewards = defineStore("streakRewards", () => {
         const hasMissedAny = daysDetails.value.some((day) => day.isMissed);
 
         if (isStreakOver.value || (isLastDay && hasMissedAny)) {
-            return StreakWidgetState.Failed;
+            return StreakWidgetState.Lost;
         }
 
         if (allDaysCompleted.value) {
             return StreakWidgetState.Completed;
         }
 
+        if (hasMissedAny) {
+            return StreakWidgetState.Broken;
+        }
+
         if (completedDaysCount.value === 0) {
-            return now.value.isSame(streak.startDate, "day")
-                ? StreakWidgetState.FirstDayIdle
-                : StreakWidgetState.InProgressIdle;
+            return StreakWidgetState.FirstDay;
         }
 
         return StreakWidgetState.InProgress;
