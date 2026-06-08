@@ -1,3 +1,14 @@
+## [1.93.1](https://github.com/upstars-global/unity-core-modules/compare/v1.93.0...v1.93.1) (2026-06-08)
+
+### 🐛 Bug Fixes
+
+* (UN-2749) handle error while cache game  ([#355](https://github.com/upstars-global/unity-core-modules/issues/355))
+ ([6d7e6ae](https://github.com/upstars-global/unity-core-modules/commit/6d7e6ae17b3da7ae791886795475faf3e8b1de81))
+
+
+
+    UN-2749 fix game set
+
 ## [1.93.0](https://github.com/upstars-global/unity-core-modules/compare/v1.92.0...v1.93.0) (2026-06-03)
 
 ### 🚀 Features
