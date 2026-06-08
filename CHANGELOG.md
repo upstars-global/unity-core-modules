@@ -1,3 +1,27 @@
+## [1.93.1](https://github.com/upstars-global/unity-core-modules/compare/v1.93.0...v1.93.1) (2026-06-08)
+
+### 🐛 Bug Fixes
+
+* (UN-2749) handle error while cache game  ([#355](https://github.com/upstars-global/unity-core-modules/issues/355))
+ ([6d7e6ae](https://github.com/upstars-global/unity-core-modules/commit/6d7e6ae17b3da7ae791886795475faf3e8b1de81))
+
+
+
+    UN-2749 fix game set
+
+## [1.93.0](https://github.com/upstars-global/unity-core-modules/compare/v1.92.0...v1.93.0) (2026-06-03)
+
+### 🚀 Features
+
+* **UN-681:** unify loadCurrentStaticPage service method to set seo m… ([#353](https://github.com/upstars-global/unity-core-modules/issues/353))
+ ([f4cc4e6](https://github.com/upstars-global/unity-core-modules/commit/f4cc4e627603f08cb791bd949884e272f09123ef))
+
+
+
+    * feat(UN-681): unify loadCurrentStaticPage service method to set seo meta data
+
+    * chore: force actions
+
 ## [1.92.0](https://github.com/upstars-global/unity-core-modules/compare/v1.91.0...v1.92.0) (2026-05-26)
 
 ### 🚀 Features
