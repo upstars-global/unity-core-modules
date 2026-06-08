@@ -12,7 +12,6 @@ import {
 import {
     loadCMSSnippets,
     loadCurrentStaticPage,
-    loadMetaSEO,
     loadStaticPages,
 } from "../../src/services/CMS";
 import { useCMS } from "../../src/store/CMS";
@@ -25,7 +24,7 @@ vi.mock("../../src/store/multilang", () => ({
 
 vi.mock("../../src/helpers/staticPages", () => ({
     prepareMapStaticPages: (pages) => pages,
-    resolveUrlFromRoute: (route) => route?.path || "",
+    resolveUrlFromRoute: (route) => route?.meta?.metaUrl || route?.path || "",
     normalizeUrl: (url) => url.replace(/^\/+|\/+$/g, ""),
 }));
 
@@ -246,56 +245,54 @@ describe("useCMS store", () => {
             expect(store.contentCurrentPage).toEqual({ a: new CurrentPage(page) });
             expect(result).toBeDefined();
         });
-    });
 
-    describe("loadMetaSEO", () => {
-        it("returns not StaticPages if slug not found", async () => {
+        it("accepts route and stores seo meta by resolved route url", async () => {
             const store = useCMS();
-            store.staticPages = [ { slug: "a", url: "/a", categories: [], hidden: false } ];
-
-            const result = await loadMetaSEO({ path: "/b", name: "other" });
-
-            expect(result).toBe("b page is not StaticPages");
-        });
-
-        it("returns not found if API returns null", async () => {
-            vi.mocked(loadPageContentFromCmsReq).mockResolvedValue();
-
-            const store = useCMS();
-            store.staticPages = [ { slug: "a", url: "/a", categories: [], hidden: false } ];
-
-            const result = await loadMetaSEO({ path: "/a", name: "other" });
-
-            expect(result).toBe("a page data is not found");
-        });
-
-        it("sets meta and pageContent if blocks exist", async () => {
-            const store = useCMS();
-            store.staticPages = [ { slug: "a", url: "/a", categories: [], hidden: false } ];
+            store.staticPages = [ { slug: "home", url: "/home", categories: [], hidden: false } ];
 
             vi.mocked(loadPageContentFromCmsReq).mockResolvedValue({
-                blocks: { title: "MetaTitle", description: "MetaDesc", json: "{}" },
-                content: "MetaContent",
+                blocks: { title: "Home title", description: "Home desc", json: "{}" },
+                content: "Home content",
             });
 
-            const result = await loadMetaSEO({ path: "/a", name: "other" });
+            const result = await loadCurrentStaticPage({ path: "/ignored", name: "other", meta: { metaUrl: "/home" } });
 
-            expect(result.metaTitle).toBe("MetaTitle");
-            expect(store.seoMeta["/a"]).toBeDefined();
+            expect(loadPageContentFromCmsReq).toHaveBeenCalledWith("home", "en");
+            expect(result).toBeDefined();
+            expect(store.contentCurrentPage.home).toBeDefined();
+            expect(store.seoMeta["/home"]).toEqual({
+                metaTitle: "Home title",
+                metaDescription: "Home desc",
+                content: "Home content",
+                json: "{}",
+            });
         });
 
-        it("sets meta from SSR if blocks missing", async () => {
+        it("accepts explicit slug and seo url for entity pages", async () => {
             const store = useCMS();
+            store.staticPages = [
+                { slug: "tournaments/frontend-id", url: "/tournaments/frontend-id", categories: [], hidden: false },
+            ];
+
             vi.mocked(loadPageContentFromCmsReq).mockResolvedValue({
-                blocks: undefined,
-                content: "MetaContent",
+                blocks: { title: "Tournament title", description: "Tournament desc", json: "{}" },
+                content: "Tournament content",
             });
 
-            store.staticPages = [ { slug: "a", url: "/a", categories: [], hidden: false } ];
+            const result = await loadCurrentStaticPage({
+                slug: "tournaments/frontend-id",
+                seoUrl: "/tournaments/route-slug",
+            });
 
-            const result = await loadMetaSEO({ path: "/a", name: "other" });
-
-            expect(result.metaTitle).toBe("SSR Title");
+            expect(loadPageContentFromCmsReq).toHaveBeenCalledWith("tournaments/frontend-id", "en");
+            expect(result).toBeDefined();
+            expect(store.contentCurrentPage["tournaments/frontend-id"]).toBeDefined();
+            expect(store.seoMeta["/tournaments/route-slug"]).toEqual({
+                metaTitle: "Tournament title",
+                metaDescription: "Tournament desc",
+                content: "Tournament content",
+                json: "{}",
+            });
         });
     });
 
