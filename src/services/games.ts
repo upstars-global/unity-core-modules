@@ -312,8 +312,10 @@ export async function loadGameBySeoTitle(seoTitle: string, producer: string, res
         const dataToArray = Object.values(data);
         const gameData = findGameBySeoTittleAndProducer(dataToArray, { seoTitle, producer }) || dataToArray[0];
 
-        setGameToCache(gameData);
-        return setToCurrentGame(gameData);
+        if (gameData) {
+            setGameToCache(gameData);
+            return setToCurrentGame(gameData);
+        }
     } catch (err) {
         log.error("LOAD_GAME_BY_SEO_TITLE", err);
         throw err;
