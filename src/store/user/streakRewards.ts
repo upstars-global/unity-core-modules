@@ -134,6 +134,24 @@ export const useStreakRewards = defineStore("streakRewards", () => {
         return Boolean(winnerGroup.value) && userGroupNames.value.includes(winnerGroup.value as string);
     });
 
+    const isStreakOver = computed<boolean>(() => {
+        const streak = activeStreak.value;
+
+        if (!streak) {
+            return false;
+        }
+
+        return now.value.isAfter(streak.endDate, "day");
+    });
+
+    const showDays = computed<boolean>(() => {
+        return Boolean(activeStreak.value) && !isStreakOver.value;
+    });
+
+    const showTimer = computed<boolean>(() => {
+        return isStreakOver.value && Boolean(nextStreak.value);
+    });
+
     const widgetState = computed<StreakWidgetState>(() => {
         const streak = activeStreak.value;
 
@@ -145,16 +163,15 @@ export const useStreakRewards = defineStore("streakRewards", () => {
             return StreakWidgetState.Claimed;
         }
 
-        if (allDaysCompleted.value) {
-            return StreakWidgetState.Completed;
-        }
-
-        const isAfterStreak = now.value.isAfter(streak.endDate, "day");
         const isLastDay = now.value.isSame(streak.endDate, "day");
         const hasMissedAny = daysDetails.value.some((day) => day.isMissed);
 
-        if (isAfterStreak || (isLastDay && hasMissedAny)) {
+        if (isStreakOver.value || (isLastDay && hasMissedAny)) {
             return StreakWidgetState.Failed;
+        }
+
+        if (allDaysCompleted.value) {
+            return StreakWidgetState.Completed;
         }
 
         if (completedDaysCount.value === 0) {
@@ -176,6 +193,9 @@ export const useStreakRewards = defineStore("streakRewards", () => {
         completedDaysCount,
         allDaysCompleted,
         hasClaimedReward,
+        isStreakOver,
+        showDays,
+        showTimer,
         widgetState,
     };
 });
