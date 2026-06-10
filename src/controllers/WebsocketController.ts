@@ -144,7 +144,7 @@ function subscribeNotificationCenterChannels(
         const sub = client.newSubscription(channelName, {});
 
         sub.on("publication", (pub) => {
-            $bus.$emit?.(`websocket.${channel}`, pub.data);
+            $bus.$emit?.(`websocket.${channel}`, pub);
         });
 
         sub.subscribe();
