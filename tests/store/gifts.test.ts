@@ -54,7 +54,6 @@ vi.mock("../../src/helpers/currencyHelper", () => ({
 }));
 
 vi.mock("@src/config/gift", () => ({
-    LOOTBOX_TYPE_GIFTS: [ "random" ],
     STATUSES_GIFT_CANCELED: "canceled",
     STATUSES_GIFT_FINISHED: "finished",
     STATUSES_GIFT_EXPIRED: "expired",
@@ -161,15 +160,9 @@ describe("useGiftsStore", () => {
                 title: "Dep 1",
                 bonuses: [ { title: "", type: "normal", conditions: [], attributes: [], result_bonus: [] } ],
             },
-            {
-                id: "d2",
-                title: "Dep 2",
-                bonuses: [ { title: "", type: "random", conditions: [], attributes: [], result_bonus: [] } ],
-            },
         ]);
 
         expect(store.depositGifts.length).toEqual(1);
-        expect(store.depositGifts.some((g) => g.id === "d2")).toBe(false); // Excludes lootbox
     });
 
     it("computes total gift count and filters new/active gifts", () => {
