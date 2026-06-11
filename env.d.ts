@@ -6,3 +6,9 @@ interface ImportMeta {
 
 declare const DEV: boolean;
 declare const FORCE_RUN_ANALYTICS: boolean;
+
+declare module "centrifuge-legacy/centrifuge" {
+    const CentrifugeLegacy: new (options: Record<string, unknown>) => unknown;
+
+    export default CentrifugeLegacy;
+}
