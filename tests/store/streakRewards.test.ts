@@ -3,6 +3,7 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 import utc from "dayjs/plugin/utc";
 import { createPinia, setActivePinia } from "pinia";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { reactive, ref } from "vue";
 
 import {
     type IStreakConfig,
@@ -45,12 +46,18 @@ const mockUserStatuses = {
     getUserStatuses: [] as Array<{ name: string }>,
 };
 
+const mockUserInfo = reactive({ getIsLogged: ref(true) });
+
 vi.mock("../../src/store/CMS", () => ({
     useCMS: () => mockCMS,
 }));
 
 vi.mock("../../src/store/user/userStatuses", () => ({
     useUserStatuses: () => mockUserStatuses,
+}));
+
+vi.mock("../../src/store/user/userInfo", () => ({
+    useUserInfo: () => mockUserInfo,
 }));
 
 function setStreaks(streaks: IStreakConfig | null): void {
@@ -65,12 +72,17 @@ function setNow(isoDate: string): void {
     vi.setSystemTime(new Date(isoDate));
 }
 
+function setLogged(value: boolean): void {
+    mockUserInfo.getIsLogged = value;
+}
+
 describe("useStreakRewards", () => {
     beforeEach(() => {
         vi.useFakeTimers();
         setActivePinia(createPinia());
         setStreaks(singleStreak);
         setCompletedGroups([]);
+        setLogged(true);
     });
 
     afterEach(() => {
@@ -235,6 +247,19 @@ describe("useStreakRewards", () => {
 
             expect(store.hasClaimedReward).toBe(true);
             expect(store.widgetState).toBe(StreakWidgetState.Claimed);
+        });
+
+        it("Guest takes priority and hides days / timer when not logged in", () => {
+            setStreaks(twoStreaks);
+            setNow("2026-06-08T10:00:00Z");
+            setCompletedGroups([ DAY_1 ]);
+            setLogged(false);
+
+            const store = useStreakRewards();
+
+            expect(store.widgetState).toBe(StreakWidgetState.Guest);
+            expect(store.showDays).toBe(false);
+            expect(store.showTimer).toBe(false);
         });
     });
 
