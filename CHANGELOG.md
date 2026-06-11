@@ -1,3 +1,10 @@
+## [1.94.0](https://github.com/upstars-global/unity-core-modules/compare/v1.93.1...v1.94.0) (2026-06-11)
+
+### 🚀 Features
+
+* Вибір бонусу в касі(refactor minor)
+ ([9d6450f](https://github.com/upstars-global/unity-core-modules/commit/9d6450f43bfc2e3b73c21dd290dc56630dd0d420))
+
 ## [1.93.1](https://github.com/upstars-global/unity-core-modules/compare/v1.93.0...v1.93.1) (2026-06-08)
 
 ### 🐛 Bug Fixes

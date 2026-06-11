@@ -37,7 +37,6 @@ vi.mock("@helpers/user", () => ({
 }));
 
 vi.mock("@src/config/gift", () => ({
-    LOOTBOX_TYPE_GIFTS: [ "random" ],
     STATUSES_GIFT_CANCELED: "canceled",
     STATUSES_GIFT_FINISHED: "finished",
     STATUSES_GIFT_EXPIRED: "expired",
