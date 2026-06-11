@@ -196,7 +196,7 @@ describe("WebsocketController", () => {
         const balanceSubscription = client.subscriptions.find(({ channel }) => channel === "ws:client-a:balance#user-1");
         balanceSubscription?.publicationHandler?.({ data: { amount: 100 } });
 
-        expect(bus.$emit).toHaveBeenCalledWith("websocket.balance", { amount: 100 });
+        expect(bus.$emit).toHaveBeenCalledWith("websocket.balance", { data: { amount: 100 } });
     });
 
     it("starts legacy flow when notification center flag is disabled", async () => {
