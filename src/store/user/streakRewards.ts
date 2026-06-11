@@ -1,8 +1,9 @@
 import dayjs, { type Dayjs } from "dayjs";
-import { defineStore } from "pinia";
+import { defineStore, storeToRefs } from "pinia";
 import { computed } from "vue";
 
 import { useCMS } from "../CMS";
+import { useUserInfo } from "./userInfo";
 import { useUserStatuses } from "./userStatuses";
 
 const DATE_FORMAT = "DD/MM/YYYY";
@@ -33,6 +34,7 @@ export enum StreakWidgetState {
     Completed = 4,
     Lost = 5,
     Claimed = 6,
+    Guest = 7,
 }
 
 function parseGroupDate(group: string): Dayjs {
@@ -42,6 +44,7 @@ function parseGroupDate(group: string): Dayjs {
 export const useStreakRewards = defineStore("streakRewards", () => {
     const userStatusesStore = useUserStatuses();
     const cmsStore = useCMS();
+    const { getIsLogged } = storeToRefs(useUserInfo());
 
     const now = computed<Dayjs>(() => dayjs().utc());
 
@@ -149,14 +152,18 @@ export const useStreakRewards = defineStore("streakRewards", () => {
     });
 
     const showDays = computed<boolean>(() => {
-        return Boolean(activeStreak.value) && !isStreakOver.value;
+        return getIsLogged.value && Boolean(activeStreak.value) && !isStreakOver.value;
     });
 
     const showTimer = computed<boolean>(() => {
-        return isStreakOver.value && Boolean(nextStreak.value);
+        return getIsLogged.value && isStreakOver.value && Boolean(nextStreak.value);
     });
 
     const widgetState = computed<StreakWidgetState>(() => {
+        if (!getIsLogged.value) {
+            return StreakWidgetState.Guest;
+        }
+
         const streak = activeStreak.value;
 
         if (!streak) {
