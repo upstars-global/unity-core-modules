@@ -4,6 +4,7 @@ import { ref, shallowRef } from "vue";
 import { type IBettingConfig } from "../models/configs";
 import { IDisabledGamesProvider } from "../models/game";
 import type { IVipProgramConfig, Level, Rewards, VipLevelSave } from "../models/levels";
+import { type IActiveSeason } from "../models/user";
 import { IWelcomeOfferConfigDTO } from "../services/api/DTO/configsDTO";
 import { type IVipProgramConfigDTO } from "../services/api/DTO/levels";
 
@@ -13,6 +14,7 @@ export const useConfigStore = defineStore("configStore", () => {
     const vipProgramConfig = shallowRef<IVipProgramConfig | null>(null);
     const disabledGamesProviders = ref<IDisabledGamesProvider>({});
     const welcomeOfferConfig = ref<IWelcomeOfferConfigDTO | null>(null);
+    const activeSeason = ref<IActiveSeason | null>(null);
 
     function setGamesPageLimit(limit: number) {
         gamesPageLimit.value = limit;
@@ -59,6 +61,10 @@ export const useConfigStore = defineStore("configStore", () => {
         welcomeOfferConfig.value = data;
     }
 
+    function setActiveSeason(data: IActiveSeason | null) {
+        activeSeason.value = data;
+    }
+
     return {
         gamesPageLimit,
         setGamesPageLimit,
@@ -70,6 +76,8 @@ export const useConfigStore = defineStore("configStore", () => {
         setDisabledGamesProviders,
         welcomeOfferConfig,
         setWelcomeOfferConfig,
+        activeSeason,
+        setActiveSeason,
     };
 },
 {

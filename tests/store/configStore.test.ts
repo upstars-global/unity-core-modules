@@ -16,6 +16,24 @@ describe("useConfigStore", () => {
         expect(store.vipProgramConfig).toBeNull();
         expect(store.disabledGamesProviders).toEqual({});
         expect(store.welcomeOfferConfig).toBeNull();
+        expect(store.activeSeason).toBeNull();
+    });
+
+    it("sets and clears the active season", () => {
+        const store = useConfigStore();
+        const season = {
+            name: "Season 1",
+            isActive: true,
+            startDate: "2026-06-08T11:43:19.450Z",
+            endDate: "2026-07-08T11:43:19.450Z",
+            technicalWorksStartAt: "2026-06-08T11:43:19.450Z",
+        };
+
+        store.setActiveSeason(season);
+        expect(store.activeSeason).toEqual(season);
+
+        store.setActiveSeason(null);
+        expect(store.activeSeason).toBeNull();
     });
 
     it("updates simple configs via setters", () => {

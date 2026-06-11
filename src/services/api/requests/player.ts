@@ -5,6 +5,8 @@ import { log } from "../../../controllers/Logger";
 import { type IAuthProvider, type IUserAuthProvider } from "../../../models/authProviders";
 import { type IPlayerFieldsInfo } from "../../../models/common";
 import {
+    type IActiveSeason,
+    type IActiveSeasonResponse,
     type IDataForUpdatePass,
     type IDepositInsuranceClaimResponse,
     type IDepositInsuranceStatus,
@@ -480,6 +482,16 @@ export async function leadPlayerStartSeasonInfoReq() {
         return data;
     } catch (error) {
         log.error("PORTOFRANCO_VIP_STATUS_REQ_ERROR", error);
+    }
+}
+
+export async function seasonsActiveReq(): Promise<IActiveSeason | undefined> {
+    try {
+        const { data } = await http().get<IActiveSeasonResponse>(`${ FE_API_PREFIX }/pf/seasons/active`);
+
+        return data?.season;
+    } catch (error) {
+        log.error("PORTOFRANCO_SEASONS_ACTIVE_REQ_ERROR", error);
     }
 }
 
