@@ -1,3 +1,35 @@
+## [1.95.0](https://github.com/upstars-global/unity-core-modules/compare/v1.94.0...v1.95.0) (2026-06-11)
+
+### 🚀 Features
+
+* **UN-2729:** notification center flow ([#350](https://github.com/upstars-global/unity-core-modules/issues/350))
+ ([99de43e](https://github.com/upstars-global/unity-core-modules/commit/99de43e62c82fb09b2d60c965bd80c3eafd79d25))
+
+
+
+    * feat(UN-2729): notification center flow
+
+    * feat: add startBetting socket connection, cover feature with tests
+
+    * refactor: review comments
+
+    * fix
+
+    * chore: load project info one more time for test
+
+    * fix
+
+    * chore: release prep
+
+    * fix: tests
+
+## [1.94.0](https://github.com/upstars-global/unity-core-modules/compare/v1.93.1...v1.94.0) (2026-06-11)
+
+### 🚀 Features
+
+* Вибір бонусу в касі(refactor minor)
+ ([9d6450f](https://github.com/upstars-global/unity-core-modules/commit/9d6450f43bfc2e3b73c21dd290dc56630dd0d420))
+
 ## [1.93.1](https://github.com/upstars-global/unity-core-modules/compare/v1.93.0...v1.93.1) (2026-06-08)
 
 ### 🐛 Bug Fixes

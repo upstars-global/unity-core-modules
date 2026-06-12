@@ -1,7 +1,4 @@
-import {
-    LOOTBOX_TYPE_GIFTS,
-    STATUSES_LOST_GIFT,
-} from "@src/config/gift";
+import { STATUSES_LOST_GIFT } from "@src/config/gift";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
@@ -51,7 +48,7 @@ export const useGiftsStore = defineStore("giftsStore", () => {
 
     const depositGifts = computed<IGiftDeposit[]>(() => {
         const localGifts = depositGiftsAll.value.filter((gift) => {
-            return gift.bonuses?.[0]?.type && !LOOTBOX_TYPE_GIFTS?.includes(gift.bonuses[0].type);
+            return gift.bonuses?.[0]?.type;
         });
 
         if (additionalGift.value) {
