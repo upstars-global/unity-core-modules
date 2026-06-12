@@ -37,6 +37,14 @@ export interface IProjectInfo {
         enabled: boolean;
     };
     authentication_key: string;
+    notification_center?: {
+        inbox?: {
+            enabled: boolean;
+            categories?: string[];
+            ws_channels?: string[];
+        };
+        new_realtime_notifications_flow_enabled?: boolean;
+    };
 }
 
 export type ICryptoExchangeRates = Record<Currencies, Record<Currencies, {
