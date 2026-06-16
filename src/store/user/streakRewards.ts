@@ -156,7 +156,12 @@ export const useStreakRewards = defineStore("streakRewards", () => {
     });
 
     const showTimer = computed<boolean>(() => {
-        return getIsLogged.value && isStreakOver.value && Boolean(nextStreak.value);
+        const pendingRewardClaim = allDaysCompleted.value && !hasClaimedReward.value;
+
+        return getIsLogged.value &&
+            isStreakOver.value &&
+            Boolean(nextStreak.value) &&
+            !pendingRewardClaim;
     });
 
     const widgetState = computed<StreakWidgetState>(() => {
@@ -174,15 +179,15 @@ export const useStreakRewards = defineStore("streakRewards", () => {
             return StreakWidgetState.Claimed;
         }
 
+        if (allDaysCompleted.value) {
+            return StreakWidgetState.Completed;
+        }
+
         const isLastDay = now.value.isSame(streak.endDate, "day");
         const hasMissedAny = daysDetails.value.some((day) => day.isMissed);
 
         if (isStreakOver.value || (isLastDay && hasMissedAny)) {
             return StreakWidgetState.Lost;
-        }
-
-        if (allDaysCompleted.value) {
-            return StreakWidgetState.Completed;
         }
 
         if (hasMissedAny) {

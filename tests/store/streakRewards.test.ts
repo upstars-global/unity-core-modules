@@ -218,6 +218,21 @@ describe("useStreakRewards", () => {
             expect(store.widgetState).toBe(StreakWidgetState.Completed);
         });
 
+        it("Completed stays available after the streak ends when reward is not claimed", () => {
+            setStreaks(twoStreaks);
+            setNow("2026-06-15T10:00:00Z");
+            setCompletedGroups([ ...DAY_GROUPS ]);
+
+            const store = useStreakRewards();
+
+            expect(store.isStreakOver).toBe(true);
+            expect(store.allDaysCompleted).toBe(true);
+            expect(store.hasClaimedReward).toBe(false);
+            expect(store.widgetState).toBe(StreakWidgetState.Completed);
+            expect(store.showTimer).toBe(false);
+            expect(store.showDays).toBe(false);
+        });
+
         it("Lost on the last day when some days were missed", () => {
             setNow("2026-06-11T10:00:00Z");
             setCompletedGroups([ DAY_1, DAY_2, DAY_3 ]);
@@ -283,6 +298,29 @@ describe("useStreakRewards", () => {
             expect(store.showDays).toBe(false);
             expect(store.showTimer).toBe(true);
             expect(store.nextStreak?.winnerGroup).toBe(NEXT_WINNER_GROUP);
+        });
+
+        it("hides timer when reward can still be claimed after the streak ends", () => {
+            setStreaks(twoStreaks);
+            setNow("2026-06-15T10:00:00Z");
+            setCompletedGroups([ ...DAY_GROUPS ]);
+
+            const store = useStreakRewards();
+
+            expect(store.showDays).toBe(false);
+            expect(store.showTimer).toBe(false);
+        });
+
+        it("shows timer after reward is claimed and the streak is over", () => {
+            setStreaks(twoStreaks);
+            setNow("2026-06-15T10:00:00Z");
+            setCompletedGroups([ ...DAY_GROUPS, WINNER_GROUP ]);
+
+            const store = useStreakRewards();
+
+            expect(store.showDays).toBe(false);
+            expect(store.showTimer).toBe(true);
+            expect(store.widgetState).toBe(StreakWidgetState.Claimed);
         });
 
         it("hides the timer when the active streak is the last one", () => {
