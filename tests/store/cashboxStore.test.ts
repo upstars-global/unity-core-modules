@@ -84,9 +84,9 @@ const historyPayoutsMock: IPlayerPayment[] = [
         recallable: false,
         created_at: "2024-08-19T14:02:27.597Z",
         finished_at: "2024-08-23T14:20:27.514Z",
-        system_name: "coinspaid",
+        system_name: "cpp",
         state: IPlayerPaymentState.recalled,
-        brand: "coinspaid",
+        brand: "cpp",
         success: false,
     },
     {
@@ -98,9 +98,9 @@ const historyPayoutsMock: IPlayerPayment[] = [
         recallable: false,
         created_at: "2024-08-19T14:02:27.597Z",
         finished_at: "2024-08-23T14:20:27.514Z",
-        system_name: "coinspaid",
+        system_name: "cpp",
         state: IPlayerPaymentState.recalled,
-        brand: "coinspaid",
+        brand: "cpp",
         success: false,
     },
     {
@@ -112,9 +112,9 @@ const historyPayoutsMock: IPlayerPayment[] = [
         recallable: true,
         created_at: "2024-08-19T14:02:27.597Z",
         finished_at: "2024-08-23T14:20:27.514Z",
-        system_name: "coinspaid",
+        system_name: "cpp",
         state: IPlayerPaymentState.recalled,
-        brand: "coinspaid",
+        brand: "cpp",
         success: false,
     },
 ];
@@ -142,7 +142,7 @@ describe("cashboxStore", () => {
         expect(store.historyPayouts).toEqual([]);
         expect(store.paymentSystems).toEqual([]);
         expect(store.payoutSystems).toEqual([]);
-        expect(store.coinspaidAddresses).toBeUndefined();
+        expect(store.cppAddresses).toBeUndefined();
     });
 
     it("returns only recallable payout requests from history", () => {
