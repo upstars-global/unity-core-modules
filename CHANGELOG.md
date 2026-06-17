@@ -1,3 +1,10 @@
+## [1.96.0](https://github.com/upstars-global/unity-core-modules/compare/v1.95.0...v1.96.0) (2026-06-17)
+
+### 🚀 Features
+
+* UN-2860 rename payment methods ([#359](https://github.com/upstars-global/unity-core-modules/issues/359))
+ ([c34d718](https://github.com/upstars-global/unity-core-modules/commit/c34d7189443449d82839aed4306df8995770c424))
+
 ## [1.95.0](https://github.com/upstars-global/unity-core-modules/compare/v1.94.0...v1.95.0) (2026-06-11)
 
 ### 🚀 Features
