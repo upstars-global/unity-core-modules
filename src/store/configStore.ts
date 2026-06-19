@@ -15,6 +15,7 @@ export const useConfigStore = defineStore("configStore", () => {
     const disabledGamesProviders = ref<IDisabledGamesProvider>({});
     const welcomeOfferConfig = ref<IWelcomeOfferConfigDTO | null>(null);
     const activeSeason = ref<IActiveSeason | null>(null);
+    const isLoadingActiveSeason = ref<boolean>(false);
 
     function setGamesPageLimit(limit: number) {
         gamesPageLimit.value = limit;
@@ -64,6 +65,9 @@ export const useConfigStore = defineStore("configStore", () => {
     function setActiveSeason(data: IActiveSeason | null) {
         activeSeason.value = data;
     }
+    function setLoadingActiveSeason(data: boolean) {
+        isLoadingActiveSeason.value = data;
+    }
 
     return {
         gamesPageLimit,
@@ -77,7 +81,9 @@ export const useConfigStore = defineStore("configStore", () => {
         welcomeOfferConfig,
         setWelcomeOfferConfig,
         activeSeason,
+        isLoadingActiveSeason,
         setActiveSeason,
+        setLoadingActiveSeason,
     };
 },
 {

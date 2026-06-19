@@ -775,6 +775,7 @@ export async function loadActiveSeason() {
     const configStore = useConfigStore();
 
     try {
+        configStore.setLoadingActiveSeason(true);
         const data = await seasonsActiveReq();
 
         if (data) {
@@ -782,6 +783,8 @@ export async function loadActiveSeason() {
         }
     } catch (err) {
         log.error("PORTOFRANCO_SEASONS_ACTIVE_ERROR", err);
+    } finally {
+        configStore.setLoadingActiveSeason(false);
     }
 }
 
