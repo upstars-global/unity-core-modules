@@ -9,11 +9,14 @@ export interface SourceOfFundsSurveyAnswers {
     place_of_birth: string;
 }
 
+export type SourceOfFundsSurveyQuestions = Record<keyof SourceOfFundsSurveyAnswers, string>;
+
 export interface SourceOfFundsSurveyTicketPayload {
     email: string;
     player_id: string | number;
     submitted_at?: string;
     answers: SourceOfFundsSurveyAnswers;
+    questions: SourceOfFundsSurveyQuestions;
 }
 
 export type SourceOfFundsSurveyTicketResponse = {
