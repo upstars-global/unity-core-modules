@@ -16,7 +16,8 @@ describe("useConfigStore", () => {
         expect(store.vipProgramConfig).toBeNull();
         expect(store.disabledGamesProviders).toEqual({});
         expect(store.welcomeOfferConfig).toBeNull();
-        expect(store.activeSeason).toBeNull();
+        expect(store.activeSeason).toBeUndefined();
+        expect(store.isLoadingActiveSeason).toBe(false);
     });
 
     it("sets and clears the active season", () => {
@@ -54,11 +55,13 @@ describe("useConfigStore", () => {
         store.setBettingConfig({ allowed_bets: [ "one" ] } as never);
         store.setDisabledGamesProviders({ provider1: [ "game1" ] });
         store.setWelcomeOfferConfig(welcomeOfferConfig);
+        store.setLoadingActiveSeason(true);
 
         expect(store.gamesPageLimit).toBe(60);
         expect(store.bettingConfig).toEqual({ allowed_bets: [ "one" ] });
         expect(store.disabledGamesProviders).toEqual({ provider1: [ "game1" ] });
         expect(store.welcomeOfferConfig).toEqual(welcomeOfferConfig);
+        expect(store.isLoadingActiveSeason).toBe(true);
     });
 
     it("maps vip program config from DTO format", () => {

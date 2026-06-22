@@ -50,6 +50,7 @@ describe("loadActiveSeason", () => {
 
         expect(seasonsActiveReqMock).toHaveBeenCalledTimes(1);
         expect(store.activeSeason).toEqual(data);
+        expect(store.isLoadingActiveSeason).toBe(false);
     });
 
     it("keeps the store empty when the API returns no season", async () => {
@@ -61,6 +62,7 @@ describe("loadActiveSeason", () => {
 
         expect(seasonsActiveReqMock).toHaveBeenCalledTimes(1);
         expect(store.activeSeason).toBeNull();
+        expect(store.isLoadingActiveSeason).toBe(false);
     });
 
     it("keeps the store empty and logs when the API throws", async () => {
@@ -76,5 +78,19 @@ describe("loadActiveSeason", () => {
             "PORTOFRANCO_SEASONS_ACTIVE_ERROR",
             expect.any(Error),
         );
+        expect(store.isLoadingActiveSeason).toBe(false);
+    });
+
+    it("toggles loading state while the request is in flight", async () => {
+        seasonsActiveReqMock.mockImplementation(async () => {
+            expect(store.isLoadingActiveSeason).toBe(true);
+            return minimalActiveSeason();
+        });
+        const { loadActiveSeason } = await import("../../src/services/user");
+        const store = useConfigStore();
+
+        await loadActiveSeason();
+
+        expect(store.isLoadingActiveSeason).toBe(false);
     });
 });
