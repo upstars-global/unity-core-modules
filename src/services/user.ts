@@ -782,6 +782,7 @@ export async function loadActiveSeason() {
             configStore.setActiveSeason(data);
         }
     } catch (err) {
+        configStore.setActiveSeason(null);
         log.error("PORTOFRANCO_SEASONS_ACTIVE_ERROR", err);
     } finally {
         configStore.setLoadingActiveSeason(false);
