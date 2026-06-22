@@ -14,7 +14,7 @@ export const useConfigStore = defineStore("configStore", () => {
     const vipProgramConfig = shallowRef<IVipProgramConfig | null>(null);
     const disabledGamesProviders = ref<IDisabledGamesProvider>({});
     const welcomeOfferConfig = ref<IWelcomeOfferConfigDTO | null>(null);
-    const activeSeason = ref<IActiveSeason | null>(null);
+    const activeSeason = ref<IActiveSeason | null>();
     const isLoadingActiveSeason = ref<boolean>(false);
 
     function setGamesPageLimit(limit: number) {
