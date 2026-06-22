@@ -780,6 +780,8 @@ export async function loadActiveSeason() {
 
         if (data) {
             configStore.setActiveSeason(data);
+        } else {
+            configStore.setActiveSeason(null);
         }
     } catch (err) {
         configStore.setActiveSeason(null);
