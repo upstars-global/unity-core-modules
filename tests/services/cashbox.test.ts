@@ -94,9 +94,9 @@ const playerPaymentTemplate: IPlayerPayment = {
     recallable: false,
     created_at: "2024-08-19T14:02:27.597Z",
     finished_at: "2024-08-23T14:20:27.514Z",
-    system_name: "coinspaid",
+    system_name: "cpp",
     state: IPlayerPaymentState.pending,
-    brand: "coinspaid",
+    brand: "cpp",
     success: false,
 };
 
@@ -157,7 +157,7 @@ describe("useCashBoxService", () => {
         beforeEach(() => {
             vi.resetAllMocks();
             vi.spyOn(cashboxStoreModule, "useCashboxStore").mockReturnValue({
-                coinspaidAddresses: ref([]),
+                cppAddresses: ref([]),
                 paymentHistory: ref([]),
                 historyDeposits: ref([]),
                 historyPayouts: ref([]),
@@ -263,12 +263,12 @@ describe("useCashBoxService", () => {
         });
     });
 
-    /* describe("loadUserCoinspaidAddresses", () => {
+    /* describe("loadUserCppAddresses", () => {
         beforeEach(async () => {
             vi.resetModules();
             vi.doMock("../../src/store/cashboxStore", () => ({
                 useCashboxStore: vi.fn(() => ({
-                    coinspaidAddresses: ref([]),
+                    cppAddresses: ref([]),
                     paymentHistory: ref([]),
                     historyDeposits: ref([]),
                     historyPayouts: ref([]),
@@ -277,11 +277,11 @@ describe("useCashBoxService", () => {
                 })),
             }));
         });
-        it("retrieves coinspaid addresses correctly", async () => {
+        it("retrieves cpp addresses correctly", async () => {
             const { useCashBoxService } = await import("../../src/services/cashbox");
 
-            const coinspaidAddressesMock = {methodFields: [{ address: "address1" }, { address: "address2" }]};
-            const getMethodFieldsMock = vi.fn(() => Promise.resolve(coinspaidAddressesMock));
+            const cppAddressesMock = {methodFields: [{ address: "address1" }, { address: "address2" }]};
+            const getMethodFieldsMock = vi.fn(() => Promise.resolve(cppAddressesMock));
 
             vi.spyOn(paymentsApiModule, "usePaymentsAPI").mockReturnValue({
                 getPaymentMethodFields: getMethodFieldsMock,
@@ -291,10 +291,10 @@ describe("useCashBoxService", () => {
             });
 
             const service = useCashBoxService();
-            const addresses = await service.loadUserCoinspaidAddresses();
+            const addresses = await service.loadUserCppAddresses();
 
             expect(getMethodFieldsMock).toHaveBeenCalled();
-            expect(addresses).toEqual(coinspaidAddressesMock);
+            expect(addresses).toEqual(cppAddressesMock);
         });
     });*/
 
@@ -303,7 +303,7 @@ describe("useCashBoxService", () => {
             vi.resetModules();
             vi.clearAllMocks();
             vi.spyOn(cashboxStoreModule, "useCashboxStore").mockReturnValue({
-                coinspaidAddresses: ref([]),
+                cppAddresses: ref([]),
                 paymentHistory: ref([]),
                 historyDeposits: ref([]),
                 historyPayouts: ref([]),
