@@ -5,7 +5,7 @@ import {
 import { storeToRefs } from "pinia";
 
 import { log } from "../controllers/Logger";
-import type { ICoinspaidAddresses } from "../models/cashbox";
+import type { ICppAddresses } from "../models/cashbox";
 import { Currencies } from "../models/enums/currencies";
 import { IPayloadMethodFields } from "../models/PaymentsLib";
 import { EventBus } from "../plugins/EventBus";
@@ -21,7 +21,7 @@ import { usePaymentsAPI } from "./paymentsAPI";
 
 export function useCashBoxService() {
     const {
-        coinspaidAddresses,
+        cppAddresses,
         paymentHistory,
         historyDeposits,
         historyPayouts,
@@ -32,7 +32,7 @@ export function useCashBoxService() {
     const { isExistPaymentsAPI, getPaymentMethods, resetCache, getPaymentMethodFields } = usePaymentsAPI();
 
 
-    async function loadUserCoinspaidAddresses(): Promise<ICoinspaidAddresses> { // TODO: maybe remove?!
+    async function loadUserCppAddresses(): Promise<ICppAddresses> { // TODO: maybe remove?!
         if (!isExistPaymentsAPI()) {
             return;
         }
@@ -60,12 +60,12 @@ export function useCashBoxService() {
                 ];
             });
             const depositInfoOfMethodsResp = await Promise.all(depositInfoOfMethodsPromises);
-            const addressesForDepInList = Object.fromEntries(depositInfoOfMethodsResp) as ICoinspaidAddresses;
+            const addressesForDepInList = Object.fromEntries(depositInfoOfMethodsResp) as ICppAddresses;
 
-            coinspaidAddresses.value = addressesForDepInList;
+            cppAddresses.value = addressesForDepInList;
             return addressesForDepInList;
         } catch (err) {
-            log.error("LOAD_USER_COINSPAID_ADDRESSES_ERROR", err);
+            log.error("LOAD_USER_CPP_ADDRESSES_ERROR", err);
             throw err;
         }
     }
@@ -163,7 +163,7 @@ export function useCashBoxService() {
 
 
     return {
-        loadUserCoinspaidAddresses,
+        loadUserCppAddresses,
         loadPlayerPaymentsHistory,
         removeWithdrawRequestById,
         getPaymentsApiMethods,
