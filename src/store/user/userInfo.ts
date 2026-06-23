@@ -113,7 +113,7 @@ export const useUserInfo = defineStore("userInfo", () => {
     }
 
     function setUserInfo(data: IUserData & { subscriptions?: ISubscriptions }) {
-        console.log("setUserInfo 1");
+        console.log("setUserInfo 2");
         info.value = data;
     }
 
