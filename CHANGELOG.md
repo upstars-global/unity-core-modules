@@ -1,3 +1,12 @@
+## [1.98.0](https://github.com/upstars-global/unity-core-modules/compare/v1.97.0...v1.98.0) (2026-06-24)
+
+### 🚀 Features
+
+* (UN-2562) handle Cloudflare challenge detection in HTTP responses ([#362](https://github.com/upstars-global/unity-core-modules/issues/362))
+ ([a28f4fa](https://github.com/upstars-global/unity-core-modules/commit/a28f4fabfef18de4c3925db5f318a43b019d5de4))
+
+, closes [#343](https://github.com/upstars-global/unity-core-modules/issues/) [#343](https://github.com/upstars-global/unity-core-modules/issues/)
+
 ## [1.97.0](https://github.com/upstars-global/unity-core-modules/compare/v1.96.0...v1.97.0) (2026-06-24)
 
 ### 🚀 Features
