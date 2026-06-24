@@ -71,6 +71,7 @@ export interface IUserFormData {
     dfpc?: string;
     captcha?: string;
     otp?: string;
+    custom_login_reg?: string;
 }
 
 export interface IUserGameHistoryItem {
