@@ -1,3 +1,35 @@
+## [1.98.0](https://github.com/upstars-global/unity-core-modules/compare/v1.97.0...v1.98.0) (2026-06-24)
+
+### 🚀 Features
+
+* (UN-2562) handle Cloudflare challenge detection in HTTP responses ([#362](https://github.com/upstars-global/unity-core-modules/issues/362))
+ ([a28f4fa](https://github.com/upstars-global/unity-core-modules/commit/a28f4fabfef18de4c3925db5f318a43b019d5de4))
+
+, closes [#343](https://github.com/upstars-global/unity-core-modules/issues/) [#343](https://github.com/upstars-global/unity-core-modules/issues/)
+
+## [1.97.0](https://github.com/upstars-global/unity-core-modules/compare/v1.96.0...v1.97.0) (2026-06-24)
+
+### 🚀 Features
+
+* (UN-2804) widget streak ([#357](https://github.com/upstars-global/unity-core-modules/issues/357))
+ ([f0fffe8](https://github.com/upstars-global/unity-core-modules/commit/f0fffe819e6e59f0f68b523136734f97ae964b34))
+
+
+
+    * UN-2804 widget streak
+
+    * UN-2804 widget streak
+
+    * UN-2804 widget streak
+
+    * UN-2804 widget streak
+
+    * UN-2804 widget streak (unauth)
+
+    * UN-2804 fix tests
+
+    * UN-2804 get reward after streak
+
 ## [1.96.0](https://github.com/upstars-global/unity-core-modules/compare/v1.95.0...v1.96.0) (2026-06-17)
 
 ### 🚀 Features
