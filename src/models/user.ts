@@ -113,6 +113,18 @@ export interface ISeasonStartPoints {
     userId: number
 }
 
+export interface IActiveSeason {
+    name: string;
+    isActive: boolean;
+    startDate: string;
+    endDate: string;
+    technicalWorksStartAt: string;
+}
+
+export interface IActiveSeasonResponse {
+    season: IActiveSeason;
+}
+
 export interface IDepositInsuranceConditionState {
     value: number | null;
     valid: boolean;
