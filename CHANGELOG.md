@@ -1,3 +1,14 @@
+## [1.99.0](https://github.com/upstars-global/unity-core-modules/compare/v1.98.0...v1.99.0) (2026-06-25)
+
+### 🚀 Features
+
+* (UN-2840) automate migration stub ([#358](https://github.com/upstars-global/unity-core-modules/issues/358))
+ ([20eb944](https://github.com/upstars-global/unity-core-modules/commit/20eb944d8cd0c7d8032cbd56db4f1ab050ce010c))
+
+
+
+    * feat: UN-2840 automate migration stub
+
 ## [1.98.0](https://github.com/upstars-global/unity-core-modules/compare/v1.97.0...v1.98.0) (2026-06-24)
 
 ### 🚀 Features
