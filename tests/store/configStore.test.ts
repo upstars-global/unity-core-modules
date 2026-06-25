@@ -16,6 +16,25 @@ describe("useConfigStore", () => {
         expect(store.vipProgramConfig).toBeNull();
         expect(store.disabledGamesProviders).toEqual({});
         expect(store.welcomeOfferConfig).toBeNull();
+        expect(store.activeSeason).toBeUndefined();
+        expect(store.isLoadingActiveSeason).toBe(false);
+    });
+
+    it("sets and clears the active season", () => {
+        const store = useConfigStore();
+        const season = {
+            name: "Season 1",
+            isActive: true,
+            startDate: "2026-06-08T11:43:19.450Z",
+            endDate: "2026-07-08T11:43:19.450Z",
+            technicalWorksStartAt: "2026-06-08T11:43:19.450Z",
+        };
+
+        store.setActiveSeason(season);
+        expect(store.activeSeason).toEqual(season);
+
+        store.setActiveSeason(null);
+        expect(store.activeSeason).toBeNull();
     });
 
     it("updates simple configs via setters", () => {
@@ -36,11 +55,13 @@ describe("useConfigStore", () => {
         store.setBettingConfig({ allowed_bets: [ "one" ] } as never);
         store.setDisabledGamesProviders({ provider1: [ "game1" ] });
         store.setWelcomeOfferConfig(welcomeOfferConfig);
+        store.setLoadingActiveSeason(true);
 
         expect(store.gamesPageLimit).toBe(60);
         expect(store.bettingConfig).toEqual({ allowed_bets: [ "one" ] });
         expect(store.disabledGamesProviders).toEqual({ provider1: [ "game1" ] });
         expect(store.welcomeOfferConfig).toEqual(welcomeOfferConfig);
+        expect(store.isLoadingActiveSeason).toBe(true);
     });
 
     it("maps vip program config from DTO format", () => {

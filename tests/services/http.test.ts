@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 const BUS_EVENTS = {
     AUTH_ERROR: "auth-error",
+    CF_CHALLENGE_REQUIRED: "cf-challenge-required",
     MAINTENANCE_MODE: "maintenance-mode",
 };
 
@@ -173,6 +174,40 @@ describe("http client", () => {
 
         expect(eventEmit).toHaveBeenCalledWith(BUS_EVENTS.MAINTENANCE_MODE);
         expect(logError).toHaveBeenCalledWith("LOAD_CMS_PAGES_ERROR", expect.any(Error));
+    });
+
+    it("emits CF_CHALLENGE_REQUIRED with challenge context", async () => {
+        const { http, eventEmit } = await loadHttpModule(false);
+        const fetchMock = vi.fn().mockResolvedValueOnce(
+            new Response("<html>challenge</html>", {
+                status: 403,
+                statusText: "Forbidden",
+                headers: {
+                    "cf-mitigated": "challenge",
+                    "content-type": "text/html",
+                },
+            }),
+        );
+        vi.stubGlobal("fetch", fetchMock);
+
+        await expect(http().post("/api/users/sign_in", {
+            user: {
+                email: "qa@example.com",
+            },
+        }, {
+            challengeContext: {
+                reason: "registration",
+                returnTo: "/registration?utm_source=qa",
+            },
+        })).rejects.toThrow("HTTP 403: Forbidden");
+
+        expect(eventEmit).toHaveBeenCalledWith(BUS_EVENTS.CF_CHALLENGE_REQUIRED, {
+            method: "POST",
+            reason: "registration",
+            returnTo: "/registration?utm_source=qa",
+            status: 403,
+            url: "/api/users/sign_in",
+        });
     });
 
     it("logs error label for failed request", async () => {

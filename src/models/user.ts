@@ -71,6 +71,7 @@ export interface IUserFormData {
     dfpc?: string;
     captcha?: string;
     otp?: string;
+    custom_login_reg?: string;
 }
 
 export interface IUserGameHistoryItem {
@@ -110,6 +111,18 @@ export interface ITwoFactorAuthData {
 export interface ISeasonStartPoints {
     compointsStart: number
     userId: number
+}
+
+export interface IActiveSeason {
+    name: string;
+    isActive: boolean;
+    startDate: string;
+    endDate: string;
+    technicalWorksStartAt: string;
+}
+
+export interface IActiveSeasonResponse {
+    season: IActiveSeason;
 }
 
 export interface IDepositInsuranceConditionState {

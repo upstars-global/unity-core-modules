@@ -33,6 +33,7 @@ export const BUS_EVENTS = {
     CHAT_SUPPORT_TOGGLE: "chat.toggle",
     AUTH_ERROR: "auth-error",
     MAINTENANCE_MODE: "maintenance-mode",
+    CF_CHALLENGE_REQUIRED: "cf-challenge-required",
 };
 
 export const eventBusPlugin = {

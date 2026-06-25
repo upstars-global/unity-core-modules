@@ -12,6 +12,7 @@ import { EnumContextFields, EnumFormFields, type IPlayerFieldsInfo } from "../mo
 import { type IDataForUpdatePass, type IDepositInsuranceClaimResponse, type ITwoFactorAuthData } from "../models/user";
 import { EventBus as bus } from "../plugins/EventBus";
 import { useCommon } from "../store/common";
+import { useConfigStore } from "../store/configStore";
 import { useGiftsStore } from "../store/gifts";
 import { useMultilangStore } from "../store/multilang";
 import { useUserDocuments } from "../store/user/userDocuments";
@@ -55,6 +56,7 @@ import {
     putUserSubscriptionReq,
     restorePasswordRequestReq,
     restorePasswordRestoreReq,
+    seasonsActiveReq,
     sendFreshChatRestoreIdReq,
     sendUserDataReq,
     setDepositBonusCodeReq,
@@ -766,6 +768,26 @@ export async function leadPlayerStartSeasonInfo() {
         } catch (err) {
             log.error("PORTOFRANCO_VIP_STATUS_ERROR", err);
         }
+    }
+}
+
+export async function loadActiveSeason() {
+    const configStore = useConfigStore();
+
+    try {
+        configStore.setLoadingActiveSeason(true);
+        const data = await seasonsActiveReq();
+
+        if (data) {
+            configStore.setActiveSeason(data);
+        } else {
+            configStore.setActiveSeason(null);
+        }
+    } catch (err) {
+        configStore.setActiveSeason(null);
+        log.error("PORTOFRANCO_SEASONS_ACTIVE_ERROR", err);
+    } finally {
+        configStore.setLoadingActiveSeason(false);
     }
 }
 
