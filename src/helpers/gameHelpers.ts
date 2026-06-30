@@ -2,6 +2,7 @@ import { getGameImagePath } from "@helpers/gameImage";
 import { SlugCategoriesGames } from "@theme/configs/categoryesGames";
 import { storeToRefs } from "pinia";
 
+import type { ISearchAliasConfig } from "../models/configs";
 import type { ICollectionItem, IDisabledGamesProvider, IGame, IGamesProvider } from "../models/game";
 import { GameDisableGeoStatus, IEnabledGames } from "../models/game";
 import { useCommon } from "../store/common";
@@ -191,6 +192,20 @@ export function filterGames<T extends IGame | IGameItem>(
             isProviderAllowed(game.provider, disabledMap, country) &&
             isGameAllowed(game.identifier, enabledMap as IEnabledGames | undefined, country),
     );
+}
+
+export function matchSearchAliasGames(query: string, config?: ISearchAliasConfig): string[] {
+    if (!config?.enabled || !Array.isArray(config.aliases)) {
+        return [];
+    }
+
+    const normalize = (value: string) => value.toLowerCase().trim().replace(/\s+/g, " ");
+    const normalizedQuery = normalize(query);
+
+    const alias = config.aliases.find((item) =>
+        item.keys?.some((key) => key && normalizedQuery.includes(normalize(key))));
+
+    return alias?.games ?? [];
 }
 
 export function isLoaded(collection: ICollectionItem, page: number) {
