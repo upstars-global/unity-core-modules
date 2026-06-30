@@ -20,12 +20,12 @@ export type ISurveyConfig = {
 
 export type IBettingConfig = Record<string, unknown>;
 
-export interface ISearchAlias {
+export interface IGamesAlias {
     keys: string[];
     games: string[];
 }
 
-export interface ISearchAliasConfig {
+export interface IGamesAliasesConfig {
     enabled?: boolean;
-    aliases: ISearchAlias[];
+    aliases: IGamesAlias[];
 }

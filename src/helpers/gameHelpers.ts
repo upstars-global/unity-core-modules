@@ -2,7 +2,7 @@ import { getGameImagePath } from "@helpers/gameImage";
 import { SlugCategoriesGames } from "@theme/configs/categoryesGames";
 import { storeToRefs } from "pinia";
 
-import type { ISearchAliasConfig } from "../models/configs";
+import type { IGamesAliasesConfig } from "../models/configs";
 import type { ICollectionItem, IDisabledGamesProvider, IGame, IGamesProvider } from "../models/game";
 import { GameDisableGeoStatus, IEnabledGames } from "../models/game";
 import { useCommon } from "../store/common";
@@ -194,7 +194,7 @@ export function filterGames<T extends IGame | IGameItem>(
     );
 }
 
-export function matchSearchAliasGames(query: string, config?: ISearchAliasConfig): string[] {
+export function matchGamesAlias(query: string, config?: IGamesAliasesConfig): string[] {
     if (!config?.enabled || !Array.isArray(config.aliases)) {
         return [];
     }

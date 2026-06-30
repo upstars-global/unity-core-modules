@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const postMock = vi.fn();
-const loadSearchAliasConfigReqMock = vi.fn();
+const loadGamesAliasesConfigReqMock = vi.fn();
 const loadGamesByIdsReqMock = vi.fn();
 
 vi.mock("../../src/controllers/Logger", () => ({
@@ -48,7 +48,7 @@ vi.mock("../../src/services/api/http", () => ({
     http: () => ({ post: postMock }),
 }));
 vi.mock("../../src/services/api/requests/configs", () => ({
-    loadSearchAliasConfigReq: (...args: unknown[]) => loadSearchAliasConfigReqMock(...args),
+    loadGamesAliasesConfigReq: (...args: unknown[]) => loadGamesAliasesConfigReqMock(...args),
 }));
 vi.mock("../../src/services/api/requests/games", () => ({
     loadGamesByIdsReq: (...args: unknown[]) => loadGamesByIdsReqMock(...args),
@@ -58,7 +58,7 @@ describe("loadFoundGames", () => {
     beforeEach(() => {
         vi.resetModules();
         postMock.mockReset();
-        loadSearchAliasConfigReqMock.mockReset();
+        loadGamesAliasesConfigReqMock.mockReset();
         loadGamesByIdsReqMock.mockReset();
     });
 
@@ -70,13 +70,13 @@ describe("loadFoundGames", () => {
         const result = await loadFoundGames("bull");
 
         expect(result).toEqual(games);
-        expect(loadSearchAliasConfigReqMock).not.toHaveBeenCalled();
+        expect(loadGamesAliasesConfigReqMock).not.toHaveBeenCalled();
         expect(loadGamesByIdsReqMock).not.toHaveBeenCalled();
     });
 
     it("requests the alias game ids and returns the games from the response values when a key matches", async () => {
         postMock.mockResolvedValue({ data: { data: [] } });
-        loadSearchAliasConfigReqMock.mockResolvedValue({
+        loadGamesAliasesConfigReqMock.mockResolvedValue({
             enabled: true,
             aliases: [ { keys: [ "bull" ], games: [ "x/y", "z/w" ] } ],
         });
@@ -94,7 +94,7 @@ describe("loadFoundGames", () => {
 
     it("returns an empty list when the standard search is empty and no alias matches", async () => {
         postMock.mockResolvedValue({ data: { data: [] } });
-        loadSearchAliasConfigReqMock.mockResolvedValue({
+        loadGamesAliasesConfigReqMock.mockResolvedValue({
             enabled: true,
             aliases: [ { keys: [ "bull" ], games: [ "x/y" ] } ],
         });
@@ -108,7 +108,7 @@ describe("loadFoundGames", () => {
 
     it("returns an empty list when there is no alias config", async () => {
         postMock.mockResolvedValue({ data: { data: [] } });
-        loadSearchAliasConfigReqMock.mockResolvedValue(undefined);
+        loadGamesAliasesConfigReqMock.mockResolvedValue(undefined);
 
         const { loadFoundGames } = await import("../../src/services/api/requests/gamesSearch");
         const result = await loadFoundGames("bull");

@@ -5,32 +5,32 @@ import {
     filterGames,
     type IGameItem,
     type IGameItemFilter,
-    matchSearchAliasGames,
+    matchGamesAlias,
     processGameForNewAPI,
 } from "../../../helpers/gameHelpers";
-import { type ISearchAliasConfig } from "../../../models/configs";
+import { type IGamesAliasesConfig } from "../../../models/configs";
 import { type IDisabledGamesProvider, type IEnabledGames } from "../../../models/game";
 import { useGamesProviders } from "../../../store/games/gamesProviders";
 import { useGamesCommon } from "../../../store/games/gamesStore";
 import { useRootStore } from "../../../store/root";
 import { http } from "../http";
-import { loadSearchAliasConfigReq } from "./configs";
+import { loadGamesAliasesConfigReq } from "./configs";
 import { loadGamesByIdsReq } from "./games";
 
-let aliasConfigRequest: Promise<ISearchAliasConfig | undefined> | undefined = undefined;
+let gamesAliasesConfigRequest: Promise<IGamesAliasesConfig | undefined> | undefined = undefined;
 
-function getSearchAliasConfig() {
-    if (!aliasConfigRequest) {
-        aliasConfigRequest = loadSearchAliasConfigReq().then((config) => {
+function getGamesAliasesConfig() {
+    if (!gamesAliasesConfigRequest) {
+        gamesAliasesConfigRequest = loadGamesAliasesConfigReq().then((config) => {
             if (!config) {
-                aliasConfigRequest = undefined;
+                gamesAliasesConfigRequest = undefined;
             }
 
             return config;
         });
     }
 
-    return aliasConfigRequest;
+    return gamesAliasesConfigRequest;
 }
 
 async function loadAliasGames(
@@ -39,8 +39,8 @@ async function loadAliasGames(
     disabledGamesProviders: IDisabledGamesProvider,
     enabledGamesConfig: IEnabledGames,
 ): Promise<IGameItem[]> {
-    const config = await getSearchAliasConfig();
-    const gameIds = matchSearchAliasGames(searchString, config);
+    const config = await getGamesAliasesConfig();
+    const gameIds = matchGamesAlias(searchString, config);
 
     if (!gameIds.length) {
         return [];

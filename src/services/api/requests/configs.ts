@@ -2,7 +2,7 @@ import { FE_API_PREFIX } from "../../../consts/apiConfig";
 import { log } from "../../../controllers/Logger";
 import { type CurrencyData } from "../../../models/cashbox";
 import { type IStagByReferName, type ISurveyConfig } from "../../../models/configs";
-import { type IBettingConfig, type ISearchAliasConfig } from "../../../models/configs";
+import { type IBettingConfig, type IGamesAliasesConfig } from "../../../models/configs";
 import { type IEnabledGames } from "../../../models/game";
 import { type LimitsDepositConfigData } from "../../../models/limitsDepositConfig";
 import { type MainWidgetItem } from "../../../models/mainWidget";
@@ -106,9 +106,9 @@ const loadWelcomeOfferConfigReq = () => loadConfig<IWelcomeOfferConfigDTO>(
     `${ FE_API_PREFIX }/config/welcome-offer-config`,
     "LOAD_WELCOME_OFFER_CONFIG_ERROR",
 );
-const loadSearchAliasConfigReq = () => loadConfig<ISearchAliasConfig>(
-    `${ FE_API_PREFIX }/config/search-alias-config`,
-    "LOAD_SEARCH_ALIAS_CONFIG_ERROR",
+const loadGamesAliasesConfigReq = () => loadConfig<IGamesAliasesConfig>(
+    `${ FE_API_PREFIX }/config/games-aliases-config`,
+    "LOAD_GAMES_ALIASES_CONFIG_ERROR",
 );
 
 export {
@@ -122,12 +122,12 @@ export {
     loadEnabledGamesConfigReq,
     loadExcludedPromoStagsReq,
     loadFooterPaymentsConfigReq,
+    loadGamesAliasesConfigReq,
     loadLimitsDepositConfigReq,
     loadMainWidgetConfigReq,
     loadManagersConfigReq,
     loadManageWithdrawConfigReq,
     loadModifyGiftsConfigReq,
-    loadSearchAliasConfigReq,
     loadStagByReferNameReq,
     loadSurveyConfigReq,
     loadVipAdventuresConfigReq,
