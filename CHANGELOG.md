@@ -1,3 +1,16 @@
+## [1.100.0](https://github.com/upstars-global/unity-core-modules/compare/v1.99.0...v1.100.0) (2026-06-30)
+
+### 🚀 Features
+
+* **UN-2618:** source of funds survey freshdesk ticket creation  ([#360](https://github.com/upstars-global/unity-core-modules/issues/360))
+ ([db70f8e](https://github.com/upstars-global/unity-core-modules/commit/db70f8e43d5a8e52f6bd5ac32fa2cf8cfb4edc96))
+
+
+
+    * feat(UN-2618): source of funds survey freshdesk ticket creation
+
+    * сhore: types
+
 ## [1.99.0](https://github.com/upstars-global/unity-core-modules/compare/v1.98.0...v1.99.0) (2026-06-25)
 
 ### 🚀 Features
