@@ -1,4 +1,5 @@
 import { log } from "../../../controllers/Logger";
+import { usePWA } from "../../../store/pwa";
 import { ICancelInfoGifts } from "../DTO/gifts";
 import { http } from "../http";
 
@@ -52,7 +53,11 @@ export function cancelBonusesReq(id: number) {
 }
 
 export function activateFreespinsReq(id: number) {
-    return http().post(`/api/player/freespins/${ id }/activation`);
+    const { isPWA } = usePWA();
+
+    return http({
+        headers: isPWA ? { "X-Display-Mode": "standalone" } : {},
+    }).post(`/api/player/freespins/${ id }/activation`);
 }
 
 export function activateBonusesReq(id: number) {
