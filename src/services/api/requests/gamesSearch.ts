@@ -21,13 +21,7 @@ let gamesAliasesConfigRequest: Promise<IGamesAliasesConfig | undefined> | undefi
 
 function getGamesAliasesConfig() {
     if (!gamesAliasesConfigRequest) {
-        gamesAliasesConfigRequest = loadGamesAliasesConfigReq().then((config) => {
-            if (!config) {
-                gamesAliasesConfigRequest = undefined;
-            }
-
-            return config;
-        });
+        gamesAliasesConfigRequest = loadGamesAliasesConfigReq();
     }
 
     return gamesAliasesConfigRequest;
