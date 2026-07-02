@@ -27,7 +27,7 @@ function prepareErrorsForMetric(errorsCollection: IFormErrorsCollection): IFormE
 export async function sendMetricsErrorsValidationForm(data: IErrorsValidationForm) {
     try {
         const { side, component, errors } = data;
-        await http().put<IMetricsErrorsValidationForm>(`${ FE_API_PREFIX }/metrics-errors-validation`, {
+        await http().post<IMetricsErrorsValidationForm>(`${ FE_API_PREFIX }/metrics-errors-validation`, {
             side,
             component,
             errors: prepareErrorsForMetric(errors),
