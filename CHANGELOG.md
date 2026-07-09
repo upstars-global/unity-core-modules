@@ -1,3 +1,27 @@
+## [1.101.0](https://github.com/upstars-global/unity-core-modules/compare/v1.100.0...v1.101.0) (2026-07-09)
+
+### 🚀 Features
+
+* (UN-2642) game aliases ([#363](https://github.com/upstars-global/unity-core-modules/issues/363))
+ ([bd99a0f](https://github.com/upstars-global/unity-core-modules/commit/bd99a0f8d1c11b655d4a40bd8b84f879b8edc3da))
+
+
+
+    * UN-2642 games aliases
+
+    * UN-2642 games aliases
+
+    * UN-2642 games aliases
+
+### 📖 Documentation
+
+* Add AI context and contribution instructions ([#364](https://github.com/upstars-global/unity-core-modules/issues/364))
+ ([8e98620](https://github.com/upstars-global/unity-core-modules/commit/8e986209ca458b13ec7b0fdd60100b4d170de842))
+
+
+
+    Co-authored-by: d-tashchi <kabak133@gmail.com>
+
 ## [1.100.0](https://github.com/upstars-global/unity-core-modules/compare/v1.99.0...v1.100.0) (2026-06-30)
 
 ### 🚀 Features
