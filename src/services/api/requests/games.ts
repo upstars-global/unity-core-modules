@@ -2,6 +2,7 @@ import type { SlugCategoriesGames } from "@theme/configs/categoryesGames";
 
 import { FE_API_PREFIX } from "../../../consts/apiConfig";
 import { log } from "../../../controllers/Logger";
+import type { IGameItemFilter } from "../../../helpers/gameHelpers";
 import type { IGame, IGamesProvider } from "../../../models/game";
 import {
     AcceptGamesVersion,
@@ -148,6 +149,20 @@ export async function loadGameBySeoTitleReq(seoTitle: string, restrict: boolean 
         return data;
     } catch (err) {
         log.error("LOAD_GAME_BY_SEO_TITLE_ERROR", err);
+        throw err;
+    }
+}
+
+export async function loadGamesByIdsReq(gameIds: string[], device: string): Promise<Record<string, IGameItemFilter>> {
+    try {
+        const { data } = await http().post<Record<string, IGameItemFilter>>("/api/games_filter/select", {
+            device,
+            game_ids: gameIds,
+        });
+
+        return data;
+    } catch (err) {
+        log.error("LOAD_GAMES_BY_IDS_ERROR", err);
         throw err;
     }
 }

@@ -2,7 +2,7 @@ import { FE_API_PREFIX } from "../../../consts/apiConfig";
 import { log } from "../../../controllers/Logger";
 import { type CurrencyData } from "../../../models/cashbox";
 import { type IStagByReferName, type ISurveyConfig } from "../../../models/configs";
-import { type IBettingConfig } from "../../../models/configs";
+import { type IBettingConfig, type IGamesAliasesConfig } from "../../../models/configs";
 import { type IEnabledGames } from "../../../models/game";
 import { type LimitsDepositConfigData } from "../../../models/limitsDepositConfig";
 import { type MainWidgetItem } from "../../../models/mainWidget";
@@ -106,6 +106,10 @@ const loadWelcomeOfferConfigReq = () => loadConfig<IWelcomeOfferConfigDTO>(
     `${ FE_API_PREFIX }/config/welcome-offer-config`,
     "LOAD_WELCOME_OFFER_CONFIG_ERROR",
 );
+const loadGamesAliasesConfigReq = () => loadConfig<IGamesAliasesConfig>(
+    `${ FE_API_PREFIX }/config/games-aliases-config`,
+    "LOAD_GAMES_ALIASES_CONFIG_ERROR",
+);
 
 export {
     loadAdditionalDepositGiftsConfigReq,
@@ -118,6 +122,7 @@ export {
     loadEnabledGamesConfigReq,
     loadExcludedPromoStagsReq,
     loadFooterPaymentsConfigReq,
+    loadGamesAliasesConfigReq,
     loadLimitsDepositConfigReq,
     loadMainWidgetConfigReq,
     loadManagersConfigReq,
