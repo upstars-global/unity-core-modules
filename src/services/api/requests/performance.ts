@@ -5,7 +5,7 @@ import { http } from "../http";
 
 export async function gameStartObserve(data: IGameObserveDTO) {
     try {
-        await http().put(`${ FE_API_PREFIX }/game-start-performance`, data);
+        await http().post(`${ FE_API_PREFIX }/game-start-performance`, data);
     } catch (err) {
         log.error("GAME_START_OBSERVE", err);
     }
