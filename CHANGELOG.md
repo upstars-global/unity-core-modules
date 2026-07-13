@@ -1,3 +1,16 @@
+## [1.101.1](https://github.com/upstars-global/unity-core-modules/compare/v1.101.0...v1.101.1) (2026-07-13)
+
+### 🐛 Bug Fixes
+
+* (UN-2923): change method for systems request (metrics-errors-val… ([#365](https://github.com/upstars-global/unity-core-modules/issues/365))
+ ([c716b9e](https://github.com/upstars-global/unity-core-modules/commit/c716b9e11b1564b7315c95fa430eb094e18db126))
+
+
+
+    fix: (UN-2923): change method for systems request (metrics-errors-validation, game-start-performance)
+
+    Co-authored-by: d-tashchi <kabak133@gmail.com>
+
 ## [1.101.0](https://github.com/upstars-global/unity-core-modules/compare/v1.100.0...v1.101.0) (2026-07-09)
 
 ### 🚀 Features
