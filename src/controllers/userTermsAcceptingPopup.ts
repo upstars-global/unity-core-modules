@@ -2,17 +2,22 @@ const supportPopup = defineAsyncComponent(() => {
     return import("@modules/Popups/SupportPopup/SupportPopup.vue");
 });
 
-import Modal from "@plugins/Modal";
 import { computed, defineAsyncComponent } from "vue";
 
 import { updateAuthDetailsProviders } from "../services/user";
 import { useMultilangStore } from "../store/multilang";
+import { useUIStore } from "../store/ui";
 import { useUserInfo } from "../store/user/userInfo";
 
-export function useUserTermsAcceptingPopup() {
+interface IUserTermsAcceptingPopupOptions {
+    getAcceptTermsExtraFields?: () => Record<string, unknown>;
+    onTermsAccepted?: () => Promise<unknown> | unknown;
+}
+
+export function useUserTermsAcceptingPopup(options: IUserTermsAcceptingPopupOptions = {}) {
     const userInfoStore = useUserInfo();
     const multilangStore = useMultilangStore();
-
+    const uiStore = useUIStore();
 
     const isUserTermsAccepted = computed(() => {
         return userInfoStore.getUserInfo.auth_fields_missed?.includes("terms_acceptance");
@@ -30,26 +35,33 @@ export function useUserTermsAcceptingPopup() {
         }
 
         if (autoAccept) {
-            acceptTerms();
-            return;
+            return acceptTerms();
         }
 
         showAcceptTermsPopup();
     }
 
-    function acceptTerms() {
+    async function acceptTerms() {
         const country = multilangStore.getUserGeo;
+        const extraFields = options.getAcceptTermsExtraFields?.() || {};
 
-        return updateAuthDetailsProviders({
+        const response = await updateAuthDetailsProviders({
             user: {
                 terms_acceptance: true,
                 ...(isUserCountryFieldMissing.value ? { country } : {}),
+                ...extraFields,
             },
         });
+
+        if (response?.status === 201) {
+            await options.onTermsAccepted?.();
+        }
+
+        return response;
     }
 
     function showAcceptTermsPopup() {
-        Modal.show({
+        uiStore.setShowModal({
             name: "modal-support",
             component: supportPopup,
             mobileFriendly: true,
