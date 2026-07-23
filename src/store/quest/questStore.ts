@@ -135,9 +135,8 @@ export const useQuestStore = defineStore("questStore", () => {
     }
 
     function setNewStatusesUserQuest(newData: ICurrentUserQuestsStatus[]): void {
-        let newState = [] as ICurrentUserQuestsStatus[];
         if (currentUserQuestsStatuses.value) {
-            newState = [
+            const newState = [
                 ...currentUserQuestsStatuses.value.filter(({ tournament_id: questId }) => {
                     return !newData.some(({ tournament_id: newID }) => {
                         return newID === questId;

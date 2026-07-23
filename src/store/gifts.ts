@@ -134,7 +134,7 @@ export const useGiftsStore = defineStore("giftsStore", () => {
         }
 
         const isLootbox = activeDepositGift.value.bonuses[0]?.type === "random" && activeDepositGift.value.bonuses[0].boxes;
-        let bonuses = null;
+        let bonuses;
 
         if (isLootbox) {
             const boxes = activeDepositGift.value.bonuses[0].boxes;
