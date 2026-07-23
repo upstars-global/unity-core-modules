@@ -1,7 +1,3 @@
-import type { Currencies } from "./enums/currencies";
-
-export type ICppAddresses = Record<Currencies, string>;
-
 export type CurrencyCode =
     "EUR" | "USD" | "GBP" | "CAD" | "AUD" | "NZD" | "BRL" | "NOK" |
     "JPY" | "BTC" | "LTC" | "ETH" | "BCH" | "DOG" | "USDT";

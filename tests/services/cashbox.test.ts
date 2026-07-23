@@ -101,7 +101,6 @@ const playerPaymentTemplate: IPlayerPayment = {
 };
 
 vi.mock("@config/cashbox", () => ({
-    getTargetWallets: vi.fn((items: IUserAccount[]) => items.map((item) => item.currency)),
     srcPaymentImage: vi.fn((item) => item),
 }));
 vi.mock("../../src/plugins/EventBus", () => ({
@@ -157,7 +156,6 @@ describe("useCashBoxService", () => {
         beforeEach(() => {
             vi.resetAllMocks();
             vi.spyOn(cashboxStoreModule, "useCashboxStore").mockReturnValue({
-                cppAddresses: ref([]),
                 paymentHistory: ref([]),
                 historyDeposits: ref([]),
                 historyPayouts: ref([]),
@@ -263,47 +261,11 @@ describe("useCashBoxService", () => {
         });
     });
 
-    /* describe("loadUserCppAddresses", () => {
-        beforeEach(async () => {
-            vi.resetModules();
-            vi.doMock("../../src/store/cashboxStore", () => ({
-                useCashboxStore: vi.fn(() => ({
-                    cppAddresses: ref([]),
-                    paymentHistory: ref([]),
-                    historyDeposits: ref([]),
-                    historyPayouts: ref([]),
-                    paymentSystems: ref([]),
-                    payoutSystems: ref(),
-                })),
-            }));
-        });
-        it("retrieves cpp addresses correctly", async () => {
-            const { useCashBoxService } = await import("../../src/services/cashbox");
-
-            const cppAddressesMock = {methodFields: [{ address: "address1" }, { address: "address2" }]};
-            const getMethodFieldsMock = vi.fn(() => Promise.resolve(cppAddressesMock));
-
-            vi.spyOn(paymentsApiModule, "usePaymentsAPI").mockReturnValue({
-                getPaymentMethodFields: getMethodFieldsMock,
-                getPaymentMethods: vi.fn(() => Promise.resolve(depositMethodMock)),
-                resetCache: vi.fn(),
-                isExistPaymentsAPI: vi.fn(() => true),
-            });
-
-            const service = useCashBoxService();
-            const addresses = await service.loadUserCppAddresses();
-
-            expect(getMethodFieldsMock).toHaveBeenCalled();
-            expect(addresses).toEqual(cppAddressesMock);
-        });
-    });*/
-
     describe("removeWithdrawRequestById", () => {
         beforeEach(async () => {
             vi.resetModules();
             vi.clearAllMocks();
             vi.spyOn(cashboxStoreModule, "useCashboxStore").mockReturnValue({
-                cppAddresses: ref([]),
                 paymentHistory: ref([]),
                 historyDeposits: ref([]),
                 historyPayouts: ref([]),

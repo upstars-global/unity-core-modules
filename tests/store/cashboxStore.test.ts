@@ -142,7 +142,6 @@ describe("cashboxStore", () => {
         expect(store.historyPayouts).toEqual([]);
         expect(store.paymentSystems).toEqual([]);
         expect(store.payoutSystems).toEqual([]);
-        expect(store.cppAddresses).toBeUndefined();
     });
 
     it("returns only recallable payout requests from history", () => {
