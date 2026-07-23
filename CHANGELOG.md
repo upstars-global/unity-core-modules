@@ -1,3 +1,28 @@
+## [1.102.0](https://github.com/upstars-global/unity-core-modules/compare/v1.101.1...v1.102.0) (2026-07-23)
+
+### 🚀 Features
+
+* (UN-2957) add mirror cross-domain autologin handover ([#366](https://github.com/upstars-global/unity-core-modules/issues/366))
+ ([a037eab](https://github.com/upstars-global/unity-core-modules/commit/a037eab873dc9dcfe4347e5d8fe4c3988719166a))
+
+
+
+    - add shared mirrors autologin helper for sso_token persistence in IndexedDB
+
+    - store recovery token after successful auth profile load
+
+    - pass recovery token through service worker mirror fallback to /handover
+
+    - add /handover page to redeem token via /api/sso/redeem
+
+    - add no-store/referrer hardening headers for handover route
+
+    - add focused tests for helper, auth persistence, and handover route
+
+    - include DOM typings in unity-core-modules for existing IndexedDB usage
+
+    Co-authored-by: d-tashchi <kabak133@gmail.com>
+
 ## [1.101.1](https://github.com/upstars-global/unity-core-modules/compare/v1.101.0...v1.101.1) (2026-07-13)
 
 ### 🐛 Bug Fixes
