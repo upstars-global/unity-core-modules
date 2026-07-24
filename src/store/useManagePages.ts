@@ -1,4 +1,4 @@
-import { defineStore, Pinia, storeToRefs } from "pinia";
+import { defineStore, storeToRefs } from "pinia";
 import { ref } from "vue";
 
 import { useUserStatuses } from "./user/userStatuses";

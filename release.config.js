@@ -61,7 +61,6 @@ export default {
         } ],
         "@semantic-release/changelog",
         [ "@semantic-release/exec", {
-            // eslint-disable-next-line @stylistic/js/max-len
             prepareCmd: "node -e \"let pkg=require('./package.json'); pkg.version='${nextRelease.version}'; require('fs').writeFileSync('package.json', JSON.stringify(pkg, null, 2));\"",
             successCmd: "node send-slack-notification.js \"${nextRelease.version}\" \"${process.env.REPO_URL}\"",
         } ],
