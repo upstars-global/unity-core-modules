@@ -1,3 +1,10 @@
+## [1.102.2](https://github.com/upstars-global/unity-core-modules/compare/v1.102.1...v1.102.2) (2026-07-27)
+
+### 🔧 Maintenance
+
+* **UN-826:** add unity-eslint-config ([#368](https://github.com/upstars-global/unity-core-modules/issues/368))
+ ([e2b2f03](https://github.com/upstars-global/unity-core-modules/commit/e2b2f03fa6b03e101482eae7d29d7aba855de220))
+
 ## [1.102.0](https://github.com/upstars-global/unity-core-modules/compare/v1.101.1...v1.102.0) (2026-07-23)
 
 ### 🚀 Features
