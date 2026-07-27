@@ -5,7 +5,6 @@ import {
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
-import { ICppAddresses } from "../models/cashbox";
 import type { IPaymentsMethod } from "../models/PaymentsLib";
 import type { UserGroup } from "../models/user";
 import type { IPlayerPayment } from "../services/api/DTO/cashbox";
@@ -36,7 +35,6 @@ export const useCashboxStore = defineStore("cashboxStore", () => {
     const historyPayouts = ref<IPlayerPayment[]>([]);
     const paymentSystems = ref<IPaymentsMethod[]>([]);
     const payoutSystems = ref<IPaymentsMethod[]>([]);
-    const cppAddresses = ref<ICppAddresses>();
     const cashboxPresets = ref<ICashboxPresets>();
     const manageWithdraw = ref<IManageWithdrawConfig>();
 
@@ -110,7 +108,6 @@ export const useCashboxStore = defineStore("cashboxStore", () => {
 
         paymentSystems,
         payoutSystems,
-        cppAddresses,
         hasMorePages,
         cashboxPresets,
         getPaymentSystems,

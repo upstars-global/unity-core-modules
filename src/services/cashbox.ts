@@ -1,18 +1,14 @@
 import {
-    getTargetWallets,
     srcPaymentImage,
 } from "@config/cashbox";
 import { storeToRefs } from "pinia";
 
 import { log } from "../controllers/Logger";
-import type { ICppAddresses } from "../models/cashbox";
 import { Currencies } from "../models/enums/currencies";
-import { IPayloadMethodFields } from "../models/PaymentsLib";
 import { EventBus } from "../plugins/EventBus";
 import { useUserBalanceService } from "../services/userBalance";
 import { useCashboxStore } from "../store/cashboxStore";
 import { useCommon } from "../store/common";
-import { useUserBalance } from "../store/user/userBalance";
 import { useUserInfo } from "../store/user/userInfo";
 import { ActionsTransaction } from "./api/DTO/cashbox";
 import { loadCashboxPresetsReq, loadManageWithdrawConfigReq } from "./api/requests/configs";
@@ -21,7 +17,6 @@ import { usePaymentsAPI } from "./paymentsAPI";
 
 export function useCashBoxService() {
     const {
-        cppAddresses,
         paymentHistory,
         historyDeposits,
         historyPayouts,
@@ -29,46 +24,7 @@ export function useCashBoxService() {
         payoutSystems,
         hasMorePages,
     } = storeToRefs(useCashboxStore());
-    const { isExistPaymentsAPI, getPaymentMethods, resetCache, getPaymentMethodFields } = usePaymentsAPI();
-
-
-    async function loadUserCppAddresses(): Promise<ICppAddresses> { // TODO: maybe remove?!
-        if (!isExistPaymentsAPI()) {
-            return;
-        }
-        try {
-            const { userWallets } = storeToRefs(useUserBalance());
-
-            const targetWallets = getTargetWallets(userWallets.value);
-            const arrayPaymentMethods = await Promise.all(
-                targetWallets.map((currency) => {
-                    return getPaymentMethods(currency, ActionsTransaction.DEPOSIT);
-                }),
-            );
-
-            const depositInfoOfMethodsPromises = arrayPaymentMethods.flat().map(async (item) => {
-                const getMethodFieldsPayload: IPayloadMethodFields = {
-                    id: item.id,
-                    currency: item.termsOfService.restrictions.amountCurrencyCode,
-                    paymentAction: ActionsTransaction.DEPOSIT,
-                };
-
-                const { methodFields } = await getPaymentMethodFields(getMethodFieldsPayload);
-                return [
-                    item.termsOfService.restrictions.amountCurrencyCode,
-                    methodFields[0].address,
-                ];
-            });
-            const depositInfoOfMethodsResp = await Promise.all(depositInfoOfMethodsPromises);
-            const addressesForDepInList = Object.fromEntries(depositInfoOfMethodsResp) as ICppAddresses;
-
-            cppAddresses.value = addressesForDepInList;
-            return addressesForDepInList;
-        } catch (err) {
-            log.error("LOAD_USER_CPP_ADDRESSES_ERROR", err);
-            throw err;
-        }
-    }
+    const { isExistPaymentsAPI, getPaymentMethods, resetCache } = usePaymentsAPI();
 
     async function loadPlayerPaymentsHistory(
         payload: { type?: string; page?: number; pageSize?: number } = {},
@@ -163,7 +119,6 @@ export function useCashBoxService() {
 
 
     return {
-        loadUserCppAddresses,
         loadPlayerPaymentsHistory,
         removeWithdrawRequestById,
         getPaymentsApiMethods,
