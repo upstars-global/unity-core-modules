@@ -1,4 +1,3 @@
-/* eslint-disable @stylistic/js/max-len */
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@theme/configs/stagConsts", async () => {

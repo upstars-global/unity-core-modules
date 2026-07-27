@@ -47,7 +47,6 @@ import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 
-import { useNotificationDB } from "../../src/controllers/indexedDB/notificationsDB";
 import { IConfigNotice, WSNotificationName } from "../../src/models/WSnotices";
 import { GiftState } from "../../src/services/api/DTO/gifts";
 import { useNoticesStore } from "../../src/store/notices";

@@ -10,7 +10,7 @@ This repository contains shared TypeScript modules for Vue 3 / Pinia frontend pr
 - TypeScript: `strict`, `noImplicitAny`, `moduleResolution: "Bundler"`.
 - Build: Vite library build.
 - Tests: Vitest with setup in `tests/vitest.setup.ts`.
-- Linting: ESLint 9 with `eslint-config-frontera` and `simple-import-sort`.
+- Linting: ESLint and Prettier through `unity-eslint-config`.
 
 ## Important commands
 
@@ -51,4 +51,3 @@ This repository contains shared TypeScript modules for Vue 3 / Pinia frontend pr
 ## Known current caveat
 
 - `vite.config.ts` currently points the library build entry to `./src/index.ts`, but this file is absent in the current tree. Verify the intended public entry before changing build or export behavior.
-

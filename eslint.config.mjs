@@ -1,29 +1,25 @@
-import eslintFrontera from "eslint-config-frontera";
-import simpleImportSort from "eslint-plugin-simple-import-sort";
+import browserConfig from "unity-eslint-config/browser";
+import nodeConfig from "unity-eslint-config/node";
 
 const commonConfig = {
     files: [ "**/*.{js,cjs,mjs,jsx,ts,mts,tsx}" ],
     ignores: [ "/node_modules/", "yarn.lock" ],
 };
 
+const legacyRules = {
+    "preserve-caught-error": "off",
+};
+
 export default [
-    ...eslintFrontera.map((config) => {
-        return {
-            ...config,
-            ...commonConfig,
-        };
-    }),
+    ...browserConfig,
+    ...nodeConfig,
     {
         ...commonConfig,
         name: "unity-core-modules",
-        plugins: {
-            "simple-import-sort": simpleImportSort,
-        },
         rules: {
-            "n/no-sync": "off",
+            ...legacyRules,
             "@typescript-eslint/no-explicit-any": "error",
             "@typescript-eslint/ban-ts-comment": "error",
-            "id-length": "off",
             "n/no-unsupported-features/node-builtins": [
                 "error",
                 {
@@ -31,8 +27,14 @@ export default [
                     ignores: [ "localStorage" ],
                 },
             ],
-            "simple-import-sort/imports": "warn",
-            "simple-import-sort/exports": "warn",
+        },
+    },
+    {
+        files: [ "**/*.cjs" ],
+        languageOptions: {
+            globals: {
+                module: "readonly",
+            },
         },
     },
 ];

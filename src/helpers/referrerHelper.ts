@@ -1,4 +1,3 @@
-/* eslint-disable @stylistic/js/max-len */
 import { REFERRER_COOKIE_NAME } from "@theme/configs/constsCookies";
 
 import { CookieController } from "../controllers/CookieController";

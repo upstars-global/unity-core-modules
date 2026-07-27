@@ -1,5 +1,5 @@
 import { createPinia, setActivePinia } from "pinia";
-import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { log } from "../../../src/controllers/Logger";
 import { IGameItem, processGame } from "../../../src/helpers/gameHelpers";

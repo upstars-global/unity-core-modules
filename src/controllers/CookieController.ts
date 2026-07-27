@@ -13,7 +13,7 @@ export const CookieController = {
             return;
         }
 
-        const pattern = new RegExp(`(?:^|; )${name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1")}=([^;]*)`);
+        const pattern = new RegExp(`(?:^|; )${name.replace(/([.$?*|{}()[\]\\/+^])/g, "\\$1")}=([^;]*)`);
         const matches = document.cookie.match(pattern);
         return matches ? decodeURIComponent(matches[1]) : undefined;
     },
@@ -54,4 +54,3 @@ export const CookieController = {
         document.cookie = updatedCookie;
     },
 };
-

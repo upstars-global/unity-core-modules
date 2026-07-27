@@ -1,5 +1,5 @@
 import { createPinia, setActivePinia } from "pinia";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 
 import { Currencies } from "../../src/models/enums/currencies";
 import { type ICurrencies } from "../../src/services/api/DTO/info";
