@@ -38,8 +38,11 @@ export const useTournamentsStore = defineStore("tournamentsStore", () => {
                 .filter((snippet: ISnippetItemCMS) => {
                     return snippet.categories.includes("tournament");
                 })
-                .map(({ content }) => {
-                    return parseJson(content, "PARSE_TOURNAMENT_ITEM_ERROR");
+                .map(({ id, content }) => {
+                    return parseJson(content, "PARSE_TOURNAMENT_ITEM_ERROR", id);
+                })
+                .filter((tour): tour is ITournament => {
+                    return Boolean(tour);
                 });
 
             return tournaments.map((tour: ITournament) => {

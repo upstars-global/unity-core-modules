@@ -169,21 +169,32 @@ describe("useTournamentsStore", () => {
         });
     });
 
-    it("getCustomTournamentsList returns empty list and logs on parse error", () => {
+    it("getCustomTournamentsList skips empty parsed items", () => {
         const store = useTournamentsStore();
-        mockParseJson.mockImplementation(() => {
-            throw new Error("bad json");
-        });
+        mockParseJson
+            .mockReturnValueOnce(undefined)
+            .mockReturnValueOnce(makeTournament({ id: 2, frontend_identifier: "custom-2" }));
         mockSnippets.value = [
             {
                 categories: [ "tournament" ],
                 id: "snippet-1",
                 content: "{bad",
             },
+            {
+                categories: [ "tournament" ],
+                id: "snippet-2",
+                content: JSON.stringify(makeTournament({ id: 2, frontend_identifier: "custom-2" })),
+            },
         ];
 
-        expect(store.getCustomTournamentsList).toEqual([]);
-        expect(mockLogError).toHaveBeenCalledTimes(1);
+        expect(store.getCustomTournamentsList).toHaveLength(1);
+        expect(store.getCustomTournamentsList[0]).toMatchObject({
+            id: 2,
+            frontend_identifier: "custom-2",
+            custom: true,
+            status: "mock-status",
+            type: PromoType.TOURNAMENT,
+        });
     });
 
     it("getAllTournamentsOnlyUser returns filtered list", () => {
