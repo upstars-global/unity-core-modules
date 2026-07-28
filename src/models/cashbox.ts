@@ -18,7 +18,7 @@ export type PaymentType = "deposit" | "cashout";
 
 export type CurrencyData = {
   default: Partial<Record<CurrencyCode, CurrencyConfig>>;
-  [key: string]: Partial<Record<CurrencyCode, CurrencyConfig>>;
+  [key: string]: Partial<Record<CurrencyCode, Partial<CurrencyConfig>>>;
 };
 
 export interface IPaymentHistoryPayload {

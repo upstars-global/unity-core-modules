@@ -57,6 +57,47 @@ describe("useCurrencyConfig", () => {
             expect(userCurrencyConfig.value).toEqual(groupUsdConfig);
         });
 
+        it("overrides only defaultAmount from group config", () => {
+            setConfig({
+                default: {
+                    USD: defaultUsdConfig,
+                },
+                "10": {
+                    USD: {
+                        defaultAmount: 50,
+                    },
+                },
+            }, "USD", [ 10 ]);
+
+            const { userCurrencyConfig } = useCurrencyConfig();
+
+            expect(userCurrencyConfig.value).toEqual({
+                ...defaultUsdConfig,
+                defaultAmount: 50,
+            });
+        });
+
+        it("overrides only steps from group config", () => {
+            const groupSteps = [ { min: 25, max: 250, step: 25 } ];
+            setConfig({
+                default: {
+                    USD: defaultUsdConfig,
+                },
+                "10": {
+                    USD: {
+                        steps: groupSteps,
+                    },
+                },
+            }, "USD", [ 10 ]);
+
+            const { userCurrencyConfig } = useCurrencyConfig();
+
+            expect(userCurrencyConfig.value).toEqual({
+                ...defaultUsdConfig,
+                steps: groupSteps,
+            });
+        });
+
         it("returns default config when group configs are absent", () => {
             setConfig({
                 default: {
