@@ -4,13 +4,40 @@ import { computed } from "vue";
 import type { CurrencyCode, CurrencyConfig, Step } from "../models/cashbox";
 import { useCommon } from "../store/common";
 import { useUserInfo } from "../store/user/userInfo";
+import { useUserStatuses } from "../store/user/userStatuses";
 
 export function useCurrencyConfig() {
     const { currencyConfig } = storeToRefs(useCommon());
     const { getUserCurrency } = storeToRefs(useUserInfo());
+    const { getUserGroups } = storeToRefs(useUserStatuses());
 
     const userCurrencyConfig = computed<CurrencyConfig | null>(() => {
-        return currencyConfig.value?.[getUserCurrency.value as CurrencyCode] ?? null;
+        if (!currencyConfig.value) {
+            return null;
+        }
+
+        const { default: defaultConfig, ...configGroups } = currencyConfig.value;
+        const defaultCurrencyConfig = defaultConfig[getUserCurrency.value as CurrencyCode] ?? null;
+        const configGroupsKeys = Object.keys(configGroups);
+
+        if (configGroupsKeys.length > 0) {
+            const userGroups = getUserGroups.value;
+            const filteredUserGroups = userGroups.filter((userGroup) => configGroupsKeys.includes(String(userGroup)));
+
+            if (!filteredUserGroups.length || filteredUserGroups.length > 1) {
+                return defaultCurrencyConfig;
+            }
+
+            const [userGroup] = filteredUserGroups;
+
+            if (userGroup) {
+                const mergedConfig = { ...defaultConfig, ...configGroups[String(userGroup)] };
+
+                return mergedConfig[getUserCurrency.value as CurrencyCode] ?? null;
+            }
+        }
+
+        return defaultCurrencyConfig;
     });
 
     const roundAmount = (amount: number, precision: number) => Number(amount.toFixed(precision));
@@ -54,7 +81,7 @@ export function useCurrencyConfig() {
                     return candidate;
                 }
 
-                // eslint-disable-next-line @typescript-eslint/init-declarations
+                 
                 let newAmount;
 
                 if (candidate - step >= min) {
