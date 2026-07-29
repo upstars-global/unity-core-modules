@@ -46,14 +46,12 @@ export const useTournamentsStore = defineStore("tournamentsStore", () => {
                 });
 
             return tournaments.map((tour: ITournament) => {
-                if (tour) {
-                    return {
-                        ...tour,
-                        custom: true,
-                        status: statusForTournament(tour),
-                        type: PromoType.TOURNAMENT,
-                    };
-                }
+                return {
+                    ...tour,
+                    custom: true,
+                    status: statusForTournament(tour),
+                    type: PromoType.TOURNAMENT,
+                };
             });
         } catch (error) {
             log.error("GET_CUSTOM_TOURNAMENTS_LIST_ERROR", error);
