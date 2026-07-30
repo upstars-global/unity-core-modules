@@ -38,19 +38,20 @@ export const useTournamentsStore = defineStore("tournamentsStore", () => {
                 .filter((snippet: ISnippetItemCMS) => {
                     return snippet.categories.includes("tournament");
                 })
-                .map(({ content }) => {
-                    return parseJson(content, "PARSE_TOURNAMENT_ITEM_ERROR");
+                .map(({ id, content }) => {
+                    return parseJson(content, "PARSE_TOURNAMENT_ITEM_ERROR", id);
+                })
+                .filter((tour): tour is ITournament => {
+                    return Boolean(tour);
                 });
 
             return tournaments.map((tour: ITournament) => {
-                if (tour) {
-                    return {
-                        ...tour,
-                        custom: true,
-                        status: statusForTournament(tour),
-                        type: PromoType.TOURNAMENT,
-                    };
-                }
+                return {
+                    ...tour,
+                    custom: true,
+                    status: statusForTournament(tour),
+                    type: PromoType.TOURNAMENT,
+                };
             });
         } catch (error) {
             log.error("GET_CUSTOM_TOURNAMENTS_LIST_ERROR", error);
