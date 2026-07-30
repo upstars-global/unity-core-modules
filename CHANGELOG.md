@@ -1,3 +1,16 @@
+## [1.102.3](https://github.com/upstars-global/unity-core-modules/compare/v1.102.2...v1.102.3) (2026-07-30)
+
+### 🐛 Bug Fixes
+
+* UN-2921 fix snippets parse ([#370](https://github.com/upstars-global/unity-core-modules/issues/370))
+ ([be6f3c0](https://github.com/upstars-global/unity-core-modules/commit/be6f3c080ca3e41ab77b948fbefc77c1be6b97cf))
+
+
+
+    * fix: UN-2921 fix snippets parse
+
+    * fix: UN-2921 fix snippets parse
+
 ## [1.102.2](https://github.com/upstars-global/unity-core-modules/compare/v1.102.1...v1.102.2) (2026-07-27)
 
 ### 🔧 Maintenance
