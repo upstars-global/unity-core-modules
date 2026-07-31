@@ -54,11 +54,16 @@ export interface HttpResponse<T = unknown> {
     config: RequestConfig;
 }
 
+interface HttpErrorData<T> {
+    errors?: string[];
+    data?: T;
+}
+
 export interface HttpError extends Error {
-    response?: {
+    response: {
         status: number;
         statusText: string;
-        data: unknown;
+        data: HttpErrorData<unknown>;
         headers: Headers;
     };
     config?: RequestConfig;
