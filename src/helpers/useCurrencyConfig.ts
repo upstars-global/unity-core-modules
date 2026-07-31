@@ -18,10 +18,10 @@ export function useCurrencyConfig() {
 
         const { default: defaultConfig, ...configGroups } = currencyConfig.value;
         const userCurrency = getUserCurrency.value as CurrencyCode;
-        const defaultCurrencyConfig = defaultConfig[userCurrency] ?? null;
+        const defaultCurrencyConfig = defaultConfig?.[userCurrency] ?? null;
         const configGroupsKeys = Object.keys(configGroups);
 
-        if (configGroupsKeys.length > 0) {
+        if (defaultCurrencyConfig && configGroupsKeys.length > 0) {
             const userGroups = getUserGroups.value;
             const filteredUserGroups = userGroups.filter((userGroup) => configGroupsKeys.includes(String(userGroup)));
 
@@ -31,10 +31,12 @@ export function useCurrencyConfig() {
 
             const [userGroup] = filteredUserGroups;
 
-            if (userGroup && defaultCurrencyConfig) {
+            if (userGroup) {
                 const groupCurrencyConfig = configGroups[String(userGroup)]?.[userCurrency];
 
-                return { ...defaultCurrencyConfig, ...groupCurrencyConfig };
+                if (groupCurrencyConfig) {
+                    return { ...defaultCurrencyConfig, ...groupCurrencyConfig };
+                }
             }
         }
 

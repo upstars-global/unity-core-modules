@@ -42,6 +42,26 @@ describe("useCurrencyConfig", () => {
             expect(userCurrencyConfig.value).toBeNull();
         });
 
+        it("returns null when currency config is an empty object", () => {
+            setConfig({} as CurrencyData);
+
+            const { userCurrencyConfig } = useCurrencyConfig();
+
+            expect(userCurrencyConfig.value).toBeNull();
+        });
+
+        it("returns null when default config section is absent", () => {
+            setConfig({
+                "10": {
+                    USD: groupUsdConfig,
+                },
+            } as CurrencyData, "USD", [ 10 ]);
+
+            const { userCurrencyConfig } = useCurrencyConfig();
+
+            expect(userCurrencyConfig.value).toBeNull();
+        });
+
         it("returns group config when exactly one user group matches", () => {
             setConfig({
                 default: {
@@ -156,13 +176,13 @@ describe("useCurrencyConfig", () => {
             expect(userCurrencyConfig.value).toEqual(defaultEurConfig);
         });
 
-        it("returns null when selected currency is absent from default and group configs", () => {
+        it("ignores group config when selected currency is absent from default config", () => {
             setConfig({
                 default: {
                     EUR: defaultEurConfig,
                 },
                 "10": {
-                    EUR: defaultEurConfig,
+                    USD: groupUsdConfig,
                 },
             }, "USD", [ 10 ]);
 
