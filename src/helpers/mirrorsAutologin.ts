@@ -98,7 +98,6 @@ export async function getStoredMirrorsAutologinRecoveryToken(
 
 export async function persistMirrorsAutologinRecoveryToken(): Promise<boolean> {
     const recoveryToken = getCookieValue(MIRRORS_AUTOLOGIN_COOKIE_NAME);
-
     return setStoredMirrorsAutologinRecoveryToken(recoveryToken);
 }
 
