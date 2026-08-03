@@ -26,8 +26,11 @@ export const useUIStore = defineStore("UI", () => {
         }
     }
 
-    // @ts-expect-error -- TS7031: Binding element 'name' implicitly has an 'any' type.
-    function closeModal({ name, immediate = false, ...args }) {
+    function closeModal({ name, immediate = false, ...args }: {
+        name: string;
+        immediate?: boolean;
+        [key: string]: unknown;
+    }) {
         const index = modals.value.findIndex((modal) => {
             return modal.name === name;
         });

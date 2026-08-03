@@ -4,7 +4,7 @@ import config from "@theme/configs/config";
 class IdleTitleClass {
     private savedTitle: string | null = null;
     private currentTitleIndex: number = 0;
-    private repeatTimer: number | null = null;
+    private repeatTimer: ReturnType<typeof setInterval> | null = null;
 
     constructor(public titles: string[] = [], private changeDelay = 1000, private startDelay = 0) {
     }
@@ -42,7 +42,6 @@ class IdleTitleClass {
         this.saveTitle();
         setTimeout(() => {
             this.setIdleTitle();
-            // @ts-expect-error -- TS2322: Type 'Timeout' is not assignable to type 'number'.
             this.repeatTimer = setInterval(() => {
                 this.setIdleTitle();
             }, this.changeDelay);

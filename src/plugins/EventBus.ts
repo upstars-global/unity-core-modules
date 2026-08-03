@@ -1,5 +1,8 @@
 // EventBus.js
 import { TinyEmitter } from "tiny-emitter";
+import type { App } from "vue";
+
+type EventCallback = (...args: never[]) => unknown;
 
 class EventBusWrapper {
     private emitter: TinyEmitter;
@@ -8,23 +11,19 @@ class EventBusWrapper {
         this.emitter = new TinyEmitter();
     }
 
-    // @ts-expect-error -- TS7006: Parameter 'event' implicitly has an 'any' type.; TS7006: Parameter 'callback' implicitly has an 'any' type.
-    $on(event, callback) {
+    $on(event: string, callback: EventCallback) {
         this.emitter.on(event, callback);
     }
 
-    // @ts-expect-error -- TS7006: Parameter 'event' implicitly has an 'any' type.; TS7006: Parameter 'callback' implicitly has an 'any' type.
-    $off(event, callback) {
+    $off(event: string, callback: EventCallback) {
         this.emitter.off(event, callback);
     }
 
-    // @ts-expect-error -- TS7006: Parameter 'event' implicitly has an 'any' type.; TS7019: Rest parameter 'args' implicitly has an 'any[]' type.
-    $emit(event, ...args) {
+    $emit(event: string, ...args: unknown[]) {
         this.emitter.emit(event, ...args);
     }
 
-    // @ts-expect-error -- TS7006: Parameter 'event' implicitly has an 'any' type.; TS7006: Parameter 'callback' implicitly has an 'any' type.
-    $once(event, callback) {
+    $once(event: string, callback: EventCallback) {
         this.emitter.once(event, callback);
     }
 }
@@ -41,8 +40,7 @@ export const BUS_EVENTS = {
 };
 
 export const eventBusPlugin = {
-    // @ts-expect-error -- TS7006: Parameter 'app' implicitly has an 'any' type.
-    install(app) {
+    install(app: App) {
         app.config.globalProperties.$bus = EventBus;
     },
 };

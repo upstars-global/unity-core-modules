@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import dayjs, { type ConfigType } from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import isToday from "dayjs/plugin/isToday";
@@ -17,39 +17,32 @@ dayjs.extend(isSameOrBefore);
 dayjs.extend(quarterOfYear);
 dayjs.extend(isToday);
 
-// @ts-expect-error -- TS7006: Parameter 'date' implicitly has an 'any' type.
-export function formatDate(date, format = "YYYY/MM/DD HH:mm") {
+export function formatDate(date: ConfigType, format = "YYYY/MM/DD HH:mm") {
     return dayjs(date).format(format);
 }
 
-// @ts-expect-error -- TS7006: Parameter 'date' implicitly has an 'any' type.
-export function formatDateL(date, format = "YYYY-MM-DD, HH:mm:ss") {
+export function formatDateL(date: ConfigType, format = "YYYY-MM-DD, HH:mm:ss") {
     return dayjs(date).format(format);
 }
 
-// @ts-expect-error -- TS7006: Parameter 'date' implicitly has an 'any' type.
-export function formatDateUS(date, format = "YYYY/MM/DD hh:mm A") {
+export function formatDateUS(date: ConfigType, format = "YYYY/MM/DD hh:mm A") {
     return dayjs(date).format(format);
 }
 
-// @ts-expect-error -- TS7006: Parameter 'date' implicitly has an 'any' type.
-export function dayMonthYear(date, format = "YYYY/MM/DD") {
+export function dayMonthYear(date: ConfigType, format = "YYYY/MM/DD") {
     return dayjs(date).format(format);
 }
 
-// @ts-expect-error -- TS7006: Parameter 'date' implicitly has an 'any' type.; TS7006: Parameter 't' implicitly has an 'any' type.
-export function timeUTC(date, t) {
+export function timeUTC(date: ConfigType, t: (key: string) => string) {
     const dateOfWeek = t(`CALENDAR.WEEK_DAYS.${[ dayjs(date).utc().day() ]}`);
     return `${dateOfWeek}, ${dayjs(date).utc().format("MMM, D, HH:mm")}`;
 }
 
-// @ts-expect-error -- TS7006: Parameter 'date' implicitly has an 'any' type.
-export function timeFromNow(date) {
+export function timeFromNow(date: ConfigType) {
     return dayjs(date).fromNow();
 }
 
-// @ts-expect-error -- TS7006: Parameter 'startAt' implicitly has an 'any' type.; TS7006: Parameter 'endAt' implicitly has an 'any' type.
-export function getEventStatus(startAt, endAt) {
+export function getEventStatus(startAt: ConfigType, endAt: ConfigType) {
     const formattedStart = dayjs(startAt, "DD/MM/YYYY");
     const formattedEnd = dayjs(endAt, "DD/MM/YYYY");
 

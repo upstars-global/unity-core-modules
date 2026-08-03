@@ -1,7 +1,6 @@
 import { CookieController } from "./CookieController";
 
-// @ts-expect-error -- TS7006: Parameter 'expires' implicitly has an 'any' type.
-export function setAffiliateToCookie(query = {}, expires) {
+export function setAffiliateToCookie(query: Record<string, unknown> = {}, expires: number) {
     if (typeof document === "undefined") {
         return;
     }

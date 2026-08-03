@@ -2,8 +2,13 @@ import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
 export const useLivechatStore = defineStore("livechatStore", () => {
+    interface ChatMessage {
+        timestamp: number;
+        [key: string]: unknown;
+    }
+
     const openChat = ref(false);
-    const messages = ref([]);
+    const messages = ref<ChatMessage[]>([]);
     const newMessagesCount = ref(0);
 
     const getNewMessagesCount = computed(() => {
@@ -18,9 +23,7 @@ export const useLivechatStore = defineStore("livechatStore", () => {
         openChat.value = true;
     }
 
-    // @ts-expect-error -- TS7006: Parameter 'message' implicitly has an 'any' type.
-    function setMessage(message) {
-        // @ts-expect-error -- TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+    function setMessage(message: ChatMessage) {
         messages.value.push(message);
         const lastOpen = localStorage.getItem("lastOpen");
         if (!lastOpen || message.timestamp > Number(lastOpen)) {

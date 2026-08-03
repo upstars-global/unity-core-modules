@@ -132,7 +132,10 @@ export const useAchievements = defineStore("achievements", () => {
                 }
 
                 if (tourValue) {
-                    return !betSunCompletedInTour(tourValue, itemAchiev.money_budget_cents);
+                    return !betSunCompletedInTour(
+                        tourValue,
+                        itemAchiev.money_budget_cents as unknown as number,
+                    );
                 }
 
                 return true;

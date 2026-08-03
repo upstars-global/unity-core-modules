@@ -1,4 +1,3 @@
-// @ts-expect-error -- TS7006: Parameter 'str' implicitly has an 'any' type.
-export function nicknameReplace(str) {
+export function nicknameReplace(str: string) {
     return `${ str.slice(0, 6) }***`;
 }

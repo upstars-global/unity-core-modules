@@ -39,12 +39,10 @@ export function prepareMapStaticPages(pages: IPageItemConfig[]): IPageCMSPrepare
 
 const STATIC_PAGE_CATEGORIES = [ CUSTOM_PAGE_TYPE, TOP_MENU_TYPE, BOTTOM_MENU, PAGE ];
 
-// @ts-expect-error -- TS7006: Parameter 'allPages' implicitly has an 'any' type.
-export function filterStaticPages(allPages) {
-    // @ts-expect-error -- TS7006: Parameter 'page' implicitly has an 'any' type.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function filterStaticPages(allPages: any[]): any {
     return allPages.filter((page) => {
-        // @ts-expect-error -- TS7006: Parameter 'categoryItem' implicitly has an 'any' type.
-        return page.categories.some((categoryItem) => {
+        return page.categories.some((categoryItem: string) => {
             return STATIC_PAGE_CATEGORIES.includes(categoryItem);
         });
     });

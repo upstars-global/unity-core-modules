@@ -45,6 +45,7 @@ export interface RequestConfig {
     url?: string;
     params?: Record<string, unknown>;
     challengeContext?: CloudflareChallengeContext;
+    withCredentials?: boolean;
 }
 
 export interface HttpResponse<T = unknown> {

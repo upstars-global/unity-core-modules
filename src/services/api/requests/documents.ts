@@ -18,13 +18,12 @@ export async function uploadDocuments(file: File, description: string): Promise<
         bodyFormData.append("document[attachment]", file);
         bodyFormData.append("document[description]", description);
 
-        const { data } = await http().post("/api/player/documents", bodyFormData, {
+        const { data } = await http().post<IDocument[]>("/api/player/documents", bodyFormData, {
             headers: {
                 "Accept": "multipart/form-data",
                 "Content-Type": "multipart/form-data",
             },
         });
-        // @ts-expect-error -- TS2322: Type 'unknown' is not assignable to type 'void | IDocument[]'.
         return data;
     } catch (err) {
         log.error("UPLOAD_DOCUMENTS_ERROR", err);

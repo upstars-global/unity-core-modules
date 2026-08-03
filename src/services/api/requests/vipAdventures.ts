@@ -15,14 +15,12 @@ export async function loadVipAdventuresConfigFile() {
 
 export async function loadVipStatusProgress(): Promise<IVipProgress> {
     try {
-        const { data } = await http().get(
+        const { data } = await http().get<IVipProgress>(
             `${ FE_API_PREFIX }/jam/vip_status_progress`,
             {
-                // @ts-expect-error -- TS2353: Object literal may only specify known properties, and 'withCredentials' does not exist in type 'Omit<RequestConfig, "method" | "url">'.
                 withCredentials: true,
             },
         );
-        // @ts-expect-error -- TS2322: Type 'unknown' is not assignable to type 'IVipProgress'.
         return data;
     } catch (err) {
         log.error("LOAD_VIP_STATUS_PROGRESS", err);

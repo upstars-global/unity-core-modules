@@ -1,29 +1,22 @@
 // @ts-expect-error -- TS2307: Cannot find module '@config/customerIO' or its corresponding type declarations.
 import { ORGANIZATION_ID, PRODUCT_ID, YOUR_SITE_ID } from "@config/customerIO";
 
-declare global {
-  interface Window {
-      _cio: unknown;
-  }
-}
+import type { IUserInfo } from "../models/user";
 
 /* eslint-disable*/
 function init() {
     if (typeof window !== "undefined") {
-        window._cio = window._cio || [];
+        window._cio = (window._cio || []) as CustomerIOQueue;
         (function() {
             let a, b, c;
-            // @ts-expect-error -- TS7006: Parameter 'f' implicitly has an 'any' type.
-            a = function(f) {
+            a = function(f: string) {
                 return function() {
-                    // @ts-expect-error -- TS2304: Cannot find name '_cio'.
                     _cio.push([ f ]
                         .concat(Array.prototype.slice.call(arguments, 0)));
                 };
             };
             b = [ "load", "identify", "sidentify", "track", "page", "on", "off" ];
             for (c = 0; c < b.length; c++) {
-                // @ts-expect-error -- TS2304: Cannot find name '_cio'.
                 _cio[b[c]] = a(b[c]);
             }
             let t = document.createElement("script");
@@ -38,18 +31,15 @@ function init() {
 
             setTimeout(() => {
                 let s = document.getElementsByTagName("script")[0];
-                // @ts-expect-error -- TS18047: 's.parentNode' is possibly 'null'.
-                s.parentNode.insertBefore(t, s);
+                s!.parentNode!.insertBefore(t, s!);
             }, 60000);
         }());
     }
 }
 
-// @ts-expect-error -- TS7031: Binding element 'idUser' implicitly has an 'any' type.; TS7031: Binding element 'email' implicitly has an 'any' type.; TS7031: Binding element 'createdProfile' implicitly has an 'any' type.
-function cioIdentify({ id: idUser, email, created_at: createdProfile, ...data }) {
+function cioIdentify({ id: idUser, email, created_at: createdProfile, ...data }: IUserInfo) {
     const created_at = new Date(createdProfile).getTime() / 1000;
 
-    // @ts-expect-error -- TS2304: Cannot find name '_cio'.
     _cio.identify({
         id: `${ PRODUCT_ID }:${ idUser }`,
         email,
@@ -58,8 +48,7 @@ function cioIdentify({ id: idUser, email, created_at: createdProfile, ...data })
     });
 }
 
-// @ts-expect-error -- TS7006: Parameter 'userInfo' implicitly has an 'any' type.
-export function cioIdentifyUser(userInfo) {
+export function cioIdentifyUser(userInfo: IUserInfo) {
     if (typeof window === "undefined") {
         return;
     }
@@ -70,4 +59,3 @@ export function cioIdentifyUser(userInfo) {
 
     cioIdentify(userInfo);
 }
-

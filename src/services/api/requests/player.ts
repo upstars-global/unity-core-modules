@@ -348,13 +348,12 @@ export async function loadPlayerFieldsInfoRequest() {
 
 export async function loadBettingPlayerSettingsRequest(): Promise<BettingPlayerSettingsDTO | undefined> {
     try {
-        const { data } = await http().get("/api/v2/settings", {
+        const { data } = await http().get<BettingPlayerSettingsDTO>("/api/v2/settings", {
             headers: {
                 "X-Api-Target": "sport",
             },
         });
 
-        // @ts-expect-error -- TS2322: Type 'unknown' is not assignable to type 'BettingPlayerSettingsDTO | undefined'.
         return data;
     } catch (err) {
         log.error("LOAD_BETTING_PLAYER_SETTINGS_REQUEST_ERROR", err);

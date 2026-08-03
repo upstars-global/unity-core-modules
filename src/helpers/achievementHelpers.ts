@@ -1,17 +1,16 @@
 
-// @ts-expect-error -- TS7006: Parameter 'frontId' implicitly has an 'any' type.
-export function isAchievement(frontId) {
+export function isAchievement(frontId: unknown) {
     return String(frontId).includes("achievement");
 }
 
-// @ts-expect-error -- TS7006: Parameter 'userStatuses' implicitly has an 'any' type.; TS7006: Parameter 'itemAchievId' implicitly has an 'any' type.
-export function containAchievIdInUserStatuses(userStatuses, itemAchievId) {
-    // @ts-expect-error -- TS7006: Parameter 'userStatus' implicitly has an 'any' type.
+export function containAchievIdInUserStatuses(
+    userStatuses: Array<{ id: string | number }>,
+    itemAchievId: string | number,
+) {
     return userStatuses.some((userStatus) => {
         return Number(userStatus.id) === itemAchievId;
     });
 }
-// @ts-expect-error -- TS7006: Parameter 'betsInTour' implicitly has an 'any' type.; TS7006: Parameter 'targetBetSum' implicitly has an 'any' type.
-export function betSunCompletedInTour(betsInTour, targetBetSum) {
+export function betSunCompletedInTour(betsInTour: number, targetBetSum: number) {
     return (betsInTour / targetBetSum) >= 1;
 }
