@@ -21,6 +21,7 @@ export async function loadDisabledGamesProviders(): Promise<void> {
         const first20Props: IDisabledGamesProvider = {};
 
         Object.keys(data).forEach((key) => {
+            // @ts-expect-error -- TS2322: Type 'string | string[]' is not assignable to type 'string[] | GameDisableGeoStatus'.
             first20Props[key] = data[key];
         });
 

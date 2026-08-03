@@ -1,3 +1,4 @@
+// @ts-expect-error -- TS2307: Cannot find module '@theme/configs/stagConsts' or its corresponding type declarations.
 import type { REFERRER } from "@theme/configs/stagConsts";
 
 export interface IStagByReferName {

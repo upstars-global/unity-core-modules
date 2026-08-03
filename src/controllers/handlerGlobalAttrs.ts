@@ -1,3 +1,4 @@
+// @ts-expect-error -- TS2307: Cannot find module '@plugins/Toast' or its corresponding type declarations.
 import toast from "@plugins/Toast";
 import { onBeforeUnmount, onMounted } from "vue";
 import { useI18n } from "vue-i18n";

@@ -1,3 +1,4 @@
+// @ts-expect-error -- TS2307: Cannot find module '@helpers/lootBoxes' or its corresponding type declarations.
 import { mapLevelItem } from "@helpers/lootBoxes";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";

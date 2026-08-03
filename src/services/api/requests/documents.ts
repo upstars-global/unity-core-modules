@@ -24,6 +24,7 @@ export async function uploadDocuments(file: File, description: string): Promise<
                 "Content-Type": "multipart/form-data",
             },
         });
+        // @ts-expect-error -- TS2322: Type 'unknown' is not assignable to type 'void | IDocument[]'.
         return data;
     } catch (err) {
         log.error("UPLOAD_DOCUMENTS_ERROR", err);

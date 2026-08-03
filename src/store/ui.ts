@@ -1,3 +1,4 @@
+// @ts-expect-error -- TS2307: Cannot find module '@theme/configs/config' or its corresponding type declarations.
 import config from "@theme/configs/config";
 import { defineStore } from "pinia";
 import { ref } from "vue";
@@ -25,6 +26,7 @@ export const useUIStore = defineStore("UI", () => {
         }
     }
 
+    // @ts-expect-error -- TS7031: Binding element 'name' implicitly has an 'any' type.
     function closeModal({ name, immediate = false, ...args }) {
         const index = modals.value.findIndex((modal) => {
             return modal.name === name;

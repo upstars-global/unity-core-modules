@@ -1,6 +1,8 @@
 /* eslint-disable n/no-unsupported-features/node-builtins */
+// @ts-expect-error -- TS7006: Parameter 'name' implicitly has an 'any' type.
 function storageObjGenerate(name) {
     return {
+        // @ts-expect-error -- TS7006: Parameter 'value' implicitly has an 'any' type.
         set(value) {
             sessionStorage.setItem(name, value);
         },

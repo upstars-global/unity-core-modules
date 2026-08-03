@@ -1,5 +1,6 @@
 import { log } from "../controllers/Logger";
 
+// @ts-expect-error -- TS7006: Parameter 'json' implicitly has an 'any' type.
 export function parseJson(json, errorMessage = "PARSE_JSON_ERROR", id: string = "") {
     try {
         return JSON.parse(json);

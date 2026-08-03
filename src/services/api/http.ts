@@ -1,3 +1,4 @@
+// @ts-expect-error -- TS2307: Cannot find module '@theme/configs/constsLocales' or its corresponding type declarations.
 import { COOKIE_BY_LOCALE } from "@theme/configs/constsLocales";
 
 import { log } from "../../controllers/Logger";

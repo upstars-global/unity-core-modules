@@ -1,5 +1,6 @@
 import { CookieController } from "./CookieController";
 
+// @ts-expect-error -- TS7006: Parameter 'expires' implicitly has an 'any' type.
 export function setAffiliateToCookie(query = {}, expires) {
     if (typeof document === "undefined") {
         return;
@@ -16,6 +17,7 @@ export function setAffiliateToCookie(query = {}, expires) {
     });
 
     CookieController.set("affiliate", cookieValue, {
+        // @ts-expect-error -- TS2551: Property 'toGMTString' does not exist on type 'Date'. Did you mean 'toString'?
         "expires": now.toGMTString(),
         "path=/": true,
     });

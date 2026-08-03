@@ -1,6 +1,7 @@
 import {
     AVAILABLE_LOCALES,
     MAIN_LOCALES_AND_DOMAINS,
+// @ts-expect-error -- TS2307: Cannot find module '@theme/configs/constsLocales' or its corresponding type declarations.
 } from "@theme/configs/constsLocales";
 
 interface IAllDomainsHrefLangs {

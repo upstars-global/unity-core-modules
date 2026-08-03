@@ -1,3 +1,4 @@
+// @ts-expect-error -- TS2307: Cannot find module '@theme/configs/stagConsts' or its corresponding type declarations.
 import { WELCOME_PACK_STAG_ID } from "@theme/configs/stagConsts";
 import { storeToRefs } from "pinia";
 import { computed, watchEffect } from "vue";

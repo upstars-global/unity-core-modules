@@ -2,6 +2,7 @@ import { log } from "../../../controllers/Logger";
 import { type ICompPoints, type IExchangeMoneyRate } from "../DTO/compPoints";
 import { http } from "../http";
 
+// @ts-expect-error -- TS7006: Parameter 'exchange' implicitly has an 'any' type.
 export async function exchangeToMoneyReq(exchange) {
     try {
         const { data } = await http().post<void>(
@@ -37,6 +38,7 @@ export async function loadUserCompPointsReq() {
 export async function loadCompPointRateBySlug(slug: string) {
     try {
         const { data } = await http().get(`/api/comp_points/rates/${slug}`);
+        // @ts-expect-error -- TS18046: 'data' is of type 'unknown'.; TS7006: Parameter 'item' implicitly has an 'any' type.
         return data.map((item) => {
             return {
                 ...item,

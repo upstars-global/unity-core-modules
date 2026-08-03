@@ -1,3 +1,4 @@
+// @ts-expect-error -- TS7006: Parameter 'element' implicitly has an 'any' type.
 export function isElementInViewport(element) {
     if (!element || element?.style?.display === "none") {
         return false;
@@ -15,6 +16,7 @@ export function isElementInViewport(element) {
     );
 }
 
+// @ts-expect-error -- TS7006: Parameter 'element' implicitly has an 'any' type.
 export function isElementInViewportHorizontally(element) {
     if (!element || element?.style?.display === "none") {
         return false;

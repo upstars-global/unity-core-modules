@@ -17,6 +17,7 @@ function prepareErrorsForMetric(errorsCollection: IFormErrorsCollection): IFormE
     Object.entries(errorsCollection)
         .forEach(([ key, messages ]) => {
             if (messages.length) {
+                // @ts-expect-error -- TS2322: Type 'string' is not assignable to type 'FormFields'.
                 return collectErrors.push({ key, firstMessage: getErrorMessage(messages) });
             }
         });
@@ -37,6 +38,7 @@ export async function sendMetricsErrorsValidationForm(data: IErrorsValidationFor
     }
 }
 
+// @ts-expect-error -- TS7006: Parameter 'data' implicitly has an 'any' type.
 export async function sendTransactionToCovery(data) {
     try {
         return await http().post("/api/users/transaction", data);
@@ -71,15 +73,18 @@ export enum UtmMetricsActions {
     SEND_UTM = "sendUtm",
 }
 
+// @ts-expect-error -- TS7006: Parameter 'actionType' implicitly has an 'any' type.
 export function getUtmMetricsLogAction(actionType) {
     const actionsMap = {
         setUtm: sendUtmSetMetrics,
         sendUtm: sendUtmSendMetrics,
     };
 
+    // @ts-expect-error -- TS2740: Type 'Record<string, string | undefined>' is missing the following properties from type 'IUtmMetrics': utm_source, utm_medium, utm_campaign, utm_content, and 2 more.
     const utmParams: IUtmMetrics = getUtmParamsFromCookies();
     const utmValString = concatValues(utmParams);
     if (utmValString) {
+        // @ts-expect-error -- TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ setUtm: (utmMetrics: IUtmMetrics) => Promise<HttpResponse<unknown> | undefined>; sendUtm: (utmMetrics: IUtmMetrics) => Promise<Http
         actionsMap[actionType](utmParams);
     }
 }

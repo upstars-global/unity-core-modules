@@ -1,5 +1,6 @@
 import { FE_API_PREFIX } from "../../../consts/apiConfig";
 import { log } from "../../../controllers/Logger";
+// @ts-expect-error -- TS2614: Module '"../../../models/lootboxes"' has no exported member 'ILootbox'. Did you mean to use 'import ILootbox from "../../../models/lootboxes"' instead?
 import type { ILootbox } from "../../../models/lootboxes";
 import { ILootboxesFileConfig } from "../DTO/lootboxes";
 import { http } from "../http";

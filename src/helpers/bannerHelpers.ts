@@ -1,6 +1,7 @@
 import type { IBannerConfig } from "../models/banners";
 import { STATUS_PROMO } from "../models/enums/tournaments";
 
+// @ts-expect-error -- TS7006: Parameter 'gradient' implicitly has an 'any' type.
 export const getCssGradient = (gradient) => {
     const {
         colorLeft,

@@ -1,3 +1,4 @@
+// @ts-expect-error -- TS2307: Cannot find module '@router/routeNames' or its corresponding type declarations.
 import { routeNames } from "@router/routeNames";
 
 import { BOTTOM_MENU, CUSTOM_PAGE_TYPE, PAGE, TOP_MENU_TYPE } from "../consts/staticPages";
@@ -38,8 +39,11 @@ export function prepareMapStaticPages(pages: IPageItemConfig[]): IPageCMSPrepare
 
 const STATIC_PAGE_CATEGORIES = [ CUSTOM_PAGE_TYPE, TOP_MENU_TYPE, BOTTOM_MENU, PAGE ];
 
+// @ts-expect-error -- TS7006: Parameter 'allPages' implicitly has an 'any' type.
 export function filterStaticPages(allPages) {
+    // @ts-expect-error -- TS7006: Parameter 'page' implicitly has an 'any' type.
     return allPages.filter((page) => {
+        // @ts-expect-error -- TS7006: Parameter 'categoryItem' implicitly has an 'any' type.
         return page.categories.some((categoryItem) => {
             return STATIC_PAGE_CATEGORIES.includes(categoryItem);
         });

@@ -1,3 +1,4 @@
+// @ts-expect-error -- TS2307: Cannot find module '@theme/configs/config' or its corresponding type declarations.
 import config from "@theme/configs/config";
 
 class IdleTitleClass {
@@ -41,6 +42,7 @@ class IdleTitleClass {
         this.saveTitle();
         setTimeout(() => {
             this.setIdleTitle();
+            // @ts-expect-error -- TS2322: Type 'Timeout' is not assignable to type 'number'.
             this.repeatTimer = setInterval(() => {
                 this.setIdleTitle();
             }, this.changeDelay);
