@@ -17,8 +17,10 @@ jobs:
         with:
           node-version: 22.22.0
           cache: "yarn"
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
+      - name: Install yarn & install dependencies
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: install
       - name: ESLint
         run: yarn lint
       - name: TypeScript
