@@ -1,3 +1,18 @@
+## [1.103.0](https://github.com/upstars-global/unity-core-modules/compare/v1.102.3...v1.103.0) (2026-08-03)
+
+### 🚀 Features
+
+* **UN-2961:** currency config by user group ([#369](https://github.com/upstars-global/unity-core-modules/issues/369))
+ ([cb0b8ae](https://github.com/upstars-global/unity-core-modules/commit/cb0b8ae86a34e81aca9b1ec28ac6e0533555da46))
+
+
+
+    * feat(UN-2961): currency config by user group
+
+    * feat: add deep merge for actual currency from config
+
+    * fix(UN-3024): return null if currencyConfig is an empty object
+
 ## [1.102.3](https://github.com/upstars-global/unity-core-modules/compare/v1.102.2...v1.102.3) (2026-07-30)
 
 ### 🐛 Bug Fixes
