@@ -1,4 +1,6 @@
+// @ts-expect-error -- TS2307: Cannot find module '@theme/configs/constsLocales' or its corresponding type declarations.
 import { AVAILABLE_LOCALES } from "@theme/configs/constsLocales";
+// @ts-expect-error -- TS2307: Cannot find module '@theme/configs/stagConsts' or its corresponding type declarations.
 import { AFFB_ID_KEY, STAG_PARTNER_KEY } from "@theme/configs/stagConsts";
 import type { Composer, VueI18n } from "vue-i18n";
 

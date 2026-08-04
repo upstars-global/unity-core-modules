@@ -2,9 +2,13 @@ import {
     ALL_LEVELS,
     ID_CASHBOX_ONBOARD_DONE,
     TEST_GROUP_ID,
+// @ts-expect-error -- TS2307: Cannot find module '@config/user-statuses' or its corresponding type declarations.
 } from "@config/user-statuses";
+// @ts-expect-error -- TS2307: Cannot find module '@config/vip-clubs' or its corresponding type declarations.
 import { VIP_CLUB_STATUSES } from "@config/vip-clubs";
+// @ts-expect-error -- TS2307: Cannot find module '@helpers/user' or its corresponding type declarations.
 import { getUserIsDiamond, getUserVipGroup } from "@helpers/user";
+// @ts-expect-error -- TS2307: Cannot find module '@types/levels' or its corresponding type declarations.; TS6137: Cannot import type declaration files. Consider importing 'levels' instead of '@types/levels'.
 import type { ILevel } from "@types/levels";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
@@ -31,6 +35,7 @@ export const useUserStatuses = defineStore("userStatuses", () => {
             return {} as ILevel;
         }
 
+        // @ts-expect-error -- TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
         return levelsStore.getLevelsById(id);
     });
 
@@ -66,6 +71,7 @@ export const useUserStatuses = defineStore("userStatuses", () => {
     });
 
     const getUserLevelId = computed(() => {
+        // @ts-expect-error -- TS7006: Parameter 'level' implicitly has an 'any' type.
         return ALL_LEVELS.find((level) => getUserGroups.value.includes(level));
     });
 

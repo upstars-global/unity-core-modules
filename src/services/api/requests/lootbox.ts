@@ -1,7 +1,6 @@
 import { FE_API_PREFIX } from "../../../consts/apiConfig";
 import { log } from "../../../controllers/Logger";
-import type { ILootbox } from "../../../models/lootboxes";
-import { ILootboxesFileConfig } from "../DTO/lootboxes";
+import type { ILootbox, ILootboxesFileConfig } from "../DTO/lootboxes";
 import { http } from "../http";
 
 export async function loadMockLootboxWheelConfigs():

@@ -1,9 +1,12 @@
-export function debounce(func, ms = 200) {
-    let timer = null;
+export function debounce<TArgs extends unknown[]>(
+    this: unknown,
+    func: (this: unknown, ...args: TArgs) => unknown,
+    ms = 200,
+) {
+    let timer: ReturnType<typeof setTimeout> | null = null;
 
-    return (...args) => {
+    return (...args: TArgs) => {
         const onComplete = () => {
-            // eslint-disable-next-line no-invalid-this
             func.apply(this, args);
             timer = null;
         };

@@ -15,7 +15,7 @@ export async function loadVipAdventuresConfigFile() {
 
 export async function loadVipStatusProgress(): Promise<IVipProgress> {
     try {
-        const { data } = await http().get(
+        const { data } = await http().get<IVipProgress>(
             `${ FE_API_PREFIX }/jam/vip_status_progress`,
             {
                 withCredentials: true,

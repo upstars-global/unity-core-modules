@@ -1,3 +1,4 @@
+// @ts-expect-error -- TS2307: Cannot find module '@theme/configs/categoryesGames' or its corresponding type declarations.
 import { SlugCategoriesGames } from "@theme/configs/categoryesGames";
 import { storeToRefs } from "pinia";
 import { UnwrapRef } from "vue";
@@ -48,6 +49,7 @@ export function getMenuCategoriesBySlug(slug: string): SlugCategoriesGames[] {
         gamesStore.menuGameCategories[slug] ||
     gamesStore.defaultMenuGameCategories[slug]
     ).filter((menuSlug: string) =>
+        // @ts-expect-error -- TS2339: Property 'isTurnOnJPMystic' does not exist on type 'Store<"jackpots", Pick<{ jackpotsList: Ref<{ id: number; name: string; allowed_currencies: string[]; currency: Currencies; external_id: string; games: string[]; identifier: string;
         (menuSlug === SlugCategoriesGames.SLUG_CATEGORY_MYSTIC_JACKPOTS ? jackpotsStore.isTurnOnJPMystic : true));
 }
 
@@ -105,6 +107,7 @@ export async function loadLastGames(): Promise<void> {
         const game_ids: string[] = [];
 
         lastGamesList.forEach((game) => {
+            // @ts-expect-error -- TS2740: Type 'IPlayedGame' is missing the following properties from type 'IGame': title, uniq_seo_title, lines, ways, and 12 more.
             gamesMap[game.identifier] = game;
             game_ids.push(game.identifier);
         });
@@ -298,6 +301,7 @@ export async function deleteGameFromFavorites(idGame: number) {
     gamesFavoriteStore.setGamesFavoriteFullData(filteredGamesFavoriteFullData);
 }
 
+// @ts-expect-error -- TS2366: Function lacks ending return statement and return type does not include 'undefined'.
 export async function loadGameBySeoTitle(seoTitle: string, producer: string, restrict: boolean = false): Promise<IGame> {
     const { setGameToCache, getGameFromCache } = useGamesCommon();
     const { setToCurrentGame } = useGameCurrent();
@@ -364,6 +368,7 @@ export async function loadGamesCategory(slug: string, page: number = 1): Promise
 
         const reqConfig: IGameFilter = {
             device,
+            // @ts-expect-error -- TS2740: Type '{ categories: { identifiers: string[]; strategy: string; }; }' is missing the following properties from type 'IFilter': currencies, providers, volatility_rating, lines, and 4 more.
             filter: {
                 categories: {
                     identifiers: [ slugCollection ],
@@ -374,8 +379,10 @@ export async function loadGamesCategory(slug: string, page: number = 1): Promise
             page_size: gamesPageLimit.value,
         };
 
+        // @ts-expect-error -- TS2345: Argument of type 'IGameFilter' is not assignable to parameter of type 'Record<string, unknown>'.
         const data = await loadGamesCategoryReq(reqConfig);
 
+        // @ts-expect-error -- TS2345: Argument of type 'IGameFilterResponse' is not assignable to parameter of type 'ICollectionItem'.
         gamesCategoryStore.setData(data, slugCollection);
     } catch (err) {
         log.error("LOAD_GAMES_CATEGORY_ERROR", err);

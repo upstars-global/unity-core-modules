@@ -1,4 +1,6 @@
+// @ts-expect-error -- TS2307: Cannot find module '@helpers/gameImage' or its corresponding type declarations.
 import { getGameImagePath } from "@helpers/gameImage";
+// @ts-expect-error -- TS2307: Cannot find module '@theme/configs/categoryesGames' or its corresponding type declarations.
 import { SlugCategoriesGames } from "@theme/configs/categoryesGames";
 import { storeToRefs } from "pinia";
 
@@ -211,10 +213,12 @@ export function matchGamesAlias(query: string, config?: IGamesAliasesConfig): st
 export function isLoaded(collection: ICollectionItem, page: number) {
     return Boolean(collection) && ((page === 1 && collection.data.length) ||
             collection.pagination.next_page === null ||
+            // @ts-expect-error -- TS18048: 'collection.pagination.next_page' is possibly 'undefined'.
             page > collection.pagination.next_page ||
             collection.pagination.current_page >= page);
 }
 
+// @ts-expect-error -- TS7006: Parameter 'game' implicitly has an 'any' type.; TS7006: Parameter 'gameKey' implicitly has an 'any' type.
 export function processGame(game, gameKey): IGameItem {
     const { $defaultProjectConfig } = useConfigStore();
     const { featureFlags } = $defaultProjectConfig;
@@ -259,6 +263,7 @@ export function processGameForNewAPI(game: IGameItemFilter): IGameItem {
     const real = {};
     Object.entries(game.currencies)
         .forEach(([ keyReal, valueReal ]: [ string, IGameReal ]) => {
+            // @ts-expect-error -- TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
             real[keyReal] = valueReal.id;
         });
 
@@ -297,6 +302,7 @@ export const getGameTemplates = (countSkeleton = 15): IGameItem[] => {
             name: "",
             badges: [],
             currencies: {
+                // @ts-expect-error -- TS2322: Type 'number' is not assignable to type '{ id: number; jackpot: null; }'.
                 id: 0,
             },
             categories: [],

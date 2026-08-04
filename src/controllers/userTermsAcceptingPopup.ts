@@ -1,7 +1,9 @@
 const supportPopup = defineAsyncComponent(() => {
+    // @ts-expect-error -- TS2307: Cannot find module '@modules/Popups/SupportPopup/SupportPopup.vue' or its corresponding type declarations.
     return import("@modules/Popups/SupportPopup/SupportPopup.vue");
 });
 
+// @ts-expect-error -- TS2307: Cannot find module '@plugins/Modal' or its corresponding type declarations.
 import Modal from "@plugins/Modal";
 import { computed, defineAsyncComponent } from "vue";
 

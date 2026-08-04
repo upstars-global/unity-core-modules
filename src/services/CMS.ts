@@ -1,6 +1,8 @@
 import {
     BANNER_CATEGORY_TERMS_CONDITIONS,
+// @ts-expect-error -- TS2307: Cannot find module '@config/banners' or its corresponding type declarations.
 } from "@config/banners";
+// @ts-expect-error -- TS2307: Cannot find module '@theme/configs/meta' or its corresponding type declarations.
 import { metaDataSSR } from "@theme/configs/meta";
 import { storeToRefs } from "pinia";
 

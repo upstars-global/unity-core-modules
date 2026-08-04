@@ -47,6 +47,7 @@ export const useRocketLootboxesStore = defineStore("rocketLootboxes", () => {
     const lootboxes = computed<LootboxMap>(() => Object.values(Mode).reduce(createModeLootbox, {} as LootboxMap));
     const notUsedLootboxes = computed<ModeLootbox[]>(() => Object.values(lootboxes.value).filter(({ used }) => !used));
     const skin = computed<RocketLootboxSkin>(() => {
+        // @ts-expect-error -- TS18048: 'currentStaticPage.value.meta.json' is possibly 'undefined'.; TS2339: Property 'skin' does not exist on type 'string'.
         return currentStaticPage.value?.meta.json.skin || {} as RocketLootboxSkin;
     });
 

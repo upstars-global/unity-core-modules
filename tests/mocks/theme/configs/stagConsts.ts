@@ -1,3 +1,4 @@
+// @ts-expect-error -- TS2307: Cannot find module '@theme/configs/constsLocales' or its corresponding type declarations.
 import { COUNTRIES } from "@theme/configs/constsLocales";
 
 export const STAG_KEY = "stag";

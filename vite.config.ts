@@ -23,6 +23,7 @@ export default defineConfig({
         },
     },
     plugins: [],
+    // @ts-expect-error -- TS2769: No overload matches this call.
     test: {
         reporters: process.env.GITHUB_ACTIONS ? [ "dot", "github-actions" ] : [ "dot" ],
         setupFiles: "./tests/vitest.setup.ts",

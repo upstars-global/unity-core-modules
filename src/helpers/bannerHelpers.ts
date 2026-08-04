@@ -1,7 +1,14 @@
 import type { IBannerConfig } from "../models/banners";
 import { STATUS_PROMO } from "../models/enums/tournaments";
 
-export const getCssGradient = (gradient) => {
+interface Gradient {
+    colorLeft: string;
+    colorLeftCenter: string;
+    colorRightCenter: string;
+    colorRight: string;
+}
+
+export const getCssGradient = (gradient?: Gradient) => {
     const {
         colorLeft,
         colorLeftCenter,

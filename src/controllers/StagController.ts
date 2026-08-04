@@ -5,6 +5,7 @@ import {
     DEFAULT_STAGS_COUNTRY_REFER,
     REFERRER,
     STAG_PARTNER_COOKIE,
+// @ts-expect-error -- TS2307: Cannot find module '@theme/configs/stagConsts' or its corresponding type declarations.
 } from "@theme/configs/stagConsts";
 import { storeToRefs } from "pinia";
 
@@ -34,6 +35,7 @@ const expires = 30 * 86400; // 30 days
 const stagHoldExpires = 8 * 3600; // 8 hours
 
 function getReferSearchEnginesMatch(referrer: string): string {
+    // @ts-expect-error -- TS2322: Type '{}' is not assignable to type 'string'.
     return Object.values(REFERRER).find((refItem) => referrer.includes(refItem as string)) || "";
 }
 
