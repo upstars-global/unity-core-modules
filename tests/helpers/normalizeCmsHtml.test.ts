@@ -28,6 +28,12 @@ describe("normalizeCmsHtml", () => {
         await expect(normalizeCmsHtml(html)).resolves.toBe(html);
     });
 
+    it("returns empty content for an invalid CMS value", async () => {
+        const normalizeCmsHtml = await loadNormalizeCmsHtml(true);
+
+        await expect(normalizeCmsHtml(null)).resolves.toBe("");
+    });
+
     it("preserves CMS component placeholders", async () => {
         const normalizeCmsHtml = await loadNormalizeCmsHtml(true);
         const html = "<div>#PromotionList[bannersList=bannersList]#</div>";
