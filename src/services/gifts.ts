@@ -3,6 +3,7 @@ import {
     TYPE_GIFT_BONUS,
     TYPE_GIFT_DEPOSIT,
     TYPE_GIFT_FS,
+    // @ts-expect-error -- TS2307: Cannot find module '@src/config/gift' or its corresponding type declarations.
     TYPE_GIFT_REGISTRATION } from "@src/config/gift";
 
 import { log } from "../controllers/Logger";
@@ -49,6 +50,7 @@ function preparingGiftOther(giftsCollection: IGiftDeposit[], type: string) {
 
 function filterActiveGifts(gifts: IGift[], disabledGifts: string[]) {
     return disabledGifts.length ?
+        // @ts-expect-error -- TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
         gifts.filter((gift) => !(disabledGifts.includes(gift.group_key) && gift.stage === STATUSES_GIFT_ISSUED))
         : gifts;
 }
@@ -64,6 +66,7 @@ export async function loadGiftsData(): Promise<IGift[]> {
 
     try {
         const data = await getPlayerBonusesReq();
+        // @ts-expect-error -- TS2345: Argument of type 'unknown' is not assignable to parameter of type 'IGift[]'.
         const prepareGiftsData = preparingGiftData<IGift>(data, TYPE_GIFT_BONUS);
         const activeGifts = filterActiveGifts(prepareGiftsData, giftsStore.disabledBonuses);
 
@@ -100,6 +103,7 @@ export async function loadAdditionalDepositGifts(): Promise<void> {
         const giftsStore = useGiftsStore();
         const data = await loadAdditionalDepositGiftsConfigReq();
 
+        // @ts-expect-error -- TS2345: Argument of type '{}' is not assignable to parameter of type 'Record<string, IGiftDeposit>'.
         giftsStore.setAdditionalGifts(data || []);
     } catch (err) {
         log.error("ERROR_LOAD_ADDITIONAL_GIFT_FILE", err);
@@ -111,6 +115,7 @@ export async function loadDepositGiftsData(): Promise<void> {
     try {
         const giftsStore = useGiftsStore();
         const data = await getDepositBonusesReq();
+        // @ts-expect-error -- TS2345: Argument of type 'unknown' is not assignable to parameter of type 'IGiftDeposit[]'.
         const prepareGiftsData = preparingGiftOther(data, TYPE_GIFT_DEPOSIT);
 
         giftsStore.setDepositGiftsAll(prepareGiftsData);
@@ -124,6 +129,7 @@ export async function loadRegistrationGiftsData(): Promise<void> {
     try {
         const giftsStore = useGiftsStore();
         const data = await getRegistrationBonusesReq();
+        // @ts-expect-error -- TS2345: Argument of type 'unknown' is not assignable to parameter of type 'IGiftDeposit[]'.
         const prepareRegistrationGifts = preparingGiftOther(data, TYPE_GIFT_REGISTRATION);
 
         giftsStore.setRegistrationGiftsAll(prepareRegistrationGifts);
@@ -137,6 +143,7 @@ export async function loadFSGiftsData(): Promise<void> {
     try {
         const giftsStore = useGiftsStore();
         const data = await getPlayerFreespinsReq();
+        // @ts-expect-error -- TS2345: Argument of type 'unknown' is not assignable to parameter of type 'IGiftFreeSpins[]'.
         const prepareFSGiftsData = preparingGiftData<IGiftFreeSpins>(data, TYPE_GIFT_FS);
 
         giftsStore.setFSGiftsAll(prepareFSGiftsData);
@@ -189,6 +196,7 @@ export async function loadDailyBonusConfig() {
         const giftsStore = useGiftsStore();
         const data = await loadDailyBonusConfigReq();
 
+        // @ts-expect-error -- TS2345: Argument of type 'Record<string, IDailyGiftConfig> | undefined' is not assignable to parameter of type 'Record<string, IDailyGiftConfig>'.
         giftsStore.setDailyBonusConfig(data);
     } catch (err) {
         log.error("LOAD_DAILY_BONUS_CONFIG", err);

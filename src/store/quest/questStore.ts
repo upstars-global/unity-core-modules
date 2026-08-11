@@ -1,3 +1,4 @@
+// @ts-expect-error -- TS2307: Cannot find module '@config/quest' or its corresponding type declarations.
 import getQuestConfig, { DEFAULT_QUEST_SIZE } from "@config/quest";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";

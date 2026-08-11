@@ -62,6 +62,7 @@ export interface ILevel {
 
 export interface IGroup {
     name: string;
+    // @ts-expect-error -- TS2304: Cannot find name 'ILevelConditions'.
     conditions: ILevelConditions[];
     status: boolean;
     id: number | string;

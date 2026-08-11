@@ -1,20 +1,20 @@
 import countryCodes from "./countryCodes";
 
-export function getCountryByPhone(phone) {
+export function getCountryByPhone(phone: string): string | null {
     if (!phone) {
         return null;
     }
     const phoneLength = phone.length;
     for (let i = phoneLength; i > 0; i--) {
         const phoneCode = phone.slice(0, i);
-        if (countryCodes[phoneCode]) {
-            return countryCodes[phoneCode];
+        if ((countryCodes as Record<string, string>)[phoneCode]) {
+            return (countryCodes as Record<string, string>)[phoneCode]!;
         }
     }
     return null;
 }
 
-export function getPhoneCodeOfCountry(countryCode) {
+export function getPhoneCodeOfCountry(countryCode: string) {
     if (!countryCode) {
         return null;
     }

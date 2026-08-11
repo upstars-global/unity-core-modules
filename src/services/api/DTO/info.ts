@@ -1,3 +1,4 @@
+// @ts-expect-error -- TS2614: Module '"./cashbox"' has no exported member 'Currencies'. Did you mean to use 'import Currencies from "./cashbox"' instead?
 import { Currencies } from "./cashbox";
 import { UserAccountLicense } from "./playerDTO";
 

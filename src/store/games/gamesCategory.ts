@@ -49,6 +49,7 @@ export const useGamesCategory = defineStore("gamesCategory", () => {
         }
         return (page === 1 && collection.data.length > 0) ||
             collection.pagination.next_page === null ||
+            // @ts-expect-error -- TS18048: 'collection.pagination.next_page' is possibly 'undefined'.
             (collection.pagination.next_page !== null && page > collection.pagination.next_page) ||
             collection.pagination.current_page >= page;
     };
@@ -59,6 +60,7 @@ export const useGamesCategory = defineStore("gamesCategory", () => {
         const { enabledGamesConfig } = storeToRefs(useGamesCommon());
 
         propsGame.data = filterGames(
+            // @ts-expect-error -- TS2345: Argument of type '(game: IGameItemFilter) => IGameItem' is not assignable to parameter of type '(value: IGame, index: number, array: IGame[]) => IGameItem'.
             data.data.map(processGameForNewAPI),
             disabledGamesProviders.value,
             enabledGamesConfig.value,

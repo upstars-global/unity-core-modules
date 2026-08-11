@@ -1,3 +1,4 @@
+// @ts-expect-error -- TS2307: Cannot find module '@theme/configs/categoryesGames' or its corresponding type declarations.
 import type { SlugCategoriesGames } from "@theme/configs/categoryesGames";
 
 import { FE_API_PREFIX } from "../../../consts/apiConfig";
@@ -125,6 +126,7 @@ export async function fetchFavoriteGames<V extends AcceptGamesVersion>(version: 
 
 export async function fetchAddFavoriteGamesCount(idGame: number): Promise<void> {
     try {
+        // @ts-expect-error -- TS2322: Type 'HttpResponse<unknown>' is not assignable to type 'void'.; TS2353: Object literal may only specify known properties, and 'auth' does not exist in type 'IHttpParams'.
         return await http({ auth: true }).put(`/api/player/favorite_games/${ idGame }`);
     } catch (err) {
         log.error("FETCH_FAVORITE_GAMES_COUNT_ERROR", err);
@@ -133,6 +135,7 @@ export async function fetchAddFavoriteGamesCount(idGame: number): Promise<void> 
 
 export async function fetchDeleteGameFromFavorites(idGame: number): Promise<void> {
     try {
+        // @ts-expect-error -- TS2322: Type 'HttpResponse<unknown>' is not assignable to type 'void'.; TS2353: Object literal may only specify known properties, and 'auth' does not exist in type 'IHttpParams'.
         return await http({ auth: true }).delete(`/api/player/favorite_games/${ idGame }`);
     } catch (err) {
         log.error("FETCH_DELETE_GAME_FROM_FAVORITES_ERROR", err);

@@ -1,4 +1,4 @@
-export default function (val) {
+export default function (val: string) {
     return val
         .replace(/,/g, ".") // меняем точки на запятые
         .replace(/\.(?=.*\.)/g, "") // убираем все точки, кроме последней

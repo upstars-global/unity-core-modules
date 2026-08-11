@@ -16,12 +16,15 @@ export const useRootStore = defineStore("rootStore", () => {
     const getPlatform = computed(() => platform.value);
 
     const isIOSPlatform = computed(() => {
+        // @ts-expect-error -- TS2345: Argument of type '{ ua: string; browser: { name?: string | undefined; version?: string | undefined; major?: string | undefined; type?: "email" | "crawler" | "cli" | "fetcher" | "inapp" | "mediaplayer" | "library" | undefined; is: (v
         return isIOSUserAgent(platform.value?.userAgentHints);
     });
     const isAndroidPlatform = computed(() => {
+        // @ts-expect-error -- TS2345: Argument of type '{ ua: string; browser: { name?: string | undefined; version?: string | undefined; major?: string | undefined; type?: "email" | "crawler" | "cli" | "fetcher" | "inapp" | "mediaplayer" | "library" | undefined; is: (v
         return isAndroidUserAgent(platform.value?.userAgentHints);
     });
     const getBrowser = computed(() => {
+        // @ts-expect-error -- TS2345: Argument of type '{ ua: string; browser: { name?: string | undefined; version?: string | undefined; major?: string | undefined; type?: "email" | "crawler" | "cli" | "fetcher" | "inapp" | "mediaplayer" | "library" | undefined; is: (v
         return getBrowserName(platform.value?.userAgentHints);
     });
 

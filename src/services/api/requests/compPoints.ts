@@ -1,8 +1,14 @@
 import { log } from "../../../controllers/Logger";
-import { type ICompPoints, type IExchangeMoneyRate } from "../DTO/compPoints";
+import type { CompPointRatesTypes } from "../../../models/enums/compPoints";
+import {
+    type ICompPoints,
+    type IExchange,
+    type IExchangeMoneyRate,
+    type IRedeemableCards,
+} from "../DTO/compPoints";
 import { http } from "../http";
 
-export async function exchangeToMoneyReq(exchange) {
+export async function exchangeToMoneyReq(exchange: IExchange) {
     try {
         const { data } = await http().post<void>(
             "/api/comp_points/exchange/money",
@@ -34,9 +40,9 @@ export async function loadUserCompPointsReq() {
     }
 }
 
-export async function loadCompPointRateBySlug(slug: string) {
+export async function loadCompPointRateBySlug(slug: CompPointRatesTypes) {
     try {
-        const { data } = await http().get(`/api/comp_points/rates/${slug}`);
+        const { data } = await http().get<IRedeemableCards[]>(`/api/comp_points/rates/${slug}`);
         return data.map((item) => {
             return {
                 ...item,

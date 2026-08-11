@@ -1,3 +1,4 @@
+// @ts-expect-error -- TS2307: Cannot find module '@theme/configs/constsCookies' or its corresponding type declarations.
 import { REFERRER_COOKIE_NAME } from "@theme/configs/constsCookies";
 
 import { CookieController } from "../controllers/CookieController";

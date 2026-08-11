@@ -1,3 +1,4 @@
+// @ts-expect-error -- TS2307: Cannot find module '@router/routeNames' or its corresponding type declarations.
 import { routeNames } from "@router/routeNames";
 import { useRoute } from "vue-router";
 
@@ -47,7 +48,6 @@ export const useGetActiveClass = () => {
         if (item.routeName === routeNames.categoryLiveAll) {
             active = $route.fullPath.startsWith("/live");
         }
-        // @ts-expect-error Property 'categorySlotsAll' does not exist on type
         if (item.routeName === routeNames.categorySlotsAll) {
             active = $route.fullPath.startsWith("/slots");
         }
@@ -56,7 +56,6 @@ export const useGetActiveClass = () => {
             item.routeName === routeNames.arena ||
             item.routeName === routeNames.action ||
             item.routeName === routeNames.tournaments ||
-            // @ts-expect-error Property 'quests' does not exist on type
             item.routeName === routeNames.quests
         ) {
             const currentRoute = $route.fullPath;

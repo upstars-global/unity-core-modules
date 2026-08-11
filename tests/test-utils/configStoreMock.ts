@@ -14,6 +14,7 @@ export type DefaultConfigMock = {
 export async function createConfigStoreMock(
     overrides: Partial<DefaultConfigMock> = {},
 ) {
+    // @ts-expect-error -- TS2322: Type '{ featureFlags: { enableAllProviders: true; enableMysticJackpots: false; enableConpoints: true; }; }' is not assignable to type 'DefaultProjectConfigMock'.
     const baseProjectConfig: DefaultProjectConfigMock = {
         featureFlags: {
             enableAllProviders: true,

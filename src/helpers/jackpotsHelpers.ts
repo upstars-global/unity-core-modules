@@ -1,3 +1,4 @@
+// @ts-expect-error -- TS2307: Cannot find module '@i18n' or its corresponding type declarations.
 import i18nInit from "@i18n";
 
 import type { IBannerConfig } from "../models/banners";

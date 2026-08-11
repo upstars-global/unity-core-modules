@@ -1,11 +1,15 @@
-export function throttle(func, wait = 1000, immediate = true) {
-    let timeout = null;
+export function throttle<TArgs extends unknown[], TThis>(
+    func: (this: TThis, ...args: TArgs) => unknown,
+    wait = 1000,
+    immediate = true,
+) {
+    let timeout: ReturnType<typeof setTimeout> | null = null;
     if (typeof func !== "function") {
         throw new TypeError("Expected a function");
     }
 
-    return function(...args) {
-        // eslint-disable-next-line no-invalid-this,consistent-this,@typescript-eslint/no-this-alias
+    return function(this: TThis, ...args: TArgs) {
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
         const context = this;
         const later = function() {
             timeout = null;
@@ -14,7 +18,7 @@ export function throttle(func, wait = 1000, immediate = true) {
             }
         };
         const callNow = immediate && !timeout;
-        clearTimeout(timeout);
+        clearTimeout(timeout!);
         timeout = setTimeout(later, wait);
         if (callNow) {
             func.apply(context, args);

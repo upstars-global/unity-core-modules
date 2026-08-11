@@ -1,4 +1,6 @@
+// @ts-expect-error -- TS2307: Cannot find module '@theme/configs/config' or its corresponding type declarations.
 import config from "@theme/configs/config";
+// @ts-expect-error -- TS2307: Cannot find module '@theme/configs/constantsFreshChat' or its corresponding type declarations.
 import { PROJECT } from "@theme/configs/constantsFreshChat";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
@@ -48,6 +50,7 @@ export const useFreshChatStore = defineStore("freshchatStore", () => {
         return null;
     });
 
+    // @ts-expect-error -- TS2769: No overload matches this call.
     const freshChatData = computed<IFreshChatData>(() => {
         const {
             getFreshChatRestoreId: restoreId,

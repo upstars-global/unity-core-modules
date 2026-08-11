@@ -3,6 +3,7 @@ import {
     BANNER_CATEGORY_131811_SHOW,
     BANNER_CATEGORY_JACKPOTS,
     shouldDisplayRegistrationBanner,
+// @ts-expect-error -- TS2307: Cannot find module '@config/banners' or its corresponding type declarations.
 } from "@config/banners";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -29,6 +30,7 @@ export const useBannerStore = defineStore("bannerStore", () => {
     const getBannersData = computed(() => {
         dayjs.extend(customParseFormat);
 
+        // @ts-expect-error -- TS2339: Property 'groups' does not exist on type 'IBannerConfig'.; TS2339: Property 'liveTime' does not exist on type 'IBannerConfig'.
         let bannersFilteredByConfigsFile = welcomePackBannersFilter(banners.value).filter(({ groups, liveTime }) => {
             if (liveTime) {
                 const format = "DD/MM/YYYY HH:mm";
@@ -45,6 +47,7 @@ export const useBannerStore = defineStore("bannerStore", () => {
             }
 
             if (groups?.length) {
+                // @ts-expect-error -- TS7006: Parameter 'groupId' implicitly has an 'any' type.
                 return groups.some((groupId) => {
                     return getUserGroups.value?.includes(groupId);
                 });

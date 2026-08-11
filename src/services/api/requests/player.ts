@@ -92,7 +92,9 @@ export async function loadPlayerPayments(
         const { data } = await http().post(
             "/api/player/payments/with_pages", payload);
         return {
+            // @ts-expect-error -- TS2339: Property 'data' does not exist on type '{}'.
             items: data?.data || [],
+            // @ts-expect-error -- TS2339: Property 'pagination' does not exist on type '{}'.
             pagination: data?.pagination || { page: 1, per_page: pageSize, total_count: 0 },
         };
     } catch (err) {
@@ -129,6 +131,7 @@ export async function loadUserBalanceReq(compatibility = false): Promise<IUserAc
     }
 }
 
+// @ts-expect-error -- TS7006: Parameter 'currency' implicitly has an 'any' type.
 export async function selectUserWalletReq(currency): Promise<void> {
     try {
         await http().post<IUserAccount>("/api/player/accounts", {
@@ -140,6 +143,7 @@ export async function selectUserWalletReq(currency): Promise<void> {
     }
 }
 
+// @ts-expect-error -- TS7006: Parameter 'data' implicitly has an 'any' type.
 export async function putUserSubscriptionReq(data) {
     try {
         await http().put("/api/subscriptions", data);
@@ -167,6 +171,7 @@ export async function loadUserSettingsReq() {
     }
 }
 
+// @ts-expect-error -- TS7006: Parameter 'data' implicitly has an 'any' type.
 export async function sendUserDataReq(data) {
     try {
         return await http().patch("/api/player", data);
@@ -176,16 +181,19 @@ export async function sendUserDataReq(data) {
     }
 }
 
+// @ts-expect-error -- TS7006: Parameter 'payload' implicitly has an 'any' type.
 export async function restorePasswordRequestReq(payload) {
     try {
         const { data } = await http().post("/api/users/password", payload);
         return data;
     } catch (err) {
         log.error("RESTORE_PASSWORD_REQUEST_ERROR", err);
+        // @ts-expect-error -- TS18046: 'err' is of type 'unknown'.
         throw err.response;
     }
 }
 
+// @ts-expect-error -- TS7006: Parameter 'payload' implicitly has an 'any' type.
 export async function restorePasswordRestoreReq(payload) {
     try {
         const { data } = await http().put("/api/users/password", payload);
@@ -205,6 +213,7 @@ export async function confirmPlayerReq(token: string) {
     }
 }
 
+// @ts-expect-error -- TS7006: Parameter 'dataForConfirm' implicitly has an 'any' type.
 export async function confirmEmailResendReg(dataForConfirm) {
     try {
         return await http().post("/api/users/confirmation", dataForConfirm);
@@ -339,7 +348,7 @@ export async function loadPlayerFieldsInfoRequest() {
 
 export async function loadBettingPlayerSettingsRequest(): Promise<BettingPlayerSettingsDTO | undefined> {
     try {
-        const { data } = await http().get("/api/v2/settings", {
+        const { data } = await http().get<BettingPlayerSettingsDTO>("/api/v2/settings", {
             headers: {
                 "X-Api-Target": "sport",
             },

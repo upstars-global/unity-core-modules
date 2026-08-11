@@ -1,5 +1,6 @@
 import {
     srcPaymentImage,
+// @ts-expect-error -- TS2307: Cannot find module '@config/cashbox' or its corresponding type declarations.
 } from "@config/cashbox";
 import { storeToRefs } from "pinia";
 
@@ -100,6 +101,7 @@ export function useCashBoxService() {
             const cashboxStore = useCashboxStore();
             const data = await loadCashboxPresetsReq();
 
+            // @ts-expect-error -- TS2345: Argument of type 'ICashboxPresets[] | undefined' is not assignable to parameter of type 'ICashboxPresets'.
             cashboxStore.setCashboxPresets(data);
         } catch (err) {
             log.error("LOAD_CASHBOX_PRESETS_ERROR", err);
@@ -111,6 +113,7 @@ export function useCashBoxService() {
             const cashboxStore = useCashboxStore();
             const data = await loadManageWithdrawConfigReq();
 
+            // @ts-expect-error -- TS2345: Argument of type 'IManageWithdrawConfig | undefined' is not assignable to parameter of type 'IManageWithdrawConfig'.
             cashboxStore.setManageWithdraw(data);
         } catch (err) {
             log.error("LOAD_MANAGE_WITHDRAW_CONFIG_ERROR", err);
