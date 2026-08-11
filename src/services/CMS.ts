@@ -162,14 +162,12 @@ export async function loadCurrentStaticPage(source: StaticPageSource, seoUrl?: s
             return `${ slug } page is not found`;
         }
 
-        const content = await normalizeCmsHtml(data.content);
-        const contentMain = await normalizeCmsHtml(data.blocks?.["content-main"]);
-        const normalizedData = {
+        const normalizedData: IPageItemCMS = {
             ...data,
-            content,
+            content: await normalizeCmsHtml(data.content),
             blocks: data.blocks ? {
                 ...data.blocks,
-                "content-main": contentMain,
+                "content-main": await normalizeCmsHtml(data.blocks["content-main"]),
             } : data.blocks,
         };
         const page = replaceCurrentYearPlaceholder<ICurrentPage>(new CurrentPage(normalizedData));
