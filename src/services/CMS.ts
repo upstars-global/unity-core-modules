@@ -8,6 +8,7 @@ import { storeToRefs } from "pinia";
 
 import { log } from "../controllers/Logger";
 import { isExistData } from "../helpers/isExistData";
+import { normalizeCmsHtml } from "../helpers/normalizeCmsHtml";
 import { replaceCurrentYearPlaceholder } from "../helpers/replaceStringHelper";
 import { normalizeUrl, prepareMapStaticPages, resolveUrlFromRoute } from "../helpers/staticPages";
 import { CurrentPage, ICurrentPage, ICurrentPageMeta } from "../models/CMS";
@@ -161,8 +162,18 @@ export async function loadCurrentStaticPage(source: StaticPageSource, seoUrl?: s
             return `${ slug } page is not found`;
         }
 
-        const page = replaceCurrentYearPlaceholder<ICurrentPage>(new CurrentPage(data));
-        const meta = replaceCurrentYearPlaceholder<ICurrentPageMeta>(buildMetaSEO(data, getUserLocale.value));
+        const content = await normalizeCmsHtml(data.content);
+        const contentMain = await normalizeCmsHtml(data.blocks?.["content-main"]);
+        const normalizedData = {
+            ...data,
+            content,
+            blocks: data.blocks ? {
+                ...data.blocks,
+                "content-main": contentMain,
+            } : data.blocks,
+        };
+        const page = replaceCurrentYearPlaceholder<ICurrentPage>(new CurrentPage(normalizedData));
+        const meta = replaceCurrentYearPlaceholder<ICurrentPageMeta>(buildMetaSEO(normalizedData, getUserLocale.value));
 
         cmsStore.setCurrentStaticPage(page);
         cmsStore.setPageContent({ page, url: slug });

@@ -246,6 +246,31 @@ describe("useCMS store", () => {
             expect(result).toBeDefined();
         });
 
+        it("normalizes malformed page content before storing it", async () => {
+            const store = useCMS();
+
+            vi.mocked(loadPageContentFromCmsReq).mockResolvedValue({
+                path: "/promotions",
+                content: '<div class="bonus-page"><div gap-row-s>Content</div>',
+                blocks: {
+                    "content-main": "<ul><li>First<li>Second</ul>",
+                    description: "",
+                    json: "{}",
+                    keywords: "",
+                    title: "Promotions",
+                },
+            });
+
+            await loadCurrentStaticPage("promotions");
+
+            expect(store.currentStaticPage?.content).toBe(
+                '<div class="bonus-page"><div gap-row-s="">Content</div></div>',
+            );
+            expect(store.currentStaticPage?.meta.mainContent).toBe(
+                "<ul><li>First</li><li>Second</li></ul>",
+            );
+        });
+
         it("accepts route and stores seo meta by resolved route url", async () => {
             const store = useCMS();
             store.staticPages = [ { slug: "home", url: "/home", categories: [], hidden: false } ];
