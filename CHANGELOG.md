@@ -1,3 +1,10 @@
+## [1.103.3](https://github.com/upstars-global/unity-core-modules/compare/v1.103.2...v1.103.3) (2026-08-12)
+
+### ⚡ Performance
+
+* Модификация работы TSLint  ([#377](https://github.com/upstars-global/unity-core-modules/issues/377))
+ ([f405702](https://github.com/upstars-global/unity-core-modules/commit/f4057026158dca2dcfbfefc54f0a71d9bfce9587))
+
 ## [1.103.2](https://github.com/upstars-global/unity-core-modules/compare/v1.103.1...v1.103.2) (2026-08-11)
 
 ### 🔧 Maintenance
