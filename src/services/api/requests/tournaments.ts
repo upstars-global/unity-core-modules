@@ -45,31 +45,35 @@ export async function loadUserTournamentsReq(): Promise<ITournamentsList> {
     }
 }
 
-export async function loadUserStatusesReq(id: number): Promise<IPlayer> {
-    try {
-        const { data } = await http().get<IPlayer>(`/api/tournaments/${ id }/status`);
-        return data;
-    } catch (err: unknown) {
-        log.error("LOAD_CURRENT_USER_TOUR_STATUSES_ERROR", err);
-        throw err;
-    }
-}
-
 export async function loadQuestDataReq(questList: ITournament[]): Promise<ICurrentUserQuestsStatus[] | void> {
     try {
-        const statuses = await Promise.allSettled(
-            questList.map((questItem) => {
-                return http().get(`/api/tournaments/${ questItem.id }/status`);
-            }),
-        );
+        if (questList.length === 0) {
+            return [];
+        }
 
-        return statuses.map((item) => {
-            if (item.status === "fulfilled") {
-                return item.value.data;
-            }
+        const questIds = questList.map((questItem) => questItem.id);
+        const statusesMap = await loadBatchTournamentStatusesReq(questIds);
 
-            return {};
-        }) as ICurrentUserQuestsStatus[];
+        return questIds.map((id) => {
+            const playerData = statusesMap[id];
+            if (!playerData) return {} as ICurrentUserQuestsStatus;
+
+            return {
+                tournament_id: playerData.tournament_id,
+                nickname: playerData.nickname,
+                user_confirmed: null,
+                bets: Number(playerData.bets) || 0,
+                bet_cents: playerData.bet_cents,
+                wins: Number(playerData.wins) || 0,
+                win_cents: playerData.win_cents,
+                rate: playerData.rate,
+                games_taken: playerData.games_taken,
+                award_place: null,
+                award_place_in_team: null,
+                points: playerData.points,
+                tournament_team_id: null,
+            } as ICurrentUserQuestsStatus;
+        }).filter(Boolean);
     } catch (err) {
         log.error("LOAD_QUESTS_DATA_ERROR", err);
     }
@@ -91,6 +95,35 @@ export async function loadRecentTournamentsReq(): Promise<ITournamentsList> {
         return data;
     } catch (err: unknown) {
         log.error("LOAD_RECENT_TOURNAMENTS_ERROR", err);
+        throw err;
+    }
+}
+
+export async function loadBatchTournamentStatusesReq(ids: number[]): Promise<Record<number, IPlayer>> {
+    try {
+        const urls = ids.map(id => `api/tournaments/${id}/status`);
+        const params = new URLSearchParams();
+        urls.forEach(url => params.append('url[]', url));
+        const { data } = await http().get<string[]>(`/batch?${ params.toString() }`);
+
+        // Transform array of JSON strings to object keyed by tournament_id
+        const transformedData: Record<number, IPlayer> = {};
+        if (Array.isArray(data)) {
+            data.forEach((jsonString) => {
+                try {
+                    const parsed = JSON.parse(jsonString);
+                    if (parsed && parsed.tournament_id) {
+                        transformedData[parsed.tournament_id] = parsed;
+                    }
+                } catch (e) {
+                    log.error("BATCH_TOURNAMENT_STATUS_PARSE_ERROR", { jsonString, error: e });
+                }
+            });
+        }
+
+        return transformedData;
+    } catch (err: unknown) {
+        log.error("LOAD_BATCH_TOURNAMENT_STATUSES_ERROR", err);
         throw err;
     }
 }

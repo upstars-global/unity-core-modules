@@ -9,11 +9,11 @@ import { useUserInfo } from "../store/user/userInfo";
 import { IPlayersList, ITournament, type ITournamentsList } from "./api/DTO/tournamentsDTO";
 import {
     chooseTournamentReq,
+    loadBatchTournamentStatusesReq,
     loadQuestDataReq,
     loadRecentTournamentsReq,
     loadTournamentByIdReq,
     loadTournamentsListReq,
-    loadUserStatusesReq,
     loadUserTournamentsReq,
 } from "./api/requests/tournaments";
 
@@ -66,21 +66,29 @@ export async function loadTournamentBySlug(slug: number): Promise<Partial<ITourn
     return currentTournament.value;
 }
 
-export async function loadCurrentUserTourStatuses(): Promise<void> {
-    const tournamentsStore = useTournamentsStore();
-    const { currentUserTournamentsStatuses, getAllTournamentsOnlyUser } = storeToRefs(tournamentsStore);
+export async function loadCurrentUserTourStatusesBatch(): Promise<void> {
+    try {
+        const tournamentsStore = useTournamentsStore();
+        const { currentUserTournamentsStatuses, getAllTournamentsOnlyUser } = storeToRefs(tournamentsStore);
 
-    const hasUserTourStatuses = Boolean(currentUserTournamentsStatuses.value.length);
+        const hasUserTourStatuses = Boolean(currentUserTournamentsStatuses.value.length);
+        const tournamentIds = getAllTournamentsOnlyUser.value.map((tourItem: ITournament) => tourItem.id);
 
-    const statuses = await Promise.all(getAllTournamentsOnlyUser.value.map((tourItem: ITournament) => {
-        return loadUserStatusesReq(tourItem.id);
-    }));
+        if (tournamentIds.length === 0) {
+            return;
+        }
 
-    const newStatuses = hasUserTourStatuses ?
-        sanitizeUserTourStatuses(currentUserTournamentsStatuses.value, statuses) :
-        statuses;
+        const statusesMap = await loadBatchTournamentStatusesReq(tournamentIds);
+        const statuses = tournamentIds.map((id) => statusesMap[id]).filter(Boolean);
 
-    tournamentsStore.setCurrentUserTournamentsStatuses(newStatuses);
+        const newStatuses = hasUserTourStatuses ?
+            sanitizeUserTourStatuses(currentUserTournamentsStatuses.value, statuses) :
+            statuses;
+
+        tournamentsStore.setCurrentUserTournamentsStatuses(newStatuses);
+    } catch (error) {
+        console.error('Error loading batch tournament statuses:', error);
+    }
 }
 
 export async function loadUserTournaments(): Promise<void> {
@@ -89,7 +97,7 @@ export async function loadUserTournaments(): Promise<void> {
 
     tournamentsStore.setUserTournaments(tournaments);
 
-    await loadCurrentUserTourStatuses();
+    await loadCurrentUserTourStatusesBatch();
 }
 
 export async function chooseTournament(id: number): Promise<void> {
@@ -124,3 +132,4 @@ export async function updateUserTourStatuses(data: IPlayersList): Promise<void> 
         }
     });
 }
+
