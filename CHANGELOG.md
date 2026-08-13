@@ -1,3 +1,14 @@
+## [1.104.1](https://github.com/upstars-global/unity-core-modules/compare/v1.104.0...v1.104.1) (2026-08-13)
+
+### ⚡ Performance
+
+* UN-2700 (additional fix eslint errors) ([#379](https://github.com/upstars-global/unity-core-modules/issues/379))
+ ([7776b5b](https://github.com/upstars-global/unity-core-modules/commit/7776b5bdd77a33a8c57708d0d21f5d1f5b1cd8a1))
+
+
+
+    UN-2700 (additional fix eslint errors)
+
 ## [1.104.0](https://github.com/upstars-global/unity-core-modules/compare/v1.103.3...v1.104.0) (2026-08-13)
 
 ### 🚀 Features
