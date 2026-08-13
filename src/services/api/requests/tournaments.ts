@@ -102,8 +102,10 @@ export async function loadRecentTournamentsReq(): Promise<ITournamentsList> {
 export async function loadBatchTournamentStatusesReq(ids: number[]): Promise<Record<number, IPlayer>> {
     try {
         const urls = ids.map(id => `api/tournaments/${id}/status`);
+        // API provider rule - only process first 12 URLs
+        const limitedUrls = urls.slice(0, 12);
         const params = new URLSearchParams();
-        urls.forEach(url => params.append('url[]', url));
+        limitedUrls.forEach(url => params.append('url[]', url));
         const { data } = await http().get<string[]>(`/batch?${ params.toString() }`);
 
         // Transform array of JSON strings to object keyed by tournament_id
