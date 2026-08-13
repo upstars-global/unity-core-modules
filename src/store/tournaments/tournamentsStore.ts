@@ -11,6 +11,7 @@ import type { ISnippetItemCMS } from "../../services/api/DTO/CMS";
 import type { IPlayersList, ITournament, ITournamentsList } from "../../services/api/DTO/tournamentsDTO";
 import { useBannerStore } from "../banners";
 import { useCMS } from "../CMS";
+import { useUserStatuses } from "../user/userStatuses";
 
 export const useTournamentsStore = defineStore("tournamentsStore", () => {
     const currentTournament = ref<Partial<ITournament> | null>(null);
@@ -20,6 +21,7 @@ export const useTournamentsStore = defineStore("tournamentsStore", () => {
     const userTournaments = ref<ITournamentsList>([]);
     const { snippets } = storeToRefs(useCMS());
     const { banners } = storeToRefs(useBannerStore());
+    const { getUserGroups } = storeToRefs(useUserStatuses());
 
     const getAllTournamentsOnlyUser = computed(() => {
         return promoFilterAndSettings(tournamentsList.value, PromoType.TOURNAMENT);
@@ -43,6 +45,13 @@ export const useTournamentsStore = defineStore("tournamentsStore", () => {
                 })
                 .filter((tour): tour is ITournament => {
                     return Boolean(tour);
+                })
+                .filter(({ group_ids }) => {
+                    if (!group_ids?.length) {
+                        return true;
+                    }
+
+                    return group_ids.some((groupId) => getUserGroups.value.includes(groupId));
                 });
 
             return tournaments.map((tour: ITournament) => {
