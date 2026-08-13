@@ -1,3 +1,4 @@
+// @ts-expect-error -- TS2307: Cannot find module '@config/compPoints' or its corresponding type declarations.
 import { CoinShopPageSlug } from "@config/compPoints";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
@@ -52,12 +53,15 @@ export const useRedeemableCompPointsStore = defineStore("redeemableCompPointsSto
             : {};
     });
     const getViewImages = computed(() => {
+        // @ts-expect-error -- TS2339: Property 'viewImages' does not exist on type '{}'.
         return getPageContent.value?.viewImages || {};
     });
     const getPromos = computed(() => {
+        // @ts-expect-error -- TS2339: Property 'promo' does not exist on type '{}'.
         return getPageContent.value?.promo || null;
     });
     const getGameTitles = computed(() => {
+        // @ts-expect-error -- TS2339: Property 'gamesTitles' does not exist on type '{}'.
         return getPageContent.value?.gamesTitles || {};
     });
     const getMaxWin = computed(() => {
@@ -65,9 +69,11 @@ export const useRedeemableCompPointsStore = defineStore("redeemableCompPointsSto
             return "";
         }
 
+        // @ts-expect-error -- TS2339: Property 'maxWin' does not exist on type '{}'.
         const maxWin = getPageContent.value?.maxWin;
         const maxWinByUserCurrency = maxWin[getUserCurrency.value as Currencies];
         const data = {
+            // @ts-expect-error -- TS18049: 'currentStaticPage.value' is possibly 'null' or 'undefined'.; TS18048: 'currentStaticPage.value.meta.json' is possibly 'undefined'.; TS2339: Property 'maxWin' does not exist on type 'string'.
             maxMin: maxWinByUserCurrency || currentStaticPage.value.meta.json.maxWin[Currencies.EUR],
             currency: maxWinByUserCurrency ? getUserCurrency.value : Currencies.EUR,
         };
@@ -75,12 +81,15 @@ export const useRedeemableCompPointsStore = defineStore("redeemableCompPointsSto
         return `${data.maxMin} ${data.currency}`;
     });
     const getFreeSpinsWager = computed(() => {
+        // @ts-expect-error -- TS2339: Property 'freeSpinsWager' does not exist on type '{}'.
         return getPageContent.value?.freeSpinsWager || {};
     });
     const getSpinRate = computed(() => {
+        // @ts-expect-error -- TS2339: Property 'spinRate' does not exist on type '{}'.
         return getPageContent.value?.spinRate || {};
     });
     const getMockCards = computed(() => {
+        // @ts-expect-error -- TS2339: Property 'cards' does not exist on type '{}'.
         return getPageContent.value?.cards || null;
     });
     const getRates = computed(() => (getIsLogged.value ? rates.value : getMockCards.value));

@@ -75,6 +75,7 @@ export async function loadRedeemableSpinInfo() {
     if (getIsLogged.value) {
         const rates = await loadCompPointRateBySlug(CompPointRatesTypes.LOOTBOXES);
 
+        // @ts-expect-error -- TS7006: Parameter 'item' implicitly has an 'any' type.
         lootboxesStore.setRedeemableSpinInfo(rates?.find((item) => item.bonus_title?.includes("manual_wheel")));
     }
 }

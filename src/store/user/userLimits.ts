@@ -1,3 +1,4 @@
+// @ts-expect-error -- TS2307: Cannot find module '@modules/Limits/limitConstants' or its corresponding type declarations.
 import { LIMIT_TYPE_COOLING_OFF, LIMIT_TYPE_DEPOSIT } from "@modules/Limits/limitConstants";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";

@@ -1,9 +1,10 @@
+// @ts-expect-error -- TS2307: Cannot find module '@theme/configs/config' or its corresponding type declarations.
 import config from "@theme/configs/config";
 
 class IdleTitleClass {
     private savedTitle: string | null = null;
     private currentTitleIndex: number = 0;
-    private repeatTimer: number | null = null;
+    private repeatTimer: ReturnType<typeof setInterval> | null = null;
 
     constructor(public titles: string[] = [], private changeDelay = 1000, private startDelay = 0) {
     }

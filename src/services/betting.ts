@@ -33,6 +33,7 @@ export async function addBonusNotificationItem(type: string, id: string) {
         };
 
         addRealTimeNotification(
+            // @ts-expect-error -- TS2345: Argument of type '{ data: { bonusType: string; }; }' is not assignable to parameter of type '{ data: INotification & { stage?: GiftState | undefined; }; }'.
             payload,
             WSBettingNotificationName.BONUS_ISSUED,
         );

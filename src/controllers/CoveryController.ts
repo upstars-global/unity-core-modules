@@ -11,7 +11,7 @@ function addCoveryScript() {
     coveryScript.src = "".concat(antifrodScriptsPath, "c-dfp.js");
 
     if (typeof window === "object" && !DEV) {
-        window.document.querySelector("head").append(coveryScript);
+        window.document.querySelector("head")!.append(coveryScript);
     }
 }
 

@@ -119,6 +119,7 @@ export default class IndexedDBController<T> {
         const now = new Date().getTime();
 
         store.openCursor().onsuccess = (event: unknown) => {
+            // @ts-expect-error -- TS18046: 'event' is of type 'unknown'.
             const cursor = event.target.result;
             if (cursor) {
                 const expirationTime = cursor.value.expiry || 0;

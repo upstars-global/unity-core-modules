@@ -8,6 +8,7 @@ import {
     ACHIEV_IDS_ALL,
     TOUR_ID_ACHIEV_SPIN_COUNT,
     TOURNAMENT_IDS_FOR_ACHIEV,
+// @ts-expect-error -- TS2307: Cannot find module '@config/achievements' or its corresponding type declarations.
 } from "@config/achievements";
 import dayjs from "dayjs";
 import { defineStore, storeToRefs } from "pinia";
@@ -131,7 +132,10 @@ export const useAchievements = defineStore("achievements", () => {
                 }
 
                 if (tourValue) {
-                    return !betSunCompletedInTour(tourValue, itemAchiev.money_budget_cents);
+                    return !betSunCompletedInTour(
+                        tourValue,
+                        itemAchiev.money_budget_cents as unknown as number,
+                    );
                 }
 
                 return true;

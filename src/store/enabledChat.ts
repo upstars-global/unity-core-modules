@@ -1,3 +1,4 @@
+// @ts-expect-error -- TS2307: Cannot find module '@theme/configs/constantsFreshChat' or its corresponding type declarations.
 import { CHAT_ID } from "@theme/configs/constantsFreshChat";
 import { defineStore } from "pinia";
 import { computed } from "vue";

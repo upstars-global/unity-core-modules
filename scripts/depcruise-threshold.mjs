@@ -13,7 +13,10 @@ const configPath = arg("config", ".dependency-cruiser.js");
 const res = spawnSync(
     process.platform === "win32" ? "npx.cmd" : "npx",
     [ "depcruise", "--config", configPath, "src", "--include-only", "^src", "--output-type", "json" ],
-    { encoding: "utf8" },
+    {
+        encoding: "utf8",
+        shell: process.platform === "win32",
+    },
 );
 
 if (res.error) {

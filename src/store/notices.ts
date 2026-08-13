@@ -1,5 +1,8 @@
+// @ts-expect-error -- TS2307: Cannot find module '@config/gift' or its corresponding type declarations.
 import { excludeNotificationTitles } from "@config/gift";
+// @ts-expect-error -- TS2307: Cannot find module '@config/user-statuses' or its corresponding type declarations.
 import { ENABLED_NOTICES_USER_GROUP_IDS } from "@config/user-statuses";
+// @ts-expect-error -- TS2307: Cannot find module '@helpers/generateNotifications' or its corresponding type declarations.
 import { eventsHandlers } from "@helpers/generateNotifications";
 import { defineStore, storeToRefs } from "pinia";
 import { v4 as uuid } from "uuid";

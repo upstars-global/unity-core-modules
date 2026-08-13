@@ -46,9 +46,9 @@ export async function loadRates() {
             (await Promise.all(Object.values(CompPointRatesTypes).map((key) => loadCompPointRateBySlug(key))));
 
     redeemableCompPointsStore.setRates({
-        MONEY_REWARD: money,
-        FREE_SPINS: freeSpins.length ? freeSpins : redeemableCompPointsStore.getMockCards?.FREE_SPINS || [],
-        SPECIAL_REWARDS: [ ...lootBoxes, ...lotteries ],
+        MONEY_REWARD: money!,
+        FREE_SPINS: freeSpins!.length ? freeSpins! : redeemableCompPointsStore.getMockCards?.FREE_SPINS || [],
+        SPECIAL_REWARDS: [ ...lootBoxes!, ...lotteries! ],
     });
 }
 

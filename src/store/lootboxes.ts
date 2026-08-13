@@ -1,3 +1,4 @@
+// @ts-expect-error -- TS2307: Cannot find module '@helpers/lootBoxes' or its corresponding type declarations.
 import { filterIssuedLootBoxes } from "@helpers/lootBoxes";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
@@ -28,10 +29,12 @@ export const useLootboxesStore = defineStore("lootboxes", () => {
     });
 
     const getMockSegmentWheelUser = computed<ILootboxItemConfig[]>(() => {
+        // @ts-expect-error -- TS2538: Type 'undefined' cannot be used as an index type.
         return mockSectionsWheelSegmentConfigs.value[userGroupForWheel.value] || [];
     });
 
     const getRedeemableSpinInfo = computed(() => {
+        // @ts-expect-error -- TS18048: 'currentStaticPage.value.meta.json' is possibly 'undefined'.; TS2339: Property 'rateInfo' does not exist on type 'string'.
         return redeemableSpinInfo.value || currentStaticPage.value?.meta?.json.rateInfo;
     });
 

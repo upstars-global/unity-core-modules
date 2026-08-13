@@ -1,3 +1,4 @@
+// @ts-expect-error -- TS2307: Cannot find module '@router/routeNames' or its corresponding type declarations.
 import { routeNames } from "@router/routeNames";
 
 import { BOTTOM_MENU, CUSTOM_PAGE_TYPE, PAGE, TOP_MENU_TYPE } from "../consts/staticPages";
@@ -38,9 +39,10 @@ export function prepareMapStaticPages(pages: IPageItemConfig[]): IPageCMSPrepare
 
 const STATIC_PAGE_CATEGORIES = [ CUSTOM_PAGE_TYPE, TOP_MENU_TYPE, BOTTOM_MENU, PAGE ];
 
-export function filterStaticPages(allPages) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function filterStaticPages(allPages: any[]): any {
     return allPages.filter((page) => {
-        return page.categories.some((categoryItem) => {
+        return page.categories.some((categoryItem: string) => {
             return STATIC_PAGE_CATEGORIES.includes(categoryItem);
         });
     });

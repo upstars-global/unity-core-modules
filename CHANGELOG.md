@@ -1,3 +1,29 @@
+## [1.103.3](https://github.com/upstars-global/unity-core-modules/compare/v1.103.2...v1.103.3) (2026-08-12)
+
+### ⚡ Performance
+
+* Модификация работы TSLint  ([#377](https://github.com/upstars-global/unity-core-modules/issues/377))
+ ([f405702](https://github.com/upstars-global/unity-core-modules/commit/f4057026158dca2dcfbfefc54f0a71d9bfce9587))
+
+## [1.103.2](https://github.com/upstars-global/unity-core-modules/compare/v1.103.1...v1.103.2) (2026-08-11)
+
+### 🔧 Maintenance
+
+* **UN-825:** resolve ts errors ([#372](https://github.com/upstars-global/unity-core-modules/issues/372))
+ ([7b107b1](https://github.com/upstars-global/unity-core-modules/commit/7b107b1dba5e96425967125082c5c83ee1230bdc))
+
+
+
+    * chore(UN-825): cover ts errors with comments
+
+    * chore(UN-825): resolve ts errors with comments
+
+    * сhore: lint github workflow
+
+    * fix: pipeline
+* update deps ([#376](https://github.com/upstars-global/unity-core-modules/issues/376))
+ ([643f003](https://github.com/upstars-global/unity-core-modules/commit/643f00376a31289550b9ed4fd334e7b916f468ce))
+
 ## [1.103.0](https://github.com/upstars-global/unity-core-modules/compare/v1.102.3...v1.103.0) (2026-08-03)
 
 ### 🚀 Features

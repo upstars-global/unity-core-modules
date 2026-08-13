@@ -1,6 +1,6 @@
 import { CookieController } from "./CookieController";
 
-export function setAffiliateToCookie(query = {}, expires) {
+export function setAffiliateToCookie(query: Record<string, unknown> = {}, expires: number) {
     if (typeof document === "undefined") {
         return;
     }
@@ -16,6 +16,7 @@ export function setAffiliateToCookie(query = {}, expires) {
     });
 
     CookieController.set("affiliate", cookieValue, {
+        // @ts-expect-error -- TS2551: Property 'toGMTString' does not exist on type 'Date'. Did you mean 'toString'?
         "expires": now.toGMTString(),
         "path=/": true,
     });

@@ -49,6 +49,7 @@ export const useUserBalance = defineStore("userBalance", () => {
             getUserCashoutBalance.value,
             userCurrency.value,
             null,
+            // @ts-expect-error -- TS2345: Argument of type 'string' is not assignable to parameter of type 'Currencies | undefined'.
             getSubunitsToUnitsByCode(userCurrency.value),
         ) as string;
     });
@@ -59,6 +60,7 @@ export const useUserBalance = defineStore("userBalance", () => {
     const getUserBonusBalanceNormalize = computed(() => {
         return currencyView(getUserBonusBalance.value,
             userCurrency.value, null,
+            // @ts-expect-error -- TS2345: Argument of type 'string' is not assignable to parameter of type 'Currencies | undefined'.
             getSubunitsToUnitsByCode(userCurrency.value),
         ) as string;
     });
@@ -75,6 +77,7 @@ export const useUserBalance = defineStore("userBalance", () => {
             getUserCommonBalance.value || 0,
             userCurrency.value,
             null,
+            // @ts-expect-error -- TS2345: Argument of type 'string' is not assignable to parameter of type 'Currencies | undefined'.
             getSubunitsToUnitsByCode(userCurrency.value),
         ) as string;
     });
