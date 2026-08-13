@@ -1,4 +1,3 @@
-
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
@@ -7,7 +6,6 @@ import { replaceCurrentYearPlaceholder } from "../helpers/replaceStringHelper";
 import { type ICurrentPage, ICurrentPageMeta, type IPageCMSPrepare } from "../models/CMS";
 import type { ISnippetItemCMS } from "../services/api/DTO/CMS";
 import { loadPageContentFromCmsReq } from "../services/api/requests/CMS";
-
 
 export const useCMS = defineStore("CMS", () => {
     const staticPages = ref<IPageCMSPrepare[]>([]);
