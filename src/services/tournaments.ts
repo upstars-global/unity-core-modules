@@ -93,11 +93,19 @@ export async function loadCurrentUserTourStatusesBatch(): Promise<void> {
 
 export async function loadUserTournaments(): Promise<void> {
     const tournamentsStore = useTournamentsStore();
+    const { currentUserTournamentsStatuses, getAllTournamentsOnlyUser } = storeToRefs(tournamentsStore);
     const tournaments = await loadUserTournamentsReq();
 
     tournamentsStore.setUserTournaments(tournaments);
 
-    await loadCurrentUserTourStatusesBatch();
+    // Check if we already have statuses for all user tournaments
+    const tournamentIds = getAllTournamentsOnlyUser.value.map((tourItem: ITournament) => tourItem.id);
+    const existingStatusIds = currentUserTournamentsStatuses.value.map((status) => status.tournament_id);
+    const missingStatuses = tournamentIds.filter((id) => !existingStatusIds.includes(id));
+
+    if (missingStatuses.length > 0) {
+        await loadCurrentUserTourStatusesBatch();
+    }
 }
 
 export async function chooseTournament(id: number): Promise<void> {
