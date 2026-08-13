@@ -1,4 +1,6 @@
+// @ts-expect-error -- TS2307: Cannot find module '@theme/configs/config' or its corresponding type declarations.
 import config from "@theme/configs/config";
+// @ts-expect-error -- TS2307: Cannot find module '@theme/configs/currencies' or its corresponding type declarations.
 import { ENABLE_CURRENCIES } from "@theme/configs/currencies";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";

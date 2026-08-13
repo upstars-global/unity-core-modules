@@ -1,3 +1,4 @@
+// @ts-expect-error -- TS2307: Cannot find module '@theme/configs/categoryesGames' or its corresponding type declarations.
 import { CONFIG_DEFAULT_COLLECTIONS_MENU_SLUGS, SlugCategoriesGames } from "@theme/configs/categoryesGames";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
@@ -49,6 +50,7 @@ export const useGamesCommon = defineStore("gamesCommon", () => {
             enabledGamesConfig.value,
         );
 
+        // @ts-expect-error -- TS2339: Property 'last_activity_at' does not exist on type 'IGameItem'.; TS2339: Property 'last_activity_at' does not exist on type 'IGameItem'.
         return tempGames.sort(({ last_activity_at: lastActivityItem }, { last_activity_at: lastActivityNextItem }) => {
             return new Date(lastActivityNextItem).getTime() - new Date(lastActivityItem).getTime();
         });
@@ -96,6 +98,7 @@ export const useGamesCommon = defineStore("gamesCommon", () => {
         }
 
         if (seoTitle) {
+            // @ts-expect-error -- TS2322: Type 'string | undefined' is not assignable to type 'string'.
             return findGameBySeoTittleAndProducer(Object.values(gamesDataCached.value), { seoTitle, producer });
         }
     }

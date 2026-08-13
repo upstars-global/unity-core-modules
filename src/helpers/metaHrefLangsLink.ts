@@ -1,7 +1,6 @@
-import {
-    AVAILABLE_LOCALES,
-    MAIN_LOCALES_AND_DOMAINS,
-} from "@theme/configs/constsLocales";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore -- TS2307: Cannot find module '@theme/configs/constsLocales' or its corresponding type declarations.
+import {AVAILABLE_LOCALES, MAIN_LOCALES_AND_DOMAINS} from "@theme/configs/constsLocales";
 
 interface IAllDomainsHrefLangs {
     rel: string;

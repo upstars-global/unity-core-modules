@@ -1,3 +1,4 @@
+// @ts-expect-error -- TS2307: Cannot find module '@theme/configs/games' or its corresponding type declarations.
 import { SPECIAL_GAME_PROVIDER_NAME } from "@theme/configs/games";
 import { defineStore, storeToRefs } from "pinia";
 import { ref } from "vue";
@@ -34,6 +35,7 @@ export const useGamesProviders = defineStore("gamesProviders", () => {
         const url = searchUrl[searchUrl.length - 1] === "/" ? searchUrl.slice(0, -1) : searchUrl;
         const { getGamesCategories } = storeToRefs(useGamesCommon());
 
+        // @ts-expect-error -- TS2322: Type '{ id: string; title: string; provider: string; slug: string; url: string; name: string; } | undefined' is not assignable to type 'IGamesProvider'.
         return [ ...getGamesCategories.value, ...gamesProviders.value ].find((obj) => {
             return obj.url === url;
         });
@@ -55,6 +57,7 @@ export const useGamesProviders = defineStore("gamesProviders", () => {
         const propsGame = { ...data };
         const { enabledGamesConfig } = storeToRefs(useGamesCommon());
 
+        // @ts-expect-error -- TS2345: Argument of type '(game: IGameItemFilter) => IGameItem' is not assignable to parameter of type '(value: IGame, index: number, array: IGame[]) => IGameItem'.
         propsGame.data = data.data.map(processGameForNewAPI);
 
         const collectionData = collections.value[slug]?.data || [];

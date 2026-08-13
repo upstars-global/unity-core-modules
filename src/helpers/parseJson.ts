@@ -1,6 +1,6 @@
 import { log } from "../controllers/Logger";
 
-export function parseJson(json, errorMessage = "PARSE_JSON_ERROR", id: string = "") {
+export function parseJson(json: string, errorMessage = "PARSE_JSON_ERROR", id: string = "") {
     try {
         return JSON.parse(json);
     } catch (error) {

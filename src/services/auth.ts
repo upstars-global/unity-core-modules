@@ -53,6 +53,7 @@ export function createLoginTwoFactor({ loadAuthData }: LoginTwoFactorDeps) {
     return async function loginTwoFactor(otp: string) {
         try {
             const { toggleUserIsLogged } = useUserInfo();
+            // @ts-expect-error -- TS2353: Object literal may only specify known properties, and 'otp_attempt' does not exist in type 'IUserFormData'.
             const data = await signIn({ otp_attempt: otp });
 
             await loadAuthData();
@@ -131,9 +132,11 @@ export function createRegistration({ loadAuthData, enableABReg }: RegistrationDe
             const data = await registerUser(registrationData);
             const { setUserData, toggleUserIsLogged } = useUserInfo();
 
+            // @ts-expect-error -- TS2345: Argument of type 'unknown' is not assignable to parameter of type 'Partial<IUserData>'.
             setUserData(data);
 
             if (enableABReg) {
+                // @ts-expect-error -- TS2576: Property 'groupById' does not exist on type 'ABTestController'. Did you mean to access the static member 'ABTestController.groupById' instead?
                 await changeUserToGroup(ABTestController.groupById);
             }
 

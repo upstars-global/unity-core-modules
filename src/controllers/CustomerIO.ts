@@ -1,18 +1,15 @@
+// @ts-expect-error -- TS2307: Cannot find module '@config/customerIO' or its corresponding type declarations.
 import { ORGANIZATION_ID, PRODUCT_ID, YOUR_SITE_ID } from "@config/customerIO";
 
-declare global {
-  interface Window {
-      _cio: unknown;
-  }
-}
+import type { IUserInfo } from "../models/user";
 
 /* eslint-disable*/
 function init() {
     if (typeof window !== "undefined") {
-        window._cio = window._cio || [];
+        window._cio = (window._cio || []) as CustomerIOQueue;
         (function() {
             let a, b, c;
-            a = function(f) {
+            a = function(f: string) {
                 return function() {
                     _cio.push([ f ]
                         .concat(Array.prototype.slice.call(arguments, 0)));
@@ -34,13 +31,13 @@ function init() {
 
             setTimeout(() => {
                 let s = document.getElementsByTagName("script")[0];
-                s.parentNode.insertBefore(t, s);
+                s!.parentNode!.insertBefore(t, s!);
             }, 60000);
         }());
     }
 }
 
-function cioIdentify({ id: idUser, email, created_at: createdProfile, ...data }) {
+function cioIdentify({ id: idUser, email, created_at: createdProfile, ...data }: IUserInfo) {
     const created_at = new Date(createdProfile).getTime() / 1000;
 
     _cio.identify({
@@ -51,7 +48,7 @@ function cioIdentify({ id: idUser, email, created_at: createdProfile, ...data })
     });
 }
 
-export function cioIdentifyUser(userInfo) {
+export function cioIdentifyUser(userInfo: IUserInfo) {
     if (typeof window === "undefined") {
         return;
     }
@@ -62,4 +59,3 @@ export function cioIdentifyUser(userInfo) {
 
     cioIdentify(userInfo);
 }
-

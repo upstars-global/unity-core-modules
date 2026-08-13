@@ -2,8 +2,13 @@ import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
 export const useLivechatStore = defineStore("livechatStore", () => {
+    interface ChatMessage {
+        timestamp: number;
+        [key: string]: unknown;
+    }
+
     const openChat = ref(false);
-    const messages = ref([]);
+    const messages = ref<ChatMessage[]>([]);
     const newMessagesCount = ref(0);
 
     const getNewMessagesCount = computed(() => {
@@ -18,7 +23,7 @@ export const useLivechatStore = defineStore("livechatStore", () => {
         openChat.value = true;
     }
 
-    function setMessage(message) {
+    function setMessage(message: ChatMessage) {
         messages.value.push(message);
         const lastOpen = localStorage.getItem("lastOpen");
         if (!lastOpen || message.timestamp > Number(lastOpen)) {

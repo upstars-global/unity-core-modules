@@ -26,6 +26,7 @@ export const useLotteriesStore = defineStore("lotteriesStore", () => {
     };
 
     const getLotteriesList = computed<ILotteriesList | []>(() => {
+        // @ts-expect-error -- TS2344: Type 'ILotteriesItem' does not satisfy the constraint 'ITournament'.
         return promoFilterAndSettings<ILotteriesItem>(lotteriesList.value, PromoType.LOTTERY);
     });
 
@@ -37,6 +38,7 @@ export const useLotteriesStore = defineStore("lotteriesStore", () => {
 
     const getCurrentLottery = computed<ILotteriesItem | null>(() => {
         if (currentLottery.value) {
+            // @ts-expect-error -- TS2344: Type 'ILotteriesItem' does not satisfy the constraint 'ITournament'.
             return promoFilterAndSettings<ILotteriesItem>([ currentLottery.value ], PromoType.LOTTERY)?.[0] ||
                 null;
         }

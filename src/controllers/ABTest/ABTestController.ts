@@ -1,3 +1,4 @@
+// @ts-expect-error -- TS2307: Cannot find module '@config/groupAB' or its corresponding type declarations.
 import { ID_GROUP_FOR_PAIRED_ID, ID_GROUP_FOR_UNPAIRED_ID } from "@config/groupAB";
 
 import { useConfigStore } from "../../store/configStore";

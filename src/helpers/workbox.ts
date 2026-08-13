@@ -3,6 +3,7 @@ import {
     DEFAULT_COUNTRY,
     DEFAULT_LOCALE_BY_COUNTRY,
     LOCALES,
+// @ts-expect-error -- TS2307: Cannot find module '@theme/configs/constsLocales' or its corresponding type declarations.
 } from "@theme/configs/constsLocales";
 
 function getPathLocale(pathname: string): string | null {

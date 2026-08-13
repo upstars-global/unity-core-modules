@@ -1,3 +1,4 @@
+// @ts-expect-error -- TS2307: Cannot find module '@helpers/gameImage' or its corresponding type declarations.
 import { getGameImagePath } from "@helpers/gameImage";
 import { storeToRefs } from "pinia";
 

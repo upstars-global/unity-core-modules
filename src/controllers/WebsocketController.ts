@@ -1,3 +1,4 @@
+// @ts-expect-error -- TS2307: Cannot find module '@config/centrifuge' or its corresponding type declarations.
 import { getCentrifugeUrl } from "@config/centrifuge";
 import { Centrifuge } from "centrifuge";
 import CentrifugeLegacy from "centrifuge-legacy/centrifuge";

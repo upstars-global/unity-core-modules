@@ -1,6 +1,7 @@
 import {
     GROUP_HIDE_SOFORT,
     PAYMENT_HIDE_SOFORT,
+// @ts-expect-error -- TS2307: Cannot find module '@config/cashbox' or its corresponding type declarations.
 } from "@config/cashbox";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";

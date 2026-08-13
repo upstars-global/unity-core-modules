@@ -1,3 +1,62 @@
+## [1.104.2](https://github.com/upstars-global/unity-core-modules/compare/v1.104.1...v1.104.2) (2026-08-13)
+
+### 🔧 Maintenance
+
+* UN-2700 (additional fix eslint errors) ([#380](https://github.com/upstars-global/unity-core-modules/issues/380))
+ ([e192724](https://github.com/upstars-global/unity-core-modules/commit/e192724316d265c80f9397ec3ab7c46ceb0dcea2))
+
+
+
+    UN-2700 (additional fix eslint errors)
+
+## [1.104.1](https://github.com/upstars-global/unity-core-modules/compare/v1.104.0...v1.104.1) (2026-08-13)
+
+### ⚡ Performance
+
+* UN-2700 (additional fix eslint errors) ([#379](https://github.com/upstars-global/unity-core-modules/issues/379))
+ ([7776b5b](https://github.com/upstars-global/unity-core-modules/commit/7776b5bdd77a33a8c57708d0d21f5d1f5b1cd8a1))
+
+
+
+    UN-2700 (additional fix eslint errors)
+
+## [1.104.0](https://github.com/upstars-global/unity-core-modules/compare/v1.103.3...v1.104.0) (2026-08-13)
+
+### 🚀 Features
+
+* (UN-2700) update unverifiedUsersGeo interface ([#374](https://github.com/upstars-global/unity-core-modules/issues/374))
+ ([7f58fcf](https://github.com/upstars-global/unity-core-modules/commit/7f58fcf857eb86f0f06321f8264bcbf14ed4b173))
+
+
+
+    UN-2700 update unverifiedUsersGeo interface
+
+## [1.103.3](https://github.com/upstars-global/unity-core-modules/compare/v1.103.2...v1.103.3) (2026-08-12)
+
+### ⚡ Performance
+
+* Модификация работы TSLint  ([#377](https://github.com/upstars-global/unity-core-modules/issues/377))
+ ([f405702](https://github.com/upstars-global/unity-core-modules/commit/f4057026158dca2dcfbfefc54f0a71d9bfce9587))
+
+## [1.103.2](https://github.com/upstars-global/unity-core-modules/compare/v1.103.1...v1.103.2) (2026-08-11)
+
+### 🔧 Maintenance
+
+* **UN-825:** resolve ts errors ([#372](https://github.com/upstars-global/unity-core-modules/issues/372))
+ ([7b107b1](https://github.com/upstars-global/unity-core-modules/commit/7b107b1dba5e96425967125082c5c83ee1230bdc))
+
+
+
+    * chore(UN-825): cover ts errors with comments
+
+    * chore(UN-825): resolve ts errors with comments
+
+    * сhore: lint github workflow
+
+    * fix: pipeline
+* update deps ([#376](https://github.com/upstars-global/unity-core-modules/issues/376))
+ ([643f003](https://github.com/upstars-global/unity-core-modules/commit/643f00376a31289550b9ed4fd334e7b916f468ce))
+
 ## [1.103.0](https://github.com/upstars-global/unity-core-modules/compare/v1.102.3...v1.103.0) (2026-08-03)
 
 ### 🚀 Features

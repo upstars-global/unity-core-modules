@@ -1,8 +1,8 @@
 /* eslint-disable n/no-unsupported-features/node-builtins */
-function storageObjGenerate(name) {
+function storageObjGenerate(name: string) {
     return {
-        set(value) {
-            sessionStorage.setItem(name, value);
+        set(value: unknown) {
+            sessionStorage.setItem(name, value as string);
         },
         get() {
             return sessionStorage.getItem(name);

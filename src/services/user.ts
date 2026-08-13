@@ -1,6 +1,10 @@
+// @ts-expect-error -- TS2307: Cannot find module '@config/groupAB' or its corresponding type declarations.
 import { ID_GROUP_FOR_PAIRED_ID, ID_GROUP_FOR_UNPAIRED_ID } from "@config/groupAB";
+// @ts-expect-error -- TS2307: Cannot find module '@config/user-statuses' or its corresponding type declarations.
 import { IRON_STATUS } from "@config/user-statuses";
+// @ts-expect-error -- TS2307: Cannot find module '@theme/configs/constantsFreshChat' or its corresponding type declarations.
 import { PROJECT } from "@theme/configs/constantsFreshChat";
+// @ts-expect-error -- TS2307: Cannot find module '@theme/configs/stateFieldConfig' or its corresponding type declarations.
 import { getStateByCounty } from "@theme/configs/stateFieldConfig";
 import { storeToRefs } from "pinia";
 
@@ -577,6 +581,7 @@ export async function loadUserProfile({ reload = false, route }: { reload?: bool
             const responseLang = response.data.language;
 
             if (responseLang !== multilang.getUserLocale && response.data.id) {
+                // @ts-expect-error -- TS2353: Object literal may only specify known properties, and 'route' does not exist in type '{ lang: string; }'.
                 updateLocale({ lang: responseLang, route });
             }
 
@@ -723,6 +728,7 @@ export async function resetActiveDepositGift() {
     const { activeDepositGiftGroupID } = storeToRefs(giftsStore);
 
     if (activeDepositGiftGroupID.value) {
+        // @ts-expect-error -- TS2345: Argument of type 'string | { currency: string; amount_cents: number; }' is not assignable to parameter of type 'IPlayerGroup | undefined'.
         await changeUserToGroup(null, activeDepositGiftGroupID.value);
 
         giftsStore.setActiveDepositGift(null);

@@ -1,4 +1,4 @@
-export function isElementInViewport(element) {
+export function isElementInViewport(element: HTMLElement | null) {
     if (!element || element?.style?.display === "none") {
         return false;
     }
@@ -15,7 +15,7 @@ export function isElementInViewport(element) {
     );
 }
 
-export function isElementInViewportHorizontally(element) {
+export function isElementInViewportHorizontally(element: HTMLElement | null) {
     if (!element || element?.style?.display === "none") {
         return false;
     }

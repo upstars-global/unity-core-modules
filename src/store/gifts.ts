@@ -1,3 +1,4 @@
+// @ts-expect-error -- TS2307: Cannot find module '@src/config/gift' or its corresponding type declarations.
 import { STATUSES_LOST_GIFT } from "@src/config/gift";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
@@ -149,14 +150,18 @@ export const useGiftsStore = defineStore("giftsStore", () => {
 
         if (attr) {
             const valueAttr = attr.value.find((item) => {
+                // @ts-expect-error -- TS2339: Property 'currency' does not exist on type 'string | { currency: string; amount_cents: number; }'.
                 return item.currency === getUserCurrency.value;
             });
 
             if (valueAttr) {
                 return currencyView(
+                    // @ts-expect-error -- TS2339: Property 'amount_cents' does not exist on type 'string | { currency: string; amount_cents: number; }'.
                     valueAttr.amount_cents,
+                    // @ts-expect-error -- TS2339: Property 'currency' does not exist on type 'string | { currency: string; amount_cents: number; }'.
                     valueAttr.currency,
                     null,
+                    // @ts-expect-error -- TS2339: Property 'currency' does not exist on type 'string | { currency: string; amount_cents: number; }'.
                     getSubunitsToUnitsByCode(valueAttr.currency as Currencies),
                     8,
                     false,

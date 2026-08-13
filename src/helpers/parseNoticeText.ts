@@ -1,6 +1,7 @@
 import type { INotification } from "../models/WSnotices";
 
-export function parseNoticeText(data): { content: INotification["content"] | undefined } | { title: string } {
+export function parseNoticeText(data: { title: string }):
+    { content: INotification["content"] | undefined } | { title: string } {
     try {
         const parseData = JSON.parse(data.title) as INotification["content"];
         return { content: parseData };

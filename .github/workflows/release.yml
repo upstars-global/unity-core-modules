@@ -31,9 +31,6 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Install @octokit/auth-app
-        run: yarn add @octokit/auth-app
-
       - name: Get GitHub App Token
         id: app_token
         run: |
