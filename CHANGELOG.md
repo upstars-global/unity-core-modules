@@ -1,3 +1,14 @@
+## [1.104.0](https://github.com/upstars-global/unity-core-modules/compare/v1.103.3...v1.104.0) (2026-08-13)
+
+### 🚀 Features
+
+* (UN-2700) update unverifiedUsersGeo interface ([#374](https://github.com/upstars-global/unity-core-modules/issues/374))
+ ([7f58fcf](https://github.com/upstars-global/unity-core-modules/commit/7f58fcf857eb86f0f06321f8264bcbf14ed4b173))
+
+
+
+    UN-2700 update unverifiedUsersGeo interface
+
 ## [1.103.3](https://github.com/upstars-global/unity-core-modules/compare/v1.103.2...v1.103.3) (2026-08-12)
 
 ### ⚡ Performance
