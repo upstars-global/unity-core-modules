@@ -13,6 +13,12 @@ import { useBannerStore } from "../banners";
 import { useCMS } from "../CMS";
 import { useUserStatuses } from "../user/userStatuses";
 
+type CustomTournament = ITournament & {
+    custom: true;
+    status: ReturnType<typeof statusForTournament>;
+    type: PromoType.TOURNAMENT;
+};
+
 export const useTournamentsStore = defineStore("tournamentsStore", () => {
     const currentTournament = ref<Partial<ITournament> | null>(null);
     const currentUserTournamentsStatuses = ref<IPlayersList>([]);
@@ -36,32 +42,32 @@ export const useTournamentsStore = defineStore("tournamentsStore", () => {
 
     const getCustomTournamentsList = computed(() => {
         try {
-            const tournaments = snippets.value
-                .filter((snippet: ISnippetItemCMS) => {
-                    return snippet.categories.includes("tournament");
-                })
-                .map(({ id, content }) => {
-                    return parseJson(content, "PARSE_TOURNAMENT_ITEM_ERROR", id);
-                })
-                .filter((tour): tour is ITournament => {
-                    return Boolean(tour);
-                })
-                .filter(({ group_ids }) => {
-                    if (!group_ids?.length) {
-                        return true;
-                    }
+            const userGroups = new Set(getUserGroups.value);
+            return snippets.value.reduce<CustomTournament[]>((result, snippet: ISnippetItemCMS) => {
+                if (!snippet.categories.includes("tournament")) {
+                    return result;
+                }
 
-                    return group_ids.some((groupId) => getUserGroups.value.includes(groupId));
-                });
+                const tournament = parseJson(
+                    snippet.content,
+                    "PARSE_TOURNAMENT_ITEM_ERROR",
+                    snippet.id,
+                ) as ITournament | undefined;
 
-            return tournaments.map((tour: ITournament) => {
-                return {
-                    ...tour,
-                    custom: true,
-                    status: statusForTournament(tour),
-                    type: PromoType.TOURNAMENT,
-                };
-            });
+                if (
+                    tournament &&
+                    (!tournament.group_ids?.length || tournament.group_ids.some((groupId) => userGroups.has(groupId)))
+                ) {
+                    result.push({
+                        ...tournament,
+                        custom: true,
+                        status: statusForTournament(tournament),
+                        type: PromoType.TOURNAMENT,
+                    });
+                }
+
+                return result;
+            }, []);
         } catch (error) {
             log.error("GET_CUSTOM_TOURNAMENTS_LIST_ERROR", error);
             return [];

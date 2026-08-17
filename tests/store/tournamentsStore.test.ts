@@ -175,6 +175,12 @@ describe("useTournamentsStore", () => {
             status: "mock-status",
             type: PromoType.TOURNAMENT,
         });
+        expect(mockParseJson).toHaveBeenCalledOnce();
+        expect(mockParseJson).toHaveBeenCalledWith(
+            mockSnippets.value[0].content,
+            "PARSE_TOURNAMENT_ITEM_ERROR",
+            "snippet-1",
+        );
     });
 
     it("getCustomTournamentsList skips empty parsed items", () => {
@@ -228,6 +234,21 @@ describe("useTournamentsStore", () => {
         ];
 
         expect(store.getCustomTournamentsList.map(({ id }) => id)).toEqual([ 1, 2 ]);
+    });
+
+    it("getCustomTournamentsList compares user group ids without type coercion", () => {
+        const store = useTournamentsStore();
+        mockParseJson.mockImplementation((content: string) => JSON.parse(content));
+        mockUserGroups.value = [ "1170" ];
+        mockSnippets.value = [
+            {
+                categories: [ "tournament" ],
+                id: "number-group-id",
+                content: JSON.stringify(makeTournament({ id: 1, group_ids: [ 1170 ] })),
+            },
+        ];
+
+        expect(store.getCustomTournamentsList).toEqual([]);
     });
 
     it("getAllTournamentsOnlyUser returns filtered list", () => {
