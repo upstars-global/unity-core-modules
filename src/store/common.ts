@@ -18,8 +18,8 @@ import type { ICountries, ICryptoExchangeRates, ICurrencies, IProjectInfo } from
 import { useMultilangStore } from "./multilang";
 
 export interface ICommonStoreDefaultOptions {
-  defaultCurrency: string;
-  enableCurrencies: string[];
+    defaultCurrency: string;
+    enableCurrencies: string[];
 }
 
 export const useCommon = defineStore("common", () => {
@@ -37,6 +37,9 @@ export const useCommon = defineStore("common", () => {
     const countries = ref<ICountries[]>([]);
     const infoProject = ref<IProjectInfo>();
     const cryptoExchangeRates = ref<ICryptoExchangeRates>();
+
+
+    console.log("UN-3070-test-1")
 
     if (typeof window !== "undefined") {
         getUserAgentPlatform().then((platformData) => {
@@ -73,11 +76,11 @@ export const useCommon = defineStore("common", () => {
     }
 
     const getCountries = computed(() => {
-        const { getUserGeo } = storeToRefs(useMultilangStore());
+        const {getUserGeo} = storeToRefs(useMultilangStore());
 
         const countriesPrepared = [ ...countries.value ];
         if (getUserGeo && countriesPrepared.length > 0) {
-            countriesPrepared.unshift(countriesPrepared.splice(countriesPrepared.findIndex(({ code }) => {
+            countriesPrepared.unshift(countriesPrepared.splice(countriesPrepared.findIndex(({code}) => {
                 return code === getUserGeo.value;
             }), 1)[0]);
             return countriesPrepared;
@@ -109,15 +112,15 @@ export const useCommon = defineStore("common", () => {
     });
 
     const isCryptoCurrency = (currency: Currencies): boolean => {
-        return Boolean(currencies.value.length) && !currencies.value.find(({ code }) => code === currency)?.fiat;
+        return Boolean(currencies.value.length) && !currencies.value.find(({code}) => code === currency)?.fiat;
     };
 
     const getCurrencyFiat = computed(() => {
-        return currencies.value.filter(({ fiat }) => fiat).map(({ code }) => code);
+        return currencies.value.filter(({fiat}) => fiat).map(({code}) => code);
     });
 
     const getCurrencyCrypto = computed(() => {
-        return currencies.value.filter(({ fiat }) => !fiat).map(({ code }) => code);
+        return currencies.value.filter(({fiat}) => !fiat).map(({code}) => code);
     });
 
     function setCryptoExchangeRates(data: ICryptoExchangeRates) {
