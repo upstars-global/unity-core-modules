@@ -1,3 +1,36 @@
+## [1.104.2](https://github.com/upstars-global/unity-core-modules/compare/v1.104.1...v1.104.2) (2026-08-13)
+
+### 🔧 Maintenance
+
+* UN-2700 (additional fix eslint errors) ([#380](https://github.com/upstars-global/unity-core-modules/issues/380))
+ ([e192724](https://github.com/upstars-global/unity-core-modules/commit/e192724316d265c80f9397ec3ab7c46ceb0dcea2))
+
+
+
+    UN-2700 (additional fix eslint errors)
+
+## [1.104.1](https://github.com/upstars-global/unity-core-modules/compare/v1.104.0...v1.104.1) (2026-08-13)
+
+### ⚡ Performance
+
+* UN-2700 (additional fix eslint errors) ([#379](https://github.com/upstars-global/unity-core-modules/issues/379))
+ ([7776b5b](https://github.com/upstars-global/unity-core-modules/commit/7776b5bdd77a33a8c57708d0d21f5d1f5b1cd8a1))
+
+
+
+    UN-2700 (additional fix eslint errors)
+
+## [1.104.0](https://github.com/upstars-global/unity-core-modules/compare/v1.103.3...v1.104.0) (2026-08-13)
+
+### 🚀 Features
+
+* (UN-2700) update unverifiedUsersGeo interface ([#374](https://github.com/upstars-global/unity-core-modules/issues/374))
+ ([7f58fcf](https://github.com/upstars-global/unity-core-modules/commit/7f58fcf857eb86f0f06321f8264bcbf14ed4b173))
+
+
+
+    UN-2700 update unverifiedUsersGeo interface
+
 ## [1.103.3](https://github.com/upstars-global/unity-core-modules/compare/v1.103.2...v1.103.3) (2026-08-12)
 
 ### ⚡ Performance
