@@ -39,7 +39,7 @@ export const useCommon = defineStore("common", () => {
     const cryptoExchangeRates = ref<ICryptoExchangeRates>();
 
 
-    console.log("UN-3070-test-1")
+    console.log("UN-3070-test-2")
 
     if (typeof window !== "undefined") {
         getUserAgentPlatform().then((platformData) => {
