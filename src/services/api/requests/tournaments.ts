@@ -106,19 +106,14 @@ export async function loadBatchTournamentStatusesReq(ids: number[]): Promise<Rec
         const limitedUrls = urls.slice(0, 12);
         const params = new URLSearchParams();
         limitedUrls.forEach(url => params.append('url[]', url));
-        const { data } = await http().get<string[]>(`/batch?${ params.toString() }`);
+        const { data } = await http().get<Record<number, IPlayer> | string[]>(`/batch?${ params.toString() }`);
 
-        // Transform array of JSON strings to object keyed by tournament_id
         const transformedData: Record<number, IPlayer> = {};
-        if (Array.isArray(data)) {
-            data.forEach((jsonString) => {
-                try {
-                    const parsed = JSON.parse(jsonString);
-                    if (parsed && parsed.tournament_id) {
-                        transformedData[parsed.tournament_id] = parsed;
-                    }
-                } catch (e) {
-                    log.error("BATCH_TOURNAMENT_STATUS_PARSE_ERROR", { jsonString, error: e });
+        
+        if (typeof data === 'object' && data !== null) {
+            Object.values(data).forEach((playerData) => {
+                if (playerData && playerData.tournament_id) {
+                    transformedData[playerData.tournament_id] = playerData;
                 }
             });
         }
