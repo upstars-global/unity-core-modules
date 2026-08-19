@@ -1,3 +1,16 @@
+## [1.105.0](https://github.com/upstars-global/unity-core-modules/compare/v1.104.2...v1.105.0) (2026-08-19)
+
+### 🚀 Features
+
+* **UN-2639:** filter snippet tournaments by group ([#381](https://github.com/upstars-global/unity-core-modules/issues/381))
+ ([9940eb5](https://github.com/upstars-global/unity-core-modules/commit/9940eb5adca95d224a60838a6662e65627974169))
+
+
+
+    * feat(UN-2639): filter snippet tournaments by group
+
+    * fix: review comments
+
 ## [1.104.2](https://github.com/upstars-global/unity-core-modules/compare/v1.104.1...v1.104.2) (2026-08-13)
 
 ### 🔧 Maintenance
