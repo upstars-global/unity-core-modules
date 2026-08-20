@@ -15,6 +15,7 @@ const mockBanners = ref<Array<{ frontend_identifier: string; image?: string }>>(
 const mockParseJson = vi.fn();
 const mockStatusForTournament = vi.fn(() => "mock-status");
 const mockLogError = vi.fn();
+const mockUserGroups = ref<Array<string | number>>([]);
 
 vi.mock("../../src/store/CMS", () => ({
     useCMS: () => ({
@@ -25,6 +26,12 @@ vi.mock("../../src/store/CMS", () => ({
 vi.mock("../../src/store/banners", () => ({
     useBannerStore: () => ({
         banners: mockBanners,
+    }),
+}));
+
+vi.mock("../../src/store/user/userStatuses", () => ({
+    useUserStatuses: () => ({
+        getUserGroups: mockUserGroups,
     }),
 }));
 
@@ -108,6 +115,7 @@ describe("useTournamentsStore", () => {
         setActivePinia(createPinia());
         mockSnippets.value = [];
         mockBanners.value = [];
+        mockUserGroups.value = [];
         mockParseJson.mockReset();
         mockStatusForTournament.mockClear();
         mockLogError.mockClear();
@@ -167,6 +175,12 @@ describe("useTournamentsStore", () => {
             status: "mock-status",
             type: PromoType.TOURNAMENT,
         });
+        expect(mockParseJson).toHaveBeenCalledOnce();
+        expect(mockParseJson).toHaveBeenCalledWith(
+            mockSnippets.value[0].content,
+            "PARSE_TOURNAMENT_ITEM_ERROR",
+            "snippet-1",
+        );
     });
 
     it("getCustomTournamentsList skips empty parsed items", () => {
@@ -195,6 +209,46 @@ describe("useTournamentsStore", () => {
             status: "mock-status",
             type: PromoType.TOURNAMENT,
         });
+    });
+
+    it("getCustomTournamentsList filters tournaments by user groups", () => {
+        const store = useTournamentsStore();
+        mockParseJson.mockImplementation((content: string) => JSON.parse(content));
+        mockUserGroups.value = [ 1170 ];
+        mockSnippets.value = [
+            {
+                categories: [ "tournament" ],
+                id: "unrestricted",
+                content: JSON.stringify(makeTournament({ id: 1, group_ids: [] })),
+            },
+            {
+                categories: [ "tournament" ],
+                id: "matching",
+                content: JSON.stringify(makeTournament({ id: 2, group_ids: [ 21, 1170 ] })),
+            },
+            {
+                categories: [ "tournament" ],
+                id: "hidden",
+                content: JSON.stringify(makeTournament({ id: 3, group_ids: [ 42 ] })),
+            },
+        ];
+
+        expect(store.getCustomTournamentsList.map(({ id }) => id)).toEqual([ 1, 2 ]);
+    });
+
+    it("getCustomTournamentsList compares user group ids without type coercion", () => {
+        const store = useTournamentsStore();
+        mockParseJson.mockImplementation((content: string) => JSON.parse(content));
+        mockUserGroups.value = [ "1170" ];
+        mockSnippets.value = [
+            {
+                categories: [ "tournament" ],
+                id: "number-group-id",
+                content: JSON.stringify(makeTournament({ id: 1, group_ids: [ 1170 ] })),
+            },
+        ];
+
+        expect(store.getCustomTournamentsList).toEqual([]);
     });
 
     it("getAllTournamentsOnlyUser returns filtered list", () => {
