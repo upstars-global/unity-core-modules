@@ -102,20 +102,32 @@ export async function loadRecentTournamentsReq(): Promise<ITournamentsList> {
 export async function loadBatchTournamentStatusesReq(ids: number[]): Promise<Record<number, IPlayer>> {
     try {
         const urls = ids.map(id => `api/tournaments/${id}/status`);
-        // API provider rule - only process first 12 URLs
-        const limitedUrls = urls.slice(0, 12);
-        const params = new URLSearchParams();
-        limitedUrls.forEach(url => params.append('url[]', url));
-        const { data } = await http().get<Record<number, IPlayer> | string[]>(`/batch?${ params.toString() }`);
+        
+        // Remove duplicate URLs to prevent processing the same tournament multiple times
+        const uniqueUrls = Array.from(new Set(urls));
+        
+        // API provider limitation: process URLs in chunks of 12
+        const CHUNK_SIZE = 12;
+        const urlChunks: string[][] = [];
+        for (let i = 0; i < uniqueUrls.length; i += CHUNK_SIZE) {
+            urlChunks.push(uniqueUrls.slice(i, i + CHUNK_SIZE));
+        }
 
         const transformedData: Record<number, IPlayer> = {};
         
-        if (typeof data === 'object' && data !== null) {
-            Object.values(data).forEach((playerData) => {
-                if (playerData && playerData.tournament_id) {
-                    transformedData[playerData.tournament_id] = playerData;
-                }
-            });
+        // Process each chunk sequentially
+        for (const chunk of urlChunks) {
+            const params = new URLSearchParams();
+            chunk.forEach(url => params.append('url[]', url));
+            const { data } = await http().get<Record<number, IPlayer> | string[]>(`/batch?${ params.toString() }`);
+            
+            if (typeof data === 'object' && data !== null) {
+                Object.values(data).forEach((playerData) => {
+                    if (playerData && playerData.tournament_id) {
+                        transformedData[playerData.tournament_id] = playerData;
+                    }
+                });
+            }
         }
 
         return transformedData;
