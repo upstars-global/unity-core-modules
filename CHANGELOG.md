@@ -1,3 +1,16 @@
+## [1.106.1](https://github.com/upstars-global/unity-core-modules/compare/v1.106.0...v1.106.1) (2026-08-21)
+
+### 🐛 Bug Fixes
+
+* UN-1867 loadBatchTournamentStatusesReq handle > 12 requests ([#386](https://github.com/upstars-global/unity-core-modules/issues/386))
+ ([d4b6b75](https://github.com/upstars-global/unity-core-modules/commit/d4b6b75e411b7762b2435e6261349bb52dcaad9b))
+
+
+
+    fix: loadBatchTournamentStatusesReq handle > 12 requests
+
+    Co-authored-by: Eduard Grabchak <edgrwork@gmail.com>
+
 ## [1.105.0](https://github.com/upstars-global/unity-core-modules/compare/v1.104.2...v1.105.0) (2026-08-19)
 
 ### 🚀 Features
