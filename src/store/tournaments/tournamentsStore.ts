@@ -6,9 +6,11 @@ import { isAchievement } from "../../helpers/achievementHelpers";
 import { parseJson } from "../../helpers/parseJson";
 import { promoFilterAndSettings, statusForTournament } from "../../helpers/promoHelpers";
 import { isQuest } from "../../helpers/questHelpers";
+import { sanitizeUserTourStatuses } from "../../helpers/tournaments";
 import { PromoType } from "../../models/enums/tournaments";
 import type { ISnippetItemCMS } from "../../services/api/DTO/CMS";
 import type { IPlayersList, ITournament, ITournamentsList } from "../../services/api/DTO/tournamentsDTO";
+import { loadBatchTournamentStatusesReq } from "../../services/api/requests/tournaments";
 import { useBannerStore } from "../banners";
 import { useCMS } from "../CMS";
 import { useUserStatuses } from "../user/userStatuses";
@@ -182,6 +184,27 @@ export const useTournamentsStore = defineStore("tournamentsStore", () => {
         userTournaments.value[indexTourForUpdate].top_players[indexUserForUpdate] = newStatus;
     }
 
+    async function fetchStatuses(ids: number[]): Promise<void> {
+        if (ids.length === 0) {
+            return;
+        }
+
+        try {
+            const hasUserTourStatuses = Boolean(currentUserTournamentsStatuses.value.length);
+
+            const statusesMap = await loadBatchTournamentStatusesReq(ids);
+            const statuses = ids.map((id) => statusesMap[id]).filter(Boolean);
+
+            const newStatuses = hasUserTourStatuses ?
+                sanitizeUserTourStatuses(currentUserTournamentsStatuses.value, statuses) :
+                statuses;
+
+            setCurrentUserTournamentsStatuses(newStatuses);
+        } catch (error) {
+            log.error("FETCH_TOURNAMENT_STATUSES_ERROR", error);
+        }
+    }
+
     return {
         currentTournament,
         currentUserTournamentsStatuses,
@@ -208,5 +231,6 @@ export const useTournamentsStore = defineStore("tournamentsStore", () => {
         setRecentTournaments,
         clearTournamentUserData,
         updateUserTournament,
+        fetchStatuses,
     };
 });
