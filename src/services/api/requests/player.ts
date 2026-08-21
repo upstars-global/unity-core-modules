@@ -65,10 +65,12 @@ export async function changePlayerGroup(groupForAdding?: IPlayerGroup, groupForR
     } catch (err) {
         log.error("CHANGE_PLAYER_GROUP_ERROR", bodyReq, err);
     } finally {
-        const loadingGroupIndex = loadingPlayerGroupIds.indexOf(groupForAdding);
+        if (groupForAdding) {
+            const loadingGroupIndex = loadingPlayerGroupIds.indexOf(groupForAdding);
 
-        if (loadingGroupIndex !== -1) {
-            loadingPlayerGroupIds.splice(loadingGroupIndex, 1);
+            if (loadingGroupIndex !== -1) {
+                loadingPlayerGroupIds.splice(loadingGroupIndex, 1);
+            }
         }
     }
 }
