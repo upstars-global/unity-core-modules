@@ -38,11 +38,15 @@ export interface LoadPlayerPaymentsParams {
     pageSize?: number;
 }
 
-let loadingChangePlayerGroup = false;
+const loadingPlayerGroupIds: IPlayerGroup[] = [];
 
 export async function changePlayerGroup(groupForAdding?: IPlayerGroup, groupForRemoving?: IPlayerGroup): Promise<void> {
-    if (loadingChangePlayerGroup) {
+    if (groupForAdding && loadingPlayerGroupIds.includes(groupForAdding)) {
         return;
+    }
+
+    if (groupForAdding) {
+        loadingPlayerGroupIds.push(groupForAdding);
     }
 
     const bodyReq = {
@@ -53,8 +57,6 @@ export async function changePlayerGroup(groupForAdding?: IPlayerGroup, groupForR
     };
 
     try {
-        loadingChangePlayerGroup = true;
-
         const response = await http().post<void>("/api/player/groups", bodyReq);
 
         if (response?.status === 422) {
@@ -63,7 +65,11 @@ export async function changePlayerGroup(groupForAdding?: IPlayerGroup, groupForR
     } catch (err) {
         log.error("CHANGE_PLAYER_GROUP_ERROR", bodyReq, err);
     } finally {
-        loadingChangePlayerGroup = false;
+        const loadingGroupIndex = loadingPlayerGroupIds.indexOf(groupForAdding);
+
+        if (loadingGroupIndex !== -1) {
+            loadingPlayerGroupIds.splice(loadingGroupIndex, 1);
+        }
     }
 }
 
