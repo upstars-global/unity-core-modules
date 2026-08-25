@@ -1,3 +1,10 @@
+## [1.107.0](https://github.com/upstars-global/unity-core-modules/compare/v1.106.2...v1.107.0) (2026-08-25)
+
+### 🚀 Features
+
+* change user group for live chat ([#383](https://github.com/upstars-global/unity-core-modules/issues/383))
+ ([9c5c0d5](https://github.com/upstars-global/unity-core-modules/commit/9c5c0d5ea47cf30e70d581f5a86ffaa57268f99e))
+
 ## [1.106.2](https://github.com/upstars-global/unity-core-modules/compare/v1.106.1...v1.106.2) (2026-08-21)
 
 ### 🐛 Bug Fixes
