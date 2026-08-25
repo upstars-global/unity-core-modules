@@ -1,3 +1,31 @@
+## [1.106.2](https://github.com/upstars-global/unity-core-modules/compare/v1.106.1...v1.106.2) (2026-08-21)
+
+### 🐛 Bug Fixes
+
+* (UN-3098) fix queue for adding user group ([#385](https://github.com/upstars-global/unity-core-modules/issues/385))
+ ([a8c4155](https://github.com/upstars-global/unity-core-modules/commit/a8c41551d17794e241e0612b8bfbbae83bc91838))
+
+
+
+    * UN-3098 fix queue for adding user group
+
+    * UN-3098 fix queue for adding user group
+
+    * UN-3098 fix queue for adding user group
+
+## [1.106.1](https://github.com/upstars-global/unity-core-modules/compare/v1.106.0...v1.106.1) (2026-08-21)
+
+### 🐛 Bug Fixes
+
+* UN-1867 loadBatchTournamentStatusesReq handle > 12 requests ([#386](https://github.com/upstars-global/unity-core-modules/issues/386))
+ ([d4b6b75](https://github.com/upstars-global/unity-core-modules/commit/d4b6b75e411b7762b2435e6261349bb52dcaad9b))
+
+
+
+    fix: loadBatchTournamentStatusesReq handle > 12 requests
+
+    Co-authored-by: Eduard Grabchak <edgrwork@gmail.com>
+
 ## [1.105.0](https://github.com/upstars-global/unity-core-modules/compare/v1.104.2...v1.105.0) (2026-08-19)
 
 ### 🚀 Features
