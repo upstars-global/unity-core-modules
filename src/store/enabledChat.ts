@@ -1,9 +1,10 @@
-// @ts-expect-error -- TS2307: Cannot find module '@theme/configs/constantsFreshChat' or its corresponding type declarations.
-import { CHAT_ID } from "@theme/configs/constantsFreshChat";
+
 import { defineStore } from "pinia";
 import { computed } from "vue";
 
 import { useLevelsStore } from "./levels/levelsStore";
+
+const RESERVE_CHAT_GROUP_ID = "reserve_chat";
 
 export const CHAT_LIVECHAT = "liveChat";
 export const DEFAULT_CHAT = "freshChat";
@@ -15,7 +16,7 @@ export const useEnabledChatStore = defineStore("enabledChatStore", () => {
 
         if (levelsStore.groups.length) {
             const isEnableReserveChat = levelsStore.groups.find(({ id }) => {
-                return Number(id) === CHAT_ID;
+                return id === RESERVE_CHAT_GROUP_ID;
             });
             return isEnableReserveChat?.writable ? RESERVE_CHAT : DEFAULT_CHAT;
         }
