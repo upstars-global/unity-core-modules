@@ -1,7 +1,4 @@
-// @ts-expect-error -- TS2307: Cannot find module '@config/centrifuge' or its corresponding type declarations.
-import { getCentrifugeUrl } from "@config/centrifuge";
 import { Centrifuge } from "centrifuge";
-import CentrifugeLegacy from "centrifuge-legacy/centrifuge";
 import { storeToRefs } from "pinia";
 
 import log from "../controllers/Logger";
@@ -64,56 +61,6 @@ function init(bus: IBus) {
     }
 
     $bus = bus;
-}
-
-function subscribeLegacyChannels(channelsType: ChannelType) {
-    const client = sock;
-
-    if (!client) {
-        return;
-    }
-
-    const { getSettings } = storeToRefs(useUserInfo());
-    const chanelSetting = channelsType === CHANNELS_TYPE_PRIVATE ? `#${getSettings.value?.cent.user}` : "";
-
-    CHANNELS_BY_TYPE[channelsType].forEach((chanel) => {
-        const keySubs = `${chanel}${chanelSetting}`;
-
-        if (Object.keys(client._subs).includes(keySubs)) {
-            return;
-        }
-
-        client.subscribe(keySubs, (message) => {
-            $bus.$emit?.(`websocket.${chanel}`, message);
-        });
-    });
-}
-
-async function startLegacyFlow() {
-    const { getSettings } = storeToRefs(useUserInfo());
-    const settings = getSettings.value;
-
-    if (!settings?.cent) {
-        return;
-    }
-
-    sock = new CentrifugeLegacy({
-        ...settings.cent,
-        url: getCentrifugeUrl(settings.cent.url),
-    }) as LegacyCentrifugeClient;
-
-    subscribeLegacyChannels(CHANNELS_TYPE_PUBLIC);
-
-    if (settings.cent.user) {
-        subscribeLegacyChannels(CHANNELS_TYPE_PRIVATE);
-    }
-
-    sock.connect();
-
-    sock.onmessage = function (response) {
-        const json = JSON.parse(response.data);
-        $bus.$emit?.(`websocket.${json.type}`, json);
-    };
 }
 
 function buildNotificationCenterChannel({ clientName, channel, user, isPrivate }: {
@@ -224,8 +171,6 @@ async function start() {
         await startNotificationCenterFlow();
         return;
     }
-
-    startLegacyFlow();
 }
 
 async function shouldUseNotificationCenterFlow() {
