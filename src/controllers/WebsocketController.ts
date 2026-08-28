@@ -45,7 +45,7 @@ const CHANNELS_BY_TYPE = {
         "groups_updates",
         "jackpot_win_award",
         "allsecure_notification",
-        "$analytics",
+        "analytics",
         "personal_notifications",
         "tournament_notifications",
         "payments_events",
