@@ -1,3 +1,10 @@
+## [1.108.0](https://github.com/upstars-global/unity-core-modules/compare/v1.107.0...v1.108.0) (2026-08-28)
+
+### 🚀 Features
+
+* UN-3152 Подписка на канал analytics по new flow ([#387](https://github.com/upstars-global/unity-core-modules/issues/387))
+ ([702d7be](https://github.com/upstars-global/unity-core-modules/commit/702d7be111c02a049f6ae2639cd700a26d044249))
+
 ## [1.107.0](https://github.com/upstars-global/unity-core-modules/compare/v1.106.2...v1.107.0) (2026-08-25)
 
 ### 🚀 Features
