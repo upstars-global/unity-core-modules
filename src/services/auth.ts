@@ -1,6 +1,5 @@
 import { type NavigationFailure } from "vue-router";
 
-import ABTestController from "../controllers/ABTest/ABTestController";
 import CoveryController from "../controllers/CoveryController";
 import { log } from "../controllers/Logger";
 import { CloudflareChallengeReason } from "../models/cloudflareChallenge";
@@ -9,8 +8,6 @@ import { IUserFormData, IUserInfo } from "../models/user";
 import { EventBus as bus } from "../plugins/EventBus";
 import { useUserInfo } from "../store/user/userInfo";
 import { checkEmail, registerUser, signIn, signOut } from "./api/requests/auth";
-import { changeUserToGroup } from "./user";
-
 function resolveLoginChallengeReason(customLoginReg?: string): CloudflareChallengeReason {
     return customLoginReg === "yes"
         ? CloudflareChallengeReason.Registration
@@ -46,7 +43,6 @@ interface LogoutDeps {
 
 interface RegistrationDeps {
     loadAuthData: LoadAuthData;
-    enableABReg: boolean;
 }
 
 export function createLoginTwoFactor({ loadAuthData }: LoginTwoFactorDeps) {
@@ -121,7 +117,7 @@ export function createLogout({ clearFreshChatUser, resetAuthData }: LogoutDeps) 
     };
 }
 
-export function createRegistration({ loadAuthData, enableABReg }: RegistrationDeps) {
+export function createRegistration({ loadAuthData }: RegistrationDeps) {
     // @ts-expect-error arameter 'registrationData' implicitly has an 'any' type.
     return async function registration(registrationData) {
         if (registrationData.user) {
@@ -134,11 +130,6 @@ export function createRegistration({ loadAuthData, enableABReg }: RegistrationDe
 
             // @ts-expect-error -- TS2345: Argument of type 'unknown' is not assignable to parameter of type 'Partial<IUserData>'.
             setUserData(data);
-
-            if (enableABReg) {
-                // @ts-expect-error -- TS2576: Property 'groupById' does not exist on type 'ABTestController'. Did you mean to access the static member 'ABTestController.groupById' instead?
-                await changeUserToGroup(ABTestController.groupById);
-            }
 
             await loadAuthData();
             toggleUserIsLogged(true);
