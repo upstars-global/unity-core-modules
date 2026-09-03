@@ -9,13 +9,7 @@ import {
     checkUserState,
     loadPlayerFieldsInfo,
     sendFreshChatRestoreId,
-    userSetToGroupForAbTest,
 } from "../../src/services/user";
-
-vi.mock("@config/groupAB", () => ({
-    ID_GROUP_FOR_PAIRED_ID: 100,
-    ID_GROUP_FOR_UNPAIRED_ID: 101,
-}));
 
 const changeUserToGroupMock = vi.fn();
 const useUserInfoMock = {
@@ -107,32 +101,6 @@ describe("user service helpers", () => {
         getFieldsTypeMock.mockReset();
         vi.mocked(playerRequests.loadPlayerFieldsInfoRequest).mockResolvedValue(undefined as unknown as IPlayerFieldsInfo);
         vi.mocked(playerRequests.sendUserDataReq).mockResolvedValue({ status: 200 } as never);
-    });
-
-    describe("userSetToGroupForAbTest", () => {
-        it("does nothing when user already in AB group", async () => {
-            userGroups = [ 100 ];
-
-            await userSetToGroupForAbTest();
-
-            expect(playerRequests.changePlayerGroup).not.toHaveBeenCalled();
-        });
-
-        it("assigns paired group for even user id", async () => {
-            userInfoRef.value = { ...userInfoRef.value, id: 4 };
-
-            await userSetToGroupForAbTest();
-
-            expect(playerRequests.changePlayerGroup).toHaveBeenCalledWith(100, null);
-        });
-
-        it("assigns unpaired group for odd user id", async () => {
-            userInfoRef.value = { ...userInfoRef.value, id: 5 };
-
-            await userSetToGroupForAbTest();
-
-            expect(playerRequests.changePlayerGroup).toHaveBeenCalledWith(101, null);
-        });
     });
 
     describe("loadPlayerFieldsInfo", () => {

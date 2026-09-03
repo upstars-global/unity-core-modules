@@ -22,7 +22,6 @@ export default {
     enableLottery: false,
     enableConpoints: false,
     enableSpecialGameRowInLobby: true,
-    enableABReg: false,
     enableSpecialLinkGame: true,
     enableVerifyEmailByIbiza: true,
     enableMysticJackpots: false,
