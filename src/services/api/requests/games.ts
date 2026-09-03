@@ -84,9 +84,10 @@ export async function loadGamesCategory(config: Record<string, unknown>): Promis
 export async function loadGamesDataByFilter<T>(config: Record<string, unknown>): Promise<T> {
     try {
         const { data } = await http().post<T>("/api/games_filter", config);
+        log.error("LOAD_GAMES_CATEGORY_ERROR_TEST", config);
         return data;
     } catch (error) {
-        log.error("LOAD_GAMES_CATEGORY_ERROR", error);
+        log.error("LOAD_FILTERED_GAMES_ERROR", error);
         return {} as T;
     }
 }
