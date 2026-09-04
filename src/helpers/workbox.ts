@@ -1,10 +1,9 @@
 import {
-    COUNTRY_BY_HOST,
-    DEFAULT_COUNTRY,
-    DEFAULT_LOCALE_BY_COUNTRY,
     LOCALES,
 // @ts-expect-error -- TS2307: Cannot find module '@theme/configs/constsLocales' or its corresponding type declarations.
 } from "@theme/configs/constsLocales";
+
+import { getDefaultLocaleByHostname } from "./getDefaultLocaleByHostname";
 
 function getPathLocale(pathname: string): string | null {
     const [ , lang ] = pathname.split("/");
@@ -18,8 +17,7 @@ interface IResConfig {
 }
 export function localeHostname(url: URL, savedLoc: string): IResConfig {
     const pathLoc = getPathLocale(url.pathname);
-    const country = COUNTRY_BY_HOST[url.hostname] || DEFAULT_COUNTRY;
-    const hostLoc = DEFAULT_LOCALE_BY_COUNTRY[country];
+    const hostLoc = getDefaultLocaleByHostname();
     const reqLoc = pathLoc || hostLoc;
 
     if (savedLoc === hostLoc && hostLoc === pathLoc) {
