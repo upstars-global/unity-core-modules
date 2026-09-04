@@ -52,6 +52,7 @@ const CHANNELS_BY_TYPE = {
         "payments_changes",
         "payment_methods_updated",
         "balance",
+        "game_insufficient_funds"
     ],
 } as const;
 
