@@ -69,4 +69,8 @@ if (drift) {
     lines.push("", `unity-ai version drift: ${ drift }`);
 }
 
+if (drift) {
+    lines.push("", `unity-ai version drift: ${ drift }`);
+}
+
 process.stdout.write(`${ lines.join("\n") }\n`);
