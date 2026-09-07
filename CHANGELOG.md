@@ -1,3 +1,60 @@
+## [1.111.0](https://github.com/upstars-global/unity-core-modules/compare/v1.110.0...v1.111.0) (2026-09-07)
+
+### 🚀 Features
+
+* **ai-kit:** warn at session start when the plugin and the pin have … ([#393](https://github.com/upstars-global/unity-core-modules/issues/393))
+ ([12c8a28](https://github.com/upstars-global/unity-core-modules/commit/12c8a28e1ae25a42b29bb84744070d39d0a73085))
+
+
+
+    feat(ai-kit): warn at session start when the plugin and the pin have drifted
+
+    The toolkit arrives through two channels that move independently: the plugin
+
+    follows the marketplace, which tracks the repository's default branch, and
+
+    node_modules follows the pinned tag. When they disagree something silently does
+
+    not work — a skill calling a script the pin does not have, or AGENTS.md pointing
+
+    at rule files that are not installed. That is exactly how `yarn ai:agents-md`
+
+    turned into MODULE_NOT_FOUND with nothing explaining why.
+
+    Claude Code exposes no "update available" signal to a hook, so a plugin cannot
+
+    warn about its own updates. This drift, however, is visible locally without any
+
+    network: compare the version of the loaded plugin against the version of the
+
+    copy inside node_modules. The SessionStart hook now does that in applications
+
+    and says which side is stale, and stays silent when they match or when it runs
+
+    in the library itself.
+
+    Auto-updating the plugin is already handled where it belongs: `autoUpdate: true`
+
+    in each application's committed .claude/settings.json, which refreshes the
+
+    catalogue and installs newer plugin versions in the background after startup.
+
+    That is off by default for third-party marketplaces, which is why it is declared
+
+    explicitly.
+
+    Plugin version 0.4.1.
+
+    Plan: Confluence > Unity > FrontEnd > Unity AI Kit
+
+    Ticket: UN-3195
+
+    Claude-Session: https://claude.ai/code/session_016QXqeBSNYV6EymrtMfUV9j
+
+    Co-authored-by: d-tashchi <kabak133@gmail.com>
+
+    Co-authored-by: Claude Opus 5 <noreply@anthropic.com>
+
 ## [1.110.0](https://github.com/upstars-global/unity-core-modules/compare/v1.109.0...v1.110.0) (2026-09-07)
 
 ### 🚀 Features
