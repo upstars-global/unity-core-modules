@@ -13,7 +13,10 @@ copy. Read it before writing a first test for an unfamiliar layer.
 ## Always
 
 - Cover changed business logic. Do not add import-only or cosmetic tests to move a number.
-- Mirror the source tree: `src/store/foo.ts` -> `tests/store/foo.test.ts`.
+- Put the test where the package puts tests. This is not uniform and it is the most common
+  mistake: `packages/front-ss` mirrors sources into `tests/unit/<same path>/<Name>.test.ts`,
+  while `packages/front-core` and the server packages keep the test **next to the source**
+  (`modules/Foo/helpers.test.ts`). `unity-core-modules` mirrors `src/` into `tests/`.
 - Reuse the existing mocks and helpers instead of writing new ones.
 - Mock at the lowest useful boundary — usually `src/services/api/requests/*` — when testing
   service or store orchestration.
@@ -27,6 +30,8 @@ copy. Read it before writing a first test for an unfamiliar layer.
   dependencies — not implementation details.
 - If the touched file already has a test file, extend that one rather than starting another.
 - Changes limited to documentation, comments or agent-context files need no tests.
+- New user-facing copy goes through a translation key in the default language file, never inline
+  text — see the i18n rule in the toolkit's `i18n-keys` skill for the flow around it.
 
 ## CI coverage gate (application repositories)
 
