@@ -28,6 +28,10 @@ a browser assumption in shared code breaks both applications at once.
 4. When the change touches assets, the service worker or caching, point at the repository's own
    `docs/ai-context/asset-cache-rules.md` as well: those rules win over the shared ones.
 
+5. When a finding explains a mechanism that will trap the next person too — not just this
+   diff — offer a knowledge page for it. An SSR trap rediscovered twice has already cost more
+   than the page would have.
+
 ## What this cannot do
 
 It reads code. It does not run the application, so it cannot see a real hydration warning — the
