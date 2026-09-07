@@ -8,16 +8,24 @@ Plan and rationale: Confluence → space **Unity** → folder **FrontEnd** → *
 
 ## Status
 
-`0.3.0` — stage 2 in progress. Ships the shared rules (stage 1), the `impact-analysis` skill and
-its agent, and the deterministic scripts they stand on. `root-cause`, the MR text and the local
-review skill are next; see the plan.
+`0.4.0` — stage 2. Ships the shared rules (stage 1), the QA and Jira skills, the local review,
+and the deterministic scripts they stand on. Wiring the review rules into the organisation's CI
+review is a separate item, waiting on that job's own implementation.
 
 ## Skills
 
 | Skill | Invoke | What it does |
 | --- | --- | --- |
 | `impact-analysis` | `/unity-ai:ia`, "що тестувати" | Branch to a manual-QA checklist of pages and checks, in Ukrainian, optionally written into the Jira ticket |
+| `root-cause` | `/unity-ai:root-cause`, "першопричина бага" | Classifies a bug-fix diff into the Jira Root cause option and writes it, after verifying the write stuck |
+| `review` | `/unity-ai:review`, "відревю до пуша" | Reviews the branch against `rules/review.md` before anyone else sees it |
+| `mr-text` | `/unity-ai:mr-text`, "опиши MR" | Merge-request description and the author's checklist from the team's development flow |
 | `doctor` | `/unity-ai:doctor` | Reports whether the toolkit is installed correctly and what it can currently do |
+
+Agents are launched by the skills, never directly: `impact-analysis` and `code-review` on sonnet,
+`root-cause` on the cheaper `fable` — its job is to pick one category from a known list. Every
+agent is read-only, cannot ask questions, and returns only its result. Jira and git writes stay in
+the skill, where the user's intent lives.
 
 ## Scripts
 
