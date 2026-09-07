@@ -1,3 +1,226 @@
+## [1.114.0](https://github.com/upstars-global/unity-core-modules/compare/v1.113.0...v1.114.0) (2026-09-07)
+
+### 🚀 Features
+
+* **ai-kit:** stage 5 — knowledge vault, without the always-on index ([#396](https://github.com/upstars-global/unity-core-modules/issues/396))
+ ([d697eee](https://github.com/upstars-global/unity-core-modules/commit/d697eee6e3b0b074753c69f1015ffac2731d518b))
+
+
+
+    * feat(ai-kit): stage 5 — knowledge vault, without the always-on index
+
+    A page in knowledge/ carries what the code cannot: invariants, contracts,
+
+    gotchas, and why something is the way it is. The tooling ships here, the pages
+
+    live in the repository they describe.
+
+    docs-map.mjs is the deterministic core — which page documents a source, whether
+
+    that page is still true, what debt a branch carries, and what is worth
+
+    documenting first. Freshness is a hash of the source in the page's frontmatter,
+
+    not its mtime: mtime changes on every install and checkout and would declare
+
+    half the vault stale for nothing. The path mapping handles a monorepo, so
+
+    front-ss and front-core helpers of the same name do not collide, and storybook
+
+    and the translation pipeline are excluded from documentation entirely.
+
+    One deliberate departure from the toolkit this learned from: **no vault index is
+
+    injected at session start.** Theirs injects it, which is a cost every session
+
+    pays whether or not anyone asks a question, and it grows with the vault.
+
+    `--find` costs one command, and only when a question is actually asked. The
+
+    reading order is written into query-docs instead: the codebase graph for where,
+
+    the page for why, the source for the rest.
+
+    --hotpath ranks by churn, because the code that changes most is the code whose
+
+    invariants get rediscovered most often. On frontera today that puts
+
+    layouts/App/App.vue at 19 changes in six months, CashboxForm and gtmConstants at
+
+    13 — a documentation backlog that comes from git rather than from opinion.
+
+    The doctrine reference is the part that decides whether this survives: a page
+
+    must not retell the file, must not restate the types, and stays under about 2 KB
+
+    because it is read *instead* of the source. --lint enforces the size along with
+
+    broken links, orphans and name collisions.
+
+    Not shipped, deliberately: the post-commit debt queue and the Stop-hook reminder
+
+    from the plan. With zero pages in the vault they would nag about nothing. They
+
+    are worth adding once the vault is genuinely used, and not before.
+
+    Plugin version 0.7.0.
+
+    Plan: Confluence > Unity > FrontEnd > Unity AI Kit
+
+    Ticket: UN-3195
+
+    Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+
+    Claude-Session: https://claude.ai/code/session_016QXqeBSNYV6EymrtMfUV9j
+
+    * fix(ai-kit): skills could not run their own scripts; review cuts the always-on cost by a third
+
+    Review of everything built so far, with one defect that mattered more than the
+
+    rest and a set of cuts.
+
+    **The defect.** `${CLAUDE_PLUGIN_ROOT}` is substituted only inside plugin.json
+
+    and hooks.json. In the body of a SKILL.md it stays a literal, so nineteen files
+
+    told the assistant to run `node "${CLAUDE_PLUGIN_ROOT}/scripts/x.mjs"`, which
+
+    the shell resolves to `node "/scripts/x.mjs"`. Every script invocation in every
+
+    skill was broken, and it looked fine in review because the string reads
+
+    correctly.
+
+    Fixed with one resolver per repository — scripts/ai.mjs, shipped as
+
+    ai-kit/templates/ai.mjs — which finds the toolkit in the pinned package, then in
+
+    the checkout, then in CLAUDE_PLUGIN_ROOT if it is set. Skills now say
+
+    `node scripts/ai.mjs collect-evidence --json`: shorter, uniform across
+
+    repositories, and it works. With no arguments it prints the version, the
+
+    resolved path and the available scripts, which is what the doctor skill existed
+
+    to do.
+
+    **Cuts, measured with budget.mjs — always-on went from 1618 to 1092
+
+    tokens, a third less, paid by every session of every developer:**
+
+    - Skill descriptions carried five or six near-synonymous trigger phrases each.
+
+      Kept the distinctive ones in three languages, dropped the rest.
+
+    - Agent descriptions restated their skill. The assistant does not pick an agent
+
+      by phrase — the skill names it — so one short line is enough.
+
+    - Rule descriptions are printed at session start verbatim; shortened to one
+
+      clause each.
+
+    - The doctor skill and selfcheck.mjs are gone. They were stage-0 spike
+
+      scaffolding: the question they answered is answered, and what remains of their
+
+      value is in the resolver and in the drift warning.
+
+    - vue-component restated conventions that the scaffold already applies and the
+
+      frontend rule already owns. Removed the duplicate, kept the one line that is
+
+      genuinely easy to get wrong (translation keys go only into en.json).
+
+    Also corrected the review rule's own description: it claimed to be the source
+
+    for the CI review, which is deferred to another team and not wired up.
+
+    Plugin version 0.8.0.
+
+    Plan: Confluence > Unity > FrontEnd > Unity AI Kit
+
+    Ticket: UN-3195
+
+    Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+
+    Claude-Session: https://claude.ai/code/session_016QXqeBSNYV6EymrtMfUV9j
+
+    * fix(ai-kit): the session-start hook no longer depends on one env var
+
+    The hook ran `node "${CLAUDE_PLUGIN_ROOT}/scripts/rules-inject.mjs" || true`.
+
+    That variable is unreliable even in hooks, and `|| true` meant a failure was
+
+    invisible: the session would simply start without the rule index and nobody
+
+    would know why a skill ignored a rule.
+
+    It now tries the repository's own resolver first — `node scripts/ai.mjs
+
+    rules-inject`, which needs no variable because hooks run in the project
+
+    directory — and falls back to the plugin path. `|| true` stays last, because a
+
+    hook must never break a session, but it is now the third line of defence rather
+
+    than the first.
+
+    Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+
+    Claude-Session: https://claude.ai/code/session_016QXqeBSNYV6EymrtMfUV9j
+
+    * refactor(ai-kit): move procedure out of the main context, where the neighbours put it
+
+    Comparing our layout against cardona-core-service line by line: their agent
+
+    model split is essentially ours (four sonnet, one fable, one haiku for a
+
+    hand-edit fallback we have no analogue for), but their SKILL.md bodies are
+
+    thinner and backed by references. write-tests there is 1.1 KB with seven
+
+    reference files; ours was 1.9 KB with none.
+
+    That difference is not cosmetic. A SKILL.md body is read by the **main** context
+
+    every time the skill fires; a reference is read by the **agent**, in its own
+
+    window and often on a cheaper model. I wrote that principle into the invariants
+
+    and then followed it halfway.
+
+    port-to-twin and write-tests now keep inputs, the gate and the delegation in the
+
+    skill, with the procedure in references the agent reads itself:
+
+    port-to-twin/references/playbook.md (branch from the twin's own default branch,
+
+    apply by verdict, the recurring asymmetries, never cherry-pick across the
+
+    repositories) and write-tests/references/placement.md (the per-package table,
+
+    including that front-ss only runs tests/** so a co-located test there is
+
+    silently never executed).
+
+    Procedure paid for by the main context drops from ~5780 to ~5340 tokens per
+
+    invocation, and what moved is now read by the agent instead. always-on is
+
+    unchanged at ~1090.
+
+    Plugin version 0.8.1.
+
+    Plan: Confluence > Unity > FrontEnd > Unity AI Kit
+
+    Ticket: UN-3195
+
+    Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+
+    Claude-Session: https://claude.ai/code/session_016QXqeBSNYV6EymrtMfUV9j
+
 ## [1.113.0](https://github.com/upstars-global/unity-core-modules/compare/v1.112.0...v1.113.0) (2026-09-07)
 
 ### 🚀 Features
