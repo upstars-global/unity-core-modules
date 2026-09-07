@@ -8,7 +8,7 @@ Plan and rationale: Confluence → space **Unity** → folder **FrontEnd** → *
 
 ## Status
 
-`0.4.1` — stage 2. Ships the shared rules (stage 1), the QA and Jira skills, the local review,
+`0.4.2` — stage 2. Ships the shared rules (stage 1), the QA and Jira skills, the local review,
 and the deterministic scripts they stand on. Wiring the review rules into the organisation's CI
 review is a separate item, waiting on that job's own implementation.
 
@@ -39,6 +39,7 @@ model in the loop.
 | `sync-agents-md.mjs` | Generates `AGENTS.md` from the rules; `--check` fails when it is stale |
 | `rules-inject.mjs` | The SessionStart index of rules, plus a warning when the plugin and the pinned copy in `node_modules` have drifted apart |
 | `selfcheck.mjs` | Install probe behind `/unity-ai:doctor` |
+| `budget.mjs` | What the toolkit costs in context, split into always-on and on-trigger. Run it before and after adding a skill |
 
 ## Layout
 
@@ -58,6 +59,11 @@ ai-kit/                           # the plugin itself
 A rule file is markdown with frontmatter: `name`, a one-line `description`, and `appliesTo`
 (`all`, `apps` or `library`). Only the descriptions are injected at session start — the body is
 read when the assistant works in that area, so the always-on cost stays a handful of lines.
+
+That split is the point, and it is measurable: `node ai-kit/scripts/budget.mjs` prints what every
+session pays for the toolkit existing (frontmatter and the SessionStart line) against what is only
+paid when a skill actually runs. Adding a skill costs the first number a line; a long playbook
+costs it nothing. Check it before and after adding anything.
 
 Three consumers read the same files, which is the whole point:
 

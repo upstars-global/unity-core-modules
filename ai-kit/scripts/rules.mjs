@@ -17,10 +17,10 @@ import { fileURLToPath } from "node:url";
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 
 export const PLUGIN_DIR = resolve(scriptDir, "..");
-export const PACKAGE_ROOT = resolve(PLUGIN_DIR, "..");
 
-// Canonical location of the package inside a consuming repository.
+// Canonical location of the package, and of the plugin inside it, in a consuming repository.
 export const PACKAGE_IN_NODE_MODULES = join("node_modules", "unity-core-modules");
+export const PLUGIN_IN_NODE_MODULES = join(PACKAGE_IN_NODE_MODULES, "ai-kit");
 
 // A checkout of unity-core-modules itself always describes its own rules; anywhere else the
 // rules come from wherever this script was loaded from (the installed plugin or node_modules).
@@ -96,10 +96,15 @@ export function relativeFromCwd (path, cwd = process.cwd()) {
         return rel;
     }
 
-    // Outside the repository: this happens when the toolkit runs from an installed plugin, or when
-    // a checkout of the package generates files for a consumer. Either way the path a developer in
-    // that repository should use is the one inside node_modules.
-    const inPackage = relative(PACKAGE_ROOT, path);
+    // Outside the repository: the toolkit is running from the installed plugin, or from a checkout
+    // of the package generating files for a consumer. Either way the path that repository should
+    // use is the one inside node_modules.
+    //
+    // It has to be derived from PLUGIN_DIR, not from its parent. The marketplace installs only the
+    // ai-kit subtree, into a directory named after the plugin version, so the parent of the plugin
+    // directory is not the package root there — assuming it was is what produced paths like
+    // node_modules/unity-core-modules/0.4.1/rules/frontend.md, which do not exist.
+    const inPlugin = relative(PLUGIN_DIR, path);
 
-    return inPackage.startsWith("..") ? path : join(PACKAGE_IN_NODE_MODULES, inPackage);
+    return inPlugin.startsWith("..") ? path : join(PLUGIN_IN_NODE_MODULES, inPlugin);
 }
