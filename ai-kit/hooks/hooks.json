@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/selfcheck.mjs\" --hook || true"
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/rules-inject.mjs\" || true"
           }
         ]
       }

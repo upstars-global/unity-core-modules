@@ -19,7 +19,8 @@
     "ci": "find . -type d -name \"node_modules\" -prune -exec rm -rf {} + && yarn cache clean && yarn",
     "depcruise:test": "depcruise src --include-only '^src'",
     "depcruise:svg": "depcruise --include-only '^src' --output-type dot src | dot -T svg > dependencygraph.svg",
-    "depcruise:check": "node scripts/depcruise-threshold.mjs --config=.dependency-cruiser.cjs --maxErrors=0 --maxWarnings=99"
+    "depcruise:check": "node scripts/depcruise-threshold.mjs --config=.dependency-cruiser.cjs --maxErrors=0 --maxWarnings=99",
+    "ai:agents-md": "node ai-kit/scripts/sync-agents-md.mjs"
   },
   "lint-staged": {
     "*.{js,cjs,mjs,jsx,ts,mts,tsx}": "eslint --fix"
