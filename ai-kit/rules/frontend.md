@@ -1,6 +1,6 @@
 ---
 name: frontend
-description: Vue 3 / Pinia / TypeScript conventions that hold in every Unity front-end repository.
+description: Vue 3 / Pinia / TypeScript conventions shared by every repository.
 appliesTo: all
 ---
 

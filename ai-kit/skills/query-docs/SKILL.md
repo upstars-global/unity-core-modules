@@ -1,6 +1,6 @@
 ---
 name: query-docs
-description: Answer how something in this codebase works, reading the knowledge page before the source. Use when the user asks "як працює X", "що таке X", "как работает X", "что такое X", "how does X work", "explain X", or "where is X handled".
+description: Answer how something works, reading the knowledge page before the source. Triggers: "як працює", "как работает", "how does X work".
 ---
 
 # Query the knowledge vault
@@ -16,7 +16,7 @@ reading the source.
 2. Then the vault, for *why* and *what breaks*:
 
    ```shell
-   node "${CLAUDE_PLUGIN_ROOT}/scripts/docs-map.mjs" --find <Entity or path>
+   node scripts/ai.mjs docs-map --find <Entity or path>
    ```
 
    `ok` — read the page and answer from it. `stale` or `no page` — read the source.

@@ -1,6 +1,6 @@
 ---
 name: ssr-safety
-description: Audit a change for SSR and hydration problems before it reaches a stage. Use when the user asks "перевір SSR", "hydration mismatch", "гідратація", "проверь SSR", "почему прыгает вёрстка", "check hydration", or "ssr safe".
+description: Audit a change for browser assumptions and hydration mismatches. Triggers: "перевір SSR", "проверь SSR", "hydration mismatch".
 ---
 
 # SSR safety
@@ -16,11 +16,11 @@ a browser assumption in shared code breaks both applications at once.
 1. Facts:
 
    ```shell
-   node "${CLAUDE_PLUGIN_ROOT}/scripts/collect-evidence.mjs"
+   node scripts/ai.mjs collect-evidence
    ```
 
 2. Delegate to the `ssr-safety` agent with the evidence and the instruction to read
-   `${CLAUDE_PLUGIN_ROOT}/rules/ssr.md` first.
+   `<toolkit>/rules/ssr.md` first.
 
 3. Return its findings verbatim. Each one names a file and line, what breaks, and when — on the
    server, on hydration, or only on a slow connection. A finding without that is not returned.

@@ -1,6 +1,6 @@
 ---
 name: port-to-twin
-description: Carry a change from one twin application to the other, reporting what cannot be carried. Use when the user asks "перенеси в king-front", "перенеси в frontera", "синхронізуй близнюка", "перенеси в близнеца", "port this to the twin", or "port to king-front".
+description: Carry a change into the twin application and report what cannot be carried. Triggers: "перенеси в king-front", "перенеси в frontera", "port to the twin".
 ---
 
 # Port to the twin
@@ -18,7 +18,7 @@ was left behind.
 1. Establish the facts before touching anything:
 
    ```shell
-   node "${CLAUDE_PLUGIN_ROOT}/scripts/port-map.mjs" --commit <sha or range>
+   node scripts/ai.mjs port-map --commit <sha or range>
    ```
 
    Run it from the source repository. It prints the structural differences and a verdict per file:

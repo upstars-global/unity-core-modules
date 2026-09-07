@@ -1,6 +1,6 @@
 ---
 name: write-tests
-description: Write unit tests for existing code, following this repository's conventions and the coverage gate. Use when the user asks "напиши тести", "покрий тестами", "напиши тесты", "покрой тестами", "test this", "add coverage for", or "створи spec".
+description: Write unit tests for existing code, by this repository's conventions and the coverage gate. Triggers: "покрий тестами", "покрой тестами", "add coverage".
 ---
 
 # Write tests
@@ -21,8 +21,8 @@ code under test is wrong, say so and stop rather than testing the bug.
 
    If a test file for the touched source already exists, extend it instead of adding another.
 
-2. Read the rules and the neighbours: `${CLAUDE_PLUGIN_ROOT}/rules/testing.md` for what to test
-   and the coverage gate, `${CLAUDE_PLUGIN_ROOT}/guides/unit-tests.md` for the full team policy
+2. Read the rules and the neighbours: `<toolkit>/rules/testing.md` for what to test
+   and the coverage gate, `<toolkit>/guides/unit-tests.md` for the full team policy
    with examples. Then read one existing test in the same directory — it shows the mocks and
    helpers to reuse.
 

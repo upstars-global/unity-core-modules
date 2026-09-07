@@ -12,7 +12,7 @@ Take it as fact and do not re-derive it.
 Then map files to pages, deterministically:
 
 ```shell
-node "${CLAUDE_PLUGIN_ROOT}/scripts/routes-map.mjs" --for <changed file> [<changed file> ...]
+node scripts/ai.mjs routes-map --for <changed file> [<changed file> ...]
 ```
 
 It answers with the routes that render each file (`renders this file`), the routes in the same

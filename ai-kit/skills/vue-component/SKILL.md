@@ -1,6 +1,6 @@
 ---
 name: vue-component
-description: Create a new Vue component with its unit test, and optionally a story and translation keys, in the places this repository puts them. Use when the user asks "новий компонент", "створи компонент", "новый компонент", "создай компонент", "create a component", "add a component", or "scaffold a component".
+description: Generate a component with its test, story and translation keys, where each package puts them. Triggers: "новий компонент", "новый компонент", "create a component".
 ---
 
 # New Vue component
@@ -21,7 +21,7 @@ and getting it wrong means someone moves files later.
 2. Generate the skeleton:
 
    ```shell
-   node "${CLAUDE_PLUGIN_ROOT}/scripts/component-scaffold.mjs" \
+   node scripts/ai.mjs component-scaffold \
      --name FeBadge --package front-ss --dir ui/FeBadge [--story] [--i18n-keys BADGE.TITLE=Badge]
    ```
 
@@ -37,12 +37,9 @@ and getting it wrong means someone moves files later.
 4. Run the package's own test script on the new test, and lint the touched files. Do not report
    the component as done before both pass.
 
-## Conventions the skeleton already follows
+## Conventions
 
-- `<script setup lang="ts">` first, then `<template>` — the order the recent components use.
-- Props through `defineProps` with an `interface`, defaults through `withDefaults`.
-- Tailwind classes in the template; a `<style>` block only when Tailwind genuinely cannot do it.
-- Tests: `mount` from `@vue/test-utils`, explicit vitest imports, alias imports for the component.
-- New translation keys land in `src/i18n/messages/en.json` and nowhere else. Every other locale
-  is pulled back from Lokalise after the merge request, so a key written into `de.json` by hand is
-  lost on the next pull.
+The skeleton already follows them, so do not restate them back to the user. Where it stops being
+enough, the answer is in the neighbouring component in the same directory, and in the `frontend`
+rule. The one thing worth repeating: new translation keys go into `src/i18n/messages/en.json` and
+nowhere else — every other locale is pulled back from Lokalise and would lose them.

@@ -1,6 +1,6 @@
 ---
 name: cross-repo
-description: How the three repositories relate — twins, the shared package, version pinning, and where an edit belongs.
+description: How the twins and the shared library relate, and where an edit belongs.
 appliesTo: all
 ---
 

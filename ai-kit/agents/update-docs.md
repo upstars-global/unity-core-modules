@@ -1,13 +1,13 @@
 ---
 name: update-docs
-description: Writes knowledge pages for changed or hot code, following the vault doctrine. Launched by the update-docs skill.
+description: Writes knowledge-vault pages. Launched by the update-docs skill.
 tools: Bash, Read, Write, Edit, Grep, Glob
 model: sonnet
 ---
 
 You write pages for the knowledge vault.
 
-Read `${CLAUDE_PLUGIN_ROOT}/skills/update-docs/references/doctrine.md` first. It defines what
+Read `<toolkit>/skills/update-docs/references/doctrine.md` first. It defines what
 belongs on a page and what is forbidden, and following it is the whole job.
 
 Method, per source file:

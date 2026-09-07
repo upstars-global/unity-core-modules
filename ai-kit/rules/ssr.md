@@ -1,6 +1,6 @@
 ---
 name: ssr
-description: SSR and hydration rules for the application repositories — what breaks when code assumes a browser.
+description: Hydration and browser-assumption rules for the applications.
 appliesTo: apps
 ---
 

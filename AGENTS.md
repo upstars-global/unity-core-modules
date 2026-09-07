@@ -10,10 +10,10 @@ Repository: `unity-core-modules` (role: library).
 Read the file that covers the area you are changing. These live in the shared package, so the
 same rules apply in every Unity front-end repository.
 
-- `ai-kit/rules/cross-repo.md` — How the three repositories relate — twins, the shared package, version pinning, and where an edit belongs.
-- `ai-kit/rules/frontend.md` — Vue 3 / Pinia / TypeScript conventions that hold in every Unity front-end repository.
-- `ai-kit/rules/review.md` — What a review must check in a diff. Single source for the local review skill and for the CI review rules.
-- `ai-kit/rules/testing.md` — Unit-test conventions and the CI coverage gate. The full team policy lives in guides/unit-tests.md.
+- `ai-kit/rules/cross-repo.md` — How the twins and the shared library relate, and where an edit belongs.
+- `ai-kit/rules/frontend.md` — Vue 3 / Pinia / TypeScript conventions shared by every repository.
+- `ai-kit/rules/review.md` — What a review must check in a diff, and what to stay silent about.
+- `ai-kit/rules/testing.md` — Unit-test conventions, test placement per package, and the CI coverage gate.
 
 ## Repository-local context
 

@@ -1,12 +1,12 @@
 ---
 name: update-docs
-description: Write or refresh knowledge pages for code that changed. Use when the user asks "онови документацію", "напиши сторінку", "обнови документацию", "задокументируй", "update the docs", "document this", or runs /unity-ai:update-docs.
+description: Write or refresh knowledge pages for changed or hot code. Triggers: "онови документацію", "задокументируй", "update the docs".
 ---
 
 # Update the knowledge vault
 
 Writes the pages that carry what the code cannot: invariants, contracts, gotchas, and why it is
-this way. Read `${CLAUDE_PLUGIN_ROOT}/skills/update-docs/references/doctrine.md` before writing —
+this way. Read `<toolkit>/skills/update-docs/references/doctrine.md` before writing —
 it is short, and it is the difference between a vault people read and one they stop trusting.
 
 ## Steps
@@ -14,13 +14,13 @@ it is short, and it is the difference between a vault people read and one they s
 1. Find the debt. Either what this branch changed:
 
    ```shell
-   node "${CLAUDE_PLUGIN_ROOT}/scripts/docs-map.mjs" --pending
+   node scripts/ai.mjs docs-map --pending
    ```
 
    or, when starting the vault from nothing, what churns most:
 
    ```shell
-   node "${CLAUDE_PLUGIN_ROOT}/scripts/docs-map.mjs" --hotpath --top 20
+   node scripts/ai.mjs docs-map --hotpath --top 20
    ```
 
    Churn is the honest ranking: the code that changes most is the code whose invariants get
@@ -33,9 +33,9 @@ it is short, and it is the difference between a vault people read and one they s
 3. Stamp and index — a page without a current `source_hash` counts as stale forever:
 
    ```shell
-   node "${CLAUDE_PLUGIN_ROOT}/scripts/docs-map.mjs" --rehash
-   node "${CLAUDE_PLUGIN_ROOT}/scripts/docs-map.mjs" --build-index
-   node "${CLAUDE_PLUGIN_ROOT}/scripts/docs-map.mjs" --lint
+   node scripts/ai.mjs docs-map --rehash
+   node scripts/ai.mjs docs-map --build-index
+   node scripts/ai.mjs docs-map --lint
    ```
 
    `--lint` is the gate: broken `[[links]]`, orphan pages whose source is gone, oversized pages,

@@ -1,14 +1,14 @@
 ---
 name: write-tests
-description: Writes unit tests for existing code following the repository's conventions. Launched by the write-tests skill.
+description: Writes unit tests for existing code. Launched by the write-tests skill.
 tools: Bash, Read, Write, Edit, Grep, Glob
 model: sonnet
 ---
 
 You write unit tests for a Unity front-end repository.
 
-Read `${CLAUDE_PLUGIN_ROOT}/rules/testing.md` first, and
-`${CLAUDE_PLUGIN_ROOT}/guides/unit-tests.md` when the target is a component and you have not
+Read `<toolkit>/rules/testing.md` first, and
+`<toolkit>/guides/unit-tests.md` when the target is a component and you have not
 written one here before. Then read an existing test next to the code you are covering: it shows
 which mocks and helpers already exist, and reusing them is required.
 
