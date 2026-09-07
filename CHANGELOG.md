@@ -1,3 +1,102 @@
+## [1.110.0](https://github.com/upstars-global/unity-core-modules/compare/v1.109.0...v1.110.0) (2026-09-07)
+
+### 🚀 Features
+
+* **ai-kit:** impact-analysis skill, plus the deterministic facts
+ ([977df44](https://github.com/upstars-global/unity-core-modules/commit/977df44195d85641b969bbe43b8bf3064a29b208))
+
+, closes [#front](https://github.com/upstars-global/unity-core-modules/issues/)
+
+    * feat(ai-kit): impact-analysis skill, plus the deterministic facts it stands on
+
+    Stage 2 of the Unity AI Kit plan, first half. Turns a branch into a checklist a
+
+    manual tester can act on: which pages to open, at which URL, what to check.
+
+    Two scripts do the part that is not judgement, so no tokens are spent on it and
+
+    nothing is guessed:
+
+    collect-evidence.mjs — ticket key from the branch, base branch resolved from git
+
+    rather than assumed (the twins disagree: master here, main there), changed files
+
+    classified by kind and workspace, changed shared code with its importers, and
+
+    Jira component hints drawn from the components these projects actually use.
+
+    routes-map.mjs — the router's real table (URL, route name, component module),
+
+    parsed from the lazy-import consts the routers use. `--for <file>` answers the
+
+    question an impact analysis exists to answer: which pages render this file. On
+
+    frontera it reads 80 pages from 98 route entries, and it says so honestly when a
+
+    file is a shared component that no route renders directly, instead of inventing
+
+    a page.
+
+    The skill stays thin — collect, delegate, hand the report back verbatim, then
+
+    offer the Jira write. The procedure lives in references/playbook.md and the
+
+    agent reads it itself, so the main context does not pay for it.
+
+    Jira I/O stays in the skill, never in the agent: a background agent cannot carry
+
+    a user's intent into a write. Field ids are read live and re-read after writing,
+
+    because editJiraIssue can answer 200 and silently drop a field that is not on
+
+    that issue type's edit screen.
+
+    Report language is Ukrainian, per the team's convention for QA and Jira output.
+
+    Plugin version 0.3.0.
+
+    Plan: Confluence > Unity > FrontEnd > Unity AI Kit
+
+    Ticket: UN-3195
+
+    Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+
+    Claude-Session: https://claude.ai/code/session_016QXqeBSNYV6EymrtMfUV9j
+
+    * feat(ai-kit): root-cause, local review and MR text skills
+
+    Stage 2 of the Unity AI Kit plan, second half. Three skills on the facts the
+
+    previous commit made available, and no new deterministic machinery.
+
+    root-cause — gates on Bug and Bug-Subtask, reads the custom field id and its
+
+    allowed options live (both differ per project, and a hardcoded id is how this
+
+    silently writes nothing), delegates only the classification to a cheap agent,
+
+    writes inline and reads the field back. editJiraIssue can answer 200 and drop a
+
+    field that is not on the issue type's edit screen, so an unverified write is
+
+    reported as a failure, not a success. No option is invented and no catch-all is
+
+    picked when nothing fits.
+
+    review — the same rules the team reviews by, applied before pushing, so the
+
+    author is the first reader of an obvious mistake. Findings only, most severe
+
+    first, each traceable to a concrete input and a concrete wrong result. Style is
+
+    explicitly out of scope: unity-eslint-config owns it, and a review that spends
+
+    attention on quoting missed the bug. It fixes nothing unless asked.
+
+    mr-text — description and the author's checklist from the team's development
+
+    flow (coverage gate, e2e for front-core, dynamic stage, two reviewers, the
+
 ## [1.109.0](https://github.com/upstars-global/unity-core-modules/compare/v1.108.2...v1.109.0) (2026-09-07)
 
 ### 🚀 Features
