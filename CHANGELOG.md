@@ -1,3 +1,198 @@
+## [1.112.0](https://github.com/upstars-global/unity-core-modules/compare/v1.111.0...v1.112.0) (2026-09-07)
+
+### 🚀 Features
+
+* **ai-kit:** stage 3 — component scaffold, tests, SSR audit, i18n keys  ([#394](https://github.com/upstars-global/unity-core-modules/issues/394))
+ ([da96db5](https://github.com/upstars-global/unity-core-modules/commit/da96db5e808b89621133cc58d0eff644bd330ee3))
+
+
+
+    * feat(ai-kit): warn at session start when the plugin and the pin have drifted
+
+    The toolkit arrives through two channels that move independently: the plugin
+
+    follows the marketplace, which tracks the repository's default branch, and
+
+    node_modules follows the pinned tag. When they disagree something silently does
+
+    not work — a skill calling a script the pin does not have, or AGENTS.md pointing
+
+    at rule files that are not installed. That is exactly how `yarn ai:agents-md`
+
+    turned into MODULE_NOT_FOUND with nothing explaining why.
+
+    Claude Code exposes no "update available" signal to a hook, so a plugin cannot
+
+    warn about its own updates. This drift, however, is visible locally without any
+
+    network: compare the version of the loaded plugin against the version of the
+
+    copy inside node_modules. The SessionStart hook now does that in applications
+
+    and says which side is stale, and stays silent when they match or when it runs
+
+    in the library itself.
+
+    Auto-updating the plugin is already handled where it belongs: `autoUpdate: true`
+
+    in each application's committed .claude/settings.json, which refreshes the
+
+    catalogue and installs newer plugin versions in the background after startup.
+
+    That is off by default for third-party marketplaces, which is why it is declared
+
+    explicitly.
+
+    Plugin version 0.4.1.
+
+    Plan: Confluence > Unity > FrontEnd > Unity AI Kit
+
+    Ticket: UN-3195
+
+    Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+
+    Claude-Session: https://claude.ai/code/session_016QXqeBSNYV6EymrtMfUV9j
+
+    * fix(ai-kit): rule paths were unfollowable from the installed plugin
+
+    The injected index printed paths like
+
+    node_modules/unity-core-modules/0.4.1/rules/frontend.md, which do not exist, so
+
+    an agent that trusted the index could not open a single shared rule.
+
+    Cause: the path was derived from the parent of the plugin directory. That is the
+
+    package root in a checkout and in node_modules, but the marketplace installs
+
+    only the ai-kit subtree, into a directory named after the plugin version — so
+
+    the parent there is the plugin's own cache directory and the version segment
+
+    leaked into every path. Derived from the plugin directory instead, with the
+
+    canonical in-package location spelled out once. Verified against a copy of the
+
+    real install layout, and the printed paths now resolve to existing files in a
+
+    consumer checkout.
+
+    The same run answered the question stage 0 left open: the plugin lives in the
+
+    global cache, so the repository root is not reachable from it. Deterministic
+
+    scripts have to live inside the plugin, which is where they already are. CI and
+
+    husky keep reaching them through node_modules/unity-core-modules/ai-kit/scripts.
+
+    Two changes in service of the toolkit's own running cost, which is the point of
+
+    unifying this work in the first place:
+
+    - The SessionStart line is now one header line plus one line per rule instead of
+
+      a header, an instruction, a footer and blank lines. Every session in every
+
+      repository pays for that text verbatim.
+
+    - budget.mjs reports what the toolkit costs in context, split into always-on
+
+      (frontmatter and the SessionStart output) and on-trigger (bodies, playbooks,
+
+      rules, guides). Today that is roughly 780 tokens always-on against 8400
+
+      on-trigger — which is the whole reason skills stay thin and procedures live in
+
+      references the agent reads itself.
+
+    Plugin version 0.4.2.
+
+    Plan: Confluence > Unity > FrontEnd > Unity AI Kit
+
+    Ticket: UN-3195
+
+    Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+
+    Claude-Session: https://claude.ai/code/session_016QXqeBSNYV6EymrtMfUV9j
+
+    * feat(ai-kit): stage 3 — component scaffold, tests, SSR audit, i18n keys
+
+    The routine half of front-end work, with the deterministic part in a script so
+
+    the team stops paying tokens for it.
+
+    component-scaffold.mjs writes the files a new component needs into the places
+
+    these repositories actually put them, which is not uniform and is what people
+
+    get wrong: front-ss mirrors sources into tests/unit, while front-core keeps the
+
+    test next to the source; stories live in packages/storybook-ss/src/stories; and
+
+    new translation keys belong in src/i18n/messages/en.json and nowhere else,
+
+    because every other locale is pulled back from Lokalise after the merge request
+
+    and would lose anything written by hand.
+
+    The skeleton follows what the recently written components do rather than what
+
+    Vue tutorials do: script setup first then template, props through an interface
+
+    with withDefaults, Tailwind in the template, tests with mount from
+
+    @vue/test-utils and explicit vitest imports. Verified end to end in frontera —
+
+    generated files pass the repository's own eslint, and a second run refuses to
+
+    overwrite instead of clobbering work.
+
+    Also fixes a rule that was wrong: testing.md claimed the test tree always
+
+    mirrors the source tree. It does in front-ss and in this package; front-core and
+
+    the server packages keep tests beside the source. A rule that is wrong for one
+
+    of three repositories is worse than no rule.
+
+    ssr-safety audits a diff for browser assumptions and hydration mismatches — the
+
+    failure that cost this team UN-2996 and UN-3047 — and is explicit that reading
+
+    code cannot prove a page hydrates cleanly, only a browser can.
+
+    No new slash commands: each one costs every session about twenty tokens of
+
+    frontmatter, and these four skills trigger from phrases people already use.
+
+    Always-on cost after this stage is roughly 1200 tokens against 12000 on-trigger;
+
+    budget.mjs prints the split.
+
+    Plugin version 0.5.0.
+
+    Plan: Confluence > Unity > FrontEnd > Unity AI Kit
+
+    Ticket: UN-3195
+
+    Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+
+    Claude-Session: https://claude.ai/code/session_016QXqeBSNYV6EymrtMfUV9j
+
+    * fix(ai-kit): drop the duplicated drift block left by the merge
+
+    Resolving main into this branch kept both sides of the same block, so the
+
+    version-drift warning printed twice whenever it fired — including the blank line
+
+    before it. Everything else in the resolution was right: the plugin stays at
+
+    0.5.0, the package at the released 1.111.0, and all of stage 3 survived.
+
+    Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+
+    Claude-Session: https://claude.ai/code/session_016QXqeBSNYV6EymrtMfUV9j
+
 ## [1.111.0](https://github.com/upstars-global/unity-core-modules/compare/v1.110.0...v1.111.0) (2026-09-07)
 
 ### 🚀 Features
