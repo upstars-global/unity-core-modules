@@ -1,3 +1,48 @@
+## [1.108.2](https://github.com/upstars-global/unity-core-modules/compare/v1.108.1...v1.108.2) (2026-09-07)
+
+### 🔧 Maintenance
+
+* **UN-3195 ai-kit:** add unity-ai plugin skeleton for the distribution spike ([#390](https://github.com/upstars-global/unity-core-modules/issues/390))
+ ([6d02428](https://github.com/upstars-global/unity-core-modules/commit/6d0242898199ac00f9297b76ce151f0d80895e32))
+
+
+
+    chore(ai-kit): add unity-ai plugin skeleton for the distribution spike
+
+    Stage 0 of the Unity AI Kit plan: prove the toolkit can be distributed as a
+
+    native Claude Code plugin instead of the symlink scheme used by the backoffice
+
+    repositories, where the tooling is pinned to the runtime dependency version.
+
+    Adds the marketplace catalogue at the repository root, the plugin manifest, a
+
+    SessionStart hook and one skill (doctor) whose only job is to report whether
+
+    the plugin arrived, whether CLAUDE_PLUGIN_ROOT expands inside a hook, and
+
+    whether the repository root is reachable from the installed plugin directory.
+
+    That last answer decides where deterministic scripts may live: scripts that CI
+
+    and husky call have to be reachable as node_modules/unity-core-modules/scripts/ai/*.
+
+    No runtime code is touched and nothing is enabled automatically.
+
+    Gate: the plugin is visible in /plugin for two different people. If it cannot
+
+    be installed from a private GitHub repository, we fall back to .claude/ plus a
+
+    sync script and the rest of the plan stays as it is.
+
+    Plan: Confluence > Unity > FrontEnd > Unity AI Kit
+
+    Claude-Session: https://claude.ai/code/session_016QXqeBSNYV6EymrtMfUV9j
+
+    Co-authored-by: d-tashchi <kabak133@gmail.com>
+
+    Co-authored-by: Claude Opus 5 <noreply@anthropic.com>
+
 ## [1.108.0](https://github.com/upstars-global/unity-core-modules/compare/v1.107.0...v1.108.0) (2026-08-28)
 
 ### 🚀 Features
