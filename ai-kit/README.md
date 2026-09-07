@@ -8,7 +8,7 @@ Plan and rationale: Confluence → space **Unity** → folder **FrontEnd** → *
 
 ## Status
 
-`0.4.1` — stage 2. Ships the shared rules (stage 1), the QA and Jira skills, the local review,
+`0.5.0` — stages 1–3. Ships the shared rules (stage 1), the QA and Jira skills, the local review,
 and the deterministic scripts they stand on. Wiring the review rules into the organisation's CI
 review is a separate item, waiting on that job's own implementation.
 
@@ -20,6 +20,10 @@ review is a separate item, waiting on that job's own implementation.
 | `root-cause` | `/unity-ai:root-cause`, "першопричина бага" | Classifies a bug-fix diff into the Jira Root cause option and writes it, after verifying the write stuck |
 | `review` | `/unity-ai:review`, "відревю до пуша" | Reviews the branch against `rules/review.md` before anyone else sees it |
 | `mr-text` | `/unity-ai:mr-text`, "опиши MR" | Merge-request description and the author's checklist from the team's development flow |
+| `vue-component` | "новий компонент" | Generates a component, its test, optionally a story and translation keys, in the places each package puts them |
+| `write-tests` | "покрий тестами" | Unit tests by the repository's conventions and the coverage gate |
+| `ssr-safety` | "перевір SSR", "hydration" | Audits a diff for browser assumptions and hydration mismatches |
+| `i18n-keys` | "додай ключі" | Translation keys the way the Lokalise flow requires |
 | `doctor` | `/unity-ai:doctor` | Reports whether the toolkit is installed correctly and what it can currently do |
 
 Agents are launched by the skills, never directly: `impact-analysis` and `code-review` on sonnet,
@@ -39,6 +43,8 @@ model in the loop.
 | `sync-agents-md.mjs` | Generates `AGENTS.md` from the rules; `--check` fails when it is stale |
 | `rules-inject.mjs` | The SessionStart index of rules, plus a warning when the plugin and the pinned copy in `node_modules` have drifted apart |
 | `selfcheck.mjs` | Install probe behind `/unity-ai:doctor` |
+| `component-scaffold.mjs` | Writes a component, its test, a story and `en.json` keys into the right places for the target package. Refuses to overwrite |
+| `budget.mjs` | What the toolkit costs in context, split into always-on and on-trigger. Run it before and after adding a skill |
 
 ## Layout
 
@@ -58,6 +64,11 @@ ai-kit/                           # the plugin itself
 A rule file is markdown with frontmatter: `name`, a one-line `description`, and `appliesTo`
 (`all`, `apps` or `library`). Only the descriptions are injected at session start — the body is
 read when the assistant works in that area, so the always-on cost stays a handful of lines.
+
+That split is the point, and it is measurable: `node ai-kit/scripts/budget.mjs` prints what every
+session pays for the toolkit existing (frontmatter and the SessionStart line) against what is only
+paid when a skill actually runs. Adding a skill costs the first number a line; a long playbook
+costs it nothing. Check it before and after adding anything.
 
 Three consumers read the same files, which is the whole point:
 

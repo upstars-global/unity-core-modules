@@ -57,13 +57,12 @@ if (rules.length === 0 && !drift) {
     process.exit(0);
 }
 
+// Every line here is paid for by every session in every repository, so it is one header line
+// plus one line per rule. The bodies are read on demand.
 const lines = [
-    `unity-ai ${ manifestVersion(PLUGIN_DIR) ?? "unknown" } — shared rules for this repository (role: ${ role }).`,
-    "Read a rule file before working in its area; do not restate it back to the user.",
-    "",
+    `unity-ai ${ manifestVersion(PLUGIN_DIR) ?? "unknown" } · shared rules (role: ${ role }). Read the file`
+        + " for the area you change; repository-local docs win where they disagree.",
     ...rules.map((rule) => `- ${ relativeFromCwd(rule.path) } — ${ rule.description }`),
-    "",
-    "Repository-local instructions win over these when they disagree; say so when they do.",
 ];
 
 if (drift) {
