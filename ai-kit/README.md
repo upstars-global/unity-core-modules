@@ -8,7 +8,7 @@ Plan and rationale: Confluence → space **Unity** → folder **FrontEnd** → *
 
 ## Status
 
-`0.6.0` — stages 1–4. Ships the shared rules (stage 1), the QA and Jira skills, the local review,
+`0.7.0` — stages 1–5. Ships the shared rules (stage 1), the QA and Jira skills, the local review,
 and the deterministic scripts they stand on. Wiring the review rules into the organisation's CI
 review is a separate item, waiting on that job's own implementation.
 
@@ -27,6 +27,8 @@ review is a separate item, waiting on that job's own implementation.
 | `port-to-twin` | "перенеси в king-front" | Carries a change into the twin and reports what could not be carried |
 | `extract-to-core` | "винеси в core" | Moves code into the shared library, with the blockers checked first |
 | `sync-consumers` | "підніми пин" | Points both applications at a new library release — pin and lockfile |
+| `query-docs` | "як працює X" | Answers from the knowledge page when one is fresh, from the source otherwise |
+| `update-docs` | "онови документацію" | Writes the pages that carry invariants, gotchas and why — not a retelling of the code |
 | `doctor` | `/unity-ai:doctor` | Reports whether the toolkit is installed correctly and what it can currently do |
 
 Agents are launched by the skills, never directly: `impact-analysis` and `code-review` on sonnet,
@@ -50,6 +52,7 @@ model in the loop.
 | `port-map.mjs` | How the twins differ, and a per-file verdict on whether a change can be carried across |
 | `check-extract.mjs` | Whether a file can move into the library, and what has to happen first |
 | `sync-consumers.mjs` | Rewrites the library pin and its lockfile entry in both applications |
+| `docs-map.mjs` | The vault's deterministic core: which page documents a source, whether it is still true, what is missing, and what churns most |
 | `budget.mjs` | What the toolkit costs in context, split into always-on and on-trigger. Run it before and after adding a skill |
 
 ## Layout
@@ -130,3 +133,18 @@ bump they keep the version they have.
    means a documented default plus an explicit note that it was assumed.
 6. Never hardcode Jira custom field ids. Read them live and re-read after writing.
 7. Style is eslint's job, not a skill's. Do not restate what `unity-eslint-config` enforces.
+
+## The knowledge vault
+
+`knowledge/` in each repository holds one page per entity that has something non-obvious about it.
+The tooling lives here, the pages live in the repository they describe.
+
+Freshness is a hash of the source in the page's frontmatter, not its mtime: mtime changes on every
+install and checkout, and would declare half the vault stale for nothing.
+
+There is **no vault index injected at session start**, unlike the backoffice toolkit this one
+learned from. An index grows with the vault and every session would pay for it whether or not
+anyone asks a question. `docs-map.mjs --find` costs one command, only when a question is asked.
+
+Start from `--hotpath`: the code that changes most is the code whose invariants get rediscovered
+most often, and that ranking comes from git rather than from opinion.
