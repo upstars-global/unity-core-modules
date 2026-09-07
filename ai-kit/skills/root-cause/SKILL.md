@@ -1,6 +1,6 @@
 ---
 name: root-cause
-description: Set the Jira "Root cause" field for a fixed bug by classifying the branch diff. Use when the user asks "проставь root cause", "першопричина бага", "первопричина бага", "root cause for this fix", or runs /unity-ai:root-cause.
+description: Set the Jira Root cause field for a fixed bug by classifying the diff. Triggers: "першопричина бага", "первопричина", "root cause", /unity-ai:root-cause.
 ---
 
 # Root cause
@@ -19,14 +19,14 @@ feature: a wrong category is worse than an empty one.
    anything else, say which type it is and stop.
 
 3. Read the field live, never from memory:
-   `${CLAUDE_PLUGIN_ROOT}/skills/root-cause/references/field-discovery.md` describes how. You need
+   `<toolkit>/skills/root-cause/references/field-discovery.md` describes how. You need
    the field id **and** its allowed options for this project — both differ between projects, and a
    hardcoded id is how this silently writes nothing.
 
 4. Collect the diff facts:
 
    ```shell
-   node "${CLAUDE_PLUGIN_ROOT}/scripts/collect-evidence.mjs" --json
+   node scripts/ai.mjs collect-evidence --json
    ```
 
 5. Delegate the classification to the `root-cause` agent. The prompt must contain the evidence

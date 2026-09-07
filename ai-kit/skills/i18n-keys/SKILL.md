@@ -1,6 +1,6 @@
 ---
 name: i18n-keys
-description: Add or clean up translation keys the way the Lokalise flow requires. Use when the user asks "додай ключі", "переклади", "добавь ключи локализации", "почисти локали", "add translation keys", or "i18n keys".
+description: Add or clean translation keys the way the Lokalise flow requires. Triggers: "додай ключі", "добавь ключи", "translation keys".
 ---
 
 # Translation keys
@@ -18,7 +18,7 @@ written into another locale by hand is lost on the next `yarn pull:i18n`.
    For a new component the scaffold does this deterministically:
 
    ```shell
-   node "${CLAUDE_PLUGIN_ROOT}/scripts/component-scaffold.mjs" --name X --dir ... \
+   node scripts/ai.mjs component-scaffold --name X --dir ... \
      --i18n-keys PROFILE.NEW_BLOCK.TITLE=Title
    ```
 

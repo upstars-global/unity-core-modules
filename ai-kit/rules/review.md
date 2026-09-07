@@ -1,13 +1,14 @@
 ---
 name: review
-description: What a review must check in a diff. Single source for the local review skill and for the CI review rules.
+description: What a review must check in a diff, and what to stay silent about.
 appliesTo: all
 ---
 
 # Review rules
 
-This file is the single source for reviews: the local pre-push review and the GitLab CI review
-read the same rules, so a comment that appears in one is not a surprise in the other.
+This file is the single source for reviews. The local pre-push review reads it today; the
+organisation's CI review will read the same file once that job is finished, so a comment appearing
+in one will not be a surprise in the other.
 
 ## Order of attention
 

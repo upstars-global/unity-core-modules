@@ -8,7 +8,7 @@ Plan and rationale: Confluence → space **Unity** → folder **FrontEnd** → *
 
 ## Status
 
-`0.6.0` — stages 1–4. Ships the shared rules (stage 1), the QA and Jira skills, the local review,
+`0.8.0` — stages 1–5, reviewed. Ships the shared rules (stage 1), the QA and Jira skills, the local review,
 and the deterministic scripts they stand on. Wiring the review rules into the organisation's CI
 review is a separate item, waiting on that job's own implementation.
 
@@ -27,7 +27,8 @@ review is a separate item, waiting on that job's own implementation.
 | `port-to-twin` | "перенеси в king-front" | Carries a change into the twin and reports what could not be carried |
 | `extract-to-core` | "винеси в core" | Moves code into the shared library, with the blockers checked first |
 | `sync-consumers` | "підніми пин" | Points both applications at a new library release — pin and lockfile |
-| `doctor` | `/unity-ai:doctor` | Reports whether the toolkit is installed correctly and what it can currently do |
+| `query-docs` | "як працює X" | Answers from the knowledge page when one is fresh, from the source otherwise |
+| `update-docs` | "онови документацію" | Writes the pages that carry invariants, gotchas and why — not a retelling of the code |
 
 Agents are launched by the skills, never directly: `impact-analysis` and `code-review` on sonnet,
 `root-cause` on the cheaper `fable` — its job is to pick one category from a known list. Every
@@ -45,11 +46,11 @@ model in the loop.
 | `routes-map.mjs` | The router's real table: URL, route name, component module. `--for <file>` answers which pages render a changed file |
 | `sync-agents-md.mjs` | Generates `AGENTS.md` from the rules; `--check` fails when it is stale |
 | `rules-inject.mjs` | The SessionStart index of rules, plus a warning when the plugin and the pinned copy in `node_modules` have drifted apart |
-| `selfcheck.mjs` | Install probe behind `/unity-ai:doctor` |
 | `component-scaffold.mjs` | Writes a component, its test, a story and `en.json` keys into the right places for the target package. Refuses to overwrite |
 | `port-map.mjs` | How the twins differ, and a per-file verdict on whether a change can be carried across |
 | `check-extract.mjs` | Whether a file can move into the library, and what has to happen first |
 | `sync-consumers.mjs` | Rewrites the library pin and its lockfile entry in both applications |
+| `docs-map.mjs` | The vault's deterministic core: which page documents a source, whether it is still true, what is missing, and what churns most |
 | `budget.mjs` | What the toolkit costs in context, split into always-on and on-trigger. Run it before and after adding a skill |
 
 ## Layout
@@ -93,6 +94,23 @@ consumer they are `node_modules/unity-core-modules/ai-kit/rules/*`.
 Directories at the plugin root are auto-discovered: `skills/`, `agents/`, `commands/`,
 `hooks/`. Only `plugin.json` belongs inside `.claude-plugin/`.
 
+## Running the scripts
+
+`${CLAUDE_PLUGIN_ROOT}` is only substituted inside `plugin.json` and `hooks.json`. In the body of
+a `SKILL.md` it stays a literal, so a skill cannot address the scripts that ship with the plugin.
+Each repository therefore carries one resolver, `scripts/ai.mjs` (copy of `ai-kit/templates/ai.mjs`),
+and every skill calls scripts through it:
+
+```shell
+node scripts/ai.mjs                          # version, resolved toolkit path, available scripts
+node scripts/ai.mjs collect-evidence --json
+node scripts/ai.mjs docs-map --hotpath
+```
+
+It resolves the toolkit from the pinned package first, then from the checkout, then from
+`CLAUDE_PLUGIN_ROOT` if it happens to be set — so it works in an application, in this repository,
+and inside a hook.
+
 ## Install in a consumer repository
 
 Both repositories carry the marketplace and the plugin in a committed
@@ -130,3 +148,18 @@ bump they keep the version they have.
    means a documented default plus an explicit note that it was assumed.
 6. Never hardcode Jira custom field ids. Read them live and re-read after writing.
 7. Style is eslint's job, not a skill's. Do not restate what `unity-eslint-config` enforces.
+
+## The knowledge vault
+
+`knowledge/` in each repository holds one page per entity that has something non-obvious about it.
+The tooling lives here, the pages live in the repository they describe.
+
+Freshness is a hash of the source in the page's frontmatter, not its mtime: mtime changes on every
+install and checkout, and would declare half the vault stale for nothing.
+
+There is **no vault index injected at session start**, unlike the backoffice toolkit this one
+learned from. An index grows with the vault and every session would pay for it whether or not
+anyone asks a question. `docs-map.mjs --find` costs one command, only when a question is asked.
+
+Start from `--hotpath`: the code that changes most is the code whose invariants get rediscovered
+most often, and that ranking comes from git rather than from opinion.

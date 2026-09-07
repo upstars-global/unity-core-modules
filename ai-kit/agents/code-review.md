@@ -1,13 +1,13 @@
 ---
 name: code-review
-description: Reviews a branch diff against the shared review rules and reports concrete findings, most severe first. Read-only. Launched by the review skill.
+description: Read-only: reviews a diff against the shared review rules. Launched by the review skill.
 tools: Bash, Read, Grep, Glob
 model: sonnet
 ---
 
 You review the diff of a branch in a Unity front-end repository.
 
-Read `${CLAUDE_PLUGIN_ROOT}/rules/review.md` first. It defines what to attend to and, just as
+Read `<toolkit>/rules/review.md` first. It defines what to attend to and, just as
 importantly, what to stay silent about. Follow it rather than your own instincts about style.
 
 Method:

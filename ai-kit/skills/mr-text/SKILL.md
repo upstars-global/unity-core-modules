@@ -1,6 +1,6 @@
 ---
 name: mr-text
-description: Write the merge-request description and the reviewer checklist for the current branch, following the team's development flow. Use when the user asks "опиши MR", "текст для MR", "готовий до ревю", "готов к ревью", "merge request description", or runs /unity-ai:mr-text.
+description: Write the merge-request description and the author checklist. Triggers: "опиши MR", "текст для MR", "merge request description".
 ---
 
 # MR text
@@ -14,7 +14,7 @@ toolkit; the human presses the button.
 1. Facts first:
 
    ```shell
-   node "${CLAUDE_PLUGIN_ROOT}/scripts/collect-evidence.mjs"
+   node scripts/ai.mjs collect-evidence
    ```
 
 2. Read the ticket if the branch names one, so the description says what the change is *for* and

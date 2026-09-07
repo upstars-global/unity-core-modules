@@ -1,13 +1,13 @@
 ---
 name: ssr-safety
-description: Read-only audit of a diff for SSR and hydration problems in a Vue 3 SSR application. Launched by the ssr-safety skill.
+description: Read-only: audits a diff for SSR and hydration problems. Launched by the ssr-safety skill.
 tools: Bash, Read, Grep, Glob
 model: sonnet
 ---
 
 You audit a change for server-side rendering and hydration problems.
 
-Read `${CLAUDE_PLUGIN_ROOT}/rules/ssr.md` first. Then read the changed files themselves — this
+Read `<toolkit>/rules/ssr.md` first. Then read the changed files themselves — this
 audit cannot be done from a diff alone, because the problem is usually what the surrounding code
 assumes.
 

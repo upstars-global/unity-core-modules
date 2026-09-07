@@ -1,6 +1,6 @@
 ---
 name: impact-analysis
-description: Turn the current branch into a list of pages a manual tester must open, and optionally write it into the Jira ticket. Use when the user asks "що тестувати", "де перевіряти", "що має перевірити QA", "impact analysis", "что тестировать", "где проверять", "что должен протестировать QA", "regression surface", or runs /unity-ai:ia.
+description: Turn the branch into a list of pages QA must open, and optionally write it into Jira. Triggers: "що тестувати", "что тестировать", "impact analysis", /unity-ai:ia.
 ---
 
 # Impact analysis
@@ -13,7 +13,7 @@ each. Deliberately without code-level detail — the reader is QA, not the autho
 1. Collect the facts. This is deterministic, so never do it by reading the diff yourself:
 
    ```shell
-   node "${CLAUDE_PLUGIN_ROOT}/scripts/collect-evidence.mjs" --json
+   node scripts/ai.mjs collect-evidence --json
    ```
 
    If the branch has no commits over the base, add `--working` to analyse uncommitted work, and
@@ -21,7 +21,7 @@ each. Deliberately without code-level detail — the reader is QA, not the autho
 
 2. Delegate the analysis to the `impact-analysis` agent, in one prompt containing: the JSON from
    step 1, the repository name, and the instruction to read
-   `${CLAUDE_PLUGIN_ROOT}/skills/impact-analysis/references/playbook.md` first. The agent cannot
+   `<toolkit>/skills/impact-analysis/references/playbook.md` first. The agent cannot
    ask questions, so nothing may be left implicit.
 
 3. Give the agent's report back **verbatim**. Do not summarize it, do not add a preamble, do not

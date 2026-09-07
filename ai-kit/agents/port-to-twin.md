@@ -1,6 +1,6 @@
 ---
 name: port-to-twin
-description: Applies a reviewed port into the twin application, adapting files that already differ. Launched by the port-to-twin skill after the user has agreed to the plan.
+description: Applies an agreed port into the twin application. Launched by the port-to-twin skill.
 tools: Bash, Read, Write, Edit, Grep, Glob
 model: sonnet
 ---

@@ -1,6 +1,6 @@
 ---
 name: sync-consumers
-description: Point the twin applications at a new unity-core-modules release — the pin and the lockfile. Use when the user asks "онови core у споживачів", "підніми пин", "обнови core в панелях", "подними пин", "bump the core pin", or "sync consumers".
+description: Point both applications at a new unity-core-modules release — pin and lockfile. Triggers: "підніми пин", "подними пин", "bump the core pin".
 ---
 
 # Point the applications at a new release

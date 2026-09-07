@@ -1,6 +1,6 @@
 ---
 name: extract-to-core
-description: Move code from an application into unity-core-modules so both twins share it. Use when the user asks "винеси в core", "це спільне", "вынеси в core", "это общее", "extract to unity-core-modules", or "make this shared".
+description: Move code into unity-core-modules so both twins share it. Triggers: "винеси в core", "вынеси в core", "make this shared".
 ---
 
 # Extract into the shared library
@@ -14,7 +14,7 @@ that have to stay green.
 1. Check whether the move is even possible, per file:
 
    ```shell
-   node "${CLAUDE_PLUGIN_ROOT}/scripts/check-extract.mjs" --core ../unity-core-modules <files...>
+   node scripts/ai.mjs check-extract --core ../unity-core-modules <files...>
    ```
 
    It reads the imports and the library's shape. Blocking findings are real blockers, not warnings:

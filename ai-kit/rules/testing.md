@@ -1,6 +1,6 @@
 ---
 name: testing
-description: Unit-test conventions and the CI coverage gate. The full team policy lives in guides/unit-tests.md.
+description: Unit-test conventions, test placement per package, and the CI coverage gate.
 appliesTo: all
 ---
 

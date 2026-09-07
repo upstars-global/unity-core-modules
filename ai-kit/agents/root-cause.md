@@ -1,6 +1,6 @@
 ---
 name: root-cause
-description: Classifies a bug-fix diff into one of the Jira Root cause options. Read-only, never touches Jira. Launched by the root-cause skill.
+description: Read-only: picks one Jira Root cause option for a bug-fix diff. Launched by the root-cause skill.
 tools: Bash, Read, Grep, Glob
 model: fable
 ---
