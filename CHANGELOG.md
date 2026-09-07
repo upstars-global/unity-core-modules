@@ -1,3 +1,72 @@
+## [1.109.0](https://github.com/upstars-global/unity-core-modules/compare/v1.108.2...v1.109.0) (2026-09-07)
+
+### 🚀 Features
+
+* **ai-kit:** shared rules as a single source for Claude, Codex and CI ([#391](https://github.com/upstars-global/unity-core-modules/issues/391))
+ ([ae6e885](https://github.com/upstars-global/unity-core-modules/commit/ae6e8855e7c0796cd4917dc137a7d04cd23204f1))
+
+
+
+    Stage 1 of the Unity AI Kit plan. Until now the same instructions lived in three
+
+    places and had already drifted: frontera and king-front carried a byte-identical
+
+    207-line unit-test policy, their AGENTS.md files described entirely different
+
+    things, and king-front had no CLAUDE.md at all.
+
+    Adds ai-kit/rules/*.md — one file per area, with frontmatter (name, description,
+
+    appliesTo) so the same set can be filtered per repository role. Distilled from
+
+    the existing docs/ai-context and guides-md of all three repositories, minus
+
+    everything unity-eslint-config already enforces:
+
+      frontend    Vue 3 / Pinia / TypeScript conventions
+
+      testing     unit-test conventions plus the CI coverage gate
+
+      ssr         hydration and browser-assumption rules (applications only)
+
+      review      what a review must check — single source for the local review
+
+                  skill and, from stage 2, for CR_REVIEW_RULES in GitLab CI
+
+      cross-repo  how the twins and the library relate, and where an edit belongs
+
+    ai-kit/guides/unit-tests.md is the team policy that both applications carry
+
+    identically today; this is now the copy to edit. Removing the two duplicates is
+
+    a follow-up together with the dependency pin bump, so nobody loses the document
+
+    in the meantime.
+
+    Three consumers, one source: the SessionStart hook prints the index for Claude
+
+    (descriptions and paths only — the body is read on demand, so the always-on cost
+
+    stays a handful of lines), sync-agents-md.mjs generates AGENTS.md for Codex, and
+
+    stage 2 will render rules/review.md into the CI review variables.
+
+    Paths resolve themselves: ai-kit/rules/* inside this repository,
+
+    node_modules/unity-core-modules/ai-kit/rules/* in a consumer.
+
+    Plugin version 0.2.0 — consumers only receive an update when this is bumped.
+
+    Plan: Confluence > Unity > FrontEnd > Unity AI Kit
+
+    Ticket: UN-3195
+
+    Claude-Session: https://claude.ai/code/session_016QXqeBSNYV6EymrtMfUV9j
+
+    Co-authored-by: d-tashchi <kabak133@gmail.com>
+
+    Co-authored-by: Claude Opus 5 <noreply@anthropic.com>
+
 ## [1.108.2](https://github.com/upstars-global/unity-core-modules/compare/v1.108.1...v1.108.2) (2026-09-07)
 
 ### 🔧 Maintenance
