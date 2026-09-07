@@ -1,3 +1,82 @@
+## [1.113.0](https://github.com/upstars-global/unity-core-modules/compare/v1.112.0...v1.113.0) (2026-09-07)
+
+### 🚀 Features
+
+* **ai-kit:** stage 4 — cross-repo work between the twins and the lib… ([#395](https://github.com/upstars-global/unity-core-modules/issues/395))
+ ([32cc4ad](https://github.com/upstars-global/unity-core-modules/commit/32cc4ad0a82c8ec1c32cb4f61ece15ee0740df9a))
+
+
+
+    feat(ai-kit): stage 4 — cross-repo work between the twins and the library
+
+    The work that has no equivalent in the backoffice toolkit: two applications that
+
+    are the same product twice, and a library both of them pin by tag.
+
+    port-map.mjs compares the twins from disk and gives a verdict per file:
+
+    identical (ports cleanly today), differs (already diverged — decide per hunk),
+
+    missing-in-twin, or deleted-here with whether the twin still has the file. It
+
+    also prints the asymmetries that actually break ports, and on the real
+
+    checkouts that is four of them: turbo only in frontera, docs/ai-context only in
+
+    frontera, and a guides directory spelled guides-md here and guids-md there. The
+
+    rename is resolved in the mapping rather than ignored, so a ported guide lands
+
+    in the directory that exists.
+
+    check-extract.mjs answers whether a file can move into unity-core-modules. Two
+
+    findings are blockers rather than warnings, both verified against the library:
+
+    it ships zero .vue files, so a component cannot go there at all — a component
+
+    both twins need belongs in packages/front-core — and code importing @ui, @views,
+
+    @src or @front/core cannot resolve inside the library. For the aliases the
+
+    library does use (@config, @theme and friends) it reports whether a mock exists
+
+    in tests/mocks, because without one the extracted tests do not run.
+
+    sync-consumers.mjs does the pin bump that was done by hand twice today: the
+
+    package.json pin plus the three lines yarn writes for a git dependency. It is
+
+    idempotent, and it refuses to touch the lock when the library's own dependencies
+
+    changed between the two versions — yarn rewrites more than three lines then, and
+
+    guessing would corrupt the file. yarn install stays mandatory: it is the only
+
+    thing that proves the lock resolves.
+
+    The skills carry the parts that are judgement: never cherry-pick across
+
+    repositories with unrelated histories, never overwrite a twin's version of a
+
+    file that already differs (that is usually a deliberate brand difference), never
+
+    port brand copy, and always report what was left behind — that last list is the
+
+    point of a port.
+
+    Always-on cost is now roughly 1500 tokens; budget.mjs prints the split.
+
+    Plugin version 0.6.0.
+
+    Plan: Confluence > Unity > FrontEnd > Unity AI Kit
+
+    Ticket: UN-3195
+
+    Claude-Session: https://claude.ai/code/session_016QXqeBSNYV6EymrtMfUV9j
+
+    Co-authored-by: Claude Opus 5 <noreply@anthropic.com>
+
 ## [1.112.0](https://github.com/upstars-global/unity-core-modules/compare/v1.111.0...v1.112.0) (2026-09-07)
 
 ### 🚀 Features
