@@ -1,7 +1,7 @@
 {
   "name": "unity-ai",
   "displayName": "Unity AI Kit",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Shared skills, agents, slash commands, hooks and scripts for the Unity front-end repositories",
   "author": {
     "name": "Unity Front Team"

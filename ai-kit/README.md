@@ -8,9 +8,29 @@ Plan and rationale: Confluence → space **Unity** → folder **FrontEnd** → *
 
 ## Status
 
-`0.2.0` — stage 1 (rules as a single source). Ships the shared rule files, the generator that
-turns them into `AGENTS.md` for Codex, the SessionStart hook that indexes them for Claude, and
-the `doctor` skill from stage 0. Production skills land from stage 2 on; see the plan.
+`0.3.0` — stage 2 in progress. Ships the shared rules (stage 1), the `impact-analysis` skill and
+its agent, and the deterministic scripts they stand on. `root-cause`, the MR text and the local
+review skill are next; see the plan.
+
+## Skills
+
+| Skill | Invoke | What it does |
+| --- | --- | --- |
+| `impact-analysis` | `/unity-ai:ia`, "що тестувати" | Branch to a manual-QA checklist of pages and checks, in Ukrainian, optionally written into the Jira ticket |
+| `doctor` | `/unity-ai:doctor` | Reports whether the toolkit is installed correctly and what it can currently do |
+
+## Scripts
+
+Deterministic, no dependencies, no network. Run them directly when you want the facts without a
+model in the loop.
+
+| Script | What it answers |
+| --- | --- |
+| `collect-evidence.mjs` | Ticket, base branch, changed files by kind and workspace, changed shared code and its importers, hinted Jira components. `--json` for an agent |
+| `routes-map.mjs` | The router's real table: URL, route name, component module. `--for <file>` answers which pages render a changed file |
+| `sync-agents-md.mjs` | Generates `AGENTS.md` from the rules; `--check` fails when it is stale |
+| `rules-inject.mjs` | The SessionStart index of rules |
+| `selfcheck.mjs` | Install probe behind `/unity-ai:doctor` |
 
 ## Layout
 
