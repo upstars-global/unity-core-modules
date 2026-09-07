@@ -10,30 +10,18 @@ code under test is wrong, say so and stop rather than testing the bug.
 
 ## Steps
 
-1. Establish where the test belongs. This differs per package and is the most common mistake:
+1. Decide where the test belongs — this is not uniform across the packages and is the most common
+   mistake. The table is in `<toolkit>/skills/write-tests/references/placement.md`; read it rather
+   than guessing, and check whether a test file for that source already exists.
 
-   | Package | Test location |
-   | --- | --- |
-   | `packages/front-ss` | mirrored: `tests/unit/<same path as under src>/<Name>.test.ts` |
-   | `packages/front-core` | **next to the source**: `modules/Foo/helpers.test.ts` |
-   | `packages/server-*` | next to the source |
-   | `unity-core-modules` | mirrored: `src/store/foo.ts` → `tests/store/foo.test.ts` |
+2. Delegate to the `write-tests` agent for anything beyond a single small function, passing the
+   file paths, the package, and the placement from step 1. Reading the source, its imports and the
+   neighbouring tests is noisy work that belongs in its own context.
 
-   If a test file for the touched source already exists, extend it instead of adding another.
-
-2. Read the rules and the neighbours: `<toolkit>/rules/testing.md` for what to test
-   and the coverage gate, `<toolkit>/guides/unit-tests.md` for the full team policy
-   with examples. Then read one existing test in the same directory — it shows the mocks and
-   helpers to reuse.
-
-3. Delegate the writing to the `write-tests` agent when the target is more than a single small
-   function: reading the source, its imports and neighbouring tests is noisy work that belongs in
-   its own context. Pass the file paths, the package, and the test location from step 1.
-
-4. Run the tests and report the result. A test suite you have not run is not a deliverable.
+3. Run the tests and report the result. A suite you have not run is not a deliverable.
 
 ## The gate this serves
 
-Merge requests check coverage per changed diff section, at 60% of changed executable lines, and
-coverage from elsewhere does not compensate. So cover the changed behaviour specifically; a test
-that only imports the module raises the number and catches nothing.
+Coverage is checked per changed diff section at 60% of changed executable lines, and coverage from
+elsewhere does not compensate. Cover the changed behaviour specifically: a test that only imports
+the module raises the number and catches nothing.
