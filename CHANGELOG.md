@@ -1,3 +1,22 @@
+## [1.116.0](https://github.com/upstars-global/unity-core-modules/compare/v1.115.0...v1.116.0) (2026-09-08)
+
+### 🚀 Features
+
+* **ai-kit:** deterministic SSR and leftovers scans for review/ssr-sa… ([#398](https://github.com/upstars-global/unity-core-modules/issues/398))
+ ([3260958](https://github.com/upstars-global/unity-core-modules/commit/326095834e3b78439a11296cfa0625772b5b11d7))
+
+
+
+    feat(ai-kit): deterministic SSR and leftovers scans for review/ssr-safety skills
+
+    Add ssr-scan.mjs and leftovers-scan.mjs, regex-only passes over the diff's added
+
+    lines for browser APIs and debug leftovers, and wire the review and ssr-safety
+
+    skills/agents to read their output instead of re-grepping the diff themselves.
+
+    Co-authored-by: Claude Sonnet 5 <noreply@anthropic.com>
+
 ## [1.115.0](https://github.com/upstars-global/unity-core-modules/compare/v1.114.0...v1.115.0) (2026-09-08)
 
 ### 🚀 Features
