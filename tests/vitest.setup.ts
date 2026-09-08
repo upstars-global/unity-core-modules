@@ -8,7 +8,7 @@ vi.mock("pinia", async () => {
         ...actual,
         createPinia: () => {
             const pinia = actual.createPinia();
-            // @ts-expect-error -- TS2345: Argument of type '{ featureFlags: { enableConpoints: true; enableAllProviders: false; enableMysticJackpots: false; enableABReg: false; }; }' is not assignable to parameter of type 'UnityConfig'.
+            // @ts-expect-error -- TS2345: Argument of type '{ featureFlags: { enableConpoints: true; enableAllProviders: false; enableMysticJackpots: false; }; }' is not assignable to parameter of type 'UnityConfig'.
             pinia.use(createUnityConfigPlugin(baseUnityConfig));
             return pinia;
         },
