@@ -1,6 +1,6 @@
 ---
 name: root-cause
-description: Set the Jira Root cause field for a fixed bug by classifying the diff. Triggers: "першопричина бага", "первопричина", "root cause", /unity-ai:root-cause.
+description: Set the Jira Root cause field for a fixed bug by classifying the diff. Run by /unity-ai:root-cause.
 ---
 
 # Root cause

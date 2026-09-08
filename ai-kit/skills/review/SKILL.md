@@ -1,6 +1,6 @@
 ---
 name: review
-description: Review the branch against the shared review rules before pushing. Triggers: "відревю", "отревьюй", "review my changes", /unity-ai:review.
+description: Review the branch against the shared review rules before pushing. Run by /unity-ai:review.
 ---
 
 # Review
@@ -27,5 +27,9 @@ until then this is the only automated pass, and it must not invent its own stand
 3. Return the findings verbatim, ordered most severe first. If the agent found nothing, say that
    in one line. Do not pad an empty review with observations.
 
-4. Offer nothing else. In particular do not fix anything unless the user asks: a review that
-   rewrites the code being reviewed removes the author's choice.
+4. Do not fix anything unless the user asks: a review that rewrites the code being reviewed
+   removes the author's choice.
+
+5. If a finding named a durable trap rather than this diff's bug — a shared-state rule, an order
+   of initialisation, a contract two packages rely on — offer one knowledge page for it and
+   nothing more. That is the only follow-up worth adding to a review.

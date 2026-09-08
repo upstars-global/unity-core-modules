@@ -1,6 +1,6 @@
 ---
 name: vue-component
-description: Generate a component with its test, story and translation keys, where each package puts them. Triggers: "новий компонент", "новый компонент", "create a component".
+description: Generate a component with its test, story and translation keys, where each package puts them. Run by /unity-ai:component.
 ---
 
 # New Vue component

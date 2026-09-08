@@ -1,13 +1,13 @@
 ---
 name: mr-text
-description: Write the merge-request description and the author checklist. Triggers: "опиши MR", "текст для MR", "merge request description".
+description: Write the merge-request title, description and author checklist. Run by /unity-ai:mr.
 ---
 
 # MR text
 
-Produces the text to paste into a GitLab merge request, plus the checklist the author owes the
-reviewer. Nothing is pushed and no MR is created — `glab` is deliberately not part of this
-toolkit; the human presses the button.
+Produces the title and the body to paste into a GitLab merge request or a GitHub pull request,
+plus the checklist the author owes the reviewer. Nothing is pushed and no MR is created — `glab`
+and `gh` are deliberately not part of this toolkit; the human presses the button.
 
 ## Steps
 
@@ -17,10 +17,31 @@ toolkit; the human presses the button.
    node scripts/ai.mjs collect-evidence
    ```
 
-2. Read the ticket if the branch names one, so the description says what the change is *for* and
-   not only what it touches.
+2. Read the ticket if the branch names one, so the text says what the change is *for* and not only
+   what it touches.
 
-3. Write the text yourself — this needs no agent. Structure:
+3. Write the **title** for the repository you are actually in — the two shapes are not
+   interchangeable, because both repositories squash and the title becomes the commit:
+
+   * **`frontera` / `king-front`** — `UN-1234: <короткий опис>`. Ticket key first, then the
+     ticket's own summary shortened to fit; language of the ticket. Nothing else: no type prefix,
+     no file names.
+   * **`unity-core-modules`** — Conventional Commits, `type(scope): summary` in English, because
+     `semantic-release` reads the squashed title to decide the release. The type is a decision,
+     not a formality:
+
+     | Title type | Release | Use when |
+     | --- | --- | --- |
+     | `feat` | minor | new export or new behaviour consumers can call |
+     | `fix` | patch | wrong behaviour in something already released |
+     | `chore`, `perf`, `refactor`, `test` | patch | internal change consumers can still pin to |
+     | `docs`, `style` | **none** | text-only change |
+
+     A `docs` or `style` title publishes no version, so the panels cannot pin the change. If the
+     change must reach a consumer, the title must not be one of those two — say this out loud when
+     the diff is mostly docs but carries something consumers need.
+
+4. Write the **body** yourself — this needs no agent. Structure:
 
    ```
    ## Що зроблено
@@ -34,7 +55,11 @@ toolkit; the human presses the button.
    feature flag, follow-up left as a TODO — omit the section when there is nothing>
    ```
 
-4. Add the author's checklist from the team's development flow, ticking only what is verifiably
+   When the evidence shows shared code touched (`unity-core-modules` exports, or files imported
+   across workspaces), name the importers in `Нюанси`. That is the paragraph that saves a reviewer
+   from finding out in production.
+
+5. Add the author's checklist from the team's development flow, ticking only what is verifiably
    true from the evidence and leaving the rest for the author:
 
    - юніт-тести на змінену логіку (coverage gate по змінених секціях диффа);
@@ -43,8 +68,9 @@ toolkit; the human presses the button.
    - двоє рев'юерів (один — якщо зміна тривіальна), архітектурні зміни — на solaris;
    - задача кинута в `#front` після проходження дев-тесту.
 
-5. Language: Ukrainian by default. If the ticket and the recent MRs of this repository are written
-   in another language, match that instead and say so in one line.
+6. Language: body and checklist in Ukrainian by default; the title follows step 3. If the ticket
+   and the recent MRs of this repository are written in another language, match that and say so in
+   one line.
 
 ## Do not
 

@@ -1,6 +1,6 @@
 ---
 name: query-docs
-description: Answer how something works, reading the knowledge page before the source. Triggers: "як працює", "как работает", "how does X work".
+description: Answer how something works, reading the knowledge page before the source. Run by /unity-ai:how.
 ---
 
 # Query the knowledge vault

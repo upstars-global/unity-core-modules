@@ -56,3 +56,21 @@ page is read instead of the source, so a page as long as the source saves nobody
 module genuinely needs more, it usually needs two pages — or the module needs splitting.
 
 Prose in Ukrainian; identifiers, paths, route names and code examples stay as they are.
+
+## Where pages come from
+
+The vault does not fill from documentation sprints. It fills from work that already happened and
+cost something:
+
+- a question `query-docs` had to answer from the source because no page existed;
+- an SSR or review finding that named a durable trap, not just this diff's bug;
+- a root cause that took reading three files to establish;
+- a port or an extraction that revealed why the twins diverge here.
+
+The test is one question: **would the next person rediscover this from scratch?** If yes, the
+answer is worth a page, and the moment to write it is now, while the reasoning is still in
+context — reconstructing it next month costs the same work again. If no — it is this branch's
+detail, and it belongs in the MR, not in the vault.
+
+The corollary is a limit. A finding that the code states plainly is not a page; a page that
+restates the diff is worse than no page, because it will go stale and someone will trust it.
