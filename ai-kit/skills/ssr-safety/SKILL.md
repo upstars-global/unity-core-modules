@@ -13,14 +13,23 @@ a browser assumption in shared code breaks both applications at once.
 
 ## Steps
 
-1. Facts:
+1. Facts, and the deterministic part of the audit itself — never grep the diff for these by hand,
+   the script already did it:
 
    ```shell
    node scripts/ai.mjs collect-evidence
+   node scripts/ai.mjs ssr-scan --json
    ```
 
-2. Delegate to the `ssr-safety` agent with the evidence and the instruction to read
-   `<toolkit>/rules/ssr.md` first.
+   `ssr-scan` greps the diff's added lines for the browser APIs that actually cause hydration bugs
+   (`window`, `document`, `localStorage`, `sessionStorage`, `navigator`, `matchMedia`, `Date.now`,
+   `Math.random`) and reports a `guarded?` hint per hit. It is a heuristic, not a verdict — it does
+   not parse scope — but a changed file with zero hits needs no reading for points 1-2 of the rule.
+
+2. Delegate to the `ssr-safety` agent with the evidence, the `ssr-scan` output, and the instruction
+   to read `<toolkit>/rules/ssr.md` first. Tell it plainly: files in `ssr-scan`'s `clean` list need
+   no read for points 1-2, only for points 3-5 (client-only placement, refetch flashes, effect
+   order) if anything else about them looks worth a look; files in `hits` are where to start.
 
 3. Return its findings verbatim. Each one names a file and line, what breaks, and when — on the
    server, on hydration, or only on a slow connection. A finding without that is not returned.

@@ -49,6 +49,8 @@ model in the loop.
 | Script | What it answers |
 | --- | --- |
 | `collect-evidence.mjs` | Ticket, base branch, changed files by kind and workspace, changed shared code and its importers, hinted Jira components. `--json` for an agent |
+| `ssr-scan.mjs` | Greps the diff's added lines for the browser APIs that cause hydration bugs, so `ssr-safety` only reads the files that might be a problem |
+| `leftovers-scan.mjs` | Greps the diff's added lines for debug logging, `debugger`, ticket-less TODOs and hardcoded-secret shapes, for the `review` "Leftovers" check |
 | `routes-map.mjs` | The router's real table: URL, route name, component module. `--for <file>` answers which pages render a changed file |
 | `sync-agents-md.mjs` | Generates `AGENTS.md` from the rules; `--check` fails when it is stale |
 | `rules-inject.mjs` | The SessionStart index of rules, plus a warning when the plugin and the pinned copy in `node_modules` have drifted apart |
