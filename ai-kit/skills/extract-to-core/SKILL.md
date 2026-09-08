@@ -1,6 +1,6 @@
 ---
 name: extract-to-core
-description: Move code into unity-core-modules so both twins share it. Triggers: "винеси в core", "вынеси в core", "make this shared".
+description: Move code into unity-core-modules so both twins share it. Run by /unity-ai:extract.
 ---
 
 # Extract into the shared library

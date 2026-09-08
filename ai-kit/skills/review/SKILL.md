@@ -1,6 +1,6 @@
 ---
 name: review
-description: Review the branch against the shared review rules before pushing. Triggers: "відревю", "отревьюй", "review my changes", /unity-ai:review.
+description: Review the branch against the shared review rules before pushing. Run by /unity-ai:review.
 ---
 
 # Review

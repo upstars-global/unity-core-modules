@@ -14,21 +14,27 @@ review is a separate item, waiting on that job's own implementation.
 
 ## Skills
 
-| Skill | Invoke | What it does |
+| Skill | Command | What it does |
 | --- | --- | --- |
-| `impact-analysis` | `/unity-ai:ia`, "що тестувати" | Branch to a manual-QA checklist of pages and checks, in Ukrainian, optionally written into the Jira ticket |
-| `root-cause` | `/unity-ai:root-cause`, "першопричина бага" | Classifies a bug-fix diff into the Jira Root cause option and writes it, after verifying the write stuck |
-| `review` | `/unity-ai:review`, "відревю до пуша" | Reviews the branch against `rules/review.md` before anyone else sees it |
-| `mr-text` | `/unity-ai:mr-text`, "опиши MR" | Merge-request description and the author's checklist from the team's development flow |
-| `vue-component` | "новий компонент" | Generates a component, its test, optionally a story and translation keys, in the places each package puts them |
-| `write-tests` | "покрий тестами" | Unit tests by the repository's conventions and the coverage gate |
-| `ssr-safety` | "перевір SSR", "hydration" | Audits a diff for browser assumptions and hydration mismatches |
-| `i18n-keys` | "додай ключі" | Translation keys the way the Lokalise flow requires |
-| `port-to-twin` | "перенеси в king-front" | Carries a change into the twin and reports what could not be carried |
-| `extract-to-core` | "винеси в core" | Moves code into the shared library, with the blockers checked first |
-| `sync-consumers` | "підніми пин" | Points both applications at a new library release — pin and lockfile |
-| `query-docs` | "як працює X" | Answers from the knowledge page when one is fresh, from the source otherwise |
-| `update-docs` | "онови документацію" | Writes the pages that carry invariants, gotchas and why — not a retelling of the code |
+| `impact-analysis` | `/unity-ai:ia` | Branch to a manual-QA checklist of pages and checks, in Ukrainian, optionally written into the Jira ticket |
+| `root-cause` | `/unity-ai:root-cause` | Classifies a bug-fix diff into the Jira Root cause option and writes it, after verifying the write stuck |
+| `review` | `/unity-ai:review` | Reviews the branch against `rules/review.md` before anyone else sees it |
+| `mr-text` | `/unity-ai:mr` | MR/PR title for this repository's convention, description and the author's checklist |
+| `vue-component` | `/unity-ai:component <name>` | Generates a component, its test, optionally a story and translation keys, in the places each package puts them |
+| `write-tests` | `/unity-ai:tests <path>` | Unit tests by the repository's conventions and the coverage gate |
+| `ssr-safety` | `/unity-ai:ssr` | Audits a diff for browser assumptions and hydration mismatches |
+| `i18n-keys` | `/unity-ai:i18n <keys>` | Translation keys the way the Lokalise flow requires |
+| `port-to-twin` | `/unity-ai:port` | Carries a change into the twin and reports what could not be carried |
+| `extract-to-core` | `/unity-ai:extract <path>` | Moves code into the shared library, with the blockers checked first |
+| `sync-consumers` | `/unity-ai:sync [version]` | Points both applications at a new library release — pin and lockfile |
+| `query-docs` | `/unity-ai:how <question>` | Answers from the knowledge page when one is fresh, from the source otherwise |
+| `update-docs` | `/unity-ai:docs` | Writes the pages that carry invariants, gotchas and why — not a retelling of the code |
+
+Every skill has a command, and the command is the supported way in: it says exactly which skill
+runs, so nothing depends on guessing intent from a phrase. That is also why the `description`
+fields are one clause — a description is loaded into every session whether or not the skill is
+used, and a list of trigger phrases in three languages was paying that price to do what a command
+does for free.
 
 Agents are launched by the skills, never directly: `impact-analysis` and `code-review` on sonnet,
 `root-cause` on the cheaper `fable` — its job is to pick one category from a known list. Every
@@ -122,7 +128,8 @@ Plugins from an external source may still need one explicit install:
 /plugin install unity-ai@unity
 ```
 
-Verify with `/unity-ai:doctor`, or from a shell: `node ai-kit/scripts/selfcheck.mjs`.
+Verify from a shell in either application: `yarn ai` prints the plugin version, the toolkit
+path it resolved and the scripts it can run.
 
 ## Develop against a checkout
 

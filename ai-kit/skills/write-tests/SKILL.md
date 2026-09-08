@@ -1,6 +1,6 @@
 ---
 name: write-tests
-description: Write unit tests for existing code, by this repository's conventions and the coverage gate. Triggers: "покрий тестами", "покрой тестами", "add coverage".
+description: Write unit tests for existing code, by this repository's conventions and the coverage gate. Run by /unity-ai:tests.
 ---
 
 # Write tests

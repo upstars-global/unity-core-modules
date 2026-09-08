@@ -1,6 +1,6 @@
 ---
 name: ssr-safety
-description: Audit a change for browser assumptions and hydration mismatches. Triggers: "перевір SSR", "проверь SSR", "hydration mismatch".
+description: Audit a change for browser assumptions and hydration mismatches. Run by /unity-ai:ssr.
 ---
 
 # SSR safety

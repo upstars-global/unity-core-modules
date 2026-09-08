@@ -1,6 +1,6 @@
 ---
 name: impact-analysis
-description: Turn the branch into a list of pages QA must open, and optionally write it into Jira. Triggers: "що тестувати", "что тестировать", "impact analysis", /unity-ai:ia.
+description: Turn the branch into a list of pages QA must open, and optionally write it into Jira. Run by /unity-ai:ia.
 ---
 
 # Impact analysis

@@ -1,6 +1,6 @@
 ---
 name: sync-consumers
-description: Point both applications at a new unity-core-modules release — pin and lockfile. Triggers: "підніми пин", "подними пин", "bump the core pin".
+description: Point both applications at a new unity-core-modules release — pin and lockfile. Run by /unity-ai:sync.
 ---
 
 # Point the applications at a new release

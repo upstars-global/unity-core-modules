@@ -1,6 +1,6 @@
 ---
 name: i18n-keys
-description: Add or clean translation keys the way the Lokalise flow requires. Triggers: "додай ключі", "добавь ключи", "translation keys".
+description: Add or clean translation keys the way the Lokalise flow requires. Run by /unity-ai:i18n.
 ---
 
 # Translation keys

@@ -1,6 +1,6 @@
 ---
 name: update-docs
-description: Write or refresh knowledge pages for changed or hot code. Triggers: "онови документацію", "задокументируй", "update the docs".
+description: Write or refresh knowledge pages for changed or hot code. Run by /unity-ai:docs.
 ---
 
 # Update the knowledge vault

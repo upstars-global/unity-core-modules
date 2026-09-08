@@ -1,6 +1,6 @@
 ---
 name: mr-text
-description: Write the merge-request title, description and author checklist. Triggers: "опиши MR", "назва MR", "название МРа", "merge request title", "PR description".
+description: Write the merge-request title, description and author checklist. Run by /unity-ai:mr.
 ---
 
 # MR text

@@ -1,6 +1,6 @@
 ---
 name: port-to-twin
-description: Carry a change into the twin application and report what cannot be carried. Triggers: "перенеси в king-front", "перенеси в frontera", "port to the twin".
+description: Carry a change into the twin application and report what cannot be carried. Run by /unity-ai:port.
 ---
 
 # Port to the twin
