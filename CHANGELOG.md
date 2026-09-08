@@ -1,3 +1,86 @@
+## [1.115.0](https://github.com/upstars-global/unity-core-modules/compare/v1.114.0...v1.115.0) (2026-09-08)
+
+### 🚀 Features
+
+* **ai-kit:** add commands ([#397](https://github.com/upstars-global/unity-core-modules/issues/397))
+ ([97f8ea0](https://github.com/upstars-global/unity-core-modules/commit/97f8ea0a55be320a43d3625866dfc896770300c5))
+
+
+
+    * feat(ai-kit): add /unity-ai:mr and teach mr-text the title conventions
+
+    The skill wrote the MR body but never the title, and the two repositories
+
+    need different shapes: the panels squash into `UN-1234: summary`, while
+
+    unity-core-modules squashes into a Conventional Commits title that
+
+    semantic-release reads to pick the release — so a `docs` title silently
+
+    publishes nothing and leaves consumers unable to pin the change.
+
+    Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+
+    Claude-Session: https://claude.ai/code/session_016QXqeBSNYV6EymrtMfUV9j
+
+    * feat(ai-kit): file findings back into the vault instead of losing them to chat
+
+    The vault could only fill from a question query-docs missed or from an
+
+    explicit documentation run, so everything a review, an SSR audit or a root
+
+    cause established evaporated when the session ended and the next person paid
+
+    to rediscover it. Adds the doctrine for where pages come from, with the test
+
+    that decides it, and the offer at the two points that produce durable
+
+    findings.
+
+    Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+
+    Claude-Session: https://claude.ai/code/session_016QXqeBSNYV6EymrtMfUV9j
+
+    * fix(ai-kit): a reformat is not staleness
+
+    source_hash covered raw bytes, so the first `eslint --fix` across a package
+
+    would mark every page in the vault stale at once — and a vault that reports
+
+    staleness for a reason nobody can see is one people stop believing. The hash
+
+    now covers a normalised view: blank lines, indentation and whole-line
+
+    comments removed. Deliberately only whole-line comments: stripping from a
+
+    mid-line `//` would eat the tail of any line holding a URL, and a later edit
+
+    inside that string would then go unnoticed.
+
+    Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+
+    Claude-Session: https://claude.ai/code/session_016QXqeBSNYV6EymrtMfUV9j
+
+    * feat(ai-kit): a command for every skill, and no trigger phrases to pay for
+
+    Nine skills could only be reached by phrasing something the description
+
+    happened to match, which is both unreliable and expensive: a description is
+
+    loaded into every session whether the skill is used or not, so the
+
+    three-language trigger lists were charged to the whole team to do what a
+
+    command does for free. Every skill now has a command, several taking the
+
+    target as an argument, and the descriptions are one clause each — nine new
+
+    commands for +38 always-on tokens.
+
+    Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+
+    Claude-Session: https://claude.ai/code/session_016QXqeBSNYV6EymrtMfUV9j
+
 ## [1.114.0](https://github.com/upstars-global/unity-core-modules/compare/v1.113.0...v1.114.0) (2026-09-07)
 
 ### 🚀 Features
