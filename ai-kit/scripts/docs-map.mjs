@@ -6,7 +6,8 @@
 //
 // Pages live in knowledge/<package>/<category>/<Name>.md and carry frontmatter:
 //   source: packages/front-ss/src/modules/Cashbox/Cashbox.vue
-//   source_hash: 1f3c9ab27e40
+//   source_hash: 1f3c9ab27e40   # of the source with blanks, indentation and whole-line
+//                                  # comments normalised away, so a reformat is not staleness
 //   updated: 2026-09-07
 //
 // CLI:
@@ -83,9 +84,28 @@ export function pageFor (path) {
     return join(VAULT, pkg, rule.category, `${ entity }.md`);
 }
 
+// A reformat is not a change of meaning. Hashing raw bytes would mark every page in the vault
+// stale the day someone runs `eslint --fix` across a package, and a vault that cries stale for a
+// reason nobody can see is a vault people stop believing. So the hash covers a normalised view:
+// blank lines dropped, indentation and trailing whitespace collapsed, whole-line comments
+// removed. Only whole-line comments — stripping from a `//` mid-line would eat the tail of any
+// line containing a URL in a string, and then a real change inside that string would go
+// unnoticed, which is the one error this file must never make. A trailing comment edited in place
+// therefore still counts as a change; that is the safe direction to be wrong in.
+const WHOLE_LINE_COMMENT = /^(\/\/|\/\*|\*|\*\/|<!--|-->|#)/;
+
+function normalise (buffer) {
+    return buffer
+        .toString("utf8")
+        .split(/\r?\n/)
+        .map((line) => line.trim())
+        .filter((line) => line !== "" && !WHOLE_LINE_COMMENT.test(line))
+        .join("\n");
+}
+
 function hashOf (path) {
     return existsSync(path)
-        ? createHash("sha256").update(readFileSync(path)).digest("hex").slice(0, 12)
+        ? createHash("sha256").update(normalise(readFileSync(path))).digest("hex").slice(0, 12)
         : null;
 }
 
