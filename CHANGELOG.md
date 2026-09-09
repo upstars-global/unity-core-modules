@@ -1,3 +1,872 @@
+## [1.116.0](https://github.com/upstars-global/unity-core-modules/compare/v1.115.0...v1.116.0) (2026-09-08)
+
+### 🚀 Features
+
+* **ai-kit:** deterministic SSR and leftovers scans for review/ssr-sa… ([#398](https://github.com/upstars-global/unity-core-modules/issues/398))
+ ([3260958](https://github.com/upstars-global/unity-core-modules/commit/326095834e3b78439a11296cfa0625772b5b11d7))
+
+
+
+    feat(ai-kit): deterministic SSR and leftovers scans for review/ssr-safety skills
+
+    Add ssr-scan.mjs and leftovers-scan.mjs, regex-only passes over the diff's added
+
+    lines for browser APIs and debug leftovers, and wire the review and ssr-safety
+
+    skills/agents to read their output instead of re-grepping the diff themselves.
+
+    Co-authored-by: Claude Sonnet 5 <noreply@anthropic.com>
+
+## [1.115.0](https://github.com/upstars-global/unity-core-modules/compare/v1.114.0...v1.115.0) (2026-09-08)
+
+### 🚀 Features
+
+* **ai-kit:** add commands ([#397](https://github.com/upstars-global/unity-core-modules/issues/397))
+ ([97f8ea0](https://github.com/upstars-global/unity-core-modules/commit/97f8ea0a55be320a43d3625866dfc896770300c5))
+
+
+
+    * feat(ai-kit): add /unity-ai:mr and teach mr-text the title conventions
+
+    The skill wrote the MR body but never the title, and the two repositories
+
+    need different shapes: the panels squash into `UN-1234: summary`, while
+
+    unity-core-modules squashes into a Conventional Commits title that
+
+    semantic-release reads to pick the release — so a `docs` title silently
+
+    publishes nothing and leaves consumers unable to pin the change.
+
+    Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+
+    Claude-Session: https://claude.ai/code/session_016QXqeBSNYV6EymrtMfUV9j
+
+    * feat(ai-kit): file findings back into the vault instead of losing them to chat
+
+    The vault could only fill from a question query-docs missed or from an
+
+    explicit documentation run, so everything a review, an SSR audit or a root
+
+    cause established evaporated when the session ended and the next person paid
+
+    to rediscover it. Adds the doctrine for where pages come from, with the test
+
+    that decides it, and the offer at the two points that produce durable
+
+    findings.
+
+    Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+
+    Claude-Session: https://claude.ai/code/session_016QXqeBSNYV6EymrtMfUV9j
+
+    * fix(ai-kit): a reformat is not staleness
+
+    source_hash covered raw bytes, so the first `eslint --fix` across a package
+
+    would mark every page in the vault stale at once — and a vault that reports
+
+    staleness for a reason nobody can see is one people stop believing. The hash
+
+    now covers a normalised view: blank lines, indentation and whole-line
+
+    comments removed. Deliberately only whole-line comments: stripping from a
+
+    mid-line `//` would eat the tail of any line holding a URL, and a later edit
+
+    inside that string would then go unnoticed.
+
+    Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+
+    Claude-Session: https://claude.ai/code/session_016QXqeBSNYV6EymrtMfUV9j
+
+    * feat(ai-kit): a command for every skill, and no trigger phrases to pay for
+
+    Nine skills could only be reached by phrasing something the description
+
+    happened to match, which is both unreliable and expensive: a description is
+
+    loaded into every session whether the skill is used or not, so the
+
+    three-language trigger lists were charged to the whole team to do what a
+
+    command does for free. Every skill now has a command, several taking the
+
+    target as an argument, and the descriptions are one clause each — nine new
+
+    commands for +38 always-on tokens.
+
+    Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+
+    Claude-Session: https://claude.ai/code/session_016QXqeBSNYV6EymrtMfUV9j
+
+## [1.114.0](https://github.com/upstars-global/unity-core-modules/compare/v1.113.0...v1.114.0) (2026-09-07)
+
+### 🚀 Features
+
+* **ai-kit:** stage 5 — knowledge vault, without the always-on index ([#396](https://github.com/upstars-global/unity-core-modules/issues/396))
+ ([d697eee](https://github.com/upstars-global/unity-core-modules/commit/d697eee6e3b0b074753c69f1015ffac2731d518b))
+
+
+
+    * feat(ai-kit): stage 5 — knowledge vault, without the always-on index
+
+    A page in knowledge/ carries what the code cannot: invariants, contracts,
+
+    gotchas, and why something is the way it is. The tooling ships here, the pages
+
+    live in the repository they describe.
+
+    docs-map.mjs is the deterministic core — which page documents a source, whether
+
+    that page is still true, what debt a branch carries, and what is worth
+
+    documenting first. Freshness is a hash of the source in the page's frontmatter,
+
+    not its mtime: mtime changes on every install and checkout and would declare
+
+    half the vault stale for nothing. The path mapping handles a monorepo, so
+
+    front-ss and front-core helpers of the same name do not collide, and storybook
+
+    and the translation pipeline are excluded from documentation entirely.
+
+    One deliberate departure from the toolkit this learned from: **no vault index is
+
+    injected at session start.** Theirs injects it, which is a cost every session
+
+    pays whether or not anyone asks a question, and it grows with the vault.
+
+    `--find` costs one command, and only when a question is actually asked. The
+
+    reading order is written into query-docs instead: the codebase graph for where,
+
+    the page for why, the source for the rest.
+
+    --hotpath ranks by churn, because the code that changes most is the code whose
+
+    invariants get rediscovered most often. On frontera today that puts
+
+    layouts/App/App.vue at 19 changes in six months, CashboxForm and gtmConstants at
+
+    13 — a documentation backlog that comes from git rather than from opinion.
+
+    The doctrine reference is the part that decides whether this survives: a page
+
+    must not retell the file, must not restate the types, and stays under about 2 KB
+
+    because it is read *instead* of the source. --lint enforces the size along with
+
+    broken links, orphans and name collisions.
+
+    Not shipped, deliberately: the post-commit debt queue and the Stop-hook reminder
+
+    from the plan. With zero pages in the vault they would nag about nothing. They
+
+    are worth adding once the vault is genuinely used, and not before.
+
+    Plugin version 0.7.0.
+
+    Plan: Confluence > Unity > FrontEnd > Unity AI Kit
+
+    Ticket: UN-3195
+
+    Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+
+    Claude-Session: https://claude.ai/code/session_016QXqeBSNYV6EymrtMfUV9j
+
+    * fix(ai-kit): skills could not run their own scripts; review cuts the always-on cost by a third
+
+    Review of everything built so far, with one defect that mattered more than the
+
+    rest and a set of cuts.
+
+    **The defect.** `${CLAUDE_PLUGIN_ROOT}` is substituted only inside plugin.json
+
+    and hooks.json. In the body of a SKILL.md it stays a literal, so nineteen files
+
+    told the assistant to run `node "${CLAUDE_PLUGIN_ROOT}/scripts/x.mjs"`, which
+
+    the shell resolves to `node "/scripts/x.mjs"`. Every script invocation in every
+
+    skill was broken, and it looked fine in review because the string reads
+
+    correctly.
+
+    Fixed with one resolver per repository — scripts/ai.mjs, shipped as
+
+    ai-kit/templates/ai.mjs — which finds the toolkit in the pinned package, then in
+
+    the checkout, then in CLAUDE_PLUGIN_ROOT if it is set. Skills now say
+
+    `node scripts/ai.mjs collect-evidence --json`: shorter, uniform across
+
+    repositories, and it works. With no arguments it prints the version, the
+
+    resolved path and the available scripts, which is what the doctor skill existed
+
+    to do.
+
+    **Cuts, measured with budget.mjs — always-on went from 1618 to 1092
+
+    tokens, a third less, paid by every session of every developer:**
+
+    - Skill descriptions carried five or six near-synonymous trigger phrases each.
+
+      Kept the distinctive ones in three languages, dropped the rest.
+
+    - Agent descriptions restated their skill. The assistant does not pick an agent
+
+      by phrase — the skill names it — so one short line is enough.
+
+    - Rule descriptions are printed at session start verbatim; shortened to one
+
+      clause each.
+
+    - The doctor skill and selfcheck.mjs are gone. They were stage-0 spike
+
+      scaffolding: the question they answered is answered, and what remains of their
+
+      value is in the resolver and in the drift warning.
+
+    - vue-component restated conventions that the scaffold already applies and the
+
+      frontend rule already owns. Removed the duplicate, kept the one line that is
+
+      genuinely easy to get wrong (translation keys go only into en.json).
+
+    Also corrected the review rule's own description: it claimed to be the source
+
+    for the CI review, which is deferred to another team and not wired up.
+
+    Plugin version 0.8.0.
+
+    Plan: Confluence > Unity > FrontEnd > Unity AI Kit
+
+    Ticket: UN-3195
+
+    Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+
+    Claude-Session: https://claude.ai/code/session_016QXqeBSNYV6EymrtMfUV9j
+
+    * fix(ai-kit): the session-start hook no longer depends on one env var
+
+    The hook ran `node "${CLAUDE_PLUGIN_ROOT}/scripts/rules-inject.mjs" || true`.
+
+    That variable is unreliable even in hooks, and `|| true` meant a failure was
+
+    invisible: the session would simply start without the rule index and nobody
+
+    would know why a skill ignored a rule.
+
+    It now tries the repository's own resolver first — `node scripts/ai.mjs
+
+    rules-inject`, which needs no variable because hooks run in the project
+
+    directory — and falls back to the plugin path. `|| true` stays last, because a
+
+    hook must never break a session, but it is now the third line of defence rather
+
+    than the first.
+
+    Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+
+    Claude-Session: https://claude.ai/code/session_016QXqeBSNYV6EymrtMfUV9j
+
+    * refactor(ai-kit): move procedure out of the main context, where the neighbours put it
+
+    Comparing our layout against cardona-core-service line by line: their agent
+
+    model split is essentially ours (four sonnet, one fable, one haiku for a
+
+    hand-edit fallback we have no analogue for), but their SKILL.md bodies are
+
+    thinner and backed by references. write-tests there is 1.1 KB with seven
+
+    reference files; ours was 1.9 KB with none.
+
+    That difference is not cosmetic. A SKILL.md body is read by the **main** context
+
+    every time the skill fires; a reference is read by the **agent**, in its own
+
+    window and often on a cheaper model. I wrote that principle into the invariants
+
+    and then followed it halfway.
+
+    port-to-twin and write-tests now keep inputs, the gate and the delegation in the
+
+    skill, with the procedure in references the agent reads itself:
+
+    port-to-twin/references/playbook.md (branch from the twin's own default branch,
+
+    apply by verdict, the recurring asymmetries, never cherry-pick across the
+
+    repositories) and write-tests/references/placement.md (the per-package table,
+
+    including that front-ss only runs tests/** so a co-located test there is
+
+    silently never executed).
+
+    Procedure paid for by the main context drops from ~5780 to ~5340 tokens per
+
+    invocation, and what moved is now read by the agent instead. always-on is
+
+    unchanged at ~1090.
+
+    Plugin version 0.8.1.
+
+    Plan: Confluence > Unity > FrontEnd > Unity AI Kit
+
+    Ticket: UN-3195
+
+    Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+
+    Claude-Session: https://claude.ai/code/session_016QXqeBSNYV6EymrtMfUV9j
+
+## [1.113.0](https://github.com/upstars-global/unity-core-modules/compare/v1.112.0...v1.113.0) (2026-09-07)
+
+### 🚀 Features
+
+* **ai-kit:** stage 4 — cross-repo work between the twins and the lib… ([#395](https://github.com/upstars-global/unity-core-modules/issues/395))
+ ([32cc4ad](https://github.com/upstars-global/unity-core-modules/commit/32cc4ad0a82c8ec1c32cb4f61ece15ee0740df9a))
+
+
+
+    feat(ai-kit): stage 4 — cross-repo work between the twins and the library
+
+    The work that has no equivalent in the backoffice toolkit: two applications that
+
+    are the same product twice, and a library both of them pin by tag.
+
+    port-map.mjs compares the twins from disk and gives a verdict per file:
+
+    identical (ports cleanly today), differs (already diverged — decide per hunk),
+
+    missing-in-twin, or deleted-here with whether the twin still has the file. It
+
+    also prints the asymmetries that actually break ports, and on the real
+
+    checkouts that is four of them: turbo only in frontera, docs/ai-context only in
+
+    frontera, and a guides directory spelled guides-md here and guids-md there. The
+
+    rename is resolved in the mapping rather than ignored, so a ported guide lands
+
+    in the directory that exists.
+
+    check-extract.mjs answers whether a file can move into unity-core-modules. Two
+
+    findings are blockers rather than warnings, both verified against the library:
+
+    it ships zero .vue files, so a component cannot go there at all — a component
+
+    both twins need belongs in packages/front-core — and code importing @ui, @views,
+
+    @src or @front/core cannot resolve inside the library. For the aliases the
+
+    library does use (@config, @theme and friends) it reports whether a mock exists
+
+    in tests/mocks, because without one the extracted tests do not run.
+
+    sync-consumers.mjs does the pin bump that was done by hand twice today: the
+
+    package.json pin plus the three lines yarn writes for a git dependency. It is
+
+    idempotent, and it refuses to touch the lock when the library's own dependencies
+
+    changed between the two versions — yarn rewrites more than three lines then, and
+
+    guessing would corrupt the file. yarn install stays mandatory: it is the only
+
+    thing that proves the lock resolves.
+
+    The skills carry the parts that are judgement: never cherry-pick across
+
+    repositories with unrelated histories, never overwrite a twin's version of a
+
+    file that already differs (that is usually a deliberate brand difference), never
+
+    port brand copy, and always report what was left behind — that last list is the
+
+    point of a port.
+
+    Always-on cost is now roughly 1500 tokens; budget.mjs prints the split.
+
+    Plugin version 0.6.0.
+
+    Plan: Confluence > Unity > FrontEnd > Unity AI Kit
+
+    Ticket: UN-3195
+
+    Claude-Session: https://claude.ai/code/session_016QXqeBSNYV6EymrtMfUV9j
+
+    Co-authored-by: Claude Opus 5 <noreply@anthropic.com>
+
+## [1.112.0](https://github.com/upstars-global/unity-core-modules/compare/v1.111.0...v1.112.0) (2026-09-07)
+
+### 🚀 Features
+
+* **ai-kit:** stage 3 — component scaffold, tests, SSR audit, i18n keys  ([#394](https://github.com/upstars-global/unity-core-modules/issues/394))
+ ([da96db5](https://github.com/upstars-global/unity-core-modules/commit/da96db5e808b89621133cc58d0eff644bd330ee3))
+
+
+
+    * feat(ai-kit): warn at session start when the plugin and the pin have drifted
+
+    The toolkit arrives through two channels that move independently: the plugin
+
+    follows the marketplace, which tracks the repository's default branch, and
+
+    node_modules follows the pinned tag. When they disagree something silently does
+
+    not work — a skill calling a script the pin does not have, or AGENTS.md pointing
+
+    at rule files that are not installed. That is exactly how `yarn ai:agents-md`
+
+    turned into MODULE_NOT_FOUND with nothing explaining why.
+
+    Claude Code exposes no "update available" signal to a hook, so a plugin cannot
+
+    warn about its own updates. This drift, however, is visible locally without any
+
+    network: compare the version of the loaded plugin against the version of the
+
+    copy inside node_modules. The SessionStart hook now does that in applications
+
+    and says which side is stale, and stays silent when they match or when it runs
+
+    in the library itself.
+
+    Auto-updating the plugin is already handled where it belongs: `autoUpdate: true`
+
+    in each application's committed .claude/settings.json, which refreshes the
+
+    catalogue and installs newer plugin versions in the background after startup.
+
+    That is off by default for third-party marketplaces, which is why it is declared
+
+    explicitly.
+
+    Plugin version 0.4.1.
+
+    Plan: Confluence > Unity > FrontEnd > Unity AI Kit
+
+    Ticket: UN-3195
+
+    Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+
+    Claude-Session: https://claude.ai/code/session_016QXqeBSNYV6EymrtMfUV9j
+
+    * fix(ai-kit): rule paths were unfollowable from the installed plugin
+
+    The injected index printed paths like
+
+    node_modules/unity-core-modules/0.4.1/rules/frontend.md, which do not exist, so
+
+    an agent that trusted the index could not open a single shared rule.
+
+    Cause: the path was derived from the parent of the plugin directory. That is the
+
+    package root in a checkout and in node_modules, but the marketplace installs
+
+    only the ai-kit subtree, into a directory named after the plugin version — so
+
+    the parent there is the plugin's own cache directory and the version segment
+
+    leaked into every path. Derived from the plugin directory instead, with the
+
+    canonical in-package location spelled out once. Verified against a copy of the
+
+    real install layout, and the printed paths now resolve to existing files in a
+
+    consumer checkout.
+
+    The same run answered the question stage 0 left open: the plugin lives in the
+
+    global cache, so the repository root is not reachable from it. Deterministic
+
+    scripts have to live inside the plugin, which is where they already are. CI and
+
+    husky keep reaching them through node_modules/unity-core-modules/ai-kit/scripts.
+
+    Two changes in service of the toolkit's own running cost, which is the point of
+
+    unifying this work in the first place:
+
+    - The SessionStart line is now one header line plus one line per rule instead of
+
+      a header, an instruction, a footer and blank lines. Every session in every
+
+      repository pays for that text verbatim.
+
+    - budget.mjs reports what the toolkit costs in context, split into always-on
+
+      (frontmatter and the SessionStart output) and on-trigger (bodies, playbooks,
+
+      rules, guides). Today that is roughly 780 tokens always-on against 8400
+
+      on-trigger — which is the whole reason skills stay thin and procedures live in
+
+      references the agent reads itself.
+
+    Plugin version 0.4.2.
+
+    Plan: Confluence > Unity > FrontEnd > Unity AI Kit
+
+    Ticket: UN-3195
+
+    Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+
+    Claude-Session: https://claude.ai/code/session_016QXqeBSNYV6EymrtMfUV9j
+
+    * feat(ai-kit): stage 3 — component scaffold, tests, SSR audit, i18n keys
+
+    The routine half of front-end work, with the deterministic part in a script so
+
+    the team stops paying tokens for it.
+
+    component-scaffold.mjs writes the files a new component needs into the places
+
+    these repositories actually put them, which is not uniform and is what people
+
+    get wrong: front-ss mirrors sources into tests/unit, while front-core keeps the
+
+    test next to the source; stories live in packages/storybook-ss/src/stories; and
+
+    new translation keys belong in src/i18n/messages/en.json and nowhere else,
+
+    because every other locale is pulled back from Lokalise after the merge request
+
+    and would lose anything written by hand.
+
+    The skeleton follows what the recently written components do rather than what
+
+    Vue tutorials do: script setup first then template, props through an interface
+
+    with withDefaults, Tailwind in the template, tests with mount from
+
+    @vue/test-utils and explicit vitest imports. Verified end to end in frontera —
+
+    generated files pass the repository's own eslint, and a second run refuses to
+
+    overwrite instead of clobbering work.
+
+    Also fixes a rule that was wrong: testing.md claimed the test tree always
+
+    mirrors the source tree. It does in front-ss and in this package; front-core and
+
+    the server packages keep tests beside the source. A rule that is wrong for one
+
+    of three repositories is worse than no rule.
+
+    ssr-safety audits a diff for browser assumptions and hydration mismatches — the
+
+    failure that cost this team UN-2996 and UN-3047 — and is explicit that reading
+
+    code cannot prove a page hydrates cleanly, only a browser can.
+
+    No new slash commands: each one costs every session about twenty tokens of
+
+    frontmatter, and these four skills trigger from phrases people already use.
+
+    Always-on cost after this stage is roughly 1200 tokens against 12000 on-trigger;
+
+    budget.mjs prints the split.
+
+    Plugin version 0.5.0.
+
+    Plan: Confluence > Unity > FrontEnd > Unity AI Kit
+
+    Ticket: UN-3195
+
+    Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+
+    Claude-Session: https://claude.ai/code/session_016QXqeBSNYV6EymrtMfUV9j
+
+    * fix(ai-kit): drop the duplicated drift block left by the merge
+
+    Resolving main into this branch kept both sides of the same block, so the
+
+    version-drift warning printed twice whenever it fired — including the blank line
+
+    before it. Everything else in the resolution was right: the plugin stays at
+
+    0.5.0, the package at the released 1.111.0, and all of stage 3 survived.
+
+    Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+
+    Claude-Session: https://claude.ai/code/session_016QXqeBSNYV6EymrtMfUV9j
+
+## [1.111.0](https://github.com/upstars-global/unity-core-modules/compare/v1.110.0...v1.111.0) (2026-09-07)
+
+### 🚀 Features
+
+* **ai-kit:** warn at session start when the plugin and the pin have … ([#393](https://github.com/upstars-global/unity-core-modules/issues/393))
+ ([12c8a28](https://github.com/upstars-global/unity-core-modules/commit/12c8a28e1ae25a42b29bb84744070d39d0a73085))
+
+
+
+    feat(ai-kit): warn at session start when the plugin and the pin have drifted
+
+    The toolkit arrives through two channels that move independently: the plugin
+
+    follows the marketplace, which tracks the repository's default branch, and
+
+    node_modules follows the pinned tag. When they disagree something silently does
+
+    not work — a skill calling a script the pin does not have, or AGENTS.md pointing
+
+    at rule files that are not installed. That is exactly how `yarn ai:agents-md`
+
+    turned into MODULE_NOT_FOUND with nothing explaining why.
+
+    Claude Code exposes no "update available" signal to a hook, so a plugin cannot
+
+    warn about its own updates. This drift, however, is visible locally without any
+
+    network: compare the version of the loaded plugin against the version of the
+
+    copy inside node_modules. The SessionStart hook now does that in applications
+
+    and says which side is stale, and stays silent when they match or when it runs
+
+    in the library itself.
+
+    Auto-updating the plugin is already handled where it belongs: `autoUpdate: true`
+
+    in each application's committed .claude/settings.json, which refreshes the
+
+    catalogue and installs newer plugin versions in the background after startup.
+
+    That is off by default for third-party marketplaces, which is why it is declared
+
+    explicitly.
+
+    Plugin version 0.4.1.
+
+    Plan: Confluence > Unity > FrontEnd > Unity AI Kit
+
+    Ticket: UN-3195
+
+    Claude-Session: https://claude.ai/code/session_016QXqeBSNYV6EymrtMfUV9j
+
+    Co-authored-by: d-tashchi <kabak133@gmail.com>
+
+    Co-authored-by: Claude Opus 5 <noreply@anthropic.com>
+
+## [1.110.0](https://github.com/upstars-global/unity-core-modules/compare/v1.109.0...v1.110.0) (2026-09-07)
+
+### 🚀 Features
+
+* **ai-kit:** impact-analysis skill, plus the deterministic facts
+ ([977df44](https://github.com/upstars-global/unity-core-modules/commit/977df44195d85641b969bbe43b8bf3064a29b208))
+
+, closes [#front](https://github.com/upstars-global/unity-core-modules/issues/)
+
+    * feat(ai-kit): impact-analysis skill, plus the deterministic facts it stands on
+
+    Stage 2 of the Unity AI Kit plan, first half. Turns a branch into a checklist a
+
+    manual tester can act on: which pages to open, at which URL, what to check.
+
+    Two scripts do the part that is not judgement, so no tokens are spent on it and
+
+    nothing is guessed:
+
+    collect-evidence.mjs — ticket key from the branch, base branch resolved from git
+
+    rather than assumed (the twins disagree: master here, main there), changed files
+
+    classified by kind and workspace, changed shared code with its importers, and
+
+    Jira component hints drawn from the components these projects actually use.
+
+    routes-map.mjs — the router's real table (URL, route name, component module),
+
+    parsed from the lazy-import consts the routers use. `--for <file>` answers the
+
+    question an impact analysis exists to answer: which pages render this file. On
+
+    frontera it reads 80 pages from 98 route entries, and it says so honestly when a
+
+    file is a shared component that no route renders directly, instead of inventing
+
+    a page.
+
+    The skill stays thin — collect, delegate, hand the report back verbatim, then
+
+    offer the Jira write. The procedure lives in references/playbook.md and the
+
+    agent reads it itself, so the main context does not pay for it.
+
+    Jira I/O stays in the skill, never in the agent: a background agent cannot carry
+
+    a user's intent into a write. Field ids are read live and re-read after writing,
+
+    because editJiraIssue can answer 200 and silently drop a field that is not on
+
+    that issue type's edit screen.
+
+    Report language is Ukrainian, per the team's convention for QA and Jira output.
+
+    Plugin version 0.3.0.
+
+    Plan: Confluence > Unity > FrontEnd > Unity AI Kit
+
+    Ticket: UN-3195
+
+    Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+
+    Claude-Session: https://claude.ai/code/session_016QXqeBSNYV6EymrtMfUV9j
+
+    * feat(ai-kit): root-cause, local review and MR text skills
+
+    Stage 2 of the Unity AI Kit plan, second half. Three skills on the facts the
+
+    previous commit made available, and no new deterministic machinery.
+
+    root-cause — gates on Bug and Bug-Subtask, reads the custom field id and its
+
+    allowed options live (both differ per project, and a hardcoded id is how this
+
+    silently writes nothing), delegates only the classification to a cheap agent,
+
+    writes inline and reads the field back. editJiraIssue can answer 200 and drop a
+
+    field that is not on the issue type's edit screen, so an unverified write is
+
+    reported as a failure, not a success. No option is invented and no catch-all is
+
+    picked when nothing fits.
+
+    review — the same rules the team reviews by, applied before pushing, so the
+
+    author is the first reader of an obvious mistake. Findings only, most severe
+
+    first, each traceable to a concrete input and a concrete wrong result. Style is
+
+    explicitly out of scope: unity-eslint-config owns it, and a review that spends
+
+    attention on quoting missed the bug. It fixes nothing unless asked.
+
+    mr-text — description and the author's checklist from the team's development
+
+    flow (coverage gate, e2e for front-core, dynamic stage, two reviewers, the
+
+## [1.109.0](https://github.com/upstars-global/unity-core-modules/compare/v1.108.2...v1.109.0) (2026-09-07)
+
+### 🚀 Features
+
+* **ai-kit:** shared rules as a single source for Claude, Codex and CI ([#391](https://github.com/upstars-global/unity-core-modules/issues/391))
+ ([ae6e885](https://github.com/upstars-global/unity-core-modules/commit/ae6e8855e7c0796cd4917dc137a7d04cd23204f1))
+
+
+
+    Stage 1 of the Unity AI Kit plan. Until now the same instructions lived in three
+
+    places and had already drifted: frontera and king-front carried a byte-identical
+
+    207-line unit-test policy, their AGENTS.md files described entirely different
+
+    things, and king-front had no CLAUDE.md at all.
+
+    Adds ai-kit/rules/*.md — one file per area, with frontmatter (name, description,
+
+    appliesTo) so the same set can be filtered per repository role. Distilled from
+
+    the existing docs/ai-context and guides-md of all three repositories, minus
+
+    everything unity-eslint-config already enforces:
+
+      frontend    Vue 3 / Pinia / TypeScript conventions
+
+      testing     unit-test conventions plus the CI coverage gate
+
+      ssr         hydration and browser-assumption rules (applications only)
+
+      review      what a review must check — single source for the local review
+
+                  skill and, from stage 2, for CR_REVIEW_RULES in GitLab CI
+
+      cross-repo  how the twins and the library relate, and where an edit belongs
+
+    ai-kit/guides/unit-tests.md is the team policy that both applications carry
+
+    identically today; this is now the copy to edit. Removing the two duplicates is
+
+    a follow-up together with the dependency pin bump, so nobody loses the document
+
+    in the meantime.
+
+    Three consumers, one source: the SessionStart hook prints the index for Claude
+
+    (descriptions and paths only — the body is read on demand, so the always-on cost
+
+    stays a handful of lines), sync-agents-md.mjs generates AGENTS.md for Codex, and
+
+    stage 2 will render rules/review.md into the CI review variables.
+
+    Paths resolve themselves: ai-kit/rules/* inside this repository,
+
+    node_modules/unity-core-modules/ai-kit/rules/* in a consumer.
+
+    Plugin version 0.2.0 — consumers only receive an update when this is bumped.
+
+    Plan: Confluence > Unity > FrontEnd > Unity AI Kit
+
+    Ticket: UN-3195
+
+    Claude-Session: https://claude.ai/code/session_016QXqeBSNYV6EymrtMfUV9j
+
+    Co-authored-by: d-tashchi <kabak133@gmail.com>
+
+    Co-authored-by: Claude Opus 5 <noreply@anthropic.com>
+
+## [1.108.2](https://github.com/upstars-global/unity-core-modules/compare/v1.108.1...v1.108.2) (2026-09-07)
+
+### 🔧 Maintenance
+
+* **UN-3195 ai-kit:** add unity-ai plugin skeleton for the distribution spike ([#390](https://github.com/upstars-global/unity-core-modules/issues/390))
+ ([6d02428](https://github.com/upstars-global/unity-core-modules/commit/6d0242898199ac00f9297b76ce151f0d80895e32))
+
+
+
+    chore(ai-kit): add unity-ai plugin skeleton for the distribution spike
+
+    Stage 0 of the Unity AI Kit plan: prove the toolkit can be distributed as a
+
+    native Claude Code plugin instead of the symlink scheme used by the backoffice
+
+    repositories, where the tooling is pinned to the runtime dependency version.
+
+    Adds the marketplace catalogue at the repository root, the plugin manifest, a
+
+    SessionStart hook and one skill (doctor) whose only job is to report whether
+
+    the plugin arrived, whether CLAUDE_PLUGIN_ROOT expands inside a hook, and
+
+    whether the repository root is reachable from the installed plugin directory.
+
+    That last answer decides where deterministic scripts may live: scripts that CI
+
+    and husky call have to be reachable as node_modules/unity-core-modules/scripts/ai/*.
+
+    No runtime code is touched and nothing is enabled automatically.
+
+    Gate: the plugin is visible in /plugin for two different people. If it cannot
+
+    be installed from a private GitHub repository, we fall back to .claude/ plus a
+
+    sync script and the rest of the plan stays as it is.
+
+    Plan: Confluence > Unity > FrontEnd > Unity AI Kit
+
+    Claude-Session: https://claude.ai/code/session_016QXqeBSNYV6EymrtMfUV9j
+
+    Co-authored-by: d-tashchi <kabak133@gmail.com>
+
+    Co-authored-by: Claude Opus 5 <noreply@anthropic.com>
+
 ## [1.108.0](https://github.com/upstars-global/unity-core-modules/compare/v1.107.0...v1.108.0) (2026-08-28)
 
 ### 🚀 Features

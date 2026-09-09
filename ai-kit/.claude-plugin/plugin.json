@@ -1,0 +1,17 @@
+{
+  "name": "unity-ai",
+  "displayName": "Unity AI Kit",
+  "version": "0.10.0",
+  "description": "Shared skills, agents, slash commands, hooks and scripts for the Unity front-end repositories",
+  "author": {
+    "name": "Unity Front Team"
+  },
+  "repository": "https://github.com/upstars-global/unity-core-modules",
+  "keywords": [
+    "unity",
+    "vue",
+    "ssr",
+    "jira",
+    "qa"
+  ]
+}
