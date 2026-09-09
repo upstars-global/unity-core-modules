@@ -33,7 +33,7 @@ import {
     loadGameBySeoTitleReq,
     loadGameBySlugReq,
     loadGamesCategories as loadGamesCategoriesReq,
-    loadGamesCategory as loadGamesCategoryReq,
+    loadGamesCategoryReq,
     loadGamesDataByFilter,
     loadGamesJackpots as loadGamesJackpotsReq,
     loadGamesProvidersReq,
@@ -381,11 +381,16 @@ export async function loadGamesCategory(slug: string, page: number = 1): Promise
 
         // @ts-expect-error -- TS2345: Argument of type 'IGameFilter' is not assignable to parameter of type 'Record<string, unknown>'.
         const data = await loadGamesCategoryReq(reqConfig);
+        const collectionData = (data as Partial<ICollectionItem>).data;
+
+        if (!Array.isArray(collectionData)) {
+            return;
+        }
 
         // @ts-expect-error -- TS2345: Argument of type 'IGameFilterResponse' is not assignable to parameter of type 'ICollectionItem'.
         gamesCategoryStore.setData(data, slugCollection);
     } catch (err) {
-        log.error("LOAD_GAMES_CATEGORY_ERROR", err);
+        log.error("LOAD_GAMES_CATEGORY_BY_SLUG_ERROR", err);
     }
 }
 

@@ -6,7 +6,7 @@ import { log } from "../../../src/controllers/Logger";
 import { processGameForNewAPI } from "../../../src/helpers/gameHelpers";
 import type { ICollectionItem, IGame, IGamesProvider } from "../../../src/models/game";
 import { IEnabledGames } from "../../../src/models/game";
-import { loadGamesCategory as loadGamesCategoryReq } from "../../../src/services/api/requests/games";
+import { loadGamesCategoryReq } from "../../../src/services/api/requests/games";
 import { loadGamesCategory } from "../../../src/services/games";
 import { useGamesCategory } from "../../../src/store/games/gamesCategory";
 
@@ -158,13 +158,21 @@ describe("store/games/gamesCategory", () => {
         });
 
         it("should log error on api failure", async () => {
-            const store = useGamesCategory();
             const error = new Error("API Failed");
             vi.mocked(loadGamesCategoryReq).mockRejectedValue(error);
 
             await loadGamesCategory("slots");
 
-            expect(log.error).toHaveBeenCalledWith("LOAD_GAMES_CATEGORY_ERROR", error);
+            expect(log.error).toHaveBeenCalledWith("LOAD_GAMES_CATEGORY_BY_SLUG_ERROR", error);
+        });
+
+        it("should ignore invalid response without setting collection data", async () => {
+            const store = useGamesCategory();
+            vi.mocked(loadGamesCategoryReq).mockResolvedValue({} as never);
+
+            await loadGamesCategory("slots");
+
+            expect(store.collections.slots).toBeUndefined();
         });
     });
 
