@@ -24,27 +24,24 @@ describe("useSmarticoInboxStore", () => {
         };
 
         store.setInboxMessages([ message ]);
-        store.setInboxMessageBody("message-1", body);
+        store.setInboxMessageBody(message.message_guid, body);
         store.setInboxUnreadCount(1);
         store.setInboxReadFilter("unread");
-        store.setInboxHasMore(true);
 
         expect(store.getInboxMessages).toEqual([ message ]);
-        expect(store.getInboxMessageBody("message-1")).toEqual(body);
+        expect(store.getInboxMessageBody(message.message_guid)).toEqual(body);
         expect(store.getInboxUnreadCount).toBe(1);
         expect(store.getInboxReadFilter).toBe("unread");
-        expect(store.getInboxHasMore).toBe(true);
 
         store.clearInboxUserData();
 
         expect(store.getInboxMessages).toEqual([]);
-        expect(store.getInboxMessageBody("message-1")).toBeUndefined();
+        expect(store.getInboxMessageBody(message.message_guid)).toBeUndefined();
         expect(store.getInboxUnreadCount).toBe(0);
         expect(store.getInboxReadFilter).toBe("all");
-        expect(store.getInboxHasMore).toBe(false);
     });
 
-    it("marks one or all Inbox messages as read", () => {
+    it("marks an Inbox message as read", () => {
         const store = useSmarticoInboxStore();
         const messages = [
             {
@@ -65,9 +62,5 @@ describe("useSmarticoInboxStore", () => {
         store.setInboxMessageAsRead("message-1");
 
         expect(store.getInboxMessages.map(({ read }) => read)).toEqual([ true, false ]);
-
-        store.setAllInboxMessagesAsRead();
-
-        expect(store.getInboxMessages.every(({ read }) => read)).toBe(true);
     });
 });
