@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/ai.mjs rules-inject 2>/dev/null || node \"${CLAUDE_PLUGIN_ROOT}/scripts/rules-inject.mjs\" 2>/dev/null || true"
+          }
+        ]
+      }
+    ]
+  }
+}
