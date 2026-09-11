@@ -5,6 +5,7 @@ import { AFFB_ID_KEY, STAG_PARTNER_KEY } from "@theme/configs/stagConsts";
 import type { Composer, VueI18n } from "vue-i18n";
 
 import { StagController } from "../controllers/StagController";
+import { getDefaultLocaleByHostname } from "../helpers/getDefaultLocaleByHostname";
 import { redirectToLang } from "../helpers/redirectToLang";
 import { getUrlSearchParams } from "../helpers/urlHelpers";
 import { useConfigStore } from "../store/configStore";
@@ -64,10 +65,10 @@ export async function loadLocales() {
 }
 
 export async function updateLocale({ lang }: { lang: LocaleName }) {
-    const { getDefaultLang, locales } = useMultilangStore();
+    const { locales } = useMultilangStore();
 
     return updateLocalesReq({ locale: lang }).then(() => {
-        redirectToLang(lang, getDefaultLang, locales);
+        redirectToLang(lang, getDefaultLocaleByHostname(), locales);
     });
 }
 
