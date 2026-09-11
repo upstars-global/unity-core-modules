@@ -1,3 +1,20 @@
+## [1.117.0](https://github.com/upstars-global/unity-core-modules/compare/v1.116.0...v1.117.0) (2026-09-11)
+
+### 🚀 Features
+
+* UN-3047 Пофиксить текущие hydration missmatch для остальных страниц ([#378](https://github.com/upstars-global/unity-core-modules/issues/378))
+ ([e6c3b4b](https://github.com/upstars-global/unity-core-modules/commit/e6c3b4b8df67dab2e217e322e3f951a64df89557))
+
+
+
+    * fix updateLocale
+
+    * add server normalize HTML
+
+    * remove centrifuge-legacy
+
+    * up vue to 3.5.42
+
 ## [1.116.0](https://github.com/upstars-global/unity-core-modules/compare/v1.115.0...v1.116.0) (2026-09-08)
 
 ### 🚀 Features
