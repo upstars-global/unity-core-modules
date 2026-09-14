@@ -71,7 +71,7 @@ export async function loadFilteredGames(config: Record<string, unknown>): Promis
     }
 }
 
-export async function loadGamesCategory(config: Record<string, unknown>): Promise<IGameFilterResponse> {
+export async function loadGamesCategoryReq(config: Record<string, unknown>): Promise<IGameFilterResponse> {
     try {
         const { data } = await http().post<IGameFilterResponse>("/api/games_filter", config);
         return data;
@@ -86,7 +86,7 @@ export async function loadGamesDataByFilter<T>(config: Record<string, unknown>):
         const { data } = await http().post<T>("/api/games_filter", config);
         return data;
     } catch (error) {
-        log.error("LOAD_GAMES_CATEGORY_ERROR", error);
+        log.error("LOAD_GAMES_DATA_BY_FILTER_ERROR", error);
         return {} as T;
     }
 }

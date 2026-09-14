@@ -1,3 +1,10 @@
+## [1.117.1](https://github.com/upstars-global/unity-core-modules/compare/v1.117.0...v1.117.1) (2026-09-14)
+
+### 🐛 Bug Fixes
+
+* UN-3183 load game category ([#389](https://github.com/upstars-global/unity-core-modules/issues/389))
+ ([57773ee](https://github.com/upstars-global/unity-core-modules/commit/57773ee0e1db89abe5e69966e85866f29f81a1cf))
+
 ## [1.117.0](https://github.com/upstars-global/unity-core-modules/compare/v1.116.0...v1.117.0) (2026-09-11)
 
 ### 🚀 Features
