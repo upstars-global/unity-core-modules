@@ -1,4 +1,3 @@
-import { isServer } from "../helpers/ssrHelpers";
 import type {
     InboxMarkMessageAction,
     SmarticoGlobal,
@@ -9,6 +8,7 @@ import type {
 import { InboxReadStatus } from "../models/smarticoInbox";
 import { useSmarticoInboxStore } from "../store/smarticoInbox";
 import { log } from "./Logger";
+import { getSmartico } from "./Smartico";
 
 const PAGE_SIZE = 20;
 
@@ -21,12 +21,11 @@ function getActionError(result: InboxMarkMessageAction) {
 }
 
 function createSmarticoInboxController() {
-    const store = useSmarticoInboxStore();
     const bodyRequests = new Map<string, Promise<TInboxMessageBody>>();
     let newMessageHandler: ((message: TInboxMessage, body: TInboxMessageBody) => void) | undefined;
 
     function getApi(): SmarticoGlobal["api"] {
-        const smartico = isServer ? undefined : window._smartico;
+        const smartico = getSmartico();
 
         if (!smartico?.api) {
             throw new Error("Smartico Inbox API is not available");
@@ -36,6 +35,7 @@ function createSmarticoInboxController() {
     }
 
     function loadMessageBody(messageGuid: string) {
+        const store = useSmarticoInboxStore();
         const storedBody = store.getInboxMessageBody(messageGuid);
 
         if (storedBody) {
@@ -69,8 +69,10 @@ function createSmarticoInboxController() {
         return request;
     }
 
-    function loadMessageBodies(messages: TInboxMessage[] = store.getInboxMessages) {
-        return Promise.all(messages.map(({ message_guid }) => {
+    function loadMessageBodies(messages?: TInboxMessage[]) {
+        const inboxMessages = messages ?? useSmarticoInboxStore().getInboxMessages;
+
+        return Promise.all(inboxMessages.map(({ message_guid }) => {
             return loadMessageBody(message_guid);
         }));
     }
@@ -95,6 +97,7 @@ function createSmarticoInboxController() {
     }
 
     function handleMessagesUpdate(updatedMessages: TInboxMessage[]) {
+        const store = useSmarticoInboxStore();
         const isUnreadFilter = store.getInboxReadFilter === "unread";
         const newMessages = updatedMessages.filter(({ message_guid: messageGuid, read }) => {
             return (!isUnreadFilter || !read) && !store.getInboxMessages.some(({ message_guid: currentGuid }) => {
@@ -116,6 +119,7 @@ function createSmarticoInboxController() {
     }
 
     async function loadMessagesByFilter(readFilter: SmarticoInboxReadFilter, subscribe = true) {
+        const store = useSmarticoInboxStore();
         const api = getApi();
         let pendingUpdate: TInboxMessage[] | undefined;
         let isLoaded = false;
@@ -145,10 +149,13 @@ function createSmarticoInboxController() {
     }
 
     function loadMessages(subscribe = true) {
+        const store = useSmarticoInboxStore();
+
         return loadMessagesByFilter(store.getInboxReadFilter, subscribe);
     }
 
     async function loadMore(from: number) {
+        const store = useSmarticoInboxStore();
         const api = getApi();
         const messages = await api.getInboxMessages({
             from,
@@ -162,6 +169,7 @@ function createSmarticoInboxController() {
     }
 
     async function loadUnreadCount() {
+        const store = useSmarticoInboxStore();
         const api = getApi();
         const unreadCount = await api.getInboxUnreadCount({
             onUpdate: (updatedCount) => {
@@ -173,6 +181,7 @@ function createSmarticoInboxController() {
     }
 
     async function markAsRead(messageGuid: string) {
+        const store = useSmarticoInboxStore();
         const api = getApi();
         const message = store.getInboxMessages.find(({ message_guid: currentGuid }) => currentGuid === messageGuid);
 
@@ -201,6 +210,7 @@ function createSmarticoInboxController() {
     }
 
     async function toggleReadFilter() {
+        const store = useSmarticoInboxStore();
         const readFilter = store.getInboxReadFilter === "all" ? "unread" : "all";
 
         await loadMessagesByFilter(readFilter);
@@ -208,7 +218,7 @@ function createSmarticoInboxController() {
 
     function reset() {
         bodyRequests.clear();
-        store.clearInboxUserData();
+        useSmarticoInboxStore().clearInboxUserData();
     }
 
     async function initialize() {

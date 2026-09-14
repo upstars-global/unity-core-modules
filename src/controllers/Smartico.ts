@@ -2,6 +2,10 @@ import { isServer } from "../helpers/ssrHelpers";
 
 const smarticoPopupSuspenders = new Set<string>();
 
+export function getSmartico() {
+    return isServer ? undefined : window._smartico;
+}
+
 export function useSmartico() {
     function setSmarticoUser(userId: string, language: string) {
         if (!isServer) {
@@ -56,7 +60,7 @@ export function useSmartico() {
     }
 
     function addSmarticoIdentifyListener(callback: (errCode: number) => void) {
-        const smartico = isServer ? undefined : window._smartico;
+        const smartico = getSmartico();
 
         if (smartico?.on) {
             smartico.on("identify", callback);
@@ -70,7 +74,7 @@ export function useSmartico() {
     }
 
     function removeSmarticoIdentifyListener(callback: (errCode: number) => void) {
-        const smartico = isServer ? undefined : window._smartico;
+        const smartico = getSmartico();
 
         if (smartico?.off) {
             smartico.off("identify", callback);

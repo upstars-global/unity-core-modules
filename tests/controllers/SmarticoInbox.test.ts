@@ -51,8 +51,11 @@ const mocks = vi.hoisted(() => {
             }),
             clearInboxUserData: vi.fn(),
         },
+        useStore: vi.fn(),
     };
 });
+
+mocks.useStore.mockImplementation(() => mocks.store);
 
 vi.mock("../../src/helpers/ssrHelpers", () => ({
     isServer: false,
@@ -65,7 +68,7 @@ vi.mock("../../src/controllers/Logger", () => ({
 }));
 
 vi.mock("../../src/store/smarticoInbox", () => ({
-    useSmarticoInboxStore: () => mocks.store,
+    useSmarticoInboxStore: mocks.useStore,
 }));
 
 function createMessage(index: number, read = false): TInboxMessage {
@@ -119,6 +122,24 @@ describe("useSmarticoInboxController", () => {
         const secondController = useSmarticoInboxController();
 
         expect(firstController).toBe(secondController);
+    });
+
+    test("uses the current store for every controller call", async() => {
+        const firstClear = vi.fn();
+        const secondClear = vi.fn();
+
+        mocks.useStore
+            .mockReturnValueOnce({ ...mocks.store, clearInboxUserData: firstClear })
+            .mockReturnValueOnce({ ...mocks.store, clearInboxUserData: secondClear });
+
+        const { useSmarticoInboxController } = await import("../../src/controllers/SmarticoInbox");
+        const controller = useSmarticoInboxController();
+
+        controller.reset();
+        controller.reset();
+
+        expect(firstClear).toHaveBeenCalledOnce();
+        expect(secondClear).toHaveBeenCalledOnce();
     });
 
     test("loads messages and unread count with subscriptions", async() => {
