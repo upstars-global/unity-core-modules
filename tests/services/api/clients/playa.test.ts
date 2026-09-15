@@ -4,7 +4,7 @@ import { PlayaApiClient, PlayaApiError } from "../../../../src/services/api/clie
 
 function response(data: unknown, status = 200, statusText = "OK") {
     return {
-        json: vi.fn().mockResolvedValue({ data }),
+        json: vi.fn().mockResolvedValue(data),
         ok: status >= 200 && status < 300,
         status,
         statusText,
@@ -13,7 +13,7 @@ function response(data: unknown, status = 200, statusText = "OK") {
 
 describe("PlayaApiClient", () => {
     it("requests player recommendations with the API and player headers", async() => {
-        const fetcher = vi.fn().mockResolvedValue(response({ categories: [] }));
+        const fetcher = vi.fn().mockResolvedValue(response({ data: { categories: [] } }));
         const client = new PlayaApiClient({
             apiKey: "test-key",
             baseUrl: "https://playa.example/",
@@ -30,19 +30,33 @@ describe("PlayaApiClient", () => {
     });
 
     it("requests guest category games with pagination", async() => {
-        const fetcher = vi.fn().mockResolvedValue(response({ data: [], pagination: {} }));
+        const categoryGames = {
+            data: { id: "top", name: "Top", games: [] },
+            pagination: { page: 2, limit: 20, total: 40 },
+        };
+        const fetcher = vi.fn().mockResolvedValue(response(categoryGames));
         const client = new PlayaApiClient({
             apiKey: "test-key",
             baseUrl: "https://playa.example",
             fetcher,
         });
 
-        await client.getGuestCategoryGames("top slots", 2);
+        await expect(client.getGuestCategoryGames("top slots", 2, "CA")).resolves.toEqual(categoryGames);
 
-        expect(fetcher).toHaveBeenCalledWith("https://playa.example/v1/recommendations/guest/categories/top%20slots/games?page=2", {
+        expect(fetcher).toHaveBeenCalledWith("https://playa.example/v1/recommendations/guest/categories/top%20slots/games?page=2&country=CA", {
             headers: {
                 "X-API-Key": "test-key",
             },
+        });
+    });
+
+    it("requests guest recommendations for the visitor country", async() => {
+        const fetcher = vi.fn().mockResolvedValue(response({ data: { categories: [] } }));
+        const client = new PlayaApiClient({ apiKey: "test-key", baseUrl: "https://playa.example", fetcher });
+
+        await expect(client.getGuestRecommendations("CA")).resolves.toEqual({ categories: [] });
+        expect(fetcher).toHaveBeenCalledWith("https://playa.example/v1/recommendations/guest?country=CA", {
+            headers: { "X-API-Key": "test-key" },
         });
     });
 

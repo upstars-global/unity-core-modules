@@ -16,14 +16,12 @@ export interface IPlayaRecommendations<TGame = IPlayaRecommendationGame> {
 }
 
 export interface IPlayaPagination {
-    current_page: number;
-    next_page: number | null;
-    prev_page: number | null;
-    total_pages: number;
-    total_count: number;
+    page: number;
+    limit: number;
+    total: number;
 }
 
 export interface IPlayaCategoryGames<TGame = IPlayaRecommendationGame> {
-    data: TGame[];
+    data: IPlayaRecommendationCategory<TGame>;
     pagination: IPlayaPagination;
 }

@@ -34,16 +34,26 @@ export class PlayaApiClient {
         this.fetcher = fetcher;
     }
 
-    getGuestRecommendations(): Promise<IPlayaRecommendations> {
-        return this.request("/v1/recommendations/guest");
+    getGuestRecommendations(country?: string): Promise<IPlayaRecommendations> {
+        const query = country ? `?country=${ encodeURIComponent(country) }` : "";
+        return this.request<IPlayaApiResponse<IPlayaRecommendations>>(`/v1/recommendations/guest${ query }`)
+            .then(({ data }) => data);
     }
 
     getPlayerRecommendations(playerId: string): Promise<IPlayaRecommendations> {
-        return this.request("/v1/recommendations/player", { "X-Player-ID": playerId });
+        return this.request<IPlayaApiResponse<IPlayaRecommendations>>(
+            "/v1/recommendations/player",
+            { "X-Player-ID": playerId },
+        ).then(({ data }) => data);
     }
 
-    getGuestCategoryGames(categoryId: string, page?: number): Promise<IPlayaCategoryGames> {
-        return this.getCategoryGames(`/v1/recommendations/guest/categories/${ encodeURIComponent(categoryId) }/games`, page);
+    getGuestCategoryGames(categoryId: string, page?: number, country?: string): Promise<IPlayaCategoryGames> {
+        return this.getCategoryGames(
+            `/v1/recommendations/guest/categories/${ encodeURIComponent(categoryId) }/games`,
+            page,
+            undefined,
+            country,
+        );
     }
 
     getPlayerCategoryGames(categoryId: string, playerId: string, page?: number): Promise<IPlayaCategoryGames> {
@@ -54,8 +64,21 @@ export class PlayaApiClient {
         );
     }
 
-    private getCategoryGames(path: string, page?: number, headers?: Record<string, string>): Promise<IPlayaCategoryGames> {
-        const query = page ? `?page=${ page }` : "";
+    private getCategoryGames(
+        path: string,
+        page?: number,
+        headers?: Record<string, string>,
+        country?: string,
+    ): Promise<IPlayaCategoryGames> {
+        const params = new URLSearchParams();
+        if (page) {
+            params.set("page", String(page));
+        }
+        if (country) {
+            params.set("country", country);
+        }
+        const queryString = params.toString();
+        const query = queryString ? `?${ queryString }` : "";
         return this.request(`${ path }${ query }`, headers);
     }
 
@@ -67,13 +90,13 @@ export class PlayaApiClient {
             },
         });
 
-        const payload = await response.json().catch(() => undefined) as IPlayaApiResponse<T> | undefined;
+        const payload = await response.json().catch(() => undefined) as T | undefined;
 
         if (!response.ok) {
             throw new PlayaApiError(response.status, response.statusText);
         }
 
-        return payload?.data as T;
+        return payload as T;
     }
 }
 
