@@ -29,12 +29,13 @@ describe("Playa proxy requests", () => {
         expect(get).toHaveBeenCalledWith("/api-fe/playa/recommendations");
     });
 
-    it("loads a paginated category through the Alpa proxy", async() => {
+    it("loads a category through the Alpa proxy", async() => {
         const { get, loadPlayaCategoryGamesReq } = await setup();
-        get.mockResolvedValue({ data: { data: [], pagination: {} } });
+        const response = { data: { id: "top slots", name: "Top slots", games: [] } };
+        get.mockResolvedValue({ data: response });
 
-        await expect(loadPlayaCategoryGamesReq("top slots", 2)).resolves.toEqual({ data: [], pagination: {} });
-        expect(get).toHaveBeenCalledWith("/api-fe/playa/recommendations/categories/top%20slots/games", { params: { page: 2 } });
+        await expect(loadPlayaCategoryGamesReq("top slots")).resolves.toEqual(response);
+        expect(get).toHaveBeenCalledWith("/api-fe/playa/recommendations/categories/top%20slots/games");
     });
 
     it("logs proxy errors without breaking the lobby page", async() => {
@@ -44,5 +45,14 @@ describe("Playa proxy requests", () => {
 
         await expect(loadPlayaRecommendationsReq()).resolves.toBeUndefined();
         expect(error).toHaveBeenCalledWith("LOAD_PLAYA_RECOMMENDATIONS_ERROR", requestError);
+    });
+
+    it("logs category errors without breaking the category page", async() => {
+        const { error, get, loadPlayaCategoryGamesReq } = await setup();
+        const requestError = new Error("unavailable");
+        get.mockRejectedValue(requestError);
+
+        await expect(loadPlayaCategoryGamesReq("top")).resolves.toBeUndefined();
+        expect(error).toHaveBeenCalledWith("LOAD_PLAYA_CATEGORY_GAMES_ERROR", requestError);
     });
 });

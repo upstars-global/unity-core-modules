@@ -15,13 +15,6 @@ export interface IPlayaRecommendations<TGame = IPlayaRecommendationGame> {
     resolved_country?: string;
 }
 
-export interface IPlayaPagination {
-    page: number;
-    limit: number;
-    total: number;
-}
-
 export interface IPlayaCategoryGames<TGame = IPlayaRecommendationGame> {
     data: IPlayaRecommendationCategory<TGame>;
-    pagination: IPlayaPagination;
 }
