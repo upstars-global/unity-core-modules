@@ -111,6 +111,7 @@ function createSmarticoInboxController() {
             });
         } else {
             store.setInboxMessages(updatedMessages);
+            store.setInboxHasMore(updatedMessages.length === PAGE_SIZE);
         }
 
         newMessages.forEach((message) => {
@@ -141,6 +142,7 @@ function createSmarticoInboxController() {
 
         store.setInboxReadFilter(readFilter);
         store.setInboxMessages(messages);
+        store.setInboxHasMore(messages.length === PAGE_SIZE);
         isLoaded = true;
 
         if (pendingUpdate) {
@@ -156,6 +158,7 @@ function createSmarticoInboxController() {
 
     async function loadMore(from: number) {
         const store = useSmarticoInboxStore();
+        const currentMessages = store.getInboxMessages;
         const api = getApi();
         const messages = await api.getInboxMessages({
             from,
@@ -164,6 +167,17 @@ function createSmarticoInboxController() {
         });
 
         await loadMessageBodies(messages);
+
+        if (store.getInboxMessages !== currentMessages) {
+            return messages;
+        }
+
+        const currentGuids = new Set(currentMessages.map(({ message_guid }) => message_guid));
+        store.setInboxMessages([
+            ...currentMessages,
+            ...messages.filter(({ message_guid }) => !currentGuids.has(message_guid)),
+        ]);
+        store.setInboxHasMore(messages.length === PAGE_SIZE);
 
         return messages;
     }
@@ -180,22 +194,21 @@ function createSmarticoInboxController() {
         store.setInboxUnreadCount(unreadCount);
     }
 
-    async function markAsRead(messageGuid: string) {
+    async function markAsRead(message: TInboxMessage) {
         const store = useSmarticoInboxStore();
         const api = getApi();
-        const message = store.getInboxMessages.find(({ message_guid: currentGuid }) => currentGuid === messageGuid);
 
-        if (message?.read) {
+        if (message.read) {
             return;
         }
 
-        const result = await api.markInboxMessageAsRead(messageGuid);
+        const result = await api.markInboxMessageAsRead(message.message_guid);
 
         if (result.err_code !== 0) {
             throw getActionError(result);
         }
 
-        store.setInboxMessageAsRead(messageGuid);
+        store.setInboxMessageAsRead(message.message_guid);
     }
 
     async function markAllAsRead() {
@@ -223,8 +236,7 @@ function createSmarticoInboxController() {
 
     async function initialize() {
         reset();
-        await loadMessages();
-        await loadUnreadCount();
+        await Promise.all([loadMessages(),loadUnreadCount()]);
     }
 
     return {

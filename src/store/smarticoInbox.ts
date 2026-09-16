@@ -11,10 +11,12 @@ export const useSmarticoInboxStore = defineStore("smarticoInbox", () => {
     const inboxMessages = ref<TInboxMessage[]>([]);
     const inboxMessageBodies = ref<Record<string, TInboxMessageBody>>({});
     const inboxUnreadCount = ref(0);
+    const inboxHasMore = ref(false);
     const inboxReadFilter = ref<SmarticoInboxReadFilter>("all");
 
     const getInboxMessages = computed(() => inboxMessages.value);
     const getInboxUnreadCount = computed(() => inboxUnreadCount.value);
+    const getInboxHasMore = computed(() => inboxHasMore.value);
     const getInboxReadFilter = computed(() => inboxReadFilter.value);
 
     function setInboxMessages(messages: TInboxMessage[]) {
@@ -33,13 +35,21 @@ export const useSmarticoInboxStore = defineStore("smarticoInbox", () => {
     }
 
     function setInboxMessageAsRead(messageGuid: string) {
-        inboxMessages.value = inboxMessages.value.map((message) => {
-            return message.message_guid === messageGuid ? { ...message, read: true } : message;
+        const message = inboxMessages.value.find(({ message_guid }) => {
+            return message_guid === messageGuid;
         });
+
+        if (message) {
+            message.read = true;
+        }
     }
 
     function setInboxUnreadCount(unreadCount: number) {
         inboxUnreadCount.value = unreadCount;
+    }
+
+    function setInboxHasMore(hasMore: boolean) {
+        inboxHasMore.value = hasMore;
     }
 
     function setInboxReadFilter(filter: SmarticoInboxReadFilter) {
@@ -50,6 +60,7 @@ export const useSmarticoInboxStore = defineStore("smarticoInbox", () => {
         inboxMessages.value = [];
         inboxMessageBodies.value = {};
         inboxUnreadCount.value = 0;
+        inboxHasMore.value = false;
         inboxReadFilter.value = "all";
     }
 
@@ -57,17 +68,20 @@ export const useSmarticoInboxStore = defineStore("smarticoInbox", () => {
         inboxMessages,
         inboxMessageBodies,
         inboxUnreadCount,
+        inboxHasMore,
         inboxReadFilter,
 
         getInboxMessages,
         getInboxMessageBody,
         getInboxUnreadCount,
+        getInboxHasMore,
         getInboxReadFilter,
 
         setInboxMessages,
         setInboxMessageBody,
         setInboxMessageAsRead,
         setInboxUnreadCount,
+        setInboxHasMore,
         setInboxReadFilter,
         clearInboxUserData,
     };

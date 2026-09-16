@@ -63,4 +63,22 @@ describe("useSmarticoInboxStore", () => {
 
         expect(store.getInboxMessages.map(({ read }) => read)).toEqual([ true, false ]);
     });
+
+    it("does not replace messages when the target is not stored", () => {
+        const store = useSmarticoInboxStore();
+        const messages = [
+            {
+                message_guid: "message-1",
+                sent_date: "2026-03-01T12:00:00.000Z",
+                read: false,
+                favorite: false,
+            },
+        ];
+
+        store.setInboxMessages(messages);
+        const storedMessages = store.getInboxMessages;
+        store.setInboxMessageAsRead("message-from-load-more");
+
+        expect(store.getInboxMessages).toBe(storedMessages);
+    });
 });

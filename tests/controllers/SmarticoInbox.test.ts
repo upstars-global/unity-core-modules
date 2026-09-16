@@ -13,6 +13,7 @@ const mocks = vi.hoisted(() => {
         messages: [] as TInboxMessage[],
         messageBodies: {} as Record<string, TInboxMessageBody>,
         unreadCount: 0,
+        hasMore: false,
         readFilter: "unread" as "all" | "unread",
     };
 
@@ -35,10 +36,17 @@ const mocks = vi.hoisted(() => {
             setInboxMessages: vi.fn((messages: TInboxMessage[]) => {
                 state.messages = messages;
             }),
+            setInboxHasMore: vi.fn((hasMore: boolean) => {
+                state.hasMore = hasMore;
+            }),
             setInboxMessageBody: vi.fn((messageGuid: string, body: TInboxMessageBody) => {
                 state.messageBodies = { ...state.messageBodies, [messageGuid]: body };
             }),
             setInboxMessageAsRead: vi.fn((messageGuid: string) => {
+                if (!state.messages.some(({ message_guid }) => message_guid === messageGuid)) {
+                    return;
+                }
+
                 state.messages = state.messages.map((message) => {
                     return message.message_guid === messageGuid ? { ...message, read: true } : message;
                 });
@@ -103,6 +111,7 @@ function resetStore() {
     mocks.state.messages = [];
     mocks.state.messageBodies = {};
     mocks.state.unreadCount = 0;
+    mocks.state.hasMore = false;
     mocks.state.readFilter = "unread";
 }
 
@@ -173,7 +182,7 @@ describe("useSmarticoInboxController", () => {
         const initializeRequest = controller.initialize();
 
         await vi.waitFor(() => expect(resolveMessages).toBeDefined());
-        expect(api.getInboxUnreadCount).not.toHaveBeenCalled();
+        expect(api.getInboxUnreadCount).toHaveBeenCalledOnce();
 
         resolveMessages?.([ createMessage(1) ]);
         await initializeRequest;
@@ -265,7 +274,8 @@ describe("useSmarticoInboxController", () => {
         const loadedMessages = await controller.loadMore(firstPage.length);
 
         expect(loadedMessages).toEqual([ createMessage(20) ]);
-        expect(mocks.state.messages).toEqual(firstPage);
+        expect(mocks.state.messages).toEqual([ ...firstPage, createMessage(20) ]);
+        expect(mocks.state.hasMore).toBe(false);
         expect(Object.keys(mocks.state.messageBodies)).toHaveLength(21);
 
         messagesUpdate?.([ createMessage(99), ...firstPage.slice(0, 19) ]);
@@ -294,6 +304,54 @@ describe("useSmarticoInboxController", () => {
         });
         expect(mocks.state.messages).toEqual([ createMessage(30) ]);
         expect(api.getInboxMessageBody).toHaveBeenCalledTimes(22);
+    });
+
+    test("replaces 40 stored messages with an update and emits only the new message", async() => {
+        const api = createApi();
+        const firstPage = Array.from({ length: 20 }, (_, index) => createMessage(index));
+        const secondPage = Array.from({ length: 20 }, (_, index) => createMessage(index + 20));
+        let messagesUpdate: ((messages: TInboxMessage[]) => void) | undefined;
+        api.getInboxMessages.mockImplementationOnce(async(params) => {
+            messagesUpdate = params?.onUpdate;
+            return firstPage;
+        }).mockResolvedValueOnce(secondPage);
+        api.getInboxMessageBody.mockImplementation(async(guid) => createBody(Number(guid.replace("message-", ""))));
+        window._smartico = { api } as unknown as SmarticoGlobal;
+        mocks.state.readFilter = "all";
+        const { useSmarticoInboxController } = await import("../../src/controllers/SmarticoInbox");
+        const controller = useSmarticoInboxController();
+        const listener = vi.fn();
+        controller.setNewMessageHandler(listener);
+        await controller.loadMessages();
+        await controller.loadMore(20);
+        expect(mocks.state.messages).toHaveLength(40);
+        expect(mocks.state.hasMore).toBe(true);
+
+        const updatedMessages = [ createMessage(99), ...firstPage.slice(0, 19) ];
+        messagesUpdate?.(updatedMessages);
+        await vi.waitFor(() => expect(listener).toHaveBeenCalledOnce());
+        expect(listener).toHaveBeenCalledWith(createMessage(99), createBody(99));
+        expect(mocks.state.messages).toEqual(updatedMessages);
+    });
+
+    test("does not append a pending page after the list was replaced", async() => {
+        const api = createApi();
+        let resolvePage!: (messages: TInboxMessage[]) => void;
+        api.getInboxMessages.mockReturnValue(new Promise((resolve) => {
+            resolvePage = resolve;
+        }));
+        api.getInboxMessageBody.mockResolvedValue(createBody(20));
+        window._smartico = { api } as unknown as SmarticoGlobal;
+        mocks.state.messages = Array.from({ length: 20 }, (_, index) => createMessage(index));
+        const { useSmarticoInboxController } = await import("../../src/controllers/SmarticoInbox");
+        const pendingPage = useSmarticoInboxController().loadMore(20);
+        const replacement = [ createMessage(99) ];
+        mocks.store.setInboxMessages(replacement);
+        mocks.store.setInboxHasMore(false);
+        resolvePage([ createMessage(20) ]);
+        await pendingPage;
+        expect(mocks.state.messages).toBe(replacement);
+        expect(mocks.state.hasMore).toBe(false);
     });
 
     test("reloads the unread list without treating known read messages as new", async() => {
@@ -521,7 +579,7 @@ describe("useSmarticoInboxController", () => {
         window._smartico = { api } as unknown as SmarticoGlobal;
 
         const { useSmarticoInboxController } = await import("../../src/controllers/SmarticoInbox");
-        const request = useSmarticoInboxController().markAsRead("message-1");
+        const request = useSmarticoInboxController().markAsRead(mocks.state.messages[0]!);
 
         expect(mocks.state.messages.map(({ read }) => read)).toEqual([ false ]);
         expect(mocks.state.unreadCount).toBe(1);
@@ -529,6 +587,19 @@ describe("useSmarticoInboxController", () => {
         await expect(request).rejects.toThrow("Rejected");
         expect(mocks.state.messages.map(({ read }) => read)).toEqual([ false ]);
         expect(mocks.state.unreadCount).toBe(1);
+    });
+
+    test("does not mark an already read message again", async() => {
+        const api = createApi();
+        const message = createMessage(1, true);
+
+        window._smartico = { api } as unknown as SmarticoGlobal;
+
+        const { useSmarticoInboxController } = await import("../../src/controllers/SmarticoInbox");
+        await useSmarticoInboxController().markAsRead(message);
+
+        expect(api.markInboxMessageAsRead).not.toHaveBeenCalled();
+        expect(mocks.store.setInboxMessageAsRead).not.toHaveBeenCalled();
     });
 
     test("updates one message locally and reloads messages after marking all as read", async() => {
@@ -545,7 +616,7 @@ describe("useSmarticoInboxController", () => {
         const { useSmarticoInboxController } = await import("../../src/controllers/SmarticoInbox");
         const controller = useSmarticoInboxController();
 
-        await controller.markAsRead("message-1");
+        await controller.markAsRead(mocks.state.messages[0]!);
 
         expect(mocks.state.messages.map(({ read }) => read)).toEqual([ true, false ]);
         expect(mocks.state.unreadCount).toBe(2);
