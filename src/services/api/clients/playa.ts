@@ -14,6 +14,13 @@ interface IPlayaClientConfig {
     fetcher?: typeof fetch;
 }
 
+interface IPlayaCategoryGamesParams {
+    country?: string;
+    headers?: Record<string, string>;
+    limit?: number;
+    page?: number;
+}
+
 export class PlayaApiError extends Error {
     readonly status: number;
 
@@ -47,32 +54,30 @@ export class PlayaApiClient {
         ).then(({ data }) => data);
     }
 
-    getGuestCategoryGames(categoryId: string, page?: number, country?: string): Promise<IPlayaCategoryGames> {
+    getGuestCategoryGames(categoryId: string, page?: number, country?: string, limit?: number): Promise<IPlayaCategoryGames> {
         return this.getCategoryGames(
             `/v1/recommendations/guest/categories/${ encodeURIComponent(categoryId) }/games`,
-            page,
-            undefined,
-            country,
+            { country, limit, page },
         );
     }
 
-    getPlayerCategoryGames(categoryId: string, playerId: string, page?: number): Promise<IPlayaCategoryGames> {
+    getPlayerCategoryGames(categoryId: string, playerId: string, page?: number, limit?: number): Promise<IPlayaCategoryGames> {
         return this.getCategoryGames(
             `/v1/recommendations/player/categories/${ encodeURIComponent(categoryId) }/games`,
-            page,
-            { "X-Player-ID": playerId },
+            { headers: { "X-Player-ID": playerId }, limit, page },
         );
     }
 
     private getCategoryGames(
         path: string,
-        page?: number,
-        headers?: Record<string, string>,
-        country?: string,
+        { country, headers, limit, page }: IPlayaCategoryGamesParams,
     ): Promise<IPlayaCategoryGames> {
         const params = new URLSearchParams();
         if (page) {
             params.set("page", String(page));
+        }
+        if (limit) {
+            params.set("limit", String(limit));
         }
         if (country) {
             params.set("country", country);

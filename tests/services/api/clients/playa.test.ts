@@ -41,9 +41,9 @@ describe("PlayaApiClient", () => {
             fetcher,
         });
 
-        await expect(client.getGuestCategoryGames("top slots", 2, "CA")).resolves.toEqual(categoryGames);
+        await expect(client.getGuestCategoryGames("top slots", 2, "CA", 100)).resolves.toEqual(categoryGames);
 
-        expect(fetcher).toHaveBeenCalledWith("https://playa.example/v1/recommendations/guest/categories/top%20slots/games?page=2&country=CA", {
+        expect(fetcher).toHaveBeenCalledWith("https://playa.example/v1/recommendations/guest/categories/top%20slots/games?page=2&limit=100&country=CA", {
             headers: {
                 "X-API-Key": "test-key",
             },
