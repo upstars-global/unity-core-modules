@@ -44,6 +44,12 @@ export function timeFromNow(date: ConfigType) {
     return dayjs(date).fromNow();
 }
 
+export function timeFromNowUTC(date: ConfigType, format = "DD/MM/YYYY HH:mm:ss") {
+    const parsedDate = dayjs.utc(date, format, true);
+
+    return parsedDate.isValid() ? parsedDate.fromNow() : undefined;
+}
+
 export function getEventStatus(startAt: ConfigType, endAt: ConfigType) {
     const formattedStart = dayjs(startAt, "DD/MM/YYYY");
     const formattedEnd = dayjs(endAt, "DD/MM/YYYY");
