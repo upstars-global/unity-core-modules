@@ -21,6 +21,18 @@ const mocks = vi.hoisted(() => {
         logError: vi.fn(),
         state,
         store: {
+            isMessagesLoading: false,
+            isBodiesLoading: false,
+            setIsMessagesLoading: vi.fn((value: boolean) => {
+                mocks.store.isMessagesLoading = value;
+            }),
+            setIsBodiesLoading: vi.fn((value: boolean) => {
+                mocks.store.isBodiesLoading = value;
+            }),
+            isLoadingMore: false,
+            setIsLoadingMore: vi.fn((value: boolean) => {
+                mocks.store.isLoadingMore = value;
+            }),
             get getInboxMessages() {
                 return state.messages;
             },
@@ -116,7 +128,93 @@ function resetStore() {
 }
 
 describe("useSmarticoInboxController", () => {
+    test("handles body loading errors and resets the loader", async() => {
+        const api = createApi();
+        const error = new Error("Body failed");
+        api.getInboxMessageBody.mockRejectedValue(error);
+        window._smartico = { api } as unknown as SmarticoGlobal;
+        const { useSmarticoInboxController } = await import("../../src/controllers/SmarticoInbox");
+        const request = useSmarticoInboxController().ensureMessageBodies([createMessage(1)]);
+        expect(mocks.store.isBodiesLoading).toBe(true);
+        await request;
+        expect(mocks.store.isBodiesLoading).toBe(false);
+        expect(mocks.logError).toHaveBeenCalledWith("SMARTICO_INBOX_LOAD_MESSAGE_BODIES_ERROR", error);
+    });
+
+    test.each(["body", "mark"])("does not prepare a message if %s fails", async(stage) => {
+        const api = createApi();
+        api.getInboxMessageBody.mockResolvedValue(createBody(1));
+        api.markInboxMessageAsRead.mockResolvedValue({ err_code: 1, err_message: "Rejected" });
+        if (stage === "body") {
+            api.getInboxMessageBody.mockRejectedValue(new Error("Body failed"));
+        }
+        window._smartico = { api } as unknown as SmarticoGlobal;
+        const { useSmarticoInboxController } = await import("../../src/controllers/SmarticoInbox");
+        await expect(useSmarticoInboxController().prepareMessage(createMessage(1))).resolves.toBeUndefined();
+        expect(mocks.logError).toHaveBeenCalledWith("SMARTICO_INBOX_OPEN_MESSAGE_ERROR", expect.any(Error));
+        if (stage === "body") {
+            expect(api.markInboxMessageAsRead).not.toHaveBeenCalled();
+        }
+    });
+
+    test("handles mark-all rejection without refreshing messages", async() => {
+        const api = createApi();
+        api.markAllInboxMessagesAsRead.mockResolvedValue({ err_code: 1, err_message: "Rejected" });
+        window._smartico = { api } as unknown as SmarticoGlobal;
+        const { useSmarticoInboxController } = await import("../../src/controllers/SmarticoInbox");
+        await useSmarticoInboxController().markAllAsRead();
+        expect(api.getInboxMessages).not.toHaveBeenCalled();
+        expect(mocks.store.isMessagesLoading).toBe(false);
+        expect(mocks.logError).toHaveBeenCalledWith("SMARTICO_INBOX_MARK_ALL_AS_READ_ERROR", expect.any(Error));
+    });
+
+    test("handles initialization errors in the controller", async() => {
+        const api = createApi();
+        api.getInboxMessages.mockRejectedValue(new Error("Request failed"));
+        api.getInboxUnreadCount.mockResolvedValue(0);
+        window._smartico = { api } as unknown as SmarticoGlobal;
+        const { useSmarticoInboxController } = await import("../../src/controllers/SmarticoInbox");
+        await useSmarticoInboxController().initialize();
+        expect(mocks.store.isMessagesLoading).toBe(false);
+        expect(mocks.logError).toHaveBeenCalledWith("SMARTICO_INBOX_INITIALIZE_ERROR", expect.any(Error));
+    });
+
+    test("tracks loading and ignores duplicate load-more requests", async() => {
+        const api = createApi();
+        let resolvePage!: (messages: TInboxMessage[]) => void;
+        api.getInboxMessages.mockReturnValue(new Promise((resolve) => {
+            resolvePage = resolve;
+        }));
+        window._smartico = { api } as unknown as SmarticoGlobal;
+        const { useSmarticoInboxController } = await import("../../src/controllers/SmarticoInbox");
+        const controller = useSmarticoInboxController();
+        const request = controller.loadMore(20);
+
+        expect(mocks.store.isLoadingMore).toBe(true);
+        await controller.loadMore(20);
+        expect(api.getInboxMessages).toHaveBeenCalledOnce();
+
+        resolvePage([]);
+        await request;
+        expect(mocks.store.isLoadingMore).toBe(false);
+    });
+
+    test("logs load-more errors without rejecting and resets loading", async() => {
+        const api = createApi();
+        const error = new Error("Request failed");
+        api.getInboxMessages.mockRejectedValue(error);
+        window._smartico = { api } as unknown as SmarticoGlobal;
+        const { useSmarticoInboxController } = await import("../../src/controllers/SmarticoInbox");
+        const previousMessages = mocks.state.messages;
+
+        await expect(useSmarticoInboxController().loadMore(20)).resolves.toBeUndefined();
+        expect(mocks.logError).toHaveBeenCalledWith("SMARTICO_INBOX_LOAD_MORE_ERROR", error);
+        expect(mocks.state.messages).toBe(previousMessages);
+        expect(mocks.store.isLoadingMore).toBe(false);
+    });
+
     beforeEach(() => {
+        mocks.store.isLoadingMore = false;
         vi.resetModules();
         vi.clearAllMocks();
         resetStore();
@@ -412,7 +510,9 @@ describe("useSmarticoInboxController", () => {
         const { useSmarticoInboxController } = await import("../../src/controllers/SmarticoInbox");
         const controller = useSmarticoInboxController();
 
-        await expect(controller.toggleReadFilter()).rejects.toThrow("Request failed");
+        await expect(controller.toggleReadFilter()).resolves.toBeUndefined();
+        expect(mocks.store.isMessagesLoading).toBe(false);
+        expect(mocks.logError).toHaveBeenCalledWith("SMARTICO_INBOX_TOGGLE_FILTER_ERROR", expect.any(Error));
 
         expect(mocks.state.readFilter).toBe("all");
         expect(mocks.state.messages).toEqual(currentMessages);

@@ -12,6 +12,9 @@ export const useSmarticoInboxStore = defineStore("smarticoInbox", () => {
     const inboxMessageBodies = ref<Record<string, TInboxMessageBody>>({});
     const inboxUnreadCount = ref(0);
     const inboxHasMore = ref(false);
+    const isLoadingMore = ref(false);
+    const isMessagesLoading = ref(false);
+    const isBodiesLoading = ref(false);
     const inboxReadFilter = ref<SmarticoInboxReadFilter>("all");
 
     const getInboxMessages = computed(() => inboxMessages.value);
@@ -52,6 +55,18 @@ export const useSmarticoInboxStore = defineStore("smarticoInbox", () => {
         inboxHasMore.value = hasMore;
     }
 
+    function setIsLoadingMore(value: boolean) {
+        isLoadingMore.value = value;
+    }
+
+    function setIsMessagesLoading(value: boolean) {
+        isMessagesLoading.value = value;
+    }
+
+    function setIsBodiesLoading(value: boolean) {
+        isBodiesLoading.value = value;
+    }
+
     function setInboxReadFilter(filter: SmarticoInboxReadFilter) {
         inboxReadFilter.value = filter;
     }
@@ -61,6 +76,9 @@ export const useSmarticoInboxStore = defineStore("smarticoInbox", () => {
         inboxMessageBodies.value = {};
         inboxUnreadCount.value = 0;
         inboxHasMore.value = false;
+        isLoadingMore.value = false;
+        isMessagesLoading.value = false;
+        isBodiesLoading.value = false;
         inboxReadFilter.value = "all";
     }
 
@@ -69,6 +87,9 @@ export const useSmarticoInboxStore = defineStore("smarticoInbox", () => {
         inboxMessageBodies,
         inboxUnreadCount,
         inboxHasMore,
+        isLoadingMore,
+        isMessagesLoading,
+        isBodiesLoading,
         inboxReadFilter,
 
         getInboxMessages,
@@ -82,6 +103,9 @@ export const useSmarticoInboxStore = defineStore("smarticoInbox", () => {
         setInboxMessageAsRead,
         setInboxUnreadCount,
         setInboxHasMore,
+        setIsLoadingMore,
+        setIsMessagesLoading,
+        setIsBodiesLoading,
         setInboxReadFilter,
         clearInboxUserData,
     };

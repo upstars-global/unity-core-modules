@@ -1,4 +1,5 @@
 import dayjs, { type ConfigType } from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import isToday from "dayjs/plugin/isToday";
@@ -16,6 +17,7 @@ dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 dayjs.extend(quarterOfYear);
 dayjs.extend(isToday);
+dayjs.extend(customParseFormat);
 
 export function formatDate(date: ConfigType, format = "YYYY/MM/DD HH:mm") {
     return dayjs(date).format(format);

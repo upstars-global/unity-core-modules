@@ -83,6 +83,36 @@ function createSmarticoInboxController() {
         newMessageHandler = handler;
     }
 
+    async function ensureMessageBodies(messages: TInboxMessage[]) {
+        const store = useSmarticoInboxStore();
+        const messagesHaveBodies = messages.every(({ message_guid }) => store.getInboxMessageBody(message_guid));
+
+        if (store.isBodiesLoading || messagesHaveBodies) {
+            return;
+        }
+
+        store.setIsBodiesLoading(true);
+
+        try {
+            await loadMessageBodies(messages);
+        } catch (error) {
+            log.error("SMARTICO_INBOX_LOAD_MESSAGE_BODIES_ERROR", error);
+        } finally {
+            store.setIsBodiesLoading(false);
+        }
+    }
+
+    async function prepareMessage(message: TInboxMessage) {
+        try {
+            const body = await loadMessageBody(message.message_guid);
+            await markAsRead(message);
+            return body;
+        } catch (error) {
+            log.error("SMARTICO_INBOX_OPEN_MESSAGE_ERROR", error);
+            return undefined;
+        }
+    }
+
     async function handleNewMessage(message: TInboxMessage) {
         let body: TInboxMessageBody;
 
@@ -158,28 +188,41 @@ function createSmarticoInboxController() {
 
     async function loadMore(from: number) {
         const store = useSmarticoInboxStore();
-        const currentMessages = store.getInboxMessages;
-        const api = getApi();
-        const messages = await api.getInboxMessages({
-            from,
-            to: from + PAGE_SIZE,
-            read_status: getReadStatus(store.getInboxReadFilter),
-        });
 
-        await loadMessageBodies(messages);
-
-        if (store.getInboxMessages !== currentMessages) {
-            return messages;
+        if (store.isLoadingMore) {
+            return;
         }
 
-        const currentGuids = new Set(currentMessages.map(({ message_guid }) => message_guid));
-        store.setInboxMessages([
-            ...currentMessages,
-            ...messages.filter(({ message_guid }) => !currentGuids.has(message_guid)),
-        ]);
-        store.setInboxHasMore(messages.length === PAGE_SIZE);
+        store.setIsLoadingMore(true);
 
-        return messages;
+        try {
+            const currentMessages = store.getInboxMessages;
+            const api = getApi();
+            const messages = await api.getInboxMessages({
+                from,
+                to: from + PAGE_SIZE,
+                read_status: getReadStatus(store.getInboxReadFilter),
+            });
+
+            await loadMessageBodies(messages);
+
+            if (store.getInboxMessages !== currentMessages) {
+                return messages;
+            }
+
+            const currentGuids = new Set(currentMessages.map(({ message_guid }) => message_guid));
+            store.setInboxMessages([
+                ...currentMessages,
+                ...messages.filter(({ message_guid }) => !currentGuids.has(message_guid)),
+            ]);
+            store.setInboxHasMore(messages.length === PAGE_SIZE);
+
+            return messages;
+        } catch (error) {
+            log.error("SMARTICO_INBOX_LOAD_MORE_ERROR", error);
+        } finally {
+            store.setIsLoadingMore(false);
+        }
     }
 
     async function loadUnreadCount() {
@@ -212,21 +255,41 @@ function createSmarticoInboxController() {
     }
 
     async function markAllAsRead() {
-        const api = getApi();
-        const result = await api.markAllInboxMessagesAsRead();
-
-        if (result.err_code !== 0) {
-            throw getActionError(result);
+        const store = useSmarticoInboxStore();
+        if (store.isMessagesLoading) {
+            return;
         }
 
-        await loadMessages(false);
+        store.setIsMessagesLoading(true);
+        try {
+            const result = await getApi().markAllInboxMessagesAsRead();
+            if (result.err_code !== 0) {
+                throw getActionError(result);
+            }
+
+            await loadMessages(false);
+        } catch (error) {
+            log.error("SMARTICO_INBOX_MARK_ALL_AS_READ_ERROR", error);
+        } finally {
+            store.setIsMessagesLoading(false);
+        }
     }
 
     async function toggleReadFilter() {
         const store = useSmarticoInboxStore();
+        if (store.isMessagesLoading) {
+            return;
+        }
         const readFilter = store.getInboxReadFilter === "all" ? "unread" : "all";
 
-        await loadMessagesByFilter(readFilter);
+        store.setIsMessagesLoading(true);
+        try {
+            await loadMessagesByFilter(readFilter);
+        } catch (error) {
+            log.error("SMARTICO_INBOX_TOGGLE_FILTER_ERROR", error);
+        } finally {
+            store.setIsMessagesLoading(false);
+        }
     }
 
     function reset() {
@@ -236,11 +299,21 @@ function createSmarticoInboxController() {
 
     async function initialize() {
         reset();
-        await Promise.all([loadMessages(),loadUnreadCount()]);
+        const store = useSmarticoInboxStore();
+        store.setIsMessagesLoading(true);
+        try {
+            await Promise.all([loadMessages(), loadUnreadCount()]);
+        } catch (error) {
+            log.error("SMARTICO_INBOX_INITIALIZE_ERROR", error);
+        } finally {
+            store.setIsMessagesLoading(false);
+        }
     }
 
     return {
         initialize,
+        ensureMessageBodies,
+        prepareMessage,
         loadMessageBody,
         loadMessageBodies,
         loadMessages,
