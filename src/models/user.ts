@@ -116,6 +116,7 @@ export interface ISeasonStartPoints {
 export interface IActiveSeason {
     name: string;
     isActive: boolean;
+    diBonusesEnabled: boolean;
     startDate: string;
     endDate: string;
     technicalWorksStartAt: string;
