@@ -1,3 +1,10 @@
+## [1.117.2](https://github.com/upstars-global/unity-core-modules/compare/v1.117.1...v1.117.2) (2026-09-22)
+
+### 🔨 Refactoring
+
+* Удалить из кор модуля и проектов запрос loadMetaSEOReq ([#401](https://github.com/upstars-global/unity-core-modules/issues/401))
+ ([d70ecc2](https://github.com/upstars-global/unity-core-modules/commit/d70ecc2e4f20e4014339335bb61ea786d89d3f85))
+
 ## [1.117.1](https://github.com/upstars-global/unity-core-modules/compare/v1.117.0...v1.117.1) (2026-09-14)
 
 ### 🐛 Bug Fixes
