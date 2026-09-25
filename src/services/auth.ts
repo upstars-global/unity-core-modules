@@ -3,11 +3,13 @@ import { type NavigationFailure } from "vue-router";
 import ABTestController from "../controllers/ABTest/ABTestController";
 import CoveryController from "../controllers/CoveryController";
 import { log } from "../controllers/Logger";
+import { reportAuthTechnicalError } from "../helpers/authTelemetry";
 import { CloudflareChallengeReason } from "../models/cloudflareChallenge";
 import { IRespIbizaService } from "../models/common";
 import { IUserFormData, IUserInfo } from "../models/user";
 import { EventBus as bus } from "../plugins/EventBus";
 import { useUserInfo } from "../store/user/userInfo";
+import { isHttpError } from "./api/http";
 import { checkEmail, registerUser, signIn, signOut } from "./api/requests/auth";
 import { changeUserToGroup } from "./user";
 
@@ -49,6 +51,18 @@ interface RegistrationDeps {
     enableABReg: boolean;
 }
 
+function logAuthFailure(label: string, message: string) {
+    try {
+        log.error(label, { message });
+    } catch {
+        return;
+    }
+}
+
+function isRegistrationAutoLogin(value: unknown): boolean {
+    return value === true || value === "yes";
+}
+
 export function createLoginTwoFactor({ loadAuthData }: LoginTwoFactorDeps) {
     return async function loginTwoFactor(otp: string) {
         try {
@@ -60,10 +74,17 @@ export function createLoginTwoFactor({ loadAuthData }: LoginTwoFactorDeps) {
             toggleUserIsLogged(true);
 
             return data;
-            // @ts-expect-error Property 'response' does not exist on type 'unknown'
-        } catch ({ response }) {
-            log.error("LOGIN_TWO_FACTORS_ERROR", response);
-            throw response.data;
+        } catch (error) {
+            logAuthFailure("LOGIN_TWO_FACTORS_ERROR", "login:client");
+            if (isHttpError(error)) {
+                if (error.response) {
+                    throw error.response.data;
+                }
+                throw error;
+            }
+
+            reportAuthTechnicalError({ flow: "login", step: "client", reason: "unexpected" });
+            throw error;
         }
     };
 }
@@ -100,10 +121,19 @@ export function createLogin({ loadAuthData, clearFreshChatUser }: LoginDeps) {
             toggleUserIsLogged(true);
 
             return data;
-        // @ts-expect-error Property 'response' does not exist on type 'unknown'
-        } catch ({ response }) {
-            log.error("LOGIN_ERROR", response);
-            throw response;
+        } catch (error) {
+            if (isHttpError(error) && error.response) {
+                throw error.response;
+            }
+
+            if (!isHttpError(error)) {
+                reportAuthTechnicalError({
+                    flow: isRegistrationAutoLogin(formData.custom_login_reg) ? "registration" : "login",
+                    step: "client",
+                    reason: "unexpected",
+                });
+            }
+            throw error;
         }
     };
 }
@@ -146,10 +176,19 @@ export function createRegistration({ loadAuthData, enableABReg }: RegistrationDe
             bus.$emit("user.registration");
 
             return data;
-            // @ts-expect-error Property 'response' does not exist on type 'unknown'
-        } catch ({ response }) {
-            log.error("REGISTRATION_ERROR", response);
-            throw response;
+        } catch (error) {
+            if (isHttpError(error) && error.response) {
+                throw error.response;
+            }
+
+            if (!isHttpError(error)) {
+                reportAuthTechnicalError({
+                    flow: "registration",
+                    step: "client",
+                    reason: "unexpected",
+                });
+            }
+            throw error;
         }
     };
 }

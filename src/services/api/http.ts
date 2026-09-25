@@ -2,6 +2,7 @@
 import { COOKIE_BY_LOCALE } from "@theme/configs/constsLocales";
 
 import { log } from "../../controllers/Logger";
+import { type AuthTechnicalError,reportAuthTechnicalError } from "../../helpers/authTelemetry";
 import { isServer } from "../../helpers/ssrHelpers";
 import {
     type CloudflareChallengeContext,
@@ -29,6 +30,35 @@ function isCloudflareChallengeHeaders(headers?: Headers): boolean {
 
     return headers.get("cf-mitigated") === "challenge" ||
         headers.get("x-cf-challenge-detected") === "1";
+}
+
+function getAuthRequestDetails(error: Pick<HttpError, "config">): Pick<AuthTechnicalError, "flow" | "step"> | undefined {
+    const config = error.config;
+    const method = config?.method?.toUpperCase();
+    const url = config?.url;
+    let flow: AuthTechnicalError["flow"];
+    let step: AuthTechnicalError["step"];
+
+    if (method !== "POST") {
+        return;
+    }
+
+    if (url === "/api/users/sign_in") {
+        const body = config?.body;
+        const user = body && typeof body === "object" && "user" in body && body.user &&
+            typeof body.user === "object" ? body.user as Record<string, unknown> : undefined;
+        flow = user?.custom_login_reg === true || user?.custom_login_reg === "yes" ? "registration" : "login";
+        step = user && "otp_attempt" in user
+            ? "otp"
+            : flow === "registration" ? "auto_login" : "password";
+    } else if (url === "/api/users") {
+        flow = "registration";
+        step = "account_creation";
+    } else {
+        return;
+    }
+
+    return { flow, step };
 }
 
 interface IHttpParams {
@@ -330,6 +360,11 @@ export function http({ headers, locale }: IHttpParams = {}): HttpClient {
     });
 
     client.interceptors.response.use((response) => {
+        const authRequest = getAuthRequestDetails(response);
+        if (authRequest && (authRequest.step === "password" || authRequest.step === "account_creation") &&
+            (response.data === null || typeof response.data !== "object" || Array.isArray(response.data))) {
+            reportAuthTechnicalError({ ...authRequest, reason: "unexpected", status: response.status });
+        }
         return response;
     }, (error) => {
         if (!isServer && isCloudflareChallengeHeaders(error.response?.headers)) {
@@ -354,7 +389,15 @@ export function http({ headers, locale }: IHttpParams = {}): HttpClient {
             }
         }
 
-        if (error?.config?.url) {
+        const authError = getAuthRequestDetails(error);
+        const status = error.response?.status;
+        if (authError && status === undefined) {
+            reportAuthTechnicalError({ ...authError, reason: "network" });
+        } else if (authError && status !== undefined && status >= 500) {
+            reportAuthTechnicalError({ ...authError, reason: "server", status });
+        }
+
+        if (error?.config?.url && !authError) {
             let apiLabel = error.config.url.replace("/api/", "").replace(/\//g, "_").toUpperCase();
             if (apiLabel.indexOf("?") > -1) {
                 apiLabel = apiLabel.split("?")[URL_PART_BEFORE_QUERY];

@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 const BUS_EVENTS = {
     AUTH_ERROR: "auth-error",
+    AUTH_TECHNICAL_ERROR: "auth-technical-error",
     CF_CHALLENGE_REQUIRED: "cf-challenge-required",
     MAINTENANCE_MODE: "maintenance-mode",
 };
@@ -220,6 +221,125 @@ describe("http client", () => {
         await expect(http().get("/api/player/groups?x=1")).rejects.toThrow("HTTP 500: Internal Error");
 
         expect(logError).toHaveBeenCalledWith("LOAD_PLAYER_GROUPS_ERROR", expect.any(Error));
+    });
+
+    it("reports auth server failures without logging the request error", async () => {
+        const { http, eventEmit, logError } = await loadHttpModule(false);
+        const fetchMock = vi.fn().mockResolvedValueOnce(
+            new Response("{\"error\":\"private\"}", { status: 500, statusText: "Internal Error" }),
+        );
+        vi.stubGlobal("fetch", fetchMock);
+
+        await expect(http().post("/api/users/sign_in", {
+            user: {
+                custom_login_reg: true,
+                email: "private@example.com",
+                password: "private",
+            },
+        })).rejects.toThrow("HTTP 500: Internal Error");
+
+        expect(eventEmit).toHaveBeenCalledWith(BUS_EVENTS.AUTH_TECHNICAL_ERROR, {
+            flow: "registration",
+            reason: "server",
+            status: 500,
+            step: "auto_login",
+        });
+        expect(logError).not.toHaveBeenCalled();
+    });
+
+    it("does not report expected auth client errors", async () => {
+        const { http, eventEmit, logError } = await loadHttpModule(false);
+        const fetchMock = vi.fn().mockResolvedValueOnce(
+            new Response("{}", { status: 422, statusText: "Unprocessable Entity" }),
+        );
+        vi.stubGlobal("fetch", fetchMock);
+
+        await expect(http().post("/api/users", { user: { email: "private@example.com" } }))
+            .rejects.toThrow("HTTP 422: Unprocessable Entity");
+
+        expect(eventEmit).not.toHaveBeenCalledWith(BUS_EVENTS.AUTH_TECHNICAL_ERROR, expect.anything());
+        expect(logError).not.toHaveBeenCalled();
+    });
+
+    it("reports malformed successful auth response text and returns it unchanged", async () => {
+        const { http, eventEmit, logError } = await loadHttpModule(false);
+        const fetchMock = vi.fn().mockResolvedValueOnce(new Response("not-json", { status: 200 }));
+        vi.stubGlobal("fetch", fetchMock);
+
+        await expect(http().post("/api/users", { user: { email: "private@example.com" } })).resolves.toMatchObject({
+            data: "not-json",
+            status: 200,
+        });
+
+        expect(eventEmit).toHaveBeenCalledWith(BUS_EVENTS.AUTH_TECHNICAL_ERROR, {
+            flow: "registration",
+            reason: "unexpected",
+            status: 200,
+            step: "account_creation",
+        });
+        expect(logError).not.toHaveBeenCalled();
+    });
+
+    it.each([
+        ["password", "/api/users/sign_in", { user: {} }, null],
+        ["password", "/api/users/sign_in", { user: {} }, "not-json"],
+        ["password", "/api/users/sign_in", { user: {} }, []],
+        ["password", "/api/users/sign_in", { user: {} }, 7],
+        ["account_creation", "/api/users", { user: {} }, null],
+        ["account_creation", "/api/users", { user: {} }, "not-json"],
+        ["account_creation", "/api/users", { user: {} }, []],
+        ["account_creation", "/api/users", { user: {} }, 7],
+    ])("reports non-object %s auth success while preserving the response", async (step, url, body, data) => {
+        const { http, eventEmit } = await loadHttpModule(false);
+        const fetchMock = vi.fn().mockResolvedValueOnce(
+            new Response(JSON.stringify(data), { status: 200, headers: { "Content-Type": "application/json" } }),
+        );
+        vi.stubGlobal("fetch", fetchMock);
+
+        await expect(http().post(url, body)).resolves.toMatchObject({ data, status: 200 });
+
+        expect(eventEmit).toHaveBeenCalledWith(BUS_EVENTS.AUTH_TECHNICAL_ERROR, {
+            flow: step === "password" ? "login" : "registration",
+            reason: "unexpected",
+            status: 200,
+            step,
+        });
+    });
+
+    it.each([
+        ["otp", { user: { otp_attempt: "private" } }],
+        ["auto_login", { user: { custom_login_reg: true } }],
+    ])("does not validate successful %s 204 responses", async (_step, body) => {
+        const { http, eventEmit } = await loadHttpModule(false);
+        const fetchMock = vi.fn().mockResolvedValueOnce(new Response(null, { status: 204 }));
+        vi.stubGlobal("fetch", fetchMock);
+
+        await expect(http().post("/api/users/sign_in", body)).resolves.toMatchObject({ data: null, status: 204 });
+
+        expect(eventEmit).not.toHaveBeenCalledWith(BUS_EVENTS.AUTH_TECHNICAL_ERROR, expect.anything());
+    });
+
+    it("keeps auth request failures fail-open when telemetry emission throws", async () => {
+        const { http, eventEmit } = await loadHttpModule(false);
+        eventEmit.mockImplementation(() => {
+            throw new Error("event bus unavailable");
+        });
+        const fetchMock = vi.fn().mockResolvedValueOnce(
+            new Response("{}", { status: 503, statusText: "Unavailable" }),
+        );
+        vi.stubGlobal("fetch", fetchMock);
+
+        const result = expect(
+            http().post("/api/users/sign_in", { user: { otp_attempt: "private" } }),
+        ).rejects.toThrow("HTTP 503: Unavailable");
+        await result;
+
+        expect(eventEmit).toHaveBeenCalledWith(BUS_EVENTS.AUTH_TECHNICAL_ERROR, {
+            flow: "login",
+            reason: "server",
+            status: 503,
+            step: "otp",
+        });
     });
 
     it("retries on client for retryable network errors", async () => {

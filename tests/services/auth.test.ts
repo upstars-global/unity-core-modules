@@ -3,7 +3,10 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const clearFreshChatUserMock = vi.fn();
 const loadAuthDataMock = vi.fn();
 const signInMock = vi.fn();
+const registerUserMock = vi.fn();
 const toggleUserIsLoggedMock = vi.fn();
+const reportAuthTechnicalErrorMock = vi.fn();
+const logErrorMock = vi.fn();
 
 vi.mock("../../src/controllers/CoveryController", () => ({
     default: {
@@ -13,15 +16,19 @@ vi.mock("../../src/controllers/CoveryController", () => ({
 
 vi.mock("../../src/controllers/Logger", () => ({
     log: {
-        error: vi.fn(),
+        error: logErrorMock,
     },
 }));
 
 vi.mock("../../src/services/api/requests/auth", () => ({
     checkEmail: vi.fn(),
-    registerUser: vi.fn(),
+    registerUser: registerUserMock,
     signIn: signInMock,
     signOut: vi.fn(),
+}));
+
+vi.mock("../../src/helpers/authTelemetry", () => ({
+    reportAuthTechnicalError: reportAuthTechnicalErrorMock,
 }));
 
 vi.mock("../../src/store/user/userInfo", () => ({
@@ -41,6 +48,8 @@ describe("auth services", () => {
         clearFreshChatUserMock.mockResolvedValue(undefined);
         loadAuthDataMock.mockResolvedValue(undefined);
         signInMock.mockResolvedValue({ id: 1 });
+        registerUserMock.mockResolvedValue({ id: 1 });
+        reportAuthTechnicalErrorMock.mockReset();
         toggleUserIsLoggedMock.mockReset();
     });
 
@@ -100,5 +109,65 @@ describe("auth services", () => {
                 reason: "login",
             },
         });
+    });
+
+    it("preserves HTTP response errors from login without duplicate telemetry", async () => {
+        const { createLogin } = await import("../../src/services/auth");
+        const response = { status: 422, data: { error: "invalid credentials" } };
+        signInMock.mockRejectedValueOnce({ message: "HTTP 422", response });
+        const login = createLogin({
+            clearFreshChatUser: clearFreshChatUserMock,
+            loadAuthData: loadAuthDataMock,
+        });
+
+        await expect(login({ email: "private@example.com", password: "private" })).rejects.toEqual(response);
+
+        expect(reportAuthTechnicalErrorMock).not.toHaveBeenCalled();
+    });
+
+    it("rethrows unexpected login failures and emits only fixed context", async () => {
+        const { createLogin } = await import("../../src/services/auth");
+        const error = new Error("private login details");
+        signInMock.mockRejectedValueOnce(error);
+        const login = createLogin({
+            clearFreshChatUser: clearFreshChatUserMock,
+            loadAuthData: loadAuthDataMock,
+        });
+
+        await expect(login({ email: "private@example.com", password: "private" })).rejects.toBe(error);
+
+        expect(reportAuthTechnicalErrorMock).toHaveBeenCalledWith({
+            flow: "login",
+            step: "client",
+            reason: "unexpected",
+        });
+    });
+
+    it("keeps registration-specific client failures out of the request context", async () => {
+        const { createRegistration } = await import("../../src/services/auth");
+        const error = new Error("private registration details");
+        registerUserMock.mockRejectedValueOnce(error);
+        const registration = createRegistration({ loadAuthData: loadAuthDataMock, enableABReg: false });
+
+        await expect(registration({ user: { email: "private@example.com" } })).rejects.toBe(error);
+
+        expect(reportAuthTechnicalErrorMock).toHaveBeenCalledWith({
+            flow: "registration",
+            step: "client",
+            reason: "unexpected",
+        });
+    });
+
+    it("preserves the two-factor response data and logs only a fixed message", async () => {
+        const { createLoginTwoFactor } = await import("../../src/services/auth");
+        const response = { status: 422, data: { errors: { otp_attempt: ["invalid"] } } };
+        signInMock.mockRejectedValueOnce({ message: "HTTP 422", response });
+        const loginTwoFactor = createLoginTwoFactor({ loadAuthData: loadAuthDataMock });
+
+        await expect(loginTwoFactor("private-code")).rejects.toEqual(response.data);
+
+        expect(logErrorMock).toHaveBeenCalledWith("LOGIN_TWO_FACTORS_ERROR", { message: "login:client" });
+        expect(logErrorMock.mock.calls.flat().join(" ")).not.toContain("private-code");
+        expect(reportAuthTechnicalErrorMock).not.toHaveBeenCalled();
     });
 });

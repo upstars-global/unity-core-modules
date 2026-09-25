@@ -18,16 +18,11 @@ export async function checkEmail(email: string) {
 type SignInRequestConfig = Omit<RequestConfig, "method" | "url" | "body">;
 
 export async function signIn(user: IUserFormData, config?: SignInRequestConfig) {
-    try {
-        const { data } = await http().post("/api/users/sign_in", {
-            user,
-        }, config);
+    const { data } = await http().post("/api/users/sign_in", {
+        user,
+    }, config);
 
-        return data;
-    } catch (error) {
-        log.error("SIGN_IN_ERROR", error);
-        throw error;
-    }
+    return data;
 }
 
 export async function signOut() {
@@ -40,14 +35,9 @@ export async function signOut() {
 }
 
 export async function registerUser(registrationData: { user: IUserFormData }) {
-    try {
-        const { data } = await http().post("/api/users", registrationData);
+    const { data } = await http().post("/api/users", registrationData);
 
-        return data;
-    } catch (error) {
-        log.error("REGISTRATION_REQUEST_ERROR", error);
-        throw error;
-    }
+    return data;
 }
 
 export async function userAccessCheckReq(user: IUserFormData) {
