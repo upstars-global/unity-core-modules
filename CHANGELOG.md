@@ -1,3 +1,14 @@
+## [1.117.3](https://github.com/upstars-global/unity-core-modules/compare/v1.117.2...v1.117.3) (2026-09-28)
+
+### 🔧 Maintenance
+
+* (UN-3188) add diBonusesEnabled field ([#402](https://github.com/upstars-global/unity-core-modules/issues/402))
+ ([3146be5](https://github.com/upstars-global/unity-core-modules/commit/3146be5703b2322d0cb542452b7099b01b2ec6fc))
+
+
+
+    UN-3188 add diBonusesEnabled field
+
 ## [1.117.2](https://github.com/upstars-global/unity-core-modules/compare/v1.117.1...v1.117.2) (2026-09-22)
 
 ### 🔨 Refactoring
