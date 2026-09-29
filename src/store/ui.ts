@@ -13,6 +13,11 @@ export const useUIStore = defineStore("UI", () => {
 
     const colorTheme = ref<string>(config.theme);
     const isThemeDark = ref<boolean>(colorTheme.value === "theme-dark");
+    const isNotifySidebarOpen = ref(false);
+    
+    function setNotifySidebarOpen(value: boolean): void {
+        isNotifySidebarOpen.value = value;
+    }
 
     function setShowModal(options: IModalOptions) {
         const modalIsOpen = modals.value.some((modal: IModalOptions) => {
@@ -54,6 +59,7 @@ export const useUIStore = defineStore("UI", () => {
     }
 
     return {
+        isNotifySidebarOpen,
         colorTheme,
         modals,
         showModal,
@@ -62,5 +68,6 @@ export const useUIStore = defineStore("UI", () => {
 
         setShowModal,
         closeModal,
+        setNotifySidebarOpen,
     };
 });
