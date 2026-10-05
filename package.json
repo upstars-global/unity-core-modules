@@ -21,7 +21,7 @@
     "depcruise:svg": "depcruise --include-only '^src' --output-type dot src | dot -T svg > dependencygraph.svg",
     "depcruise:check": "node scripts/depcruise-threshold.mjs --config=.dependency-cruiser.cjs --maxErrors=0 --maxWarnings=99",
     "ai:agents-md": "node ai-kit/scripts/sync-agents-md.mjs",
-    "graph": "bash scripts/graph-ui.sh"
+    "graph": "node scripts/ai.mjs graph-ui"
   },
   "lint-staged": {
     "*.{js,cjs,mjs,jsx,ts,mts,tsx}": "eslint --fix"
