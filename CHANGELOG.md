@@ -1,3 +1,14 @@
+## [1.117.4](https://github.com/upstars-global/unity-core-modules/compare/v1.117.3...v1.117.4) (2026-10-05)
+
+### 🔧 Maintenance
+
+* add codebase-memory-mcp graph UI script ([#406](https://github.com/upstars-global/unity-core-modules/issues/406))
+ ([9dc031f](https://github.com/upstars-global/unity-core-modules/commit/9dc031fc23c55aefa1ff3d11872268b1e1acbf35))
+
+
+
+    chore(dev): add codebase-memory-mcp graph UI script
+
 ## [1.117.3](https://github.com/upstars-global/unity-core-modules/compare/v1.117.2...v1.117.3) (2026-09-28)
 
 ### 🔧 Maintenance
