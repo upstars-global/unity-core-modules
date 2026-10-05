@@ -1,3 +1,10 @@
+## [1.118.0](https://github.com/upstars-global/unity-core-modules/compare/v1.117.4...v1.118.0) (2026-10-05)
+
+### 🚀 Features
+
+* (ai-kit): add /unity-ai:graph command and graph-ui script ([#407](https://github.com/upstars-global/unity-core-modules/issues/407))
+ ([3cc9b82](https://github.com/upstars-global/unity-core-modules/commit/3cc9b8209ac292ea672935878c45f0051e5d6978))
+
 ## [1.117.4](https://github.com/upstars-global/unity-core-modules/compare/v1.117.3...v1.117.4) (2026-10-05)
 
 ### 🔧 Maintenance
