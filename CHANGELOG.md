@@ -1,3 +1,32 @@
+## [1.118.0](https://github.com/upstars-global/unity-core-modules/compare/v1.117.4...v1.118.0) (2026-10-05)
+
+### 🚀 Features
+
+* (ai-kit): add /unity-ai:graph command and graph-ui script ([#407](https://github.com/upstars-global/unity-core-modules/issues/407))
+ ([3cc9b82](https://github.com/upstars-global/unity-core-modules/commit/3cc9b8209ac292ea672935878c45f0051e5d6978))
+
+## [1.117.4](https://github.com/upstars-global/unity-core-modules/compare/v1.117.3...v1.117.4) (2026-10-05)
+
+### 🔧 Maintenance
+
+* add codebase-memory-mcp graph UI script ([#406](https://github.com/upstars-global/unity-core-modules/issues/406))
+ ([9dc031f](https://github.com/upstars-global/unity-core-modules/commit/9dc031fc23c55aefa1ff3d11872268b1e1acbf35))
+
+
+
+    chore(dev): add codebase-memory-mcp graph UI script
+
+## [1.117.3](https://github.com/upstars-global/unity-core-modules/compare/v1.117.2...v1.117.3) (2026-09-28)
+
+### 🔧 Maintenance
+
+* (UN-3188) add diBonusesEnabled field ([#402](https://github.com/upstars-global/unity-core-modules/issues/402))
+ ([3146be5](https://github.com/upstars-global/unity-core-modules/commit/3146be5703b2322d0cb542452b7099b01b2ec6fc))
+
+
+
+    UN-3188 add diBonusesEnabled field
+
 ## [1.117.2](https://github.com/upstars-global/unity-core-modules/compare/v1.117.1...v1.117.2) (2026-09-22)
 
 ### 🔨 Refactoring
