@@ -23,6 +23,7 @@ function minimalActiveSeason(): IActiveSeason {
     return {
         name: "Season 1",
         isActive: true,
+        diBonusesEnabled: true,
         startDate: "2026-06-08T11:43:19.450Z",
         endDate: "2026-07-08T11:43:19.450Z",
         technicalWorksStartAt: "2026-06-08T11:43:19.450Z",

@@ -9,6 +9,8 @@ const getAffbIdMock = vi.fn();
 const setStagMock = vi.fn();
 const setLocalesMock = vi.fn();
 const setLocaleMock = vi.fn();
+const redirectToLangMock = vi.fn();
+const getDefaultLocaleByHostnameMock = vi.fn();
 
 vi.mock("../../src/services/api/requests/multilang", () => ({
     loadLocalesReq: loadLocalesReqMock,
@@ -17,6 +19,14 @@ vi.mock("../../src/services/api/requests/multilang", () => ({
 
 vi.mock("../../src/helpers/urlHelpers", () => ({
     getUrlSearchParams: getUrlSearchParamsMock,
+}));
+
+vi.mock("../../src/helpers/redirectToLang", () => ({
+    redirectToLang: redirectToLangMock,
+}));
+
+vi.mock("../../src/helpers/getDefaultLocaleByHostname", () => ({
+    getDefaultLocaleByHostname: getDefaultLocaleByHostnameMock,
 }));
 
 vi.mock("../../src/controllers/StagController", () => ({
@@ -58,6 +68,7 @@ describe("localization service referral stag handling", () => {
         getStagMock.mockReturnValue(undefined);
         getStagHoldMock.mockReturnValue(undefined);
         loadLocalesReqMock.mockResolvedValue([]);
+        getDefaultLocaleByHostnameMock.mockReturnValue("en");
     });
 
     it("sets referral stag when ref_code exists and stag is missing", async () => {
@@ -127,5 +138,16 @@ describe("localization service referral stag handling", () => {
         await loadLocales();
 
         expect(loadLocalesReqMock).toHaveBeenCalledWith("ref_code=ref123&affb_id=777&partner-stag=existing_stag");
+    });
+
+    it("redirects to the locale configured for the current hostname", async () => {
+        updateLocalesReqMock.mockResolvedValue(undefined);
+        getDefaultLocaleByHostnameMock.mockReturnValue("de");
+
+        const { updateLocale } = await import("../../src/services/localization");
+
+        await updateLocale({ lang: "fr" });
+
+        expect(redirectToLangMock).toHaveBeenCalledWith("fr", "de", []);
     });
 });

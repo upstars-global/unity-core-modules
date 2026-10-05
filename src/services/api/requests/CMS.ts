@@ -39,13 +39,3 @@ export async function loadPageContentFromCmsReq(slugPage: string, locale?: strin
         throw err;
     }
 }
-
-export async function loadMetaSEOReq(url: string, locale: string): Promise<IPageItemCMS | void> {
-    try {
-        const { data } = await http({ locale }).get<IPageItemCMS>(`/api/cms/pages${ url }?l=${ locale }`);
-        return data;
-    } catch (err) {
-        log.error("LOAD_SEO_META_REQ_ERROR", err);
-        throw err;
-    }
-}

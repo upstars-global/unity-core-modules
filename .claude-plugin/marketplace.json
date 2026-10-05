@@ -1,0 +1,15 @@
+{
+  "name": "unity",
+  "owner": {
+    "name": "Unity Front Team",
+    "url": "https://github.com/upstars-global/unity-core-modules"
+  },
+  "description": "Shared Claude Code tooling for the Unity front-end repositories",
+  "plugins": [
+    {
+      "name": "unity-ai",
+      "source": "./ai-kit",
+      "description": "Skills, agents, slash commands and hooks covering typical work in frontera, king-front and unity-core-modules"
+    }
+  ]
+}
