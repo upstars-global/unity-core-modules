@@ -1,5 +1,3 @@
-// @ts-expect-error -- TS2307: Cannot find module '@config/groupAB' or its corresponding type declarations.
-import { ID_GROUP_FOR_PAIRED_ID, ID_GROUP_FOR_UNPAIRED_ID } from "@config/groupAB";
 // @ts-expect-error -- TS2307: Cannot find module '@config/user-statuses' or its corresponding type declarations.
 import { IRON_STATUS } from "@config/user-statuses";
 // @ts-expect-error -- TS2307: Cannot find module '@theme/configs/constantsFreshChat' or its corresponding type declarations.
@@ -78,21 +76,6 @@ import {
 } from "./api/requests/userLimits";
 import { loadDepositGiftsData } from "./gifts";
 import { updateLocale } from "./localization";
-
-export async function userSetToGroupForAbTest() {
-    const userInfo = useUserInfo();
-    const userStatuses = useUserStatuses();
-
-    const isUserIncludingInAB = userStatuses.getUserGroups.some((id) => {
-        return id === ID_GROUP_FOR_PAIRED_ID || id === ID_GROUP_FOR_UNPAIRED_ID;
-    });
-    if (isUserIncludingInAB) {
-        return;
-    }
-    const groupForAdding = userInfo.info.id % 2 ? ID_GROUP_FOR_UNPAIRED_ID : ID_GROUP_FOR_PAIRED_ID;
-
-    await changeUserToGroup(groupForAdding);
-}
 
 export async function loadPlayerFieldsInfo({ reload } = { reload: false }): Promise<IPlayerFieldsInfo | undefined> {
     const commonStore = useCommon();
