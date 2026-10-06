@@ -2239,6 +2239,11 @@ cmd-shim@^8.0.0:
   resolved "https://registry.yarnpkg.com/cmd-shim/-/cmd-shim-8.0.0.tgz#5be238f22f40faf3f7e8c92edc3f5d354f7657b2"
   integrity sha512-Jk/BK6NCapZ58BKUxlSI+ouKRbjH1NLZCgJkYoab+vEHUY3f6OzpNBN9u7HFSv9J6TRDGs4PLOHezoKGaFRSCA==
 
+codebase-memory-mcp@0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/codebase-memory-mcp/-/codebase-memory-mcp-0.11.0.tgz#270c71422dda0575a076e9263559302a9709a4c8"
+  integrity sha512-BXPeAIQQOH2iKPYMcNOiRezj1BeBGkIfAAQ99GWSRMsvHxMUrGiuJqhJH1uTdN4hs6kRkqPnmpjCfy05hANKIg==
+
 color-convert@^1.9.0:
   version "1.9.3"
   resolved "https://registry.yarnpkg.com/color-convert/-/color-convert-1.9.3.tgz#bb71850690e1f136567de629d2d5471deda4c1e8"
