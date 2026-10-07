@@ -62,7 +62,6 @@ export const useMultilangStore = defineStore("multilang", () => {
         geo,
         locale,
         country,
-
         getDefaultLang,
         getUserLocale,
         getUserGeo,
