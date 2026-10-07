@@ -108,9 +108,19 @@ describe("useMultilangStore", () => {
 
     it("getUserLocale takes locale from cookie if it exists", () => {
         const store = useMultilangStore();
-        getLocale.mockReturnValue("fr");
+        getLocale.mockReturnValue("en-IE");
 
-        expect(store.getUserLocale).toBe("fr");
+        expect(store.getUserLocale).toBe("en-IE");
+    });
+
+    it("getUserLocale ignores cookie locale that is not available", () => {
+        const store = useMultilangStore();
+        getLocale.mockReturnValue("el");
+
+        expect(store.getUserLocale).toBe(store.getDefaultLang);
+
+        store.setLocale("en-IE");
+        expect(store.getUserLocale).toBe("en-IE");
     });
 
     it("if cookie not set, takes locale from store", () => {

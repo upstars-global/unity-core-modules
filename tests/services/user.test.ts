@@ -5,9 +5,11 @@ import { computed, reactive, ref } from "vue";
 import type { IPlayerFieldsInfo } from "../../src/models/common";
 import { EnumFormFields } from "../../src/models/common";
 import * as playerRequests from "../../src/services/api/requests/player";
+import { updateLocale } from "../../src/services/localization";
 import {
     checkUserState,
     loadPlayerFieldsInfo,
+    loadUserProfile,
     sendFreshChatRestoreId,
 } from "../../src/services/user";
 
@@ -79,6 +81,16 @@ vi.mock("../../src/services/api/requests/player", () => ({
     sendFreshChatRestoreIdReq: vi.fn(),
     sendUserDataReq: vi.fn(),
     loadUserProfileReq: vi.fn(),
+    loadAvailableBonusesReq: vi.fn(),
+    loadFreshChatRestoreIdReq: vi.fn(),
+}));
+
+vi.mock("../../src/services/localization", () => ({
+    updateLocale: vi.fn(),
+}));
+
+vi.mock("../../src/controllers/CustomerIO", () => ({
+    cioIdentifyUser: vi.fn(),
 }));
 
 vi.mock("../../src/controllers/Logger", () => ({
@@ -178,6 +190,40 @@ describe("user service helpers", () => {
             await checkUserState();
 
             expect(playerRequests.sendUserDataReq).not.toHaveBeenCalled();
+        });
+    });
+
+    describe("loadUserProfile", () => {
+        const mockProfileLanguage = (language: string) => {
+            vi.mocked(playerRequests.loadUserProfileReq).mockResolvedValue({
+                data: { ...defaultUser(), language },
+            } as never);
+        };
+
+        it("switches to the profile locale when it is available", async () => {
+            mockProfileLanguage("en-IE");
+
+            await loadUserProfile({ reload: true });
+
+            expect(updateLocale).toHaveBeenCalledWith(expect.objectContaining({ lang: "en-IE" }));
+            expect(useUserInfoMock.toggleUserIsLogged).toHaveBeenCalledWith(true);
+        });
+
+        it("keeps the current locale when the profile locale is not available", async () => {
+            mockProfileLanguage("el");
+
+            await loadUserProfile({ reload: true });
+
+            expect(updateLocale).not.toHaveBeenCalled();
+            expect(useUserInfoMock.toggleUserIsLogged).toHaveBeenCalledWith(true);
+        });
+
+        it("does not update the locale when the profile locale is already active", async () => {
+            mockProfileLanguage("en");
+
+            await loadUserProfile({ reload: true });
+
+            expect(updateLocale).not.toHaveBeenCalled();
         });
     });
 });
