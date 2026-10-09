@@ -1,3 +1,37 @@
+## [1.119.1](https://github.com/upstars-global/unity-core-modules/compare/v1.119.0...v1.119.1) (2026-10-07)
+
+### 🐛 Bug Fixes
+
+* UN-3234 fix unexpected redirect for el locale ([#409](https://github.com/upstars-global/unity-core-modules/issues/409))
+ ([4d3c4b5](https://github.com/upstars-global/unity-core-modules/commit/4d3c4b5fc945a5e85c46ca197247807f0c4ef942))
+
+
+
+    refactor: UN-3234 module rebuild
+
+## [1.119.0](https://github.com/upstars-global/unity-core-modules/compare/v1.118.1...v1.119.0) (2026-10-06)
+
+### 🚀 Features
+
+* Add Smartico Inbox API, types, controller and store ([#399](https://github.com/upstars-global/unity-core-modules/issues/399))
+ ([f732928](https://github.com/upstars-global/unity-core-modules/commit/f732928a3d34797752e60454f5e0577bce98e71e))
+
+
+
+    * feat: Add Smartico Inbox API types and store
+
+    * feat: Add Smartico Inbox API, types, controller and store
+
+    * fix: review comments
+
+    * feat: improve logic
+
+    * refactor: move logic from component to controller
+
+    * feat: add time from now utc formatter
+
+    * feat: add notification sidebar state to ui store
+
 ## [1.118.0](https://github.com/upstars-global/unity-core-modules/compare/v1.117.4...v1.118.0) (2026-10-05)
 
 ### 🚀 Features

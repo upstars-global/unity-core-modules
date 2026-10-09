@@ -14,6 +14,8 @@ interface CustomerIOQueue {
 
 interface Window {
     _cio?: CustomerIOQueue;
+    _smartico_language: string | null;
+    _smartico_user_id: string | null;
     antifrodScriptsPath?: string;
     dfpObj?: {
         getDFP(): string;
