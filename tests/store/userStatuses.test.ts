@@ -10,7 +10,6 @@ import { useUserInfo } from "../../src/store/user/userInfo";
 import { useUserStatuses } from "../../src/store/user/userStatuses";
 
 const ALL_LEVELS = [ 10, 20, 30 ];
-const ID_CASHBOX_ONBOARD_DONE = 99;
 const ID_GROUP_FOR_MULTI_ACC = 77;
 const TEST_GROUP_ID = 11;
 
@@ -21,7 +20,6 @@ const mockGetLevelsById = vi.fn();
 
 vi.mock("@config/user-statuses", () => ({
     ALL_LEVELS: [ 10, 20, 30 ],
-    ID_CASHBOX_ONBOARD_DONE: 99,
     ID_GROUP_FOR_MULTI_ACC: 77,
     TEST_GROUP_ID: 11,
 }));
@@ -68,14 +66,12 @@ describe("useUserStatuses", () => {
         expect(store.getUserLevelInfo).toEqual({});
         expect(store.getUserManager).toBeNull();
         expect(store.isRegisteredViaSocialNetwork).toBe(false);
-        expect(store.isCashboxOnboardDone).toBe(false);
     });
 
-    it("maps user groups and detects tester and cashbox flags", () => {
+    it("maps user groups and detects tester flag", () => {
         mockUserInfo.value = {
             statuses: [
                 { id: TEST_GROUP_ID, name: "tester" },
-                { id: ID_CASHBOX_ONBOARD_DONE, name: "cashbox" },
                 { id: "vip_level_1", name: "vip" },
             ],
         };
@@ -84,11 +80,9 @@ describe("useUserStatuses", () => {
 
         expect(store.getUserGroups).toEqual([
             TEST_GROUP_ID,
-            ID_CASHBOX_ONBOARD_DONE,
             "vip_level_1",
         ]);
         expect(store.isUserTester).toBe(true);
-        expect(store.isCashboxOnboardDone).toBe(true);
     });
 
     it("detects multiaccount via setAvailableBonuses", () => {
