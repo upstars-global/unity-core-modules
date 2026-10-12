@@ -1,3 +1,10 @@
+## [1.120.0](https://github.com/upstars-global/unity-core-modules/compare/v1.119.1...v1.120.0) (2026-10-12)
+
+### 🚀 Features
+
+* UN-3299 masking payments ([#410](https://github.com/upstars-global/unity-core-modules/issues/410))
+ ([c7fb147](https://github.com/upstars-global/unity-core-modules/commit/c7fb147652b2c7fac9b7caf771744c0db353bedf))
+
 ## [1.119.1](https://github.com/upstars-global/unity-core-modules/compare/v1.119.0...v1.119.1) (2026-10-07)
 
 ### 🐛 Bug Fixes
