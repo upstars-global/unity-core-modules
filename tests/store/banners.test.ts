@@ -1,47 +1,18 @@
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import { createPinia, setActivePinia } from "pinia";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 
 import { useBannerStore } from "../../src/store/banners";
 
+dayjs.extend(utc);
+
 const showWelcomePack = ref(true);
 const userGroups = ref<number[]>([]);
 const isCryptoDomain = ref(false);
 const isCryptoUserCurrency = ref(false);
 const isLogged = ref(false);
-
-const nowMs = Date.parse("2024-01-02T00:00:00Z");
-
-function parseDDMMYYYYHHmm(str: string): number {
-    const match = str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2})$/);
-    if (!match) {
-        return Date.parse(str);
-    }
-    const [ , day, month, year, hour, minute ] = match;
-    return Date.UTC(Number(year), Number(month) - 1, Number(day), Number(hour), Number(minute));
-}
-
-const makeDay = (ms: number) => ({
-    __ms: ms,
-    isAfter(other: { __ms: number }) {
-        return ms > other.__ms;
-    },
-    utc() {
-        return this;
-    },
-});
-
-vi.mock("dayjs", () => {
-    const dayjs = (input?: string) => makeDay(input ? Date.parse(input) : nowMs);
-    dayjs.utc = (dateStr?: string, _format?: string) =>
-        makeDay(dateStr ? parseDDMMYYYYHHmm(dateStr) : Date.now());
-    dayjs.extend = vi.fn();
-    return { default: dayjs };
-});
-
-vi.mock("dayjs/plugin/customParseFormat", () => ({
-    default: {},
-}));
 
 vi.mock("@config/banners", () => ({
     BANNER_CATEGORY_131811__HIDE: "welcome_hide",
@@ -193,6 +164,67 @@ describe("useBannerStore", () => {
         ] as never);
 
         expect(store.getBannersData).toEqual([]);
+    });
+
+    it.each([
+        [ "2026-10-01T12:00:00Z", "thu" ],
+        [ "2026-10-02T12:00:00Z", "fri" ],
+        [ "2026-10-03T12:00:00Z", "sat" ],
+        [ "2026-10-04T12:00:00Z", "sun" ],
+        [ "2026-10-05T12:00:00Z", "mon" ],
+        [ "2026-10-06T12:00:00Z", "tue" ],
+        [ "2026-10-07T12:00:00Z", "wed" ],
+        [ "2026-10-02T00:30:00+03:00", "thu" ],
+        [ "2026-10-01T23:30:00-07:00", "fri" ],
+    ])("filters weekdays using UTC at %s", (date, weekday) => {
+        vi.setSystemTime(new Date(date));
+        const store = useBannerStore();
+        const days = [ "mon", "tue", "wed", "thu", "fri", "sat", "sun" ];
+
+        store.setBanners(days.map((day) => ({
+            id: day,
+            categories: [],
+            liveTime: {
+                start: "01/10/2026 00:01",
+                end: "31/10/2026 23:59",
+                days: [ day ],
+            },
+        })) as never);
+
+        expect(store.getBannersData.map((banner) => banner.id)).toEqual([ weekday ]);
+    });
+
+    it.each([ undefined, null, [] ])("preserves daily display for days=%s", (days) => {
+        const store = useBannerStore();
+        store.setBanners([ {
+            id: "daily",
+            categories: [],
+            liveTime: { start: "01/01/2024 00:00", end: "03/01/2024 00:00", days },
+        } ] as never);
+
+        expect(store.getBannersData.map((banner) => banner.id)).toEqual([ "daily" ]);
+    });
+
+    it.each([
+        [ "2026-10-01T00:00:00Z", false ],
+        [ "2026-10-01T12:00:00Z", true ],
+        [ "2026-10-02T12:00:00Z", true ],
+        [ "2026-10-03T12:00:00Z", false ],
+        [ "2026-11-05T12:00:00Z", false ],
+    ])("combines the date range and multiple weekdays at %s", (date, visible) => {
+        vi.setSystemTime(new Date(date));
+        const store = useBannerStore();
+        store.setBanners([ {
+            id: "weekly",
+            categories: [],
+            liveTime: {
+                start: "01/10/2026 00:01",
+                end: "31/10/2026 23:59",
+                days: [ "thu", "fri" ],
+            },
+        } ] as never);
+
+        expect(store.getBannersData.map((banner) => banner.id)).toEqual(visible ? [ "weekly" ] : []);
     });
 
     it("manages terms files and viewed banners", () => {
