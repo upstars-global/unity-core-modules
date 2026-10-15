@@ -1,3 +1,10 @@
+## [1.120.1](https://github.com/upstars-global/unity-core-modules/compare/v1.120.0...v1.120.1) (2026-10-15)
+
+### 🔨 Refactoring
+
+* UN-3230 remove isCashboxOnboardDone
+ ([4cf584e](https://github.com/upstars-global/unity-core-modules/commit/4cf584e80644f0ff96ebbdddc900fd7c61f04844))
+
 ## [1.120.0](https://github.com/upstars-global/unity-core-modules/compare/v1.119.1...v1.120.0) (2026-10-12)
 
 ### 🚀 Features
