@@ -1,3 +1,10 @@
+## [1.121.0](https://github.com/upstars-global/unity-core-modules/compare/v1.120.1...v1.121.0) (2026-10-16)
+
+### 🚀 Features
+
+* **UN-3332:** do not load wheel configs if they are exist ([#412](https://github.com/upstars-global/unity-core-modules/issues/412))
+ ([1455dcd](https://github.com/upstars-global/unity-core-modules/commit/1455dcda63b9e8a11f69f74e071fe2dfb4ffc8df))
+
 ## [1.120.1](https://github.com/upstars-global/unity-core-modules/compare/v1.120.0...v1.120.1) (2026-10-15)
 
 ### 🔨 Refactoring
