@@ -12,11 +12,13 @@ import { computed, ref } from "vue";
 
 import { useWelcomePack } from "../controllers/useWelcomePack";
 import { prepareJackpotsBanners } from "../helpers/jackpotsHelpers";
-import type { IBannerConfig, IViewedGTMBanners } from "../models/banners";
+import type { BannerWeekday, IBannerConfig, IViewedGTMBanners } from "../models/banners";
 import type { IFileCMS } from "../services/api/DTO/CMS";
 import { useSettings } from "./settings";
 import { useUserInfo } from "./user/userInfo";
 import { useUserStatuses } from "./user/userStatuses";
+
+const weekdays: BannerWeekday[] = [ "sun", "mon", "tue", "wed", "thu", "fri", "sat" ];
 
 export const useBannerStore = defineStore("bannerStore", () => {
     const { getIsLogged, isCryptoUserCurrency } = storeToRefs(useUserInfo());
@@ -30,11 +32,16 @@ export const useBannerStore = defineStore("bannerStore", () => {
     const getBannersData = computed(() => {
         dayjs.extend(customParseFormat);
 
-        // @ts-expect-error -- TS2339: Property 'groups' does not exist on type 'IBannerConfig'.; TS2339: Property 'liveTime' does not exist on type 'IBannerConfig'.
+        // @ts-expect-error -- TS2339: Property 'groups' does not exist on type 'IBannerConfig'.
         let bannersFilteredByConfigsFile = welcomePackBannersFilter(banners.value).filter(({ groups, liveTime }) => {
             if (liveTime) {
                 const format = "DD/MM/YYYY HH:mm";
                 const now = dayjs.utc();
+
+                if (liveTime.days?.length && !liveTime.days.includes(weekdays[now.day()])) {
+                    return false;
+                }
+
                 const start = liveTime.start && dayjs.utc(liveTime.start, format);
                 if (!now.isAfter(start)) {
                     return false;
