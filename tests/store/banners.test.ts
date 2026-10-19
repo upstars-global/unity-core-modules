@@ -4,6 +4,7 @@ import { createPinia, setActivePinia } from "pinia";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 
+import type { IBannerConfig } from "../../src/models/banners";
 import { useBannerStore } from "../../src/store/banners";
 
 dayjs.extend(utc);
@@ -225,6 +226,30 @@ describe("useBannerStore", () => {
         } ] as never);
 
         expect(store.getBannersData.map((banner) => banner.id)).toEqual(visible ? [ "weekly" ] : []);
+    });
+
+    it.each<{ liveTime: IBannerConfig["liveTime"]; visible: boolean }>([
+        { liveTime: { days: [ "mon", "fri" ] }, visible: true },
+        { liveTime: { days: [ "tue" ] }, visible: false },
+        { liveTime: {}, visible: true },
+        { liveTime: { days: [] }, visible: true },
+        { liveTime: { days: null }, visible: true },
+        { liveTime: { start: "18/10/2026 00:00" }, visible: true },
+        { liveTime: { start: "20/10/2026 00:00" }, visible: false },
+        { liveTime: { start: "19/10/2026 00:00" }, visible: false },
+        { liveTime: { end: "20/10/2026 00:00" }, visible: true },
+        { liveTime: { end: "18/10/2026 00:00" }, visible: false },
+        { liveTime: { end: "19/10/2026 00:00" }, visible: true },
+        { liveTime: { days: [ "mon" ], start: "20/10/2026 00:00" }, visible: false },
+        { liveTime: { days: [ "mon" ], end: "18/10/2026 00:00" }, visible: false },
+        { liveTime: { days: [ "tue" ], start: "18/10/2026 00:00" }, visible: false },
+        { liveTime: { days: [ "tue" ], end: "20/10/2026 00:00" }, visible: false },
+    ])("supports optional date bounds: $liveTime", ({ liveTime, visible }) => {
+        vi.setSystemTime(new Date("2026-10-19T03:00:00+03:00"));
+        const store = useBannerStore();
+        store.setBanners([ { id: "optional-dates", categories: [], liveTime } ] as never);
+
+        expect(store.getBannersData.map((banner) => banner.id)).toEqual(visible ? [ "optional-dates" ] : []);
     });
 
     it("manages terms files and viewed banners", () => {

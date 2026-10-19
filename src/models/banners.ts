@@ -4,8 +4,8 @@ export type BannerWeekday = "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun
 
 export interface IBannerConfig {
     liveTime?: {
-        start: string;
-        end: string;
+        start?: string;
+        end?: string;
         days?: BannerWeekday[] | null;
     };
     categories: string[];

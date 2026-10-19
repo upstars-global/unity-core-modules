@@ -43,12 +43,12 @@ export const useBannerStore = defineStore("bannerStore", () => {
                 }
 
                 const start = liveTime.start && dayjs.utc(liveTime.start, format);
-                if (!now.isAfter(start)) {
+                if (start && !now.isAfter(start)) {
                     return false;
                 }
                 const end = liveTime.end && dayjs.utc(liveTime.end, format);
 
-                if (now.isAfter(end)) {
+                if (end && now.isAfter(end)) {
                     return false;
                 }
             }
