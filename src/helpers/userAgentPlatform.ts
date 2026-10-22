@@ -38,7 +38,7 @@ export const getUserAgentPlatform = async (uaHints?: IResult) => {
             platform.isMobile = osList.includes(os.name);
         }
     } else if (typeof window !== "undefined") {
-        const _uaHints = uaParser(navigator.userAgent);
+        const _uaHints = await uaParser(navigator.userAgent).withFeatureCheck();
         platform.userAgent = _uaHints.ua;
         platform.userAgentHints = _uaHints;
 
