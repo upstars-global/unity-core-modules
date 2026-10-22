@@ -27,7 +27,6 @@ export const getUserAgentPlatform = async (uaHints?: IResult) => {
         transitionName: "slide-left",
         userAgentHints: uaHints,
     };
-    console.log(uaHints);
     if (uaHints) {
         const { device, os, ua } = uaHints;
         platform.userAgent = ua;
@@ -39,7 +38,6 @@ export const getUserAgentPlatform = async (uaHints?: IResult) => {
         }
     } else if (typeof window !== "undefined") {
         const _uaHints = await uaParser(navigator.userAgent).withFeatureCheck();
-        console.log(_uaHints);
         platform.userAgent = _uaHints.ua;
         platform.userAgentHints = _uaHints;
 
