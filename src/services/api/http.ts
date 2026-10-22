@@ -315,7 +315,7 @@ export function http({ headers, locale }: IHttpParams = {}): HttpClient {
     const clientHeaders: Record<string, string> = {
         "Accept": "application/json, text/plain, */*",
         "X-Requested-With": "XMLHttpRequest",
-        "X-Content-Policy": "3",
+        "X-Content-Policy": "4",
         ...(headers || {}),
     };
 

@@ -1,6 +1,5 @@
 import {
     ALL_LEVELS,
-    ID_CASHBOX_ONBOARD_DONE,
     TEST_GROUP_ID,
 // @ts-expect-error -- TS2307: Cannot find module '@config/user-statuses' or its corresponding type declarations.
 } from "@config/user-statuses";
@@ -87,10 +86,6 @@ export const useUserStatuses = defineStore("userStatuses", () => {
         return userManager.value;
     });
 
-    const isCashboxOnboardDone = computed(() => {
-        return getUserGroups.value.includes(ID_CASHBOX_ONBOARD_DONE);
-    });
-
     function setUserManager(manager: IVipManager) {
         userManager.value = manager;
     }
@@ -115,7 +110,6 @@ export const useUserStatuses = defineStore("userStatuses", () => {
         isMultiAccount,
         isVip,
         isDiamond,
-        isCashboxOnboardDone,
         userManager,
         getUserManager,
         setUserManager,

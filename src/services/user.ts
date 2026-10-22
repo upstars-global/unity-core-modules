@@ -2,6 +2,8 @@
 import { IRON_STATUS } from "@config/user-statuses";
 // @ts-expect-error -- TS2307: Cannot find module '@theme/configs/constantsFreshChat' or its corresponding type declarations.
 import { PROJECT } from "@theme/configs/constantsFreshChat";
+// @ts-expect-error -- TS2307: Cannot find module '@theme/configs/constsLocales' or its corresponding type declarations.
+import { AVAILABLE_LOCALES } from "@theme/configs/constsLocales";
 // @ts-expect-error -- TS2307: Cannot find module '@theme/configs/stateFieldConfig' or its corresponding type declarations.
 import { getStateByCounty } from "@theme/configs/stateFieldConfig";
 import { storeToRefs } from "pinia";
@@ -563,7 +565,7 @@ export async function loadUserProfile({ reload = false, route }: { reload?: bool
 
             const responseLang = response.data.language;
 
-            if (responseLang !== multilang.getUserLocale && response.data.id) {
+            if (responseLang !== multilang.getUserLocale && AVAILABLE_LOCALES[responseLang] && response.data.id) {
                 // @ts-expect-error -- TS2353: Object literal may only specify known properties, and 'route' does not exist in type '{ lang: string; }'.
                 updateLocale({ lang: responseLang, route });
             }
