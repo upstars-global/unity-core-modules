@@ -1,3 +1,16 @@
+## [1.122.0](https://github.com/upstars-global/unity-core-modules/compare/v1.121.0...v1.122.0) (2026-10-20)
+
+### 🚀 Features
+
+* **UN-3242:** add days to banners config ([#411](https://github.com/upstars-global/unity-core-modules/issues/411))
+ ([a48156f](https://github.com/upstars-global/unity-core-modules/commit/a48156f089d298dd4001f7d88bdbc83f363cbb59))
+
+
+
+    * feat(UN-3242): add days to banners config
+
+    * feat: made start and end liveTime banner data optional
+
 ## [1.121.0](https://github.com/upstars-global/unity-core-modules/compare/v1.120.1...v1.121.0) (2026-10-16)
 
 ### 🚀 Features
