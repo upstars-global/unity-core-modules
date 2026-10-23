@@ -10,8 +10,10 @@ import {
     checkUserState,
     loadPlayerFieldsInfo,
     loadUserProfile,
+    requestGdprReport,
     sendFreshChatRestoreId,
 } from "../../src/services/user";
+import { useUserSecurity } from "../../src/store/user/userSecurity";
 
 const changeUserToGroupMock = vi.fn();
 const useUserInfoMock = {
@@ -43,7 +45,7 @@ const freshchatRestoreId = ref("");
 let userGroups: number[] = [];
 
 vi.mock("../../src/store/user/userInfo", () => ({
-    useUserInfo: vi.fn(() => ({
+    useUserInfo: vi.fn(() => reactive({
         info: { id: userInfoRef.value.id },
         getUserInfo: userInfoRef,
         getFreshChatRestoreIdLoaded: freshchatRestoreIdLoaded,
@@ -62,6 +64,7 @@ vi.mock("../../src/store/user/userStatuses", () => ({
 }));
 
 const playerFieldsInfo = ref<IPlayerFieldsInfo | undefined>(undefined);
+const projectInfo = ref<{ gdpr_report_enabled?: boolean }>({ gdpr_report_enabled: true });
 const setPlayerFieldsInfoMock = vi.fn((data: IPlayerFieldsInfo) => {
     playerFieldsInfo.value = data;
 });
@@ -69,6 +72,10 @@ const getFieldsTypeMock = vi.fn();
 
 vi.mock("../../src/store/common", () => ({
     useCommon: vi.fn(() => ({
+        infoProject: projectInfo.value,
+        get isGdprReportEnabled() {
+            return projectInfo.value.gdpr_report_enabled === true;
+        },
         playerFieldsInfo,
         setPlayerFieldsInfo: setPlayerFieldsInfoMock,
         getFieldsType: getFieldsTypeMock,
@@ -83,6 +90,7 @@ vi.mock("../../src/services/api/requests/player", () => ({
     loadUserProfileReq: vi.fn(),
     loadAvailableBonusesReq: vi.fn(),
     loadFreshChatRestoreIdReq: vi.fn(),
+    requestGdprReportReq: vi.fn(),
 }));
 
 vi.mock("../../src/services/localization", () => ({
@@ -110,9 +118,103 @@ describe("user service helpers", () => {
         freshchatRestoreIdLoaded.value = true;
         freshchatRestoreId.value = "";
         playerFieldsInfo.value = undefined;
+        projectInfo.value = { gdpr_report_enabled: true };
         getFieldsTypeMock.mockReset();
         vi.mocked(playerRequests.loadPlayerFieldsInfoRequest).mockResolvedValue(undefined as unknown as IPlayerFieldsInfo);
         vi.mocked(playerRequests.sendUserDataReq).mockResolvedValue({ status: 200 } as never);
+    });
+
+    describe("requestGdprReport", () => {
+        it.each([ {}, { gdpr_report_enabled: false } ])("skips disabled GDPR settings %j", async (settings) => {
+            projectInfo.value = settings;
+
+            await requestGdprReport();
+
+            expect(playerRequests.requestGdprReportReq).not.toHaveBeenCalled();
+            expect(useUserSecurity().gdprReport.status).toBe("idle");
+        });
+
+        it("stores a successful request and prevents another request", async () => {
+            vi.mocked(playerRequests.requestGdprReportReq).mockResolvedValue(undefined);
+
+            await requestGdprReport();
+
+            expect(useUserSecurity().gdprReport.status).toBe("created");
+            expect(useUserSecurity().isGdprReportRequested).toBe(true);
+            await requestGdprReport();
+            expect(playerRequests.requestGdprReportReq).toHaveBeenCalledExactlyOnceWith();
+        });
+
+        it("stores the restriction for an already requested report", async () => {
+            const error = Object.assign(new Error("HTTP 422"), {
+                response: { status: 422, data: { errors: { report: [ "already_exist" ] } } },
+            });
+            vi.mocked(playerRequests.requestGdprReportReq).mockRejectedValue(error);
+
+            await requestGdprReport();
+
+            expect(useUserSecurity().gdprReport.status).toBe("already_requested");
+            expect(useUserSecurity().isGdprReportRequested).toBe(true);
+            await requestGdprReport();
+            expect(playerRequests.requestGdprReportReq).toHaveBeenCalledExactlyOnceWith();
+        });
+
+        it.each([
+            Object.assign(new Error("HTTP 422"), {
+                response: { status: 422, data: { errors: { report: [ "no_permissions" ] } } },
+            }),
+            Object.assign(new Error("HTTP 500"), {
+                response: { status: 500, data: { errors: { report: [ "already_exist" ] } } },
+            }),
+            new Error("Network Error"),
+        ])("stores other failures and allows retry", async (error) => {
+            vi.mocked(playerRequests.requestGdprReportReq).mockRejectedValueOnce(error).mockResolvedValue(undefined);
+
+            await requestGdprReport();
+
+            expect(useUserSecurity().gdprReport.status).toBe("error");
+            expect(useUserSecurity().isGdprReportRequested).toBe(false);
+            await requestGdprReport();
+            expect(useUserSecurity().gdprReport.status).toBe("created");
+        });
+
+        it("blocks concurrent calls and settles if the flag is disabled", async () => {
+            let resolve!: () => void;
+            vi.mocked(playerRequests.requestGdprReportReq).mockReturnValue(new Promise<void>((done) => { resolve = done; }));
+
+            const request = requestGdprReport();
+            await requestGdprReport();
+
+            expect(useUserSecurity().isGdprReportLoading).toBe(true);
+            expect(playerRequests.requestGdprReportReq).toHaveBeenCalledExactlyOnceWith();
+            projectInfo.value = { gdpr_report_enabled: false };
+            resolve();
+            await request;
+            expect(useUserSecurity().isGdprReportLoading).toBe(false);
+            expect(useUserSecurity().gdprReport.status).toBe("created");
+        });
+
+        it.each([ "success", "error" ])("ignores an old %s after switching away and back to the same account", async (outcome) => {
+            let resolve!: () => void;
+            let reject!: (error: Error) => void;
+            vi.mocked(playerRequests.requestGdprReportReq).mockReturnValueOnce(new Promise<void>((done, fail) => {
+                resolve = done;
+                reject = fail;
+            })).mockResolvedValue(undefined);
+
+            const oldRequest = requestGdprReport();
+            userInfoRef.value = { ...defaultUser(), id: 3 };
+            userInfoRef.value = defaultUser();
+            await requestGdprReport();
+            const currentState = useUserSecurity().gdprReport;
+
+            if (outcome === "success") resolve();
+            else reject(new Error("Network Error"));
+            await oldRequest;
+
+            expect(useUserSecurity().gdprReport).toBe(currentState);
+            expect(useUserSecurity().gdprReport.status).toBe("created");
+        });
     });
 
     describe("loadPlayerFieldsInfo", () => {

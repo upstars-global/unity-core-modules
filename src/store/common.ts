@@ -37,6 +37,7 @@ export const useCommon = defineStore("common", () => {
     const countries = ref<ICountries[]>([]);
     const infoProject = ref<IProjectInfo>();
     const cryptoExchangeRates = ref<ICryptoExchangeRates>();
+    const isGdprReportEnabled = computed(() => infoProject.value?.gdpr_report_enabled === true);
 
     if (typeof window !== "undefined") {
         getUserAgentPlatform().then((platformData) => {
@@ -170,6 +171,7 @@ export const useCommon = defineStore("common", () => {
 
         setProjectInfo,
         infoProject,
+        isGdprReportEnabled,
 
         cryptoExchangeRates,
         setCryptoExchangeRates,
