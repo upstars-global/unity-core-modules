@@ -50,17 +50,23 @@ export function timeFromNowUTC(date: ConfigType, format = "DD/MM/YYYY HH:mm:ss")
     return parsedDate.isValid() ? parsedDate.fromNow() : undefined;
 }
 
-export function getEventStatus(startAt: ConfigType, endAt: ConfigType) {
-    const formattedStart = dayjs(startAt, "DD/MM/YYYY");
-    const formattedEnd = dayjs(endAt, "DD/MM/YYYY");
+export function parseCmsDate(date: ConfigType) {
+    return typeof date === "string"
+        ? dayjs.utc(date, date.includes(" ") ? "DD/MM/YYYY HH:mm" : "DD/MM/YYYY", true)
+        : dayjs.utc(date ?? null);
+}
+
+export function getEventStatus(startAt: ConfigType, endAt: ConfigType, currentTime: ConfigType = new Date()) {
+    const formattedStart = parseCmsDate(startAt);
+    const formattedEnd = parseCmsDate(endAt);
 
     if (!formattedStart.isValid() || !formattedEnd.isValid()) {
         return STATUS_PROMO.FUTURE;
     }
 
-    const now = dayjs();
+    const now = dayjs.utc(currentTime);
 
-    if (now.isAfter(formattedEnd)) {
+    if (now.isAfter(formattedEnd, "minute")) {
         return STATUS_PROMO.ARCHIVE;
     }
     if (now.isBefore(formattedStart)) {
