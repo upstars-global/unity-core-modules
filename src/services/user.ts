@@ -23,7 +23,7 @@ import { useUserDocuments } from "../store/user/userDocuments";
 import { userGamesHistory } from "../store/user/userGamesHistory";
 import { useUserInfo } from "../store/user/userInfo";
 import { useUserLimits } from "../store/user/userLimits";
-import { useUserSecurity } from "../store/user/userSecurity";
+import { type GdprReportStatus, useUserSecurity } from "../store/user/userSecurity";
 import { useUserStatuses } from "../store/user/userStatuses";
 import { useUserVerificationSumsub } from "../store/user/userVerificationSumsub";
 import { type IUserLimit } from "./api/DTO/userLimits";
@@ -58,6 +58,7 @@ import {
     loadUserStatsReq,
     loadUserSubscriptionsReq,
     putUserSubscriptionReq,
+    requestGdprReportReq,
     restorePasswordRequestReq,
     restorePasswordRestoreReq,
     seasonsActiveReq,
@@ -295,6 +296,30 @@ export async function updateUserPassword(
     } catch (err) {
         log.error("UPDATE_USER_PASSWORD", err);
         throw err;
+    }
+}
+
+function getGdprReportErrorStatus(error: unknown): GdprReportStatus {
+    const reportErrors = isHttpError(error) && error.response?.status === 422
+        ? (error.response.data as { errors?: { report?: string[] } })?.errors?.report
+        : undefined;
+
+    return reportErrors?.includes("already_exist") ? "already_requested" : "error";
+}
+
+export async function requestGdprReport(): Promise<void> {
+    const userSecurityStore = useUserSecurity();
+    const request = userSecurityStore.startGdprReportRequest();
+
+    if (!request) {
+        return;
+    }
+
+    try {
+        await requestGdprReportReq();
+        userSecurityStore.completeGdprReportRequest(request, "created");
+    } catch (error) {
+        userSecurityStore.completeGdprReportRequest(request, getGdprReportErrorStatus(error));
     }
 }
 
