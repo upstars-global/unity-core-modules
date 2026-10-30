@@ -1,7 +1,10 @@
 import { createPinia, setActivePinia } from "pinia";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("../../src/services/api/requests/configs", () => ({}));
+vi.mock("../../src/services/api/requests/configs", () => ({
+    loadDisabledBonusesConfigReq: vi.fn(),
+}));
+vi.mock("../../src/controllers/Logger", () => ({ log: { error: vi.fn() } }));
 vi.mock("@theme/configs/constantsFreshChat", () => ({ PROJECT: "mocked" }));
 vi.mock("../../src/services/api/requests/gifts", () => ({
     getPlayerBonusesReq: vi.fn(),
@@ -18,6 +21,7 @@ vi.mock("@src/config/gift", () => ({
     STATUSES_GIFT_ISSUED: "issued",
 }));
 
+import * as configReqs from "../../src/services/api/requests/configs";
 import * as giftReqs from "../../src/services/api/requests/gifts";
 import {
     loadDepositGiftsData,
@@ -30,6 +34,8 @@ import { useGiftsStore } from "../../src/store/gifts";
 describe("Gifts service – mapping to store (selected functions)", () => {
     beforeEach(() => {
         setActivePinia(createPinia());
+        vi.mocked(configReqs.loadDisabledBonusesConfigReq).mockReset();
+        vi.mocked(configReqs.loadDisabledBonusesConfigReq).mockResolvedValue({ group_keys: [] });
     });
 
     afterEach(() => {
@@ -37,10 +43,78 @@ describe("Gifts service – mapping to store (selected functions)", () => {
     });
 
     describe("loadGiftsData()", () => {
+        it.each([ "bonuses", "config" ])("waits for both responses when %s arrives first", async (first) => {
+            const store = useGiftsStore();
+            const bonuses = [
+                { id: 1, group_key: "bthd17", stage: "issued", activatable: true },
+                { id: 2, group_key: "bthd17", stage: "activated", activatable: false },
+                { id: 3, group_key: "other", stage: "issued", activatable: true },
+            ];
+            let resolveBonuses!: (value: typeof bonuses) => void;
+            let resolveConfig!: (value: { group_keys: string[] }) => void;
+            vi.mocked(giftReqs.getPlayerBonusesReq).mockReturnValueOnce(new Promise((resolve) => {
+                resolveBonuses = resolve;
+            }));
+            vi.mocked(configReqs.loadDisabledBonusesConfigReq).mockReturnValueOnce(new Promise((resolve) => {
+                resolveConfig = resolve;
+            }));
+
+            const loading = loadGiftsData();
+            if (first === "bonuses") {
+                resolveBonuses(bonuses);
+            } else {
+                resolveConfig({ group_keys: [ "bthd17" ] });
+            }
+            await Promise.resolve();
+            await Promise.resolve();
+
+            expect(store.gifts).toEqual([]);
+            expect(store.isLoadingGiftData).toBe(true);
+
+            if (first === "bonuses") {
+                resolveConfig({ group_keys: [ "bthd17" ] });
+            } else {
+                resolveBonuses(bonuses);
+            }
+            await loading;
+
+            expect(store.disabledBonuses).toEqual([ "bthd17" ]);
+            expect(store.gifts.map((gift) => gift.id)).toEqual([ 2, 3 ]);
+            expect(store.isLoadingGiftData).toBe(false);
+        });
+
+        it("applies the updated disabled bonuses config when gifts are reloaded", async() => {
+            const store = useGiftsStore();
+            vi.mocked(giftReqs.getPlayerBonusesReq).mockResolvedValue([
+                { id: 1, group_key: "bthd17", stage: "issued", activatable: true },
+            ]);
+
+            await loadGiftsData();
+            expect(store.gifts).toHaveLength(1);
+
+            vi.mocked(configReqs.loadDisabledBonusesConfigReq).mockResolvedValue({ group_keys: [ "bthd17" ] });
+            await loadGiftsData();
+
+            expect(store.gifts).toEqual([]);
+            expect(store.isLoadingGiftData).toBe(false);
+        });
+
+        it("clears the loading flag and keeps existing gifts when the bonuses request fails", async () => {
+            const store = useGiftsStore();
+            const previousGifts = store.gifts;
+            const error = new Error("Bonuses request failed");
+            vi.mocked(giftReqs.getPlayerBonusesReq).mockRejectedValueOnce(error);
+
+            await expect(loadGiftsData()).rejects.toThrow(error);
+
+            expect(store.gifts).toBe(previousGifts);
+            expect(store.isLoadingGiftData).toBe(false);
+        });
+
         it("adds type='bonus' to each IGift and filters out disabled 'issued' gifts", async () => {
             const store = useGiftsStore();
 
-            store.disabledBonuses = [ "grpX" ];
+            vi.mocked(configReqs.loadDisabledBonusesConfigReq).mockResolvedValue({ group_keys: [ "grpX" ] });
 
             const rawBonuses = [
                 {
