@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
-import { parseCmsDate, timeFromNowUTC } from "../../src/helpers/formatDate";
+import { getEventStatus, parseCmsDate, timeFromNowUTC } from "../../src/helpers/formatDate";
 
 describe("timeFromNowUTC", () => {
     afterEach(() => {
@@ -35,5 +35,16 @@ describe("parseCmsDate", () => {
 
     test("rejects an invalid strict date", () => {
         expect(parseCmsDate("31/02/2026 10:00").isValid()).toBe(false);
+    });
+});
+
+describe("getEventStatus", () => {
+    test("keeps the existing date-only active state", () => {
+        vi.useFakeTimers();
+        vi.setSystemTime(new Date("2026-08-21T12:00:00Z"));
+
+        expect(getEventStatus("21/08/2026", "22/08/2026")).toBe("active");
+
+        vi.useRealTimers();
     });
 });
