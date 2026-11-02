@@ -1,3 +1,14 @@
+## [1.123.0](https://github.com/upstars-global/unity-core-modules/compare/v1.122.0...v1.123.0) (2026-10-29)
+
+### 🚀 Features
+
+* UN-3294 DS. Containers ([#415](https://github.com/upstars-global/unity-core-modules/issues/415))
+ ([4bf7b73](https://github.com/upstars-global/unity-core-modules/commit/4bf7b736dc99c0cbf02f720ffa8fb5e0892d5c4d))
+
+
+
+    * feat: UN-3294 DS. Containers
+
 ## [1.122.0](https://github.com/upstars-global/unity-core-modules/compare/v1.121.0...v1.122.0) (2026-10-20)
 
 ### 🚀 Features
