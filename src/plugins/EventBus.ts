@@ -31,6 +31,7 @@ class EventBusWrapper {
 export const EventBus = new EventBusWrapper();
 
 export const BUS_EVENTS = {
+    ACTIVITY_HUB_TIMER_END: "activity-hub.timer.end",
     GAME_FRAME_LOADED: "game.frame.loaded",
     ADVENTURE_CALENDAR_SET_INDEX: "adventure.calendar.set.index",
     CHAT_SUPPORT_TOGGLE: "chat.toggle",

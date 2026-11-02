@@ -1,8 +1,12 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { EventBus, eventBusPlugin } from "../../src/plugins/EventBus";
+import { BUS_EVENTS, EventBus, eventBusPlugin } from "../../src/plugins/EventBus";
 
 describe("EventBus", () => {
+    it("exposes the activity hub timer event", () => {
+        expect(BUS_EVENTS.ACTIVITY_HUB_TIMER_END).toBe("activity-hub.timer.end");
+    });
+
     it("$on + $emit call listener with args", () => {
         const event = `unit.event.${ Date.now() }`;
         const listener = vi.fn();
