@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { afterEach, describe, expect, test, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
 import { parseCmsDate, timeFromNowUTC } from "../../src/helpers/formatDate";
 
@@ -21,6 +21,9 @@ describe("timeFromNowUTC", () => {
 });
 
 describe("parseCmsDate", () => {
+    beforeEach(() => vi.stubEnv("TZ", "America/New_York"));
+    afterEach(() => vi.unstubAllEnvs());
+
     test.each([
         [ "21/08/2026 10:00", "2026-08-21T10:00:00.000Z" ],
         [ "21/08/2026", "2026-08-21T00:00:00.000Z" ],

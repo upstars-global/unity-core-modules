@@ -10,6 +10,8 @@ import weekday from "dayjs/plugin/weekday";
 
 import { STATUS_PROMO } from "../models/enums/tournaments";
 
+const CMS_DATE_FORMATS = [ "DD/MM/YYYY HH:mm", "DD/MM/YYYY" ];
+
 dayjs.extend(utcPlugin);
 dayjs.extend(weekday);
 dayjs.extend(relativeTime);
@@ -52,7 +54,7 @@ export function timeFromNowUTC(date: ConfigType, format = "DD/MM/YYYY HH:mm:ss")
 
 export function parseCmsDate(date: ConfigType) {
     return typeof date === "string"
-        ? dayjs.utc(date, date.includes(" ") ? "DD/MM/YYYY HH:mm" : "DD/MM/YYYY", true)
+        ? dayjs(date, CMS_DATE_FORMATS, true).utc(true)
         : dayjs.utc(date ?? null);
 }
 
