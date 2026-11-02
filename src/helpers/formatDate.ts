@@ -56,17 +56,17 @@ export function parseCmsDate(date: ConfigType) {
         : dayjs.utc(date ?? null);
 }
 
-export function getEventStatus(startAt: ConfigType, endAt: ConfigType, currentTime: ConfigType = new Date()) {
-    const formattedStart = parseCmsDate(startAt);
-    const formattedEnd = parseCmsDate(endAt);
+export function getEventStatus(startAt: ConfigType, endAt: ConfigType) {
+    const formattedStart = dayjs(startAt, "DD/MM/YYYY");
+    const formattedEnd = dayjs(endAt, "DD/MM/YYYY");
 
     if (!formattedStart.isValid() || !formattedEnd.isValid()) {
         return STATUS_PROMO.FUTURE;
     }
 
-    const now = dayjs.utc(currentTime);
+    const now = dayjs();
 
-    if (now.isAfter(formattedEnd, "minute")) {
+    if (now.isAfter(formattedEnd)) {
         return STATUS_PROMO.ARCHIVE;
     }
     if (now.isBefore(formattedStart)) {
