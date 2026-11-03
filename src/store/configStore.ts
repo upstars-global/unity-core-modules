@@ -1,12 +1,14 @@
 import { defineStore } from "pinia";
-import { ref, shallowRef } from "vue";
+import {computed, ref, shallowRef} from "vue";
 
-import { type IBettingConfig } from "../models/configs";
+import {type IBettingConfig, IGameSearchMetaTagsConfig} from "../models/configs";
 import { IDisabledGamesProvider } from "../models/game";
 import type { IVipProgramConfig, Level, Rewards, VipLevelSave } from "../models/levels";
 import { type IActiveSeason } from "../models/user";
 import { IWelcomeOfferConfigDTO } from "../services/api/DTO/configsDTO";
 import { type IVipProgramConfigDTO } from "../services/api/DTO/levels";
+import { useUserInfo } from "./user/userInfo";
+import { useUserStatuses } from "./user/userStatuses";
 
 export const useConfigStore = defineStore("configStore", () => {
     const gamesPageLimit = ref<number>(40);
@@ -16,6 +18,27 @@ export const useConfigStore = defineStore("configStore", () => {
     const welcomeOfferConfig = ref<IWelcomeOfferConfigDTO | null>(null);
     const activeSeason = ref<IActiveSeason | null>();
     const isLoadingActiveSeason = ref<boolean>(false);
+    const searchMetaTagsConfig = ref<IGameSearchMetaTagsConfig>();
+
+    const getCurrentMetaTags = computed<string[]>(() => {
+        const config = searchMetaTagsConfig.value;
+
+        if (!config) {
+            return [];
+        }
+
+        if (!useUserInfo().getIsLogged) {
+            return config.noReg;
+        }
+
+        const group = useUserStatuses().getUserGroups.find((id) =>
+            Object.prototype.hasOwnProperty.call(config, String(id)),
+        );
+
+        const groupMetaTags = group === undefined ? undefined : config[String(group)];
+
+        return groupMetaTags?.length ? groupMetaTags : config.reg;
+    });
 
     function setGamesPageLimit(limit: number) {
         gamesPageLimit.value = limit;
@@ -68,6 +91,11 @@ export const useConfigStore = defineStore("configStore", () => {
     function setLoadingActiveSeason(data: boolean) {
         isLoadingActiveSeason.value = data;
     }
+    function setSearchMetaTagsConfig(data: IGameSearchMetaTagsConfig) {
+        searchMetaTagsConfig.value = data;
+    }
+
+
 
     return {
         gamesPageLimit,
@@ -84,6 +112,9 @@ export const useConfigStore = defineStore("configStore", () => {
         isLoadingActiveSeason,
         setActiveSeason,
         setLoadingActiveSeason,
+        searchMetaTagsConfig,
+        setSearchMetaTagsConfig,
+        getCurrentMetaTags,
     };
 },
 {

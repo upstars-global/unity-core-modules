@@ -30,3 +30,8 @@ export interface IGamesAliasesConfig {
     enabled?: boolean;
     aliases: IGamesAlias[];
 }
+
+export interface IGameSearchMetaTagsConfig extends Record<string, string[]> {
+    noReg: string[];
+    reg: string[];
+}
