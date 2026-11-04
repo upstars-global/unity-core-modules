@@ -71,6 +71,7 @@ describe("useConfigStore", () => {
         const user = useUserInfo();
 
         store.setSearchMetaTagsConfig({
+            enableConfig: true,
             noReg: [ "guest" ],
             reg: [ "registered" ],
             "42": [ "group 42" ],
@@ -97,6 +98,18 @@ describe("useConfigStore", () => {
 
         user.toggleUserIsLogged(false);
         expect(store.getCurrentMetaTags).toEqual([ "guest" ]);
+    });
+
+    it("reports whether the search meta tags config is enabled", () => {
+        const store = useConfigStore();
+
+        expect(store.isSearchMetaTagsConfigEnabled).toBe(false);
+
+        store.setSearchMetaTagsConfig({ enableConfig: true, noReg: [], reg: [] });
+        expect(store.isSearchMetaTagsConfigEnabled).toBe(true);
+
+        store.setSearchMetaTagsConfig({ enableConfig: false, noReg: [], reg: [] });
+        expect(store.isSearchMetaTagsConfigEnabled).toBe(false);
     });
 
     it("maps vip program config from DTO format", () => {

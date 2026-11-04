@@ -19,6 +19,7 @@ export const useConfigStore = defineStore("configStore", () => {
     const activeSeason = ref<IActiveSeason | null>();
     const isLoadingActiveSeason = ref<boolean>(false);
     const searchMetaTagsConfig = ref<IGameSearchMetaTagsConfig>();
+    const isSearchMetaTagsConfigEnabled = computed(() => searchMetaTagsConfig.value?.enableConfig ?? false);
 
     const getCurrentMetaTags = computed<string[]>(() => {
         const config = searchMetaTagsConfig.value;
@@ -37,7 +38,7 @@ export const useConfigStore = defineStore("configStore", () => {
 
         const groupMetaTags = group === undefined ? undefined : config[String(group)];
 
-        return groupMetaTags?.length ? groupMetaTags : config.reg;
+        return Array.isArray(groupMetaTags) && groupMetaTags.length ? groupMetaTags : config.reg;
     });
 
     function setGamesPageLimit(limit: number) {
@@ -114,6 +115,7 @@ export const useConfigStore = defineStore("configStore", () => {
         setLoadingActiveSeason,
         searchMetaTagsConfig,
         setSearchMetaTagsConfig,
+        isSearchMetaTagsConfigEnabled,
         getCurrentMetaTags,
     };
 },
