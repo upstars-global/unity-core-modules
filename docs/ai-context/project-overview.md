@@ -5,7 +5,7 @@ This repository contains shared TypeScript modules for Vue 3 / Pinia frontend pr
 ## Runtime and tooling
 
 - Package manager: Yarn.
-- Node.js: `>=22.23.4`.
+- Node.js: `>=26.13.0`.
 - Module type: ESM (`"type": "module"`).
 - TypeScript: `strict`, `noImplicitAny`, `moduleResolution: "Bundler"`.
 - Build: Vite library build.
