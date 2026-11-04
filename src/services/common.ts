@@ -107,11 +107,11 @@ export async function loadCurrencies() {
     }
 }
 
-export async function loadProjectInfo(): Promise<void> {
+export async function loadProjectInfo({ reload = false } = {}): Promise<void> {
     const commonStore = useCommon();
     const { infoProject } = storeToRefs(commonStore);
 
-    if (isExistData(infoProject.value)) {
+    if (!reload && isExistData(infoProject.value)) {
         return;
     }
 
