@@ -1,3 +1,118 @@
+## [1.123.0](https://github.com/upstars-global/unity-core-modules/compare/v1.122.0...v1.123.0) (2026-10-29)
+
+### 🚀 Features
+
+* UN-3294 DS. Containers ([#415](https://github.com/upstars-global/unity-core-modules/issues/415))
+ ([4bf7b73](https://github.com/upstars-global/unity-core-modules/commit/4bf7b736dc99c0cbf02f720ffa8fb5e0892d5c4d))
+
+
+
+    * feat: UN-3294 DS. Containers
+
+## [1.122.0](https://github.com/upstars-global/unity-core-modules/compare/v1.121.0...v1.122.0) (2026-10-20)
+
+### 🚀 Features
+
+* **UN-3242:** add days to banners config ([#411](https://github.com/upstars-global/unity-core-modules/issues/411))
+ ([a48156f](https://github.com/upstars-global/unity-core-modules/commit/a48156f089d298dd4001f7d88bdbc83f363cbb59))
+
+
+
+    * feat(UN-3242): add days to banners config
+
+    * feat: made start and end liveTime banner data optional
+
+## [1.121.0](https://github.com/upstars-global/unity-core-modules/compare/v1.120.1...v1.121.0) (2026-10-16)
+
+### 🚀 Features
+
+* **UN-3332:** do not load wheel configs if they are exist ([#412](https://github.com/upstars-global/unity-core-modules/issues/412))
+ ([1455dcd](https://github.com/upstars-global/unity-core-modules/commit/1455dcda63b9e8a11f69f74e071fe2dfb4ffc8df))
+
+## [1.120.1](https://github.com/upstars-global/unity-core-modules/compare/v1.120.0...v1.120.1) (2026-10-15)
+
+### 🔨 Refactoring
+
+* UN-3230 remove isCashboxOnboardDone
+ ([4cf584e](https://github.com/upstars-global/unity-core-modules/commit/4cf584e80644f0ff96ebbdddc900fd7c61f04844))
+
+## [1.120.0](https://github.com/upstars-global/unity-core-modules/compare/v1.119.1...v1.120.0) (2026-10-12)
+
+### 🚀 Features
+
+* UN-3299 masking payments ([#410](https://github.com/upstars-global/unity-core-modules/issues/410))
+ ([c7fb147](https://github.com/upstars-global/unity-core-modules/commit/c7fb147652b2c7fac9b7caf771744c0db353bedf))
+
+## [1.119.1](https://github.com/upstars-global/unity-core-modules/compare/v1.119.0...v1.119.1) (2026-10-07)
+
+### 🐛 Bug Fixes
+
+* UN-3234 fix unexpected redirect for el locale ([#409](https://github.com/upstars-global/unity-core-modules/issues/409))
+ ([4d3c4b5](https://github.com/upstars-global/unity-core-modules/commit/4d3c4b5fc945a5e85c46ca197247807f0c4ef942))
+
+
+
+    refactor: UN-3234 module rebuild
+
+## [1.119.0](https://github.com/upstars-global/unity-core-modules/compare/v1.118.1...v1.119.0) (2026-10-06)
+
+### 🚀 Features
+
+* Add Smartico Inbox API, types, controller and store ([#399](https://github.com/upstars-global/unity-core-modules/issues/399))
+ ([f732928](https://github.com/upstars-global/unity-core-modules/commit/f732928a3d34797752e60454f5e0577bce98e71e))
+
+
+
+    * feat: Add Smartico Inbox API types and store
+
+    * feat: Add Smartico Inbox API, types, controller and store
+
+    * fix: review comments
+
+    * feat: improve logic
+
+    * refactor: move logic from component to controller
+
+    * feat: add time from now utc formatter
+
+    * feat: add notification sidebar state to ui store
+
+## [1.118.0](https://github.com/upstars-global/unity-core-modules/compare/v1.117.4...v1.118.0) (2026-10-05)
+
+### 🚀 Features
+
+* (ai-kit): add /unity-ai:graph command and graph-ui script ([#407](https://github.com/upstars-global/unity-core-modules/issues/407))
+ ([3cc9b82](https://github.com/upstars-global/unity-core-modules/commit/3cc9b8209ac292ea672935878c45f0051e5d6978))
+
+## [1.117.4](https://github.com/upstars-global/unity-core-modules/compare/v1.117.3...v1.117.4) (2026-10-05)
+
+### 🔧 Maintenance
+
+* add codebase-memory-mcp graph UI script ([#406](https://github.com/upstars-global/unity-core-modules/issues/406))
+ ([9dc031f](https://github.com/upstars-global/unity-core-modules/commit/9dc031fc23c55aefa1ff3d11872268b1e1acbf35))
+
+
+
+    chore(dev): add codebase-memory-mcp graph UI script
+
+## [1.117.3](https://github.com/upstars-global/unity-core-modules/compare/v1.117.2...v1.117.3) (2026-09-28)
+
+### 🔧 Maintenance
+
+* (UN-3188) add diBonusesEnabled field ([#402](https://github.com/upstars-global/unity-core-modules/issues/402))
+ ([3146be5](https://github.com/upstars-global/unity-core-modules/commit/3146be5703b2322d0cb542452b7099b01b2ec6fc))
+
+
+
+    UN-3188 add diBonusesEnabled field
+
+## [1.117.2](https://github.com/upstars-global/unity-core-modules/compare/v1.117.1...v1.117.2) (2026-09-22)
+
+### 🔨 Refactoring
+
+* Удалить из кор модуля и проектов запрос loadMetaSEOReq ([#401](https://github.com/upstars-global/unity-core-modules/issues/401))
+ ([d70ecc2](https://github.com/upstars-global/unity-core-modules/commit/d70ecc2e4f20e4014339335bb61ea786d89d3f85))
+
 ## [1.117.1](https://github.com/upstars-global/unity-core-modules/compare/v1.117.0...v1.117.1) (2026-09-14)
 
 ### 🐛 Bug Fixes

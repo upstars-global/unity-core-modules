@@ -5,17 +5,13 @@ import { computed, reactive, ref } from "vue";
 import type { IPlayerFieldsInfo } from "../../src/models/common";
 import { EnumFormFields } from "../../src/models/common";
 import * as playerRequests from "../../src/services/api/requests/player";
+import { updateLocale } from "../../src/services/localization";
 import {
     checkUserState,
     loadPlayerFieldsInfo,
+    loadUserProfile,
     sendFreshChatRestoreId,
-    userSetToGroupForAbTest,
 } from "../../src/services/user";
-
-vi.mock("@config/groupAB", () => ({
-    ID_GROUP_FOR_PAIRED_ID: 100,
-    ID_GROUP_FOR_UNPAIRED_ID: 101,
-}));
 
 const changeUserToGroupMock = vi.fn();
 const useUserInfoMock = {
@@ -85,6 +81,16 @@ vi.mock("../../src/services/api/requests/player", () => ({
     sendFreshChatRestoreIdReq: vi.fn(),
     sendUserDataReq: vi.fn(),
     loadUserProfileReq: vi.fn(),
+    loadAvailableBonusesReq: vi.fn(),
+    loadFreshChatRestoreIdReq: vi.fn(),
+}));
+
+vi.mock("../../src/services/localization", () => ({
+    updateLocale: vi.fn(),
+}));
+
+vi.mock("../../src/controllers/CustomerIO", () => ({
+    cioIdentifyUser: vi.fn(),
 }));
 
 vi.mock("../../src/controllers/Logger", () => ({
@@ -107,32 +113,6 @@ describe("user service helpers", () => {
         getFieldsTypeMock.mockReset();
         vi.mocked(playerRequests.loadPlayerFieldsInfoRequest).mockResolvedValue(undefined as unknown as IPlayerFieldsInfo);
         vi.mocked(playerRequests.sendUserDataReq).mockResolvedValue({ status: 200 } as never);
-    });
-
-    describe("userSetToGroupForAbTest", () => {
-        it("does nothing when user already in AB group", async () => {
-            userGroups = [ 100 ];
-
-            await userSetToGroupForAbTest();
-
-            expect(playerRequests.changePlayerGroup).not.toHaveBeenCalled();
-        });
-
-        it("assigns paired group for even user id", async () => {
-            userInfoRef.value = { ...userInfoRef.value, id: 4 };
-
-            await userSetToGroupForAbTest();
-
-            expect(playerRequests.changePlayerGroup).toHaveBeenCalledWith(100, null);
-        });
-
-        it("assigns unpaired group for odd user id", async () => {
-            userInfoRef.value = { ...userInfoRef.value, id: 5 };
-
-            await userSetToGroupForAbTest();
-
-            expect(playerRequests.changePlayerGroup).toHaveBeenCalledWith(101, null);
-        });
     });
 
     describe("loadPlayerFieldsInfo", () => {
@@ -210,6 +190,40 @@ describe("user service helpers", () => {
             await checkUserState();
 
             expect(playerRequests.sendUserDataReq).not.toHaveBeenCalled();
+        });
+    });
+
+    describe("loadUserProfile", () => {
+        const mockProfileLanguage = (language: string) => {
+            vi.mocked(playerRequests.loadUserProfileReq).mockResolvedValue({
+                data: { ...defaultUser(), language },
+            } as never);
+        };
+
+        it("switches to the profile locale when it is available", async () => {
+            mockProfileLanguage("en-IE");
+
+            await loadUserProfile({ reload: true });
+
+            expect(updateLocale).toHaveBeenCalledWith(expect.objectContaining({ lang: "en-IE" }));
+            expect(useUserInfoMock.toggleUserIsLogged).toHaveBeenCalledWith(true);
+        });
+
+        it("keeps the current locale when the profile locale is not available", async () => {
+            mockProfileLanguage("el");
+
+            await loadUserProfile({ reload: true });
+
+            expect(updateLocale).not.toHaveBeenCalled();
+            expect(useUserInfoMock.toggleUserIsLogged).toHaveBeenCalledWith(true);
+        });
+
+        it("does not update the locale when the profile locale is already active", async () => {
+            mockProfileLanguage("en");
+
+            await loadUserProfile({ reload: true });
+
+            expect(updateLocale).not.toHaveBeenCalled();
         });
     });
 });

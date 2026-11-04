@@ -1,9 +1,9 @@
-// @ts-expect-error -- TS2307: Cannot find module '@config/groupAB' or its corresponding type declarations.
-import { ID_GROUP_FOR_PAIRED_ID, ID_GROUP_FOR_UNPAIRED_ID } from "@config/groupAB";
 // @ts-expect-error -- TS2307: Cannot find module '@config/user-statuses' or its corresponding type declarations.
 import { IRON_STATUS } from "@config/user-statuses";
 // @ts-expect-error -- TS2307: Cannot find module '@theme/configs/constantsFreshChat' or its corresponding type declarations.
 import { PROJECT } from "@theme/configs/constantsFreshChat";
+// @ts-expect-error -- TS2307: Cannot find module '@theme/configs/constsLocales' or its corresponding type declarations.
+import { AVAILABLE_LOCALES } from "@theme/configs/constsLocales";
 // @ts-expect-error -- TS2307: Cannot find module '@theme/configs/stateFieldConfig' or its corresponding type declarations.
 import { getStateByCounty } from "@theme/configs/stateFieldConfig";
 import { storeToRefs } from "pinia";
@@ -78,21 +78,6 @@ import {
 } from "./api/requests/userLimits";
 import { loadDepositGiftsData } from "./gifts";
 import { updateLocale } from "./localization";
-
-export async function userSetToGroupForAbTest() {
-    const userInfo = useUserInfo();
-    const userStatuses = useUserStatuses();
-
-    const isUserIncludingInAB = userStatuses.getUserGroups.some((id) => {
-        return id === ID_GROUP_FOR_PAIRED_ID || id === ID_GROUP_FOR_UNPAIRED_ID;
-    });
-    if (isUserIncludingInAB) {
-        return;
-    }
-    const groupForAdding = userInfo.info.id % 2 ? ID_GROUP_FOR_UNPAIRED_ID : ID_GROUP_FOR_PAIRED_ID;
-
-    await changeUserToGroup(groupForAdding);
-}
 
 export async function loadPlayerFieldsInfo({ reload } = { reload: false }): Promise<IPlayerFieldsInfo | undefined> {
     const commonStore = useCommon();
@@ -580,7 +565,7 @@ export async function loadUserProfile({ reload = false, route }: { reload?: bool
 
             const responseLang = response.data.language;
 
-            if (responseLang !== multilang.getUserLocale && response.data.id) {
+            if (responseLang !== multilang.getUserLocale && AVAILABLE_LOCALES[responseLang] && response.data.id) {
                 // @ts-expect-error -- TS2353: Object literal may only specify known properties, and 'route' does not exist in type '{ lang: string; }'.
                 updateLocale({ lang: responseLang, route });
             }

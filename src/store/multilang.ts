@@ -1,5 +1,5 @@
 // @ts-expect-error -- TS2307: Cannot find module '@theme/configs/constsLocales' or its corresponding type declarations.
-import { DEFAULT_COUNTRY, DEFAULT_LOCALE_BY_COUNTRY } from "@theme/configs/constsLocales";
+import { AVAILABLE_LOCALES, DEFAULT_COUNTRY, DEFAULT_LOCALE_BY_COUNTRY } from "@theme/configs/constsLocales";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
@@ -34,7 +34,10 @@ export const useMultilangStore = defineStore("multilang", () => {
     });
 
     const getUserLocale = computed(() => {
-        return getLocale() || locale.value || getDefaultLang.value;
+        const cookieLocale = getLocale();
+        const activeCookieLocale = cookieLocale && AVAILABLE_LOCALES[cookieLocale] ? cookieLocale : "";
+
+        return activeCookieLocale || locale.value || getDefaultLang.value;
     });
 
     const getUserGeo = computed(() => {
@@ -59,7 +62,6 @@ export const useMultilangStore = defineStore("multilang", () => {
         geo,
         locale,
         country,
-
         getDefaultLang,
         getUserLocale,
         getUserGeo,

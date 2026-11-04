@@ -29,6 +29,7 @@ review is a separate item, waiting on that job's own implementation.
 | `sync-consumers` | `/unity-ai:sync [version]` | Points both applications at a new library release — pin and lockfile |
 | `query-docs` | `/unity-ai:how <question>` | Answers from the knowledge page when one is fresh, from the source otherwise |
 | `update-docs` | `/unity-ai:docs` | Writes the pages that carry invariants, gotchas and why — not a retelling of the code |
+| `graph` command | `/unity-ai:graph` | Indexes the repository with codebase-memory-mcp and opens the code graph UI |
 
 Every skill has a command, and the command is the supported way in: it says exactly which skill
 runs, so nothing depends on guessing intent from a phrase. That is also why the `description`
