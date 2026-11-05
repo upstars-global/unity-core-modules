@@ -9,7 +9,7 @@ import {
 } from "@theme/configs/stagConsts";
 import { storeToRefs } from "pinia";
 
-import { getAIReferrer, getDocumentReferrer } from "../helpers/referrerHelper";
+import { getAIReferrer, getDocumentReferrer, getReferrerHostname } from "../helpers/referrerHelper";
 import { isServer } from "../helpers/ssrHelpers";
 import type { IStagByReferName } from "../models/configs";
 import { loadStagByReferName } from "../services/common";
@@ -35,8 +35,14 @@ const expires = 30 * 86400; // 30 days
 const stagHoldExpires = 8 * 3600; // 8 hours
 
 function getReferSearchEnginesMatch(referrer: string): string {
-    // @ts-expect-error -- TS2322: Type '{}' is not assignable to type 'string'.
-    return Object.values(REFERRER).find((refItem) => referrer.includes(refItem as string)) || "";
+    if (referrer === REFERRER.AI) {
+        return referrer;
+    }
+
+    const hostname = getReferrerHostname(referrer);
+    const searchServices = (Object.values(REFERRER) as string[]).filter((refItem) => refItem !== REFERRER.AI);
+
+    return searchServices.find((refItem) => hostname.includes(refItem)) || "";
 }
 
 function getStagByReferrerName({ referrer, stagsByReferName, path, country } = {} as IGetStagParams): string {
