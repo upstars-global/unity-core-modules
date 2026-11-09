@@ -9,6 +9,7 @@ import {
     AcceptGamesVersion,
     IGameCollection,
     IGameFilterResponse,
+    IGamesProvidersFilter,
     IJackpots,
     IPlayedGame,
     IRandomGameFilter,
@@ -91,9 +92,15 @@ export async function loadGamesDataByFilter<T>(config: Record<string, unknown>):
     }
 }
 
-export async function loadGamesProvidersReq() {
+export async function loadGamesProvidersReq(filter?: IGamesProvidersFilter) {
     try {
-        const { data } = await http().get<IGamesProvider[]>("/api/games/providers");
+        const params = new URLSearchParams();
+        filter?.category_identifiers?.forEach((identifier) => params.append("category_identifiers[]", identifier));
+        if (filter?.device) {
+            params.append("device", filter.device);
+        }
+        const query = params.toString();
+        const { data } = await http().get<IGamesProvider[]>(`/api/games/providers${ query ? `?${ query }` : "" }`);
         return data;
     } catch (error) {
         log.error("LOAD_GAMES_PROVIDERS_ERROR", error);
