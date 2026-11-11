@@ -28,20 +28,20 @@
   },
   "private": true,
   "dependencies": {
-    "@smartico/public-api": "0.0.447",
+    "@smartico/public-api": "0.0.450",
     "buffer": "^6.0.3",
     "centrifuge": "^5.8.0",
     "dayjs": "^1.11.23",
-    "parse5": "^8.1.0",
+    "parse5": "^8.1.1",
     "pinia": "^3.0.4",
     "recaptcha-v3": "^1.11.3",
     "tiny-emitter": "^2.1.0",
     "typescript": "^5.9.3",
     "ua-parser-js": "^2.0.10",
     "uuid": "^14.0.3",
-    "vue": "^3.5.44",
+    "vue": "^3.5.45",
     "vue-i18n": "^9.14.5",
-    "vue-router": "^5.4.0"
+    "vue-router": "^5.5.0"
   },
   "devDependencies": {
     "@octokit/auth-app": "^8.3.1",
