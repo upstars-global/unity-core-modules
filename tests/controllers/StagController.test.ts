@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@theme/configs/stagConsts", async () => {
     const actual = await vi.importActual<typeof import("../mocks/theme/configs/stagConsts")>("../mocks/theme/configs/stagConsts");
@@ -6,13 +6,42 @@ vi.mock("@theme/configs/stagConsts", async () => {
     return {
         ...actual,
         STAG_PARTNER_COOKIE: "partner-stag",
+        AFFB_ID_COOKIE: "affb_id",
+        AFFB_ID_NEW_PARTNERS: 222,
     };
 });
+
+vi.mock("../../src/helpers/ssrHelpers", () => ({
+    isServer: false,
+}));
+
+vi.mock("../../src/helpers/referrerHelper", async () => {
+    const actual = await vi.importActual<typeof import("../../src/helpers/referrerHelper")>(
+        "../../src/helpers/referrerHelper",
+    );
+
+    return {
+        ...actual,
+        getAIReferrer: vi.fn(),
+        getDocumentReferrer: vi.fn(),
+    };
+});
+
+vi.mock("../../src/controllers/Logger", () => ({
+    log: {
+        error: vi.fn(),
+    },
+}));
+
+vi.mock("../../src/services/common", () => ({
+    loadStagByReferName: vi.fn().mockResolvedValue(undefined),
+}));
 
 import { DEFAULT_STAGS_COUNTRY_REFER, REFERRER } from "@theme/configs/stagConsts";
 
 import { CookieController } from "../../src/controllers/CookieController";
 import { StagController } from "../../src/controllers/StagController";
+import { getAIReferrer, getDocumentReferrer } from "../../src/helpers/referrerHelper";
 import { COUNTRIES } from "../mocks/theme/configs/constsLocales";
 
 describe("StagController.getStagByReferrerName function", () => {
@@ -163,6 +192,172 @@ describe("StagController.getStagByReferrerName function", () => {
         });
 
         expect(result).toBe("test-stag-ai-page");
+    });
+
+    it.each([
+        "https://www.thailand-travel.com/",
+        "https://dubai-guide.com/",
+        "https://mail.example.com/",
+        "https://example.com/?q=ai&utm=ai",
+        "https://perplexity.ai/",
+        "https://ai.example.com/",
+    ])("should not treat '%s' as AI referrer", (referrer) => {
+        const result = StagController.getStagByReferrerName({
+            referrer,
+            stagsByReferName: undefined,
+            path: "/test-path",
+            country: "CA",
+        });
+
+        expect(result).toBe("");
+    });
+
+    it.each([
+        "https://example.com/?q=google",
+        "https://example.com/bing-review",
+    ])("should ignore path and query of '%s'", (referrer) => {
+        const result = StagController.getStagByReferrerName({
+            referrer,
+            stagsByReferName: undefined,
+            path: "/test-path",
+            country: "CA",
+        });
+
+        expect(result).toBe("");
+    });
+
+    it.each([
+        [ "https://www.google.co.uk/", REFERRER.GOOGLE ],
+        [ "https://search.yahoo.com/search?p=test", REFERRER.YAHOO ],
+        [ "https://www.bing.com/", REFERRER.BING ],
+    ])("should match search engine by hostname of '%s'", (referrer, engine) => {
+        const result = StagController.getStagByReferrerName({
+            referrer,
+            stagsByReferName: undefined,
+            path: "/test-path",
+            country: "CA",
+        });
+
+        expect(result).toBe(DEFAULT_STAGS_COUNTRY_REFER[COUNTRIES.CANADA][engine]);
+    });
+
+    it("should return empty string for referrer that is not a valid URL and has no search engine", () => {
+        const result = StagController.getStagByReferrerName({
+            referrer: "not a url",
+            stagsByReferName: undefined,
+            path: "/test-path",
+            country: "CA",
+        });
+
+        expect(result).toBe("");
+    });
+
+    it("should match search engine in referrer without protocol", () => {
+        const result = StagController.getStagByReferrerName({
+            referrer: "www.google.com",
+            stagsByReferName: undefined,
+            path: "/test-path",
+            country: "CA",
+        });
+
+        expect(result).toBe(DEFAULT_STAGS_COUNTRY_REFER[COUNTRIES.CANADA][REFERRER.GOOGLE]);
+    });
+});
+
+describe("StagController.init affb_id", () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+        vi.stubGlobal("window", { location: { href: "https://site.test/page" } });
+        vi.spyOn(CookieController, "get").mockImplementation((name: string) => {
+            // existing stag skips initStag, so only initAffbId is exercised
+            return name === "partner-stag" ? "existing-stag_1" : undefined;
+        });
+    });
+
+    afterEach(() => {
+        vi.unstubAllGlobals();
+        vi.restoreAllMocks();
+    });
+
+    it.each([
+        [ "", 111 ],
+        [ "https://www.thailand-travel.com/", 111 ],
+        [ "https://www.google.com/search?q=test", 222 ],
+    ])("should set affb_id for referrer '%s' without throwing", (referrer, affbId) => {
+        vi.mocked(getAIReferrer).mockReturnValue(undefined);
+        vi.mocked(getDocumentReferrer).mockReturnValue(referrer);
+        const setSpy = vi.spyOn(CookieController, "set").mockImplementation(() => undefined);
+
+        expect(() => StagController.init()).not.toThrow();
+        expect(setSpy).toHaveBeenCalledWith("affb_id", affbId, { expires: 30 * 86400, path: "/" });
+    });
+
+    it("should set new partners affb_id for AI traffic", () => {
+        vi.mocked(getAIReferrer).mockReturnValue("chatgpt");
+        vi.mocked(getDocumentReferrer).mockReturnValue("https://www.thailand-travel.com/");
+        const setSpy = vi.spyOn(CookieController, "set").mockImplementation(() => undefined);
+
+        StagController.init();
+
+        expect(setSpy).toHaveBeenCalledWith("affb_id", 222, { expires: 30 * 86400, path: "/" });
+    });
+});
+
+describe("StagController.init stag", () => {
+    const flushPromises = () => new Promise((resolve) => setTimeout(resolve));
+
+    beforeEach(() => {
+        vi.clearAllMocks();
+        vi.stubGlobal("window", { location: { href: "https://site.test/page" } });
+        // no stag and affb_id cookies yet
+        vi.spyOn(CookieController, "get").mockReturnValue(undefined);
+    });
+
+    afterEach(() => {
+        vi.unstubAllGlobals();
+        vi.restoreAllMocks();
+    });
+
+    it("should set AI stag when getAIReferrer detects AI traffic", async () => {
+        vi.mocked(getAIReferrer).mockReturnValue("chatgpt");
+        vi.mocked(getDocumentReferrer).mockReturnValue("https://chatgpt.com/");
+        const setSpy = vi.spyOn(CookieController, "set").mockImplementation(() => undefined);
+
+        StagController.init();
+        await flushPromises();
+
+        expect(setSpy).toHaveBeenCalledWith("partner-stag", DEFAULT_STAGS_COUNTRY_REFER.others[REFERRER.AI], {
+            expires: 30 * 86400,
+            path: "/",
+        });
+    });
+
+    it("should set search engine stag by referrer hostname", async () => {
+        vi.mocked(getAIReferrer).mockReturnValue(undefined);
+        vi.mocked(getDocumentReferrer).mockReturnValue("https://www.google.com/search?q=test");
+        const setSpy = vi.spyOn(CookieController, "set").mockImplementation(() => undefined);
+
+        StagController.init();
+        await flushPromises();
+
+        expect(setSpy).toHaveBeenCalledWith("partner-stag", DEFAULT_STAGS_COUNTRY_REFER.others[REFERRER.GOOGLE], {
+            expires: 30 * 86400,
+            path: "/",
+        });
+    });
+
+    it.each([
+        "https://www.thailand-travel.com/",
+        "https://mail.example.com/?utm_source=ai",
+    ])("should not set stag for non AI referrer '%s' containing 'ai'", async (referrer) => {
+        vi.mocked(getAIReferrer).mockReturnValue(undefined);
+        vi.mocked(getDocumentReferrer).mockReturnValue(referrer);
+        const setSpy = vi.spyOn(CookieController, "set").mockImplementation(() => undefined);
+
+        StagController.init();
+        await flushPromises();
+
+        expect(setSpy).not.toHaveBeenCalledWith("partner-stag", expect.anything(), expect.anything());
     });
 });
 
