@@ -23,7 +23,7 @@ export default [
             "n/no-unsupported-features/node-builtins": [
                 "error",
                 {
-                    version: ">=26.13.0",
+                    version: ">=26.13.1",
                     ignores: [ "localStorage" ],
                 },
             ],
