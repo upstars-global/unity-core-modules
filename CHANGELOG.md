@@ -1,3 +1,10 @@
+## [1.123.2](https://github.com/upstars-global/unity-core-modules/compare/v1.123.1...v1.123.2) (2026-11-12)
+
+### 🐛 Bug Fixes
+
+* **UN-3407:** load disabled bonuses config alongside with bonuses ([#416](https://github.com/upstars-global/unity-core-modules/issues/416))
+ ([6456464](https://github.com/upstars-global/unity-core-modules/commit/6456464bc11801cd64f625501fdfecb8c0a38f12))
+
 ## [1.123.1](https://github.com/upstars-global/unity-core-modules/compare/v1.123.0...v1.123.1) (2026-11-10)
 
 ### 🐛 Bug Fixes
