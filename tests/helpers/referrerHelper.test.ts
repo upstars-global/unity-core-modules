@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { CookieController } from "../../src/controllers/CookieController";
-import { getAIReferrer, getDocumentReferrer } from "../../src/helpers/referrerHelper";
+import { getAIReferrer, getDocumentReferrer, getReferrerHostname } from "../../src/helpers/referrerHelper";
 import { REFERRER_COOKIE_NAME } from "../mocks/theme/configs/constsCookies";
 
 vi.mock("../../src/helpers/ssrHelpers", () => ({
@@ -43,6 +43,20 @@ describe("getDocumentReferrer", () => {
 
         expect(CookieController.get).toHaveBeenCalledWith(REFERRER_COOKIE_NAME);
         expect(result).toBe("https://perplexity.ai");
+    });
+});
+
+describe("getReferrerHostname", () => {
+    it("returns hostname without path and query", () => {
+        expect(getReferrerHostname("https://www.google.com/search?q=test#top")).toBe("www.google.com");
+    });
+
+    it.each([
+        "",
+        "www.google.com",
+        "not a url",
+    ])("returns '%s' as is if it is not a valid URL", (referrer) => {
+        expect(getReferrerHostname(referrer)).toBe(referrer);
     });
 });
 

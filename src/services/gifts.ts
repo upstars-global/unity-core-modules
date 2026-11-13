@@ -65,7 +65,10 @@ export async function loadGiftsData(): Promise<IGift[]> {
     giftsStore.setGiftsLoading(true);
 
     try {
-        const data = await getPlayerBonusesReq();
+        const [ data ] = await Promise.all([
+            getPlayerBonusesReq(),
+            loadDisabledBonuses(),
+        ]);
         // @ts-expect-error -- TS2345: Argument of type 'unknown' is not assignable to parameter of type 'IGift[]'.
         const prepareGiftsData = preparingGiftData<IGift>(data, TYPE_GIFT_BONUS);
         const activeGifts = filterActiveGifts(prepareGiftsData, giftsStore.disabledBonuses);

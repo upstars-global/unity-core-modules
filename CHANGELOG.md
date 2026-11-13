@@ -1,3 +1,17 @@
+## [1.123.2](https://github.com/upstars-global/unity-core-modules/compare/v1.123.1...v1.123.2) (2026-11-12)
+
+### 🐛 Bug Fixes
+
+* **UN-3407:** load disabled bonuses config alongside with bonuses ([#416](https://github.com/upstars-global/unity-core-modules/issues/416))
+ ([6456464](https://github.com/upstars-global/unity-core-modules/commit/6456464bc11801cd64f625501fdfecb8c0a38f12))
+
+## [1.123.1](https://github.com/upstars-global/unity-core-modules/compare/v1.123.0...v1.123.1) (2026-11-10)
+
+### 🐛 Bug Fixes
+
+* UNS-73 Хибний AI-стаг, коли в url реферера є ‘ai’
+ ([b3c28ae](https://github.com/upstars-global/unity-core-modules/commit/b3c28ae8fdf646bd83efd404decc5db780ec8dbc))
+
 ## [1.123.0](https://github.com/upstars-global/unity-core-modules/compare/v1.122.0...v1.123.0) (2026-10-29)
 
 ### 🚀 Features
