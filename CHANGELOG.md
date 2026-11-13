@@ -1,3 +1,14 @@
+## [1.124.0](https://github.com/upstars-global/unity-core-modules/compare/v1.123.2...v1.124.0) (2026-11-13)
+
+### 🚀 Features
+
+* UN-3420 add filter params for game provider req ([#421](https://github.com/upstars-global/unity-core-modules/issues/421))
+ ([aecc9c3](https://github.com/upstars-global/unity-core-modules/commit/aecc9c3cbd7c6773f9f84ae75b69ea9305aa9348))
+
+
+
+    feat: UN-3420 add filter params for game provider req
+
 ## [1.123.2](https://github.com/upstars-global/unity-core-modules/compare/v1.123.1...v1.123.2) (2026-11-12)
 
 ### 🐛 Bug Fixes
