@@ -12,7 +12,15 @@ export const getDocumentReferrer = (): string | undefined => {
     return document.referrer || CookieController.get(REFERRER_COOKIE_NAME);
 };
 
-export const getAIReferrer = (queryParams: URLSearchParams): string | undefined => {
+export const getReferrerHostname = (referrer: string): string => {
+    try {
+        return new URL(referrer).hostname;
+    } catch {
+        return referrer;
+    }
+};
+
+export const getAIReferrer =(queryParams: URLSearchParams): string | undefined => {
     const regexUTM: RegExp = /^(chatgpt|openai|gemini|bard|perplexity|claude|copilot|mistral|llama|ai21|grok|deepseek|qwen)(\.com)?(_ai)?$/;
     const regexRef: RegExp = /chat\.openai\.com|chatgpt\.com|perplexity\.ai|claude\.ai|gemini\.google\.com|copilot\.microsoft\.com|chat\.mistral\.ai|x\.ai/;
 
