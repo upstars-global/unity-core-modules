@@ -4,7 +4,7 @@ Shared TypeScript modules for Vue 3 / Pinia frontend projects.
 
 ## Stack
 
-- Node.js `>=22.22.0`.
+- Node.js `>=26.13.1`.
 - TypeScript with `strict` and `noImplicitAny`.
 - Vue 3 and Pinia stores.
 - Vite library build configured for `cjs`, `es`, and `umd` formats.
