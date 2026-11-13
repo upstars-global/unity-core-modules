@@ -1,6 +1,7 @@
-import { afterEach, describe, expect, test, vi } from "vitest";
+import dayjs from "dayjs";
+import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
-import { timeFromNowUTC } from "../../src/helpers/formatDate";
+import { getEventStatus, parseCmsDate, timeFromNowUTC } from "../../src/helpers/formatDate";
 
 describe("timeFromNowUTC", () => {
     afterEach(() => {
@@ -16,5 +17,34 @@ describe("timeFromNowUTC", () => {
 
     test("returns undefined for an invalid date", () => {
         expect(timeFromNowUTC("invalid date")).toBeUndefined();
+    });
+});
+
+describe("parseCmsDate", () => {
+    beforeEach(() => vi.stubEnv("TZ", "America/New_York"));
+    afterEach(() => vi.unstubAllEnvs());
+
+    test.each([
+        [ "21/08/2026 10:00", "2026-08-21T10:00:00.000Z" ],
+        [ "21/08/2026", "2026-08-21T00:00:00.000Z" ],
+        [ new Date("2026-08-21T10:00:00Z"), "2026-08-21T10:00:00.000Z" ],
+        [ dayjs.utc("2026-08-21T10:00:00Z"), "2026-08-21T10:00:00.000Z" ],
+    ])("parses %s in UTC", (value, expected) => {
+        expect(parseCmsDate(value).toISOString()).toBe(expected);
+    });
+
+    test("rejects an invalid strict date", () => {
+        expect(parseCmsDate("31/02/2026 10:00").isValid()).toBe(false);
+    });
+});
+
+describe("getEventStatus", () => {
+    test("keeps the existing date-only active state", () => {
+        vi.useFakeTimers();
+        vi.setSystemTime(new Date("2026-08-21T12:00:00Z"));
+
+        expect(getEventStatus("21/08/2026", "22/08/2026")).toBe("active");
+
+        vi.useRealTimers();
     });
 });
