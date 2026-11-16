@@ -111,6 +111,8 @@ function createBody(index: number): TInboxMessageBody {
 
 function createApi() {
     return {
+        reportImpressionEvent: vi.fn(),
+        reportClickEvent: vi.fn(),
         getInboxMessages: vi.fn<SmarticoGlobal["api"]["getInboxMessages"]>(),
         getInboxMessageBody: vi.fn<SmarticoGlobal["api"]["getInboxMessageBody"]>(),
         getInboxUnreadCount: vi.fn<SmarticoGlobal["api"]["getInboxUnreadCount"]>(),
@@ -128,6 +130,51 @@ function resetStore() {
 }
 
 describe("useSmarticoInboxController", () => {
+    test("reports an impression only once per message until reset", async() => {
+        const api = createApi();
+        window._smartico = { api } as unknown as SmarticoGlobal;
+        const { useSmarticoInboxController } = await import("../../src/controllers/SmarticoInbox");
+        const controller = useSmarticoInboxController();
+
+        controller.reportImpression("one");
+        controller.reportImpression("one");
+        controller.reportImpression("two");
+
+        expect(api.reportImpressionEvent.mock.calls).toEqual([
+            [{ engagement_uid: "one", activityType: 31 }],
+            [{ engagement_uid: "two", activityType: 31 }],
+        ]);
+        controller.reset();
+        controller.reportImpression("one");
+        expect(api.reportImpressionEvent).toHaveBeenCalledTimes(3);
+    });
+
+    test("reports each click with the message guid and action", async() => {
+        const api = createApi();
+        window._smartico = { api } as unknown as SmarticoGlobal;
+        const { useSmarticoInboxController } = await import("../../src/controllers/SmarticoInbox");
+        const controller = useSmarticoInboxController();
+        controller.reportClick("one", "dp:inbox");
+        controller.reportClick("one", "dp:deposit");
+        expect(api.reportClickEvent.mock.calls).toEqual([
+            [{ engagement_uid: "one", activityType: 31, action: "dp:inbox" }],
+            [{ engagement_uid: "one", activityType: 31, action: "dp:deposit" }],
+        ]);
+    });
+
+    test("keeps analytics failures non-blocking and permits impression retry", async() => {
+        const { useSmarticoInboxController } = await import("../../src/controllers/SmarticoInbox");
+        const controller = useSmarticoInboxController();
+        expect(() => controller.reportImpression("one")).not.toThrow();
+        expect(() => controller.reportClick("one", "dp:inbox")).not.toThrow();
+        const api = createApi();
+        window._smartico = { api } as unknown as SmarticoGlobal;
+        controller.reportImpression("one");
+        expect(api.reportImpressionEvent).toHaveBeenCalledOnce();
+        expect(mocks.logError).toHaveBeenCalledWith("SMARTICO_INBOX_IMPRESSION_ERROR", expect.any(Error));
+        expect(mocks.logError).toHaveBeenCalledWith("SMARTICO_INBOX_CLICK_ERROR", expect.any(Error));
+    });
+
     test("handles body loading errors and resets the loader", async() => {
         const api = createApi();
         const error = new Error("Body failed");
