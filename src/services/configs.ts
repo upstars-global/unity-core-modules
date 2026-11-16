@@ -4,7 +4,7 @@ import { useConfigStore } from "../store/configStore";
 import {
     loadBettingConfigReq,
     loadCurrencyConfigReq,
-    loadExcludedPromoStagsReq,
+    loadExcludedPromoStagsReq, loadGamesSearchMetaTagsConfigReq,
     loadLimitsDepositConfigReq,
     loadMainWidgetConfigReq, loadVipProgramConfigReq,
     loadWelcomeOfferConfigReq,
@@ -104,5 +104,19 @@ export async function loadWelcomeOfferConfig() {
 
     if (config) {
         configStore.setWelcomeOfferConfig(config);
+    }
+}
+
+export async function loadSearchMetaTagsConfig() {
+    const configStore = useConfigStore();
+
+    if (isExistData(configStore.searchMetaTagsConfig)) {
+        return;
+    }
+
+    const config = await loadGamesSearchMetaTagsConfigReq();
+
+    if (config) {
+        configStore.setSearchMetaTagsConfig(config);
     }
 }

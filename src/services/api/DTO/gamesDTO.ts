@@ -70,3 +70,8 @@ export type ResponseGamesByVersion<V extends AcceptGamesVersion> =
 export interface IRandomGameFilter {
     identifier?: string
 }
+
+export interface IGamesProvidersFilter {
+    category_identifiers?: string[];
+    device?: "desktop" | "mobile";
+}

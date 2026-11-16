@@ -1,7 +1,7 @@
 import { FE_API_PREFIX } from "../../../consts/apiConfig";
 import { log } from "../../../controllers/Logger";
 import { type CurrencyData } from "../../../models/cashbox";
-import { type IStagByReferName, type ISurveyConfig } from "../../../models/configs";
+import {IGameSearchMetaTagsConfig, type IStagByReferName, type ISurveyConfig} from "../../../models/configs";
 import { type IBettingConfig, type IGamesAliasesConfig } from "../../../models/configs";
 import { type IEnabledGames } from "../../../models/game";
 import { type LimitsDepositConfigData } from "../../../models/limitsDepositConfig";
@@ -111,6 +111,11 @@ const loadGamesAliasesConfigReq = () => loadConfig<IGamesAliasesConfig>(
     "LOAD_GAMES_ALIASES_CONFIG_ERROR",
 );
 
+const loadGamesSearchMetaTagsConfigReq = () => loadConfig<IGameSearchMetaTagsConfig>(
+    `${ FE_API_PREFIX }/config/search-meta-tags`,
+    "LOAD_GAMES_SEARCH_META_TAGS_ERROR",
+);
+
 export {
     loadAdditionalDepositGiftsConfigReq,
     loadBettingConfigReq,
@@ -123,6 +128,7 @@ export {
     loadExcludedPromoStagsReq,
     loadFooterPaymentsConfigReq,
     loadGamesAliasesConfigReq,
+    loadGamesSearchMetaTagsConfigReq,
     loadLimitsDepositConfigReq,
     loadMainWidgetConfigReq,
     loadManagersConfigReq,
@@ -132,5 +138,4 @@ export {
     loadSurveyConfigReq,
     loadVipAdventuresConfigReq,
     loadVipProgramConfigReq,
-    loadWelcomeOfferConfigReq,
-};
+    loadWelcomeOfferConfigReq};

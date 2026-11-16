@@ -2,6 +2,7 @@ import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it } from "vitest";
 
 import { useConfigStore } from "../../src/store/configStore";
+import { useUserInfo } from "../../src/store/user/userInfo";
 
 describe("useConfigStore", () => {
     beforeEach(() => {
@@ -63,6 +64,52 @@ describe("useConfigStore", () => {
         expect(store.disabledGamesProviders).toEqual({ provider1: [ "game1" ] });
         expect(store.welcomeOfferConfig).toEqual(welcomeOfferConfig);
         expect(store.isLoadingActiveSeason).toBe(true);
+    });
+
+    it("selects meta tags by authorization and matching user group", () => {
+        const store = useConfigStore();
+        const user = useUserInfo();
+
+        store.setSearchMetaTagsConfig({
+            enableConfig: true,
+            noReg: [ "guest" ],
+            reg: [ "registered" ],
+            "42": [ "group 42" ],
+            "vip": [ "vip group" ],
+            "vip_level_3": [],
+        });
+
+        expect(store.getCurrentMetaTags).toEqual([ "guest" ]);
+
+        user.toggleUserIsLogged(true);
+        expect(store.getCurrentMetaTags).toEqual([ "registered" ]);
+
+        user.setUserStatuses([ { id: 99 }, { id: 42 }, { id: "vip" } ] as never);
+        expect(store.getCurrentMetaTags).toEqual([ "group 42" ]);
+
+        user.setUserStatuses([ { id: "vip" } ] as never);
+        expect(store.getCurrentMetaTags).toEqual([ "vip group" ]);
+
+        user.setUserStatuses([ { id: "vip_level_3" } ] as never);
+        expect(store.getCurrentMetaTags).toEqual([ "registered" ]);
+
+        user.setUserStatuses([ { id: 99 } ] as never);
+        expect(store.getCurrentMetaTags).toEqual([ "registered" ]);
+
+        user.toggleUserIsLogged(false);
+        expect(store.getCurrentMetaTags).toEqual([ "guest" ]);
+    });
+
+    it("reports whether the search meta tags config is enabled", () => {
+        const store = useConfigStore();
+
+        expect(store.isSearchMetaTagsConfigEnabled).toBe(false);
+
+        store.setSearchMetaTagsConfig({ enableConfig: true, noReg: [], reg: [] });
+        expect(store.isSearchMetaTagsConfigEnabled).toBe(true);
+
+        store.setSearchMetaTagsConfig({ enableConfig: false, noReg: [], reg: [] });
+        expect(store.isSearchMetaTagsConfigEnabled).toBe(false);
     });
 
     it("maps vip program config from DTO format", () => {
