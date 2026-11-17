@@ -88,13 +88,11 @@ export interface ICreateAppOptions {
     state?: unknown;
     environment?: Record<string, unknown>;
     routerData?: Record<string, unknown>;
-    guest?: unknown;
 }
 
 export interface AppContext {
     api?: string;
     environment?: Record<string, unknown>;
-    guest?: unknown;
     routerData?: Record<string, unknown>;
     state?: unknown;
     uaHints?: IResult;
