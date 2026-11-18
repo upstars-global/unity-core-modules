@@ -8,7 +8,7 @@ import type { CurrencyData } from "../../src/models/cashbox";
 import { EnumContextFields, EnumFormFields, type IPlayerFieldsInfo } from "../../src/models/common";
 import type { IStagByReferName } from "../../src/models/configs";
 import { Currencies } from "../../src/models/enums/currencies";
-import { type MainWidgetItem, Widgets } from "../../src/models/mainWidget";
+import { type IMainWidgetConfig, type MainWidgetItem, Widgets } from "../../src/models/mainWidget";
 import type { ICurrentIP } from "../../src/services/api/DTO/current-ip";
 import type { ICountries, ICryptoExchangeRates, ICurrencies, IProjectInfo } from "../../src/services/api/DTO/info";
 import { UserAccountLicense } from "../../src/services/api/DTO/playerDTO";
@@ -71,6 +71,7 @@ describe("useCommon store", () => {
         expect(store.getAllCurrencies).toEqual([]);
         expect(store.countries).toEqual([]);
         expect(store.widgetsConfig).toEqual([]);
+        expect(store.mainWidgetConfig).toBeNull();
         expect(store.currencyConfig).toBeNull();
         expect(store.limitsDepositConfig).toBeNull();
         expect(store.getDefaultCurrency).toBe(config.currencyDefault);
@@ -297,6 +298,11 @@ describe("useCommon store", () => {
         const widgetsConfig: MainWidgetItem[] = [
             { name: "Quest", image: "quest.png", type: Widgets.quest, isNew: true },
         ];
+        const mainWidgetConfig: IMainWidgetConfig = {
+            hidden: false,
+            preview: [ "quest" ],
+            widgets: [ { name: "Quest", image: "quest.png", type: "quest", isNew: true } ],
+        };
         const projectInfo: IProjectInfo = {
             apps: {
                 sportsbook: true,
@@ -339,6 +345,7 @@ describe("useCommon store", () => {
         store.setCryptoExchangeRates(exchangeRates);
         store.setCurrencyConfig(currencyConfig);
         store.setMainWidgetConfig(widgetsConfig);
+        store.setMainWidgetFullConfig(mainWidgetConfig);
         store.setProjectInfo(projectInfo);
         store.setExcludedPromoStags([ "stagA", "stagB" ]);
         store.setStagByReferName(stagsByReferName);
@@ -346,6 +353,7 @@ describe("useCommon store", () => {
         expect(store.cryptoExchangeRates).toEqual(exchangeRates);
         expect(store.currencyConfig).toEqual(currencyConfig);
         expect(store.widgetsConfig).toEqual(widgetsConfig);
+        expect(store.mainWidgetConfig).toEqual(mainWidgetConfig);
         expect(store.infoProject).toEqual(projectInfo);
         expect(store.excludedPromoStags).toEqual([ "stagA", "stagB" ]);
         expect(store.stagsByReferName).toEqual(stagsByReferName);

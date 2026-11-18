@@ -12,7 +12,7 @@ import type { EnumContextFields, EnumFormFields, IPlayerFieldsInfo } from "../mo
 import type { IStagByReferName } from "../models/configs";
 import { Currencies } from "../models/enums/currencies";
 import type { LimitsDepositConfigData } from "../models/limitsDepositConfig";
-import type { MainWidgetItem } from "../models/mainWidget";
+import type { IMainWidgetConfig, MainWidgetItem } from "../models/mainWidget";
 import type { ICurrentIP } from "../services/api/DTO/current-ip";
 import type { ICountries, ICryptoExchangeRates, ICurrencies, IProjectInfo } from "../services/api/DTO/info";
 import { useMultilangStore } from "./multilang";
@@ -33,6 +33,7 @@ export const useCommon = defineStore("common", () => {
     const currencyConfig = ref<null | CurrencyData>(null);
     const limitsDepositConfig = ref<null | LimitsDepositConfigData>(null);
     const widgetsConfig = ref<MainWidgetItem[]>([]);
+    const mainWidgetConfig = ref<IMainWidgetConfig | null>(null);
     const stagsByReferName = ref<IStagByReferName>();
     const countries = ref<ICountries[]>([]);
     const infoProject = ref<IProjectInfo>();
@@ -136,6 +137,10 @@ export const useCommon = defineStore("common", () => {
         widgetsConfig.value = data;
     }
 
+    function setMainWidgetFullConfig(data: IMainWidgetConfig) {
+        mainWidgetConfig.value = data;
+    }
+
     function setProjectInfo(data: IProjectInfo) {
         infoProject.value = data;
     }
@@ -185,5 +190,8 @@ export const useCommon = defineStore("common", () => {
 
         widgetsConfig,
         setMainWidgetConfig,
+
+        mainWidgetConfig,
+        setMainWidgetFullConfig,
     };
 });
