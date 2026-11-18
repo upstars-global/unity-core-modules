@@ -299,7 +299,6 @@ describe("useCommon store", () => {
             { name: "Quest", image: "quest.png", type: Widgets.quest, isNew: true },
         ];
         const mainWidgetConfig: IMainWidgetConfig = {
-            hidden: false,
             preview: [ "quest" ],
             widgets: [ { name: "Quest", image: "quest.png", type: "quest", isNew: true } ],
         };

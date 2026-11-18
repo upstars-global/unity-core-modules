@@ -16,12 +16,11 @@ describe("loadMainWidgetConfig", () => {
         vi.mocked(configReqs.loadMainWidgetConfigReq).mockReset();
     });
 
-    it("stores widgets list and full config with root fields", async () => {
+    it("stores widgets list and full config with preview", async () => {
         const response = {
-            hidden: true,
             preview: [ "wheel" ],
             widgets: [
-                { name: "MAIN_WIDGET.WHEEL", type: "wheel", image: "wheel.png", isNew: true },
+                { name: "MAIN_WIDGET.WHEEL", type: "wheel", image: "wheel.png", previewImage: "wheel-preview.png", isNew: true },
                 { name: "MAIN_WIDGET.QUEST", type: "quest", image: "quest.png", hidden: true },
             ],
         };
@@ -35,7 +34,7 @@ describe("loadMainWidgetConfig", () => {
     });
 
     it("keeps store empty when config has no widgets", async () => {
-        vi.mocked(configReqs.loadMainWidgetConfigReq).mockResolvedValue({ hidden: false });
+        vi.mocked(configReqs.loadMainWidgetConfigReq).mockResolvedValue({ preview: [ "wheel" ] });
 
         await loadMainWidgetConfig();
 

@@ -21,12 +21,12 @@ export interface IMainWidgetConfigItem {
     name: string;
     type: string;
     image: string;
+    previewImage?: string;
     isNew?: boolean;
     hidden?: boolean;
 }
 
 export interface IMainWidgetConfig {
-    hidden?: boolean;
     preview?: string[];
     widgets: IMainWidgetConfigItem[];
 }
