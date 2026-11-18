@@ -4,6 +4,7 @@ import { storeToRefs } from "pinia";
 import { UnwrapRef } from "vue";
 
 import { log } from "../controllers/Logger";
+import { trackSmarticoAction } from "../controllers/Smartico";
 import { processGame } from "../helpers/gameHelpers";
 import {
     defaultCollection,
@@ -284,6 +285,7 @@ export async function loadFavoriteGames() {
 export async function addGameToFavorites(idGame: number): Promise<void> {
     await fetchAddFavoriteGamesCount(idGame);
     await loadFavoriteGames();
+    trackSmarticoAction("GAME_ADDED_TO_FAVORITES", { game_id: idGame });
 }
 
 export async function deleteGameFromFavorites(idGame: number) {
@@ -299,6 +301,7 @@ export async function deleteGameFromFavorites(idGame: number) {
 
     gamesFavoriteStore.setFavoritesId(filteredFavoritesId);
     gamesFavoriteStore.setGamesFavoriteFullData(filteredGamesFavoriteFullData);
+    trackSmarticoAction("GAME_REMOVED_FROM_FAVORITES", { game_id: idGame });
 }
 
 // @ts-expect-error -- TS2366: Function lacks ending return statement and return type does not include 'undefined'.
