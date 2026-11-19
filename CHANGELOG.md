@@ -1,3 +1,33 @@
+## [1.124.1](https://github.com/upstars-global/unity-core-modules/compare/v1.124.0...v1.124.1) (2026-11-13)
+
+### 🔧 Maintenance
+
+* UN-3175 support timed UTC event statuses ([#417](https://github.com/upstars-global/unity-core-modules/issues/417))
+ ([b743184](https://github.com/upstars-global/unity-core-modules/commit/b743184a336b7994e569d7f25a3efad4a93aa342))
+
+
+
+    * feat:UN-3175 (format-date): support timed UTC event statuses
+
+    * feat:UN-3175 (format-date): support timed UTC event statuses
+
+    * feat:UN-3175 (format-date): support timed UTC event statuses
+
+    * feat:UN-3175 (format-date): support timed UTC event statuses
+
+    * feat:UN-3175 (format-date): support timed UTC event statuses
+
+## [1.124.0](https://github.com/upstars-global/unity-core-modules/compare/v1.123.2...v1.124.0) (2026-11-13)
+
+### 🚀 Features
+
+* UN-3420 add filter params for game provider req ([#421](https://github.com/upstars-global/unity-core-modules/issues/421))
+ ([aecc9c3](https://github.com/upstars-global/unity-core-modules/commit/aecc9c3cbd7c6773f9f84ae75b69ea9305aa9348))
+
+
+
+    feat: UN-3420 add filter params for game provider req
+
 ## [1.123.2](https://github.com/upstars-global/unity-core-modules/compare/v1.123.1...v1.123.2) (2026-11-12)
 
 ### 🐛 Bug Fixes
