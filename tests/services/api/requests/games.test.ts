@@ -28,6 +28,7 @@ import {
     loadGamesJackpots,
     loadGamesProvidersReq,
     loadLastGames,
+    loadPlayaRecommendationsReq,
     loadRandomGame,
 } from "../../../../src/services/api/requests/games";
 
@@ -37,6 +38,23 @@ beforeEach(() => {
 });
 
 describe("games GET requests", () => {
+    it("loads a Playa page and logs a failed request", async () => {
+        const data = { gameIds: [ "studio/game" ], pagination: { page: 2, limit: 25, total: 40 } };
+        getMock.mockResolvedValueOnce({ data });
+
+        await expect(loadPlayaRecommendationsReq(2, 25)).resolves.toEqual(data);
+        expect(getMock).toHaveBeenCalledExactlyOnceWith("/api-fe/playa/recommendations", {
+            params: { page: 2, limit: 25 },
+        });
+        expect(postMock).not.toHaveBeenCalled();
+
+        const error = new Error("network");
+        getMock.mockRejectedValueOnce(error);
+
+        await expect(loadPlayaRecommendationsReq(2, 25)).resolves.toBeUndefined();
+        expect(logError).toHaveBeenCalledWith("LOAD_PLAYA_RECOMMENDATIONS_ERROR", error);
+    });
+
     it.each([
         { name: "jackpots", run: loadGamesJackpots, url: "/api/games/jackpots", data: { USD: { provider: 100 } }, fallback: {}, errorLabel: "LOAD_GAMES_JACKPOTS_ERROR" },
         { name: "played games", run: loadLastGames, url: "/api/player/played_games", data: [{ identifier: "game", last_activity_at: null }], fallback: [], errorLabel: "LOAD_LAST_GAMES_ERROR" },

@@ -3,11 +3,11 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 
 import { log } from "../../../src/controllers/Logger";
-import { processGameForNewAPI } from "../../../src/helpers/gameHelpers";
+import { filterGames, type IGameItemFilter, processGameForNewAPI } from "../../../src/helpers/gameHelpers";
 import type { ICollectionItem, IGame, IGamesProvider } from "../../../src/models/game";
 import { IEnabledGames } from "../../../src/models/game";
-import { loadGamesCategoryReq } from "../../../src/services/api/requests/games";
-import { loadGamesCategory } from "../../../src/services/games";
+import { loadGamesByIdsReq, loadGamesCategoryReq, loadPlayaRecommendationsReq } from "../../../src/services/api/requests/games";
+import { loadGamesByIds, loadGamesCategory } from "../../../src/services/games";
 import { useGamesCategory } from "../../../src/store/games/gamesCategory";
 
 vi.mock("../../../src/controllers/Logger", () => ({
@@ -41,11 +41,15 @@ vi.mock("../../../src/store/multilang", () => ({
 
 const mockIsLogged = ref(false);
 const mockUserCurrency = ref("USD");
+const mockUserGroups: Array<string | number> = [];
 vi.mock("../../../src/store/user/userInfo", () => ({
     useUserInfo: () => ({
         getIsLogged: mockIsLogged,
         getUserCurrency: mockUserCurrency,
     }),
+}));
+vi.mock("../../../src/store/user/userStatuses", () => ({
+    useUserStatuses: () => ({ getUserGroups: mockUserGroups }),
 }));
 
 vi.mock("../../../src/store/configStore", () => ({
@@ -82,6 +86,7 @@ describe("store/games/gamesCategory", () => {
         mockIsLogged.value = false;
         mockUserCurrency.value = "USD";
         mockGamesCategories.value = [];
+        mockUserGroups.length = 0;
     });
 
     it("should initialize with default values", () => {
@@ -111,6 +116,28 @@ describe("store/games/gamesCategory", () => {
                 { id: "slots:ca", name: "Slots CA" },
             ] as IGamesProvider[];
             expect(store.categoryGeo("slots")).toBe("slots:ca");
+        });
+    });
+
+    describe("loadGamesByIds", () => {
+        it("returns available catalogue cards in the requested order", async () => {
+            const first = { identifier: "studio/first", is_geo_available: true } as IGameItemFilter;
+            const second = { identifier: "studio/second" } as IGameItemFilter;
+            const blocked = { identifier: "studio/blocked", is_geo_available: false } as IGameItemFilter;
+            const gameIds = [ first.identifier, "studio/missing", "constructor", blocked.identifier, second.identifier ];
+            vi.mocked(loadGamesByIdsReq).mockResolvedValueOnce({
+                [second.identifier]: second,
+                [blocked.identifier]: blocked,
+                [first.identifier]: first,
+            });
+
+            await expect(loadGamesByIds(gameIds, "mobile")).resolves.toEqual([ first, second ]);
+            expect(loadGamesByIdsReq).toHaveBeenCalledExactlyOnceWith(gameIds, "mobile");
+        });
+
+        it("returns an empty list without calling the catalogue for an empty page", async () => {
+            await expect(loadGamesByIds([], "desktop")).resolves.toEqual([]);
+            expect(loadGamesByIdsReq).not.toHaveBeenCalled();
         });
     });
 
@@ -154,6 +181,107 @@ describe("store/games/gamesCategory", () => {
             } as ICollectionItem;
 
             await loadGamesCategory("slots", 1);
+            expect(loadGamesCategoryReq).not.toHaveBeenCalled();
+        });
+
+        it("replaces cached Top with the recommended cards for the Playa group", async () => {
+            const store = useGamesCategory();
+            mockUserGeo.value = "AU";
+            mockGamesCategories.value = [ { id: "top:au" } as IGamesProvider ];
+            store.collections["top:au"] = {
+                data: [ mockGameData as IGame ],
+                pagination: { current_page: 1, next_page: null },
+            } as ICollectionItem;
+            mockUserGroups.push("playa_au");
+            const game = { identifier: "studio/personal" } as IGameItemFilter;
+            vi.mocked(loadPlayaRecommendationsReq).mockResolvedValueOnce({
+                gameIds: [ game.identifier ],
+                pagination: { page: 1, limit: 20, total: 25 },
+            });
+            vi.mocked(loadGamesByIdsReq).mockResolvedValueOnce({ [game.identifier]: game });
+
+            await loadGamesCategory("top");
+
+            expect(loadPlayaRecommendationsReq).toHaveBeenCalledWith(1, 20);
+            expect(loadGamesByIdsReq).toHaveBeenCalledWith([ game.identifier ], "desktop");
+            expect(loadGamesCategoryReq).not.toHaveBeenCalled();
+            expect(store.collections["top:au"].data).toEqual([ game ]);
+            expect(store.collections["top:au"].isPlaya).toBe(true);
+            expect(store.collections["top:au"].pagination.next_page).toBe(2);
+        });
+
+        it.each([
+            { slug: "top", geo: "AU", key: "top:au", groups: [ 21 ] },
+            { slug: "slots", geo: "AU", key: "slots", groups: [ "playa_au" ] },
+            { slug: "top", geo: "DE", key: "top:de", groups: [ "playa_au" ] },
+            { slug: "top:au", geo: "DE", key: "top:au", groups: [ "playa_au" ] },
+        ])("uses the ordinary loader for $key with groups $groups", async ({ slug, geo, key, groups }) => {
+            mockUserGeo.value = geo;
+            mockGamesCategories.value = [ { id: key } as IGamesProvider ];
+            mockUserGroups.push(...groups);
+
+            await loadGamesCategory(slug);
+
+            expect(loadGamesCategoryReq).toHaveBeenCalledWith(expect.objectContaining({
+                filter: { categories: { identifiers: [ key ], strategy: "OR" } },
+            }));
+            expect(loadPlayaRecommendationsReq).not.toHaveBeenCalled();
+        });
+
+        it.each([{ gameIds: undefined }, { gameIds: [] }])("loads and keeps ordinary Top when the first recommendation page is %j", async ({ gameIds }) => {
+            mockUserGeo.value = "AU";
+            mockGamesCategories.value = [ { id: "top:au" } as IGamesProvider ];
+            mockUserGroups.push("playa_au");
+            vi.mocked(loadPlayaRecommendationsReq).mockResolvedValueOnce(gameIds && {
+                gameIds,
+                pagination: { page: 1, limit: 20, total: 0 },
+            });
+
+            await loadGamesCategory("top", 1);
+            await loadGamesCategory("top", 2);
+
+            expect(loadPlayaRecommendationsReq).toHaveBeenCalledTimes(1);
+            expect(loadGamesCategoryReq).toHaveBeenCalledTimes(2);
+            expect(useGamesCategory().collections["top:au"].isPlaya).toBeUndefined();
+        });
+
+        it("falls back when the CMS filters out the first personalized page", async () => {
+            mockUserGeo.value = "AU";
+            mockGamesCategories.value = [ { id: "top:au" } as IGamesProvider ];
+            mockUserGroups.push("playa_au");
+            const game = { identifier: "studio/personal" } as IGameItemFilter;
+            vi.mocked(loadPlayaRecommendationsReq).mockResolvedValueOnce({
+                gameIds: [ game.identifier ],
+                pagination: { page: 1, limit: 20, total: 1 },
+            });
+            vi.mocked(loadGamesByIdsReq).mockResolvedValueOnce({ [game.identifier]: game });
+            vi.mocked(filterGames).mockReturnValueOnce([]);
+
+            await loadGamesCategory("top");
+
+            expect(loadGamesCategoryReq).toHaveBeenCalledTimes(1);
+            expect(useGamesCategory().collections["top:au"].data).toEqual([ mockGameData ]);
+        });
+
+        it("keeps the personalized collection and stops on a valid empty last page", async () => {
+            const store = useGamesCategory();
+            mockUserGeo.value = "AU";
+            mockGamesCategories.value = [ { id: "top:au" } as IGamesProvider ];
+            mockUserGroups.push("playa_au");
+            store.collections["top:au"] = {
+                data: [ mockGameData as IGame ],
+                isPlaya: true,
+                pagination: { current_page: 1, next_page: 2, prev_page: null, total_pages: 2, total_count: 25 },
+            };
+            vi.mocked(loadPlayaRecommendationsReq).mockResolvedValueOnce({
+                gameIds: [],
+                pagination: { page: 2, limit: 20, total: 25 },
+            });
+
+            await loadGamesCategory("top", 2);
+
+            expect(store.collections["top:au"].data).toEqual([ mockGameData ]);
+            expect(store.collections["top:au"].pagination.next_page).toBeNull();
             expect(loadGamesCategoryReq).not.toHaveBeenCalled();
         });
 
@@ -291,9 +419,9 @@ describe("store/games/gamesCategory", () => {
             } as ICollectionItem;
 
             store.setData({
-                data: [ { identifier: "new" } as IGame ],
-                pagination: { current_page: 2, next_page: null },
-            } as ICollectionItem, "slots");
+                data: [ { identifier: "new" } as IGameItemFilter ],
+                pagination: { current_page: 2, next_page: null, prev_page: 1, total_pages: 2, total_count: 2 },
+            }, "slots");
 
             expect(store.collections.slots.data).toHaveLength(2);
             expect(store.collections.slots.pagination.next_page).toBeNull();

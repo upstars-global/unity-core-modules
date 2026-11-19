@@ -55,6 +55,7 @@ export interface IGameItemFilter {
     identifier: string;
     seo_title: string;
     devices: screenTypes[];
+    is_geo_available?: boolean;
     unfinished_games_for: [];
     currencies: {
         [key: string]: IGameReal,

@@ -22,6 +22,7 @@ import { useGamesProviders } from "../store/games/gamesProviders";
 import { useGamesCommon } from "../store/games/gamesStore";
 import { useJackpots } from "../store/jackpots";
 import { useRootStore } from "../store/root";
+import { useUserStatuses } from "../store/user/userStatuses";
 import { AcceptsGamesVariants, IGameFilter } from "./api/DTO/gamesDTO";
 import { loadEnabledGamesConfigReq } from "./api/requests/configs";
 import {
@@ -32,14 +33,19 @@ import {
     loadFilteredGames as loadFilteredGamesReq,
     loadGameBySeoTitleReq,
     loadGameBySlugReq,
+    loadGamesByIdsReq,
     loadGamesCategories as loadGamesCategoriesReq,
     loadGamesCategoryReq,
     loadGamesDataByFilter,
     loadGamesJackpots as loadGamesJackpotsReq,
     loadGamesProvidersReq,
     loadLastGames as loadLastGamesReq,
+    loadPlayaRecommendationsReq,
     loadRandomGame,
 } from "./api/requests/games";
+
+const PLAYA_GROUP_ID = "playa_au";
+const PLAYA_CATEGORY_ID = "top:au";
 
 export function getMenuCategoriesBySlug(slug: string): SlugCategoriesGames[] {
     const jackpotsStore = useJackpots();
@@ -350,14 +356,61 @@ export async function loadGameBySlug(slug: string) {
     }
 }
 
+export async function loadGamesByIds(gameIds: string[], device: string) {
+    if (!gameIds.length) {
+        return [];
+    }
+
+    const games = await loadGamesByIdsReq(gameIds, device);
+    return gameIds.flatMap((id) => {
+        const game = games[id];
+        return game?.identifier && game.is_geo_available !== false ? [ game ] : [];
+    });
+}
+
+async function loadPlayaGamesPage(page: number, limit: number, device: string) {
+    const recommendations = await loadPlayaRecommendationsReq(page, limit);
+    if (!recommendations) {
+        return;
+    }
+
+    const data = await loadGamesByIds(recommendations.gameIds, device).catch(() => undefined);
+    if (!data) {
+        return;
+    }
+
+    const { page: currentPage, limit: pageSize, total } = recommendations.pagination;
+    const totalPages = Math.ceil(total / pageSize);
+    return {
+        data,
+        isPlaya: true,
+        pagination: {
+            current_page: currentPage,
+            next_page: currentPage < totalPages ? currentPage + 1 : null,
+            prev_page: currentPage > 1 ? currentPage - 1 : null,
+            total_count: total,
+            total_pages: totalPages,
+        },
+    };
+}
+
 export async function loadGamesCategory(slug: string, page: number = 1): Promise<ICollectionItem | undefined> {
     const gamesCategoryStore = useGamesCategory();
     const { collections } = storeToRefs(gamesCategoryStore);
     const { gamesPageLimit } = storeToRefs(useConfigStore());
     const slugCollection = gamesCategoryStore.categoryGeo(slug);
-    const loaded = gamesCategoryStore.isLoaded(slugCollection, page);
+    const cached = collections.value[slugCollection];
+    const isPlaya = slug === SlugCategoriesGames.SLUG_CATEGORY_TOP &&
+        slugCollection === PLAYA_CATEGORY_ID &&
+        useUserStatuses().getUserGroups.includes(PLAYA_GROUP_ID);
+    const replace = isPlaya && +page === 1 && !cached?.isPlaya;
 
-    if (loaded) {
+    if (cached?.isPlaya && !isPlaya) {
+        delete collections.value[slugCollection];
+    }
+
+    const loaded = gamesCategoryStore.isLoaded(slugCollection, page);
+    if (!replace && loaded) {
         return collections.value[slugCollection];
     }
 
@@ -365,6 +418,16 @@ export async function loadGamesCategory(slug: string, page: number = 1): Promise
         const { isMobile } = storeToRefs(useRootStore());
 
         const device = isMobile.value ? "mobile" : "desktop";
+
+        if (isPlaya && (replace || cached?.isPlaya)) {
+            const data = await loadPlayaGamesPage(+page, gamesPageLimit.value, device);
+            if (data && gamesCategoryStore.setData(data, slugCollection, replace)) {
+                return;
+            }
+            if (loaded) {
+                return collections.value[slugCollection];
+            }
+        }
 
         const reqConfig: IGameFilter = {
             device,

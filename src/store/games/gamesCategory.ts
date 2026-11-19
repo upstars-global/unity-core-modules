@@ -2,7 +2,7 @@ import { storeToRefs } from "pinia";
 import { defineStore } from "pinia";
 import { ref, toRefs } from "vue";
 
-import { processGameForNewAPI } from "../../helpers/gameHelpers";
+import { type IGameItemFilter, processGameForNewAPI } from "../../helpers/gameHelpers";
 import { defaultCollection, filterGames } from "../../helpers/gameHelpers";
 import type { ICollectionItem, IGame } from "../../models/game";
 import type { ICollectionRecord } from "../../services/api/DTO/gamesDTO";
@@ -54,27 +54,34 @@ export const useGamesCategory = defineStore("gamesCategory", () => {
             collection.pagination.current_page >= page;
     };
 
-    function setData(data: ICollectionItem, slug: string): void {
-        const propsGame = { ...data };
+    function setData(
+        data: Omit<ICollectionItem, "data"> & { data: IGameItemFilter[] },
+        slug: string,
+        replace = false,
+    ): boolean {
         const { disabledGamesProviders } = storeToRefs(useGamesProviders());
         const { enabledGamesConfig } = storeToRefs(useGamesCommon());
 
-        propsGame.data = filterGames(
-            // @ts-expect-error -- TS2345: Argument of type '(game: IGameItemFilter) => IGameItem' is not assignable to parameter of type '(value: IGame, index: number, array: IGame[]) => IGameItem'.
+        const games = filterGames(
             data.data.map(processGameForNewAPI),
             disabledGamesProviders.value,
             enabledGamesConfig.value,
         );
 
-        if (!collections.value[slug]) {
+        if (replace && !games.length) {
+            return false;
+        }
+
+        if (replace || !collections.value[slug]) {
             collections.value = {
                 ...collections.value,
-                [slug]: propsGame,
+                [slug]: { ...data, data: games },
             };
         } else {
-            collections.value[slug].data.push(...propsGame.data);
+            collections.value[slug].data.push(...games);
             collections.value[slug].pagination = data.pagination;
         }
+        return true;
     }
 
     function initCollection(data: { slug: string }[]): void {
