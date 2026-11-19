@@ -60,8 +60,8 @@ export interface IEnabledGames {
 
 export type IGamesProviderCollection = Record<string, IGamesProvider>;
 
-export interface ICollectionItem {
-    data: IGame[];
+export interface ICollectionItem<TGame = IGame> {
+    data: TGame[];
     isPlaya?: boolean;
     firstPage?: number;
     pagination: {

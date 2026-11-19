@@ -192,7 +192,7 @@ describe("store/games/gamesCategory", () => {
             mockUserGeo.value = "AU";
             mockGamesCategories.value = [ { id: "top:au" } as IGamesProvider ];
             store.collections["top:au"] = {
-                data: [ mockGameData as IGame ],
+                data: [ mockGameData ],
                 pagination: { current_page: 1, next_page: null },
             } as ICollectionItem;
             mockUserGroups.push("playa_au");

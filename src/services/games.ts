@@ -415,9 +415,8 @@ export async function loadGamesCategory(slug: string, page: number = 1): Promise
 
     const cached = collections.value[slugCollection];
     const isPlaya = isPlayaCategory && useUserStatuses().getUserGroups.includes(PLAYA_GROUP_ID);
-    const pageNumber = +page;
-    const replace = isPlaya && (pageNumber < (cached?.firstPage ?? 1) ||
-        (!cached?.isPlaya && (pageNumber === 1 || !cached?.pagination.current_page)));
+    const replace = isPlaya && (page < (cached?.firstPage ?? 1) ||
+        (!cached?.isPlaya && (page === 1 || !cached?.pagination.current_page)));
 
     if (cached?.isPlaya && !isPlaya) {
         delete collections.value[slugCollection];
@@ -434,7 +433,7 @@ export async function loadGamesCategory(slug: string, page: number = 1): Promise
         const device = isMobile.value ? "mobile" : "desktop";
 
         if (isPlaya && (replace || cached?.isPlaya)) {
-            const data = await loadPlayaGamesPage(pageNumber, gamesPageLimit.value, device);
+            const data = await loadPlayaGamesPage(page, gamesPageLimit.value, device);
             if (data && gamesCategoryStore.setData(data, slugCollection, replace)) {
                 return;
             }

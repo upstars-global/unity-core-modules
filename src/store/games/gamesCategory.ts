@@ -58,11 +58,7 @@ export const useGamesCategory = defineStore("gamesCategory", () => {
             collection.pagination.current_page >= page;
     };
 
-    function setData(
-        data: Omit<ICollectionItem, "data"> & { data: IGameItemFilter[] },
-        slug: string,
-        replace = false,
-    ): boolean {
+    function setData(data: ICollectionItem<IGameItemFilter>, slug: string, replace = false) {
         const { disabledGamesProviders } = storeToRefs(useGamesProviders());
         const { enabledGamesConfig } = storeToRefs(useGamesCommon());
 

@@ -91,7 +91,6 @@ export async function loadPlayaRecommendationsReq(page: number, limit: number) {
         return data;
     } catch (error) {
         log.error("LOAD_PLAYA_RECOMMENDATIONS_ERROR", error);
-        return undefined;
     }
 }
 
