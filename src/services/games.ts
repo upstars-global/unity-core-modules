@@ -1,7 +1,7 @@
 // @ts-expect-error -- TS2307: Cannot find module '@theme/configs/categoryesGames' or its corresponding type declarations.
 import { SlugCategoriesGames } from "@theme/configs/categoryesGames";
 import { storeToRefs } from "pinia";
-import { UnwrapRef } from "vue";
+import { UnwrapRef, watch } from "vue";
 
 import { log } from "../controllers/Logger";
 import { processGame } from "../helpers/gameHelpers";
@@ -22,6 +22,7 @@ import { useGamesProviders } from "../store/games/gamesProviders";
 import { useGamesCommon } from "../store/games/gamesStore";
 import { useJackpots } from "../store/jackpots";
 import { useRootStore } from "../store/root";
+import { useUserInfo } from "../store/user/userInfo";
 import { useUserStatuses } from "../store/user/userStatuses";
 import { AcceptsGamesVariants, IGameFilter } from "./api/DTO/gamesDTO";
 import { loadEnabledGamesConfigReq } from "./api/requests/configs";
@@ -384,6 +385,7 @@ async function loadPlayaGamesPage(page: number, limit: number, device: string) {
     return {
         data,
         isPlaya: true,
+        firstPage: currentPage,
         pagination: {
             current_page: currentPage,
             next_page: currentPage < totalPages ? currentPage + 1 : null,
@@ -399,11 +401,23 @@ export async function loadGamesCategory(slug: string, page: number = 1): Promise
     const { collections } = storeToRefs(gamesCategoryStore);
     const { gamesPageLimit } = storeToRefs(useConfigStore());
     const slugCollection = gamesCategoryStore.categoryGeo(slug);
+    const isPlayaCategory = slug === SlugCategoriesGames.SLUG_CATEGORY_TOP && slugCollection === PLAYA_CATEGORY_ID;
+
+    if (isPlayaCategory) {
+        const user = useUserInfo();
+        const isProfileLoading = () => user.getIsLogged && !user.getDataIsLoaded;
+        if (isProfileLoading()) {
+            await new Promise<void>((resolve) => {
+                watch(isProfileLoading, () => resolve(), { once: true });
+            });
+        }
+    }
+
     const cached = collections.value[slugCollection];
-    const isPlaya = slug === SlugCategoriesGames.SLUG_CATEGORY_TOP &&
-        slugCollection === PLAYA_CATEGORY_ID &&
-        useUserStatuses().getUserGroups.includes(PLAYA_GROUP_ID);
-    const replace = isPlaya && +page === 1 && !cached?.isPlaya;
+    const isPlaya = isPlayaCategory && useUserStatuses().getUserGroups.includes(PLAYA_GROUP_ID);
+    const pageNumber = +page;
+    const replace = isPlaya && (pageNumber < (cached?.firstPage ?? 1) ||
+        (!cached?.isPlaya && (pageNumber === 1 || !cached?.pagination.current_page)));
 
     if (cached?.isPlaya && !isPlaya) {
         delete collections.value[slugCollection];
@@ -420,7 +434,7 @@ export async function loadGamesCategory(slug: string, page: number = 1): Promise
         const device = isMobile.value ? "mobile" : "desktop";
 
         if (isPlaya && (replace || cached?.isPlaya)) {
-            const data = await loadPlayaGamesPage(+page, gamesPageLimit.value, device);
+            const data = await loadPlayaGamesPage(pageNumber, gamesPageLimit.value, device);
             if (data && gamesCategoryStore.setData(data, slugCollection, replace)) {
                 return;
             }
@@ -451,7 +465,7 @@ export async function loadGamesCategory(slug: string, page: number = 1): Promise
         }
 
         // @ts-expect-error -- TS2345: Argument of type 'IGameFilterResponse' is not assignable to parameter of type 'ICollectionItem'.
-        gamesCategoryStore.setData(data, slugCollection);
+        gamesCategoryStore.setData(data, slugCollection, replace && cached?.isPlaya);
     } catch (err) {
         log.error("LOAD_GAMES_CATEGORY_BY_SLUG_ERROR", err);
     }

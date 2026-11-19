@@ -40,11 +40,13 @@ vi.mock("../../../src/store/multilang", () => ({
 }));
 
 const mockIsLogged = ref(false);
+const mockProfileLoaded = ref(true);
 const mockUserCurrency = ref("USD");
 const mockUserGroups: Array<string | number> = [];
 vi.mock("../../../src/store/user/userInfo", () => ({
     useUserInfo: () => ({
-        getIsLogged: mockIsLogged,
+        get getIsLogged() { return mockIsLogged.value; },
+        get getDataIsLoaded() { return mockProfileLoaded.value; },
         getUserCurrency: mockUserCurrency,
     }),
 }));
@@ -84,6 +86,7 @@ describe("store/games/gamesCategory", () => {
         vi.clearAllMocks();
         mockUserGeo.value = "";
         mockIsLogged.value = false;
+        mockProfileLoaded.value = true;
         mockUserCurrency.value = "USD";
         mockGamesCategories.value = [];
         mockUserGroups.length = 0;
@@ -210,6 +213,57 @@ describe("store/games/gamesCategory", () => {
             expect(store.collections["top:au"].pagination.next_page).toBe(2);
         });
 
+        it.each([ 1, 2 ])("loads Playa page %i after the profile arrives on a cold start", async (page) => {
+            mockUserGeo.value = "AU";
+            mockGamesCategories.value = [ { id: "top:au" } as IGamesProvider ];
+            mockIsLogged.value = true;
+            mockProfileLoaded.value = false;
+            const game = { identifier: "studio/personal" } as IGameItemFilter;
+            vi.mocked(loadPlayaRecommendationsReq).mockResolvedValueOnce({
+                gameIds: [ game.identifier ],
+                pagination: { page, limit: 20, total: 40 },
+            });
+            vi.mocked(loadGamesByIdsReq).mockResolvedValueOnce({ [game.identifier]: game });
+
+            const loading = loadGamesCategory("top", page);
+            expect(loadGamesCategoryReq).not.toHaveBeenCalled();
+            expect(loadPlayaRecommendationsReq).not.toHaveBeenCalled();
+            mockUserGroups.push("playa_au");
+            mockProfileLoaded.value = true;
+            await loading;
+
+            expect(loadPlayaRecommendationsReq).toHaveBeenCalledWith(page, 20);
+            expect(loadGamesCategoryReq).not.toHaveBeenCalled();
+            expect(useGamesCategory().getCollection("top", page, page - 1)).toEqual([ game ]);
+        });
+
+        it.each([ true, false ])("replaces a second-page cache on page 1 when Playa availability is %s", async (hasRecommendations) => {
+            const store = useGamesCategory();
+            mockUserGeo.value = "AU";
+            mockGamesCategories.value = [ { id: "top:au" } as IGamesProvider ];
+            mockUserGroups.push("playa_au");
+            store.collections["top:au"] = {
+                data: [ mockGameData as IGame ],
+                isPlaya: true,
+                firstPage: 2,
+                pagination: { current_page: 2, next_page: null, prev_page: 1, total_pages: 2, total_count: 40 },
+            };
+            const game = { identifier: "studio/personal" } as IGameItemFilter;
+            vi.mocked(loadPlayaRecommendationsReq).mockResolvedValueOnce(hasRecommendations ? {
+                gameIds: [ game.identifier ],
+                pagination: { page: 1, limit: 20, total: 40 },
+            } : undefined);
+            vi.mocked(loadGamesByIdsReq).mockResolvedValueOnce({ [game.identifier]: game });
+
+            await loadGamesCategory("top");
+
+            expect(loadPlayaRecommendationsReq).toHaveBeenCalledWith(1, 20);
+            expect(loadGamesCategoryReq).toHaveBeenCalledTimes(hasRecommendations ? 0 : 1);
+            expect(store.getCollection("top")).toEqual([ hasRecommendations ? game : mockGameData ]);
+            expect(Boolean(store.collections["top:au"].isPlaya)).toBe(hasRecommendations);
+            expect(store.collections["top:au"].firstPage).toBe(hasRecommendations ? 1 : undefined);
+        });
+
         it.each([
             { slug: "top", geo: "AU", key: "top:au", groups: [ 21 ] },
             { slug: "slots", geo: "AU", key: "slots", groups: [ "playa_au" ] },
@@ -263,16 +317,19 @@ describe("store/games/gamesCategory", () => {
             expect(useGamesCategory().collections["top:au"].data).toEqual([ mockGameData ]);
         });
 
-        it("keeps the personalized collection and stops on a valid empty last page", async () => {
+        it.each([ true, false ])("stops on a valid empty last page with an existing collection: %s", async (hasCollection) => {
             const store = useGamesCategory();
             mockUserGeo.value = "AU";
             mockGamesCategories.value = [ { id: "top:au" } as IGamesProvider ];
             mockUserGroups.push("playa_au");
-            store.collections["top:au"] = {
-                data: [ mockGameData as IGame ],
-                isPlaya: true,
-                pagination: { current_page: 1, next_page: 2, prev_page: null, total_pages: 2, total_count: 25 },
-            };
+            if (hasCollection) {
+                store.collections["top:au"] = {
+                    data: [ mockGameData as IGame ],
+                    isPlaya: true,
+                    firstPage: 1,
+                    pagination: { current_page: 1, next_page: 2, prev_page: null, total_pages: 2, total_count: 25 },
+                };
+            }
             vi.mocked(loadPlayaRecommendationsReq).mockResolvedValueOnce({
                 gameIds: [],
                 pagination: { page: 2, limit: 20, total: 25 },
@@ -280,7 +337,8 @@ describe("store/games/gamesCategory", () => {
 
             await loadGamesCategory("top", 2);
 
-            expect(store.collections["top:au"].data).toEqual([ mockGameData ]);
+            expect(store.collections["top:au"].data).toEqual(hasCollection ? [ mockGameData ] : []);
+            expect(store.collections["top:au"].firstPage).toBe(hasCollection ? 1 : 2);
             expect(store.collections["top:au"].pagination.next_page).toBeNull();
             expect(loadGamesCategoryReq).not.toHaveBeenCalled();
         });

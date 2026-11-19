@@ -31,7 +31,11 @@ export const useGamesCategory = defineStore("gamesCategory", () => {
     const getCollection = (slug: string = DEFAULT_COLLECTION_NAME, page: number = 1, startPage: number = 0): IGame[] => {
         const slugCollection = categoryGeo(slug);
         const collection = collections.value[slugCollection];
-        return collection?.data.slice(startPage * gamesPageLimit.value, page * gamesPageLimit.value) || [];
+        const offset = (collection?.firstPage ?? 1) - 1;
+        return collection?.data.slice(
+            Math.max(0, startPage - offset) * gamesPageLimit.value,
+            Math.max(0, page - offset) * gamesPageLimit.value,
+        ) || [];
     };
 
     const getCollectionPagination = (slug: string = DEFAULT_COLLECTION_NAME): ICollectionItem["pagination"] | undefined => {
@@ -44,7 +48,7 @@ export const useGamesCategory = defineStore("gamesCategory", () => {
 
     const isLoaded = (slug: string, page: number): boolean => {
         const collection = collections.value[slug];
-        if (!collection) {
+        if (!collection || page < (collection.firstPage ?? 1)) {
             return false;
         }
         return (page === 1 && collection.data.length > 0) ||
@@ -68,7 +72,7 @@ export const useGamesCategory = defineStore("gamesCategory", () => {
             enabledGamesConfig.value,
         );
 
-        if (replace && !games.length) {
+        if (replace && data.isPlaya && data.pagination.current_page === 1 && !games.length) {
             return false;
         }
 

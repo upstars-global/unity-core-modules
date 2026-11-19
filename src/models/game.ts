@@ -63,6 +63,7 @@ export type IGamesProviderCollection = Record<string, IGamesProvider>;
 export interface ICollectionItem {
     data: IGame[];
     isPlaya?: boolean;
+    firstPage?: number;
     pagination: {
         current_page: number;
         next_page: number | null | undefined;
