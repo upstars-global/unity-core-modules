@@ -92,6 +92,14 @@ export async function loadGamesDataByFilter<T>(config: Record<string, unknown>):
     }
 }
 
+export async function loadPlayaRecommendationsReq(page: number, limit: number) {
+    const { data } = await http().get<{
+        gameIds: string[];
+        pagination: { page: number; limit: number; total: number };
+    }>(`${ FE_API_PREFIX }/playa/recommendations`, { params: { page, limit } });
+    return data;
+}
+
 export async function loadGamesProvidersReq(filter?: IGamesProvidersFilter) {
     try {
         const params = new URLSearchParams();
