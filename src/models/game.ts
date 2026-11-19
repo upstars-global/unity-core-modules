@@ -60,14 +60,12 @@ export interface IEnabledGames {
 
 export type IGamesProviderCollection = Record<string, IGamesProvider>;
 
-export interface ICollectionItem<TGame = IGame> {
-    data: TGame[];
-    isPlaya?: boolean;
-    firstPage?: number;
+export interface ICollectionItem {
+    data: IGame[];
     pagination: {
         current_page: number;
-        next_page: number | null | undefined;
-        prev_page: number | null | undefined;
+        next_page: undefined;
+        prev_page: undefined;
         total_pages: number;
         total_count: number;
     };

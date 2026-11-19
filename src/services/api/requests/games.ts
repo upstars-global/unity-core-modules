@@ -11,7 +11,6 @@ import {
     IGameFilterResponse,
     IGamesProvidersFilter,
     IJackpots,
-    IPlayaRecommendationsPage,
     IPlayedGame,
     IRandomGameFilter,
     ResponseGamesByVersion,
@@ -80,17 +79,6 @@ export async function loadGamesCategoryReq(config: Record<string, unknown>): Pro
     } catch (error) {
         log.error("LOAD_GAMES_CATEGORY_ERROR", error);
         return {};
-    }
-}
-
-export async function loadPlayaRecommendationsReq(page: number, limit: number) {
-    try {
-        const { data } = await http().get<IPlayaRecommendationsPage>(`${ FE_API_PREFIX }/playa/recommendations`, {
-            params: { page, limit },
-        });
-        return data;
-    } catch (error) {
-        log.error("LOAD_PLAYA_RECOMMENDATIONS_ERROR", error);
     }
 }
 

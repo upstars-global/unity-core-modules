@@ -49,11 +49,6 @@ export interface IGameFilter {
 
 export type IGameFilterResponse = IGameFilter | Record<string, unknown>;
 
-export interface IPlayaRecommendationsPage {
-    gameIds: string[];
-    pagination: { page: number; limit: number; total: number };
-}
-
 export interface ICollectionRecord {
     [slug: string]: ICollectionItem;
 }

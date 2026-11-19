@@ -2,7 +2,7 @@ import { storeToRefs } from "pinia";
 import { defineStore } from "pinia";
 import { ref, toRefs } from "vue";
 
-import { type IGameItemFilter, processGameForNewAPI } from "../../helpers/gameHelpers";
+import { processGameForNewAPI } from "../../helpers/gameHelpers";
 import { defaultCollection, filterGames } from "../../helpers/gameHelpers";
 import type { ICollectionItem, IGame } from "../../models/game";
 import type { ICollectionRecord } from "../../services/api/DTO/gamesDTO";
@@ -31,11 +31,7 @@ export const useGamesCategory = defineStore("gamesCategory", () => {
     const getCollection = (slug: string = DEFAULT_COLLECTION_NAME, page: number = 1, startPage: number = 0): IGame[] => {
         const slugCollection = categoryGeo(slug);
         const collection = collections.value[slugCollection];
-        const offset = (collection?.firstPage ?? 1) - 1;
-        return collection?.data.slice(
-            Math.max(0, startPage - offset) * gamesPageLimit.value,
-            Math.max(0, page - offset) * gamesPageLimit.value,
-        ) || [];
+        return collection?.data.slice(startPage * gamesPageLimit.value, page * gamesPageLimit.value) || [];
     };
 
     const getCollectionPagination = (slug: string = DEFAULT_COLLECTION_NAME): ICollectionItem["pagination"] | undefined => {
@@ -48,7 +44,7 @@ export const useGamesCategory = defineStore("gamesCategory", () => {
 
     const isLoaded = (slug: string, page: number): boolean => {
         const collection = collections.value[slug];
-        if (!collection || page < (collection.firstPage ?? 1)) {
+        if (!collection) {
             return false;
         }
         return (page === 1 && collection.data.length > 0) ||
@@ -58,33 +54,27 @@ export const useGamesCategory = defineStore("gamesCategory", () => {
             collection.pagination.current_page >= page;
     };
 
-    function setData(data: ICollectionItem<IGameItemFilter>, slug: string) {
+    function setData(data: ICollectionItem, slug: string): void {
+        const propsGame = { ...data };
         const { disabledGamesProviders } = storeToRefs(useGamesProviders());
         const { enabledGamesConfig } = storeToRefs(useGamesCommon());
 
-        const games = filterGames(
+        propsGame.data = filterGames(
+            // @ts-expect-error -- TS2345: Argument of type '(game: IGameItemFilter) => IGameItem' is not assignable to parameter of type '(value: IGame, index: number, array: IGame[]) => IGameItem'.
             data.data.map(processGameForNewAPI),
             disabledGamesProviders.value,
             enabledGamesConfig.value,
         );
 
-        const collection = collections.value[slug];
-        const replace = !collection || data.isPlaya !== collection.isPlaya ||
-            (collection.firstPage && data.pagination.current_page <= collection.firstPage);
-        if (replace && data.isPlaya && !games.length) {
-            return false;
-        }
-
-        if (replace) {
+        if (!collections.value[slug]) {
             collections.value = {
                 ...collections.value,
-                [slug]: { ...data, data: games },
+                [slug]: propsGame,
             };
         } else {
-            collection.data.push(...games);
-            collection.pagination = data.pagination;
+            collections.value[slug].data.push(...propsGame.data);
+            collections.value[slug].pagination = data.pagination;
         }
-        return true;
     }
 
     function initCollection(data: { slug: string }[]): void {

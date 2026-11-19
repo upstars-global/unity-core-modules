@@ -1,7 +1,7 @@
 // @ts-expect-error -- TS2307: Cannot find module '@theme/configs/categoryesGames' or its corresponding type declarations.
 import { SlugCategoriesGames } from "@theme/configs/categoryesGames";
 import { storeToRefs } from "pinia";
-import { UnwrapRef, watch } from "vue";
+import { UnwrapRef } from "vue";
 
 import { log } from "../controllers/Logger";
 import { processGame } from "../helpers/gameHelpers";
@@ -22,8 +22,6 @@ import { useGamesProviders } from "../store/games/gamesProviders";
 import { useGamesCommon } from "../store/games/gamesStore";
 import { useJackpots } from "../store/jackpots";
 import { useRootStore } from "../store/root";
-import { useUserInfo } from "../store/user/userInfo";
-import { useUserStatuses } from "../store/user/userStatuses";
 import { AcceptsGamesVariants, IGameFilter } from "./api/DTO/gamesDTO";
 import { loadEnabledGamesConfigReq } from "./api/requests/configs";
 import {
@@ -34,19 +32,14 @@ import {
     loadFilteredGames as loadFilteredGamesReq,
     loadGameBySeoTitleReq,
     loadGameBySlugReq,
-    loadGamesByIdsReq,
     loadGamesCategories as loadGamesCategoriesReq,
     loadGamesCategoryReq,
     loadGamesDataByFilter,
     loadGamesJackpots as loadGamesJackpotsReq,
     loadGamesProvidersReq,
     loadLastGames as loadLastGamesReq,
-    loadPlayaRecommendationsReq,
     loadRandomGame,
 } from "./api/requests/games";
-
-const PLAYA_GROUP_ID = "playa_au";
-const PLAYA_CATEGORY_ID = "top:au";
 
 export function getMenuCategoriesBySlug(slug: string): SlugCategoriesGames[] {
     const jackpotsStore = useJackpots();
@@ -357,108 +350,11 @@ export async function loadGameBySlug(slug: string) {
     }
 }
 
-export async function loadGamesByIds(gameIds: string[]) {
-    if (!gameIds.length) {
-        return [];
-    }
-
-    const device = useRootStore().isMobile ? "mobile" : "desktop";
-    const games = await loadGamesByIdsReq(gameIds, device);
-    return gameIds.flatMap((id) => {
-        const game = games[id];
-        return game?.identifier && game.is_geo_available !== false ? [ game ] : [];
-    });
-}
-
-async function loadPlayaGamesPage(page: number, limit: number) {
-    const recommendations = await loadPlayaRecommendationsReq(page, limit);
-    if (!recommendations) {
-        return;
-    }
-
-    const data = await loadGamesByIds(recommendations.gameIds).catch(() => undefined);
-    if (!data) {
-        return;
-    }
-
-    const { page: currentPage, limit: pageSize, total } = recommendations.pagination;
-    const totalPages = Math.ceil(total / pageSize);
-    return {
-        data,
-        isPlaya: true,
-        firstPage: currentPage,
-        pagination: {
-            current_page: currentPage,
-            next_page: currentPage < totalPages ? currentPage + 1 : null,
-            prev_page: currentPage > 1 ? currentPage - 1 : null,
-            total_count: total,
-            total_pages: totalPages,
-        },
-    };
-}
-
-function isPlayaRecommendations(slug: string, category: string, page: number) {
-    if (slug !== SlugCategoriesGames.SLUG_CATEGORY_TOP || category !== PLAYA_CATEGORY_ID) {
-        return false;
-    }
-    const cached = useGamesCategory().collections[category];
-    return page <= 1 || cached?.isPlaya || !cached?.pagination.current_page;
-}
-
-async function loadPlayaGamesCategory(category: string, page: number) {
-    const user = useUserInfo();
-    const isProfileLoading = () => user.getIsLogged && !user.getDataIsLoaded;
-    if (isProfileLoading()) {
-        await new Promise<void>((resolve) => {
-            watch(isProfileLoading, () => resolve(), { once: true });
-        });
-    }
-
-    const store = useGamesCategory();
-    const cached = store.collections[category];
-    if (!user.getIsLogged || !useUserStatuses().getUserGroups.includes(PLAYA_GROUP_ID)) {
-        if (cached?.isPlaya) {
-            delete store.collections[category];
-        }
-        return loadGamesCategory(category, page);
-    }
-
-    if (cached?.isPlaya && store.isLoaded(category, page)) {
-        return cached;
-    }
-
-    try {
-        const data = await loadPlayaGamesPage(page, useConfigStore().gamesPageLimit);
-        if (data && store.setData(data, category)) {
-            return;
-        }
-    } catch (err) {
-        log.error("LOAD_GAMES_CATEGORY_BY_SLUG_ERROR", err);
-    }
-
-    if (cached?.isPlaya && page > cached.pagination.current_page) {
-        cached.pagination.next_page = null;
-        return cached;
-    }
-
-    const firstLoad = !cached?.pagination.current_page;
-    const result = await loadGamesCategory(category, page);
-    const collection = store.collections[category];
-    if (page > 1 && firstLoad && collection?.pagination.current_page === page) {
-        collection.firstPage = page;
-    }
-    return result;
-}
-
 export async function loadGamesCategory(slug: string, page: number = 1): Promise<ICollectionItem | undefined> {
     const gamesCategoryStore = useGamesCategory();
     const { collections } = storeToRefs(gamesCategoryStore);
     const { gamesPageLimit } = storeToRefs(useConfigStore());
     const slugCollection = gamesCategoryStore.categoryGeo(slug);
-    if (isPlayaRecommendations(slug, slugCollection, page)) {
-        return loadPlayaGamesCategory(slugCollection, page);
-    }
-
     const loaded = gamesCategoryStore.isLoaded(slugCollection, page);
 
     if (loaded) {
