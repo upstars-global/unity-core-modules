@@ -401,6 +401,15 @@ export async function activateUserCouponReq(code: string) {
     }
 }
 
+export async function requestGdprReportReq(): Promise<void> {
+    try {
+        await http().post<void>("/api/gdpr_reports");
+    } catch (err) {
+        log.error("REQUEST_GDPR_REPORT_ERROR", err);
+        throw err;
+    }
+}
+
 export async function loadUserActiveSessionsReq() {
     try {
         const { data } = await http().get<IUserSession[]>("/api/player/sessions");

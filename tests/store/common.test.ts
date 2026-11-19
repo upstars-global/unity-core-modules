@@ -74,6 +74,18 @@ describe("useCommon store", () => {
         expect(store.currencyConfig).toBeNull();
         expect(store.limitsDepositConfig).toBeNull();
         expect(store.getDefaultCurrency).toBe(config.currencyDefault);
+        expect(store.isGdprReportEnabled).toBe(false);
+    });
+
+    it.each([
+        [ undefined, false ],
+        [ false, false ],
+        [ true, true ],
+    ] as const)("exposes GDPR availability for flag %s", (flag, enabled) => {
+        const store = useCommon();
+        store.$patch({ infoProject: { gdpr_report_enabled: flag } });
+
+        expect(store.isGdprReportEnabled).toBe(enabled);
     });
 
     it("setDefaultOptions overrides defaults without mutating source data", () => {

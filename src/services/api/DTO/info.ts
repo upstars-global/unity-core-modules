@@ -29,6 +29,7 @@ export interface IProjectInfo {
     };
     license: UserAccountLicense;
     player_two_factor_auth: boolean;
+    gdpr_report_enabled?: boolean;
     available_currency_exchange: boolean;
     available_referral_system: boolean;
     supported_payment_api_versions: string[];
