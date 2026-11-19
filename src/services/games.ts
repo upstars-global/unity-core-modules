@@ -357,11 +357,12 @@ export async function loadGameBySlug(slug: string) {
     }
 }
 
-export async function loadGamesByIds(gameIds: string[], device: string) {
+export async function loadGamesByIds(gameIds: string[]) {
     if (!gameIds.length) {
         return [];
     }
 
+    const device = useRootStore().isMobile ? "mobile" : "desktop";
     const games = await loadGamesByIdsReq(gameIds, device);
     return gameIds.flatMap((id) => {
         const game = games[id];
@@ -369,13 +370,13 @@ export async function loadGamesByIds(gameIds: string[], device: string) {
     });
 }
 
-async function loadPlayaGamesPage(page: number, limit: number, device: string) {
+async function loadPlayaGamesPage(page: number, limit: number) {
     const recommendations = await loadPlayaRecommendationsReq(page, limit);
     if (!recommendations) {
         return;
     }
 
-    const data = await loadGamesByIds(recommendations.gameIds, device).catch(() => undefined);
+    const data = await loadGamesByIds(recommendations.gameIds).catch(() => undefined);
     if (!data) {
         return;
     }
@@ -396,11 +397,15 @@ async function loadPlayaGamesPage(page: number, limit: number, device: string) {
     };
 }
 
-function isPlayaRecommendations(slug: string, category: string) {
-    return slug === SlugCategoriesGames.SLUG_CATEGORY_TOP && category === PLAYA_CATEGORY_ID;
+function isPlayaRecommendations(slug: string, category: string, page: number) {
+    if (slug !== SlugCategoriesGames.SLUG_CATEGORY_TOP || category !== PLAYA_CATEGORY_ID) {
+        return false;
+    }
+    const cached = useGamesCategory().collections[category];
+    return page <= 1 || cached?.isPlaya || !cached?.pagination.current_page;
 }
 
-async function loadPlayaGamesCategory(page: number) {
+async function loadPlayaGamesCategory(category: string, page: number) {
     const user = useUserInfo();
     const isProfileLoading = () => user.getIsLogged && !user.getDataIsLoaded;
     if (isProfileLoading()) {
@@ -410,26 +415,39 @@ async function loadPlayaGamesCategory(page: number) {
     }
 
     const store = useGamesCategory();
-    const cached = store.collections[PLAYA_CATEGORY_ID];
+    const cached = store.collections[category];
     if (!user.getIsLogged || !useUserStatuses().getUserGroups.includes(PLAYA_GROUP_ID)) {
         if (cached?.isPlaya) {
-            delete store.collections[PLAYA_CATEGORY_ID];
+            delete store.collections[category];
         }
-        return false;
+        return loadGamesCategory(category, page);
     }
 
-    const replace = page < (cached?.firstPage ?? 1) ||
-        (!cached?.isPlaya && (page === 1 || !cached?.pagination.current_page));
-
-    if (!replace && (!cached?.isPlaya || store.isLoaded(PLAYA_CATEGORY_ID, page))) {
-        return false;
+    if (cached?.isPlaya && store.isLoaded(category, page)) {
+        return cached;
     }
 
-    const { isMobile } = storeToRefs(useRootStore());
-    const { gamesPageLimit } = storeToRefs(useConfigStore());
-    const device = isMobile.value ? "mobile" : "desktop";
-    const data = await loadPlayaGamesPage(page, gamesPageLimit.value, device);
-    return data && store.setData(data, PLAYA_CATEGORY_ID, replace);
+    try {
+        const data = await loadPlayaGamesPage(page, useConfigStore().gamesPageLimit);
+        if (data && store.setData(data, category)) {
+            return;
+        }
+    } catch (err) {
+        log.error("LOAD_GAMES_CATEGORY_BY_SLUG_ERROR", err);
+    }
+
+    if (cached?.isPlaya && page > cached.pagination.current_page) {
+        cached.pagination.next_page = null;
+        return cached;
+    }
+
+    const firstLoad = !cached?.pagination.current_page;
+    const result = await loadGamesCategory(category, page);
+    const collection = store.collections[category];
+    if (page > 1 && firstLoad && collection?.pagination.current_page === page) {
+        collection.firstPage = page;
+    }
+    return result;
 }
 
 export async function loadGamesCategory(slug: string, page: number = 1): Promise<ICollectionItem | undefined> {
@@ -437,18 +455,17 @@ export async function loadGamesCategory(slug: string, page: number = 1): Promise
     const { collections } = storeToRefs(gamesCategoryStore);
     const { gamesPageLimit } = storeToRefs(useConfigStore());
     const slugCollection = gamesCategoryStore.categoryGeo(slug);
-    const isPlaya = isPlayaRecommendations(slug, slugCollection);
+    if (isPlayaRecommendations(slug, slugCollection, page)) {
+        return loadPlayaGamesCategory(slugCollection, page);
+    }
+
+    const loaded = gamesCategoryStore.isLoaded(slugCollection, page);
+
+    if (loaded) {
+        return collections.value[slugCollection];
+    }
 
     try {
-        if (isPlaya && await loadPlayaGamesCategory(page)) {
-            return;
-        }
-
-        const loaded = gamesCategoryStore.isLoaded(slugCollection, page);
-        if (loaded) {
-            return collections.value[slugCollection];
-        }
-
         const { isMobile } = storeToRefs(useRootStore());
 
         const device = isMobile.value ? "mobile" : "desktop";
@@ -466,7 +483,6 @@ export async function loadGamesCategory(slug: string, page: number = 1): Promise
             page_size: gamesPageLimit.value,
         };
 
-        const replace = isPlaya && page < (collections.value[slugCollection]?.firstPage ?? 1);
         // @ts-expect-error -- TS2345: Argument of type 'IGameFilter' is not assignable to parameter of type 'Record<string, unknown>'.
         const data = await loadGamesCategoryReq(reqConfig);
         const collectionData = (data as Partial<ICollectionItem>).data;
@@ -476,7 +492,7 @@ export async function loadGamesCategory(slug: string, page: number = 1): Promise
         }
 
         // @ts-expect-error -- TS2345: Argument of type 'IGameFilterResponse' is not assignable to parameter of type 'ICollectionItem'.
-        gamesCategoryStore.setData(data, slugCollection, replace);
+        gamesCategoryStore.setData(data, slugCollection);
     } catch (err) {
         log.error("LOAD_GAMES_CATEGORY_BY_SLUG_ERROR", err);
     }

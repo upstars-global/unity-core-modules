@@ -58,7 +58,7 @@ export const useGamesCategory = defineStore("gamesCategory", () => {
             collection.pagination.current_page >= page;
     };
 
-    function setData(data: ICollectionItem<IGameItemFilter>, slug: string, replace = false) {
+    function setData(data: ICollectionItem<IGameItemFilter>, slug: string) {
         const { disabledGamesProviders } = storeToRefs(useGamesProviders());
         const { enabledGamesConfig } = storeToRefs(useGamesCommon());
 
@@ -68,18 +68,21 @@ export const useGamesCategory = defineStore("gamesCategory", () => {
             enabledGamesConfig.value,
         );
 
-        if (replace && data.isPlaya && data.pagination.current_page === 1 && !games.length) {
+        const collection = collections.value[slug];
+        const replace = !collection || data.isPlaya !== collection.isPlaya ||
+            (collection.firstPage && data.pagination.current_page <= collection.firstPage);
+        if (replace && data.isPlaya && !games.length) {
             return false;
         }
 
-        if (replace || !collections.value[slug]) {
+        if (replace) {
             collections.value = {
                 ...collections.value,
                 [slug]: { ...data, data: games },
             };
         } else {
-            collections.value[slug].data.push(...games);
-            collections.value[slug].pagination = data.pagination;
+            collection.data.push(...games);
+            collection.pagination = data.pagination;
         }
         return true;
     }

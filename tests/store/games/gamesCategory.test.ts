@@ -1,6 +1,6 @@
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 
 import { log } from "../../../src/controllers/Logger";
 import { filterGames, type IGameItemFilter, processGameForNewAPI } from "../../../src/helpers/gameHelpers";
@@ -55,7 +55,7 @@ vi.mock("../../../src/store/user/userStatuses", () => ({
 }));
 
 vi.mock("../../../src/store/configStore", () => ({
-    useConfigStore: () => ({
+    useConfigStore: () => reactive({
         gamesPageLimit: ref(20),
         $defaultProjectConfig: {
             featureFlags: {
@@ -65,9 +65,10 @@ vi.mock("../../../src/store/configStore", () => ({
     }),
 }));
 
+const mockIsMobile = ref(false);
 vi.mock("../../../src/store/root", () => ({
-    useRootStore: () => ({
-        isMobile: ref(false),
+    useRootStore: () => reactive({
+        isMobile: mockIsMobile,
     }),
 }));
 
@@ -88,6 +89,7 @@ describe("store/games/gamesCategory", () => {
         mockIsLogged.value = false;
         mockProfileLoaded.value = true;
         mockUserCurrency.value = "USD";
+        mockIsMobile.value = false;
         mockGamesCategories.value = [];
         mockUserGroups.length = 0;
     });
@@ -124,6 +126,7 @@ describe("store/games/gamesCategory", () => {
 
     describe("loadGamesByIds", () => {
         it("returns available catalogue cards in the requested order", async () => {
+            mockIsMobile.value = true;
             const first = { identifier: "studio/first", is_geo_available: true } as IGameItemFilter;
             const second = { identifier: "studio/second" } as IGameItemFilter;
             const blocked = { identifier: "studio/blocked", is_geo_available: false } as IGameItemFilter;
@@ -134,12 +137,12 @@ describe("store/games/gamesCategory", () => {
                 [first.identifier]: first,
             });
 
-            await expect(loadGamesByIds(gameIds, "mobile")).resolves.toEqual([ first, second ]);
+            await expect(loadGamesByIds(gameIds)).resolves.toEqual([ first, second ]);
             expect(loadGamesByIdsReq).toHaveBeenCalledExactlyOnceWith(gameIds, "mobile");
         });
 
         it("returns an empty list without calling the catalogue for an empty page", async () => {
-            await expect(loadGamesByIds([], "desktop")).resolves.toEqual([]);
+            await expect(loadGamesByIds([])).resolves.toEqual([]);
             expect(loadGamesByIdsReq).not.toHaveBeenCalled();
         });
     });
@@ -205,8 +208,9 @@ describe("store/games/gamesCategory", () => {
             vi.mocked(loadGamesByIdsReq).mockResolvedValueOnce({ [game.identifier]: game });
 
             await loadGamesCategory("top");
+            await loadGamesCategory("top");
 
-            expect(loadPlayaRecommendationsReq).toHaveBeenCalledWith(1, 20);
+            expect(loadPlayaRecommendationsReq).toHaveBeenCalledExactlyOnceWith(1, 20);
             expect(loadGamesByIdsReq).toHaveBeenCalledWith([ game.identifier ], "desktop");
             expect(loadGamesCategoryReq).not.toHaveBeenCalled();
             expect(store.collections["top:au"].data).toEqual([ game ]);
@@ -300,6 +304,9 @@ describe("store/games/gamesCategory", () => {
 
             expect(loadPlayaRecommendationsReq).toHaveBeenCalledTimes(1);
             expect(loadGamesCategoryReq).toHaveBeenCalledTimes(2);
+            expect(loadGamesCategoryReq).toHaveBeenNthCalledWith(1, expect.objectContaining({
+                filter: { categories: { identifiers: [ "top:au" ], strategy: "OR" } },
+            }));
             expect(useGamesCategory().collections["top:au"].isPlaya).toBeUndefined();
         });
 
@@ -322,12 +329,19 @@ describe("store/games/gamesCategory", () => {
             expect(useGamesCategory().collections["top:au"].data).toEqual([ mockGameData ]);
         });
 
-        it.each([ true, false ])("stops on a valid empty last page with an existing collection: %s", async (hasCollection) => {
+        it.each([
+            { hasCollection: true, failed: false },
+            { hasCollection: true, failed: true },
+            { hasCollection: false, failed: false },
+            { hasCollection: false, failed: true },
+        ])("falls back only on initial page 2 (existing collection: $hasCollection, failed: $failed)", async ({ hasCollection, failed }) => {
             const store = useGamesCategory();
             mockUserGeo.value = "AU";
             mockGamesCategories.value = [ { id: "top:au" } as IGamesProvider ];
             mockIsLogged.value = true;
             mockUserGroups.push("playa_au");
+
+            const ordinaryGame = { identifier: "studio/ordinary" } as IGame;
             if (hasCollection) {
                 store.collections["top:au"] = {
                     data: [ mockGameData as IGame ],
@@ -335,18 +349,25 @@ describe("store/games/gamesCategory", () => {
                     firstPage: 1,
                     pagination: { current_page: 1, next_page: 2, prev_page: null, total_pages: 2, total_count: 25 },
                 };
+            } else if (failed) {
+                store.initCollection([ { slug: "top:au" } ]);
             }
-            vi.mocked(loadPlayaRecommendationsReq).mockResolvedValueOnce({
+            vi.mocked(loadPlayaRecommendationsReq).mockResolvedValueOnce(failed ? undefined : {
                 gameIds: [],
                 pagination: { page: 2, limit: 20, total: 25 },
             });
+            vi.mocked(loadGamesCategoryReq).mockResolvedValue({
+                data: [ ordinaryGame ],
+                pagination: { current_page: 2, next_page: null },
+            } as ICollectionItem);
 
             await loadGamesCategory("top", 2);
 
-            expect(store.collections["top:au"].data).toEqual(hasCollection ? [ mockGameData ] : []);
+            expect(store.getCollection("top", 2, hasCollection ? 0 : 1))
+                .toEqual([ hasCollection ? mockGameData : ordinaryGame ]);
             expect(store.collections["top:au"].firstPage).toBe(hasCollection ? 1 : 2);
             expect(store.collections["top:au"].pagination.next_page).toBeNull();
-            expect(loadGamesCategoryReq).not.toHaveBeenCalled();
+            expect(loadGamesCategoryReq).toHaveBeenCalledTimes(hasCollection ? 0 : 1);
         });
 
         it("should log error on api failure", async () => {
