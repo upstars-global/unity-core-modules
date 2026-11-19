@@ -396,51 +396,62 @@ async function loadPlayaGamesPage(page: number, limit: number, device: string) {
     };
 }
 
+function isPlayaRecommendations(slug: string, category: string) {
+    return slug === SlugCategoriesGames.SLUG_CATEGORY_TOP && category === PLAYA_CATEGORY_ID;
+}
+
+async function loadPlayaGamesCategory(page: number) {
+    const user = useUserInfo();
+    const isProfileLoading = () => user.getIsLogged && !user.getDataIsLoaded;
+    if (isProfileLoading()) {
+        await new Promise<void>((resolve) => {
+            watch(isProfileLoading, () => resolve(), { once: true });
+        });
+    }
+
+    const store = useGamesCategory();
+    const cached = store.collections[PLAYA_CATEGORY_ID];
+    if (!user.getIsLogged || !useUserStatuses().getUserGroups.includes(PLAYA_GROUP_ID)) {
+        if (cached?.isPlaya) {
+            delete store.collections[PLAYA_CATEGORY_ID];
+        }
+        return false;
+    }
+
+    const replace = page < (cached?.firstPage ?? 1) ||
+        (!cached?.isPlaya && (page === 1 || !cached?.pagination.current_page));
+
+    if (!replace && (!cached?.isPlaya || store.isLoaded(PLAYA_CATEGORY_ID, page))) {
+        return false;
+    }
+
+    const { isMobile } = storeToRefs(useRootStore());
+    const { gamesPageLimit } = storeToRefs(useConfigStore());
+    const device = isMobile.value ? "mobile" : "desktop";
+    const data = await loadPlayaGamesPage(page, gamesPageLimit.value, device);
+    return data && store.setData(data, PLAYA_CATEGORY_ID, replace);
+}
+
 export async function loadGamesCategory(slug: string, page: number = 1): Promise<ICollectionItem | undefined> {
     const gamesCategoryStore = useGamesCategory();
     const { collections } = storeToRefs(gamesCategoryStore);
     const { gamesPageLimit } = storeToRefs(useConfigStore());
     const slugCollection = gamesCategoryStore.categoryGeo(slug);
-    const isPlayaCategory = slug === SlugCategoriesGames.SLUG_CATEGORY_TOP && slugCollection === PLAYA_CATEGORY_ID;
-
-    if (isPlayaCategory) {
-        const user = useUserInfo();
-        const isProfileLoading = () => user.getIsLogged && !user.getDataIsLoaded;
-        if (isProfileLoading()) {
-            await new Promise<void>((resolve) => {
-                watch(isProfileLoading, () => resolve(), { once: true });
-            });
-        }
-    }
-
-    const cached = collections.value[slugCollection];
-    const isPlaya = isPlayaCategory && useUserStatuses().getUserGroups.includes(PLAYA_GROUP_ID);
-    const replace = isPlaya && (page < (cached?.firstPage ?? 1) ||
-        (!cached?.isPlaya && (page === 1 || !cached?.pagination.current_page)));
-
-    if (cached?.isPlaya && !isPlaya) {
-        delete collections.value[slugCollection];
-    }
-
-    const loaded = gamesCategoryStore.isLoaded(slugCollection, page);
-    if (!replace && loaded) {
-        return collections.value[slugCollection];
-    }
+    const isPlaya = isPlayaRecommendations(slug, slugCollection);
 
     try {
+        if (isPlaya && await loadPlayaGamesCategory(page)) {
+            return;
+        }
+
+        const loaded = gamesCategoryStore.isLoaded(slugCollection, page);
+        if (loaded) {
+            return collections.value[slugCollection];
+        }
+
         const { isMobile } = storeToRefs(useRootStore());
 
         const device = isMobile.value ? "mobile" : "desktop";
-
-        if (isPlaya && (replace || cached?.isPlaya)) {
-            const data = await loadPlayaGamesPage(page, gamesPageLimit.value, device);
-            if (data && gamesCategoryStore.setData(data, slugCollection, replace)) {
-                return;
-            }
-            if (loaded) {
-                return collections.value[slugCollection];
-            }
-        }
 
         const reqConfig: IGameFilter = {
             device,
@@ -455,6 +466,7 @@ export async function loadGamesCategory(slug: string, page: number = 1): Promise
             page_size: gamesPageLimit.value,
         };
 
+        const replace = isPlaya && page < (collections.value[slugCollection]?.firstPage ?? 1);
         // @ts-expect-error -- TS2345: Argument of type 'IGameFilter' is not assignable to parameter of type 'Record<string, unknown>'.
         const data = await loadGamesCategoryReq(reqConfig);
         const collectionData = (data as Partial<ICollectionItem>).data;
@@ -464,7 +476,7 @@ export async function loadGamesCategory(slug: string, page: number = 1): Promise
         }
 
         // @ts-expect-error -- TS2345: Argument of type 'IGameFilterResponse' is not assignable to parameter of type 'ICollectionItem'.
-        gamesCategoryStore.setData(data, slugCollection, replace && cached?.isPlaya);
+        gamesCategoryStore.setData(data, slugCollection, replace);
     } catch (err) {
         log.error("LOAD_GAMES_CATEGORY_BY_SLUG_ERROR", err);
     }

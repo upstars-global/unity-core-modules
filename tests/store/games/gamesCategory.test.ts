@@ -195,6 +195,7 @@ describe("store/games/gamesCategory", () => {
                 data: [ mockGameData ],
                 pagination: { current_page: 1, next_page: null },
             } as ICollectionItem;
+            mockIsLogged.value = true;
             mockUserGroups.push("playa_au");
             const game = { identifier: "studio/personal" } as IGameItemFilter;
             vi.mocked(loadPlayaRecommendationsReq).mockResolvedValueOnce({
@@ -241,6 +242,7 @@ describe("store/games/gamesCategory", () => {
             const store = useGamesCategory();
             mockUserGeo.value = "AU";
             mockGamesCategories.value = [ { id: "top:au" } as IGamesProvider ];
+            mockIsLogged.value = true;
             mockUserGroups.push("playa_au");
             store.collections["top:au"] = {
                 data: [ mockGameData as IGame ],
@@ -272,6 +274,7 @@ describe("store/games/gamesCategory", () => {
         ])("uses the ordinary loader for $key with groups $groups", async ({ slug, geo, key, groups }) => {
             mockUserGeo.value = geo;
             mockGamesCategories.value = [ { id: key } as IGamesProvider ];
+            mockIsLogged.value = true;
             mockUserGroups.push(...groups);
 
             await loadGamesCategory(slug);
@@ -285,6 +288,7 @@ describe("store/games/gamesCategory", () => {
         it.each([{ gameIds: undefined }, { gameIds: [] }])("loads and keeps ordinary Top when the first recommendation page is %j", async ({ gameIds }) => {
             mockUserGeo.value = "AU";
             mockGamesCategories.value = [ { id: "top:au" } as IGamesProvider ];
+            mockIsLogged.value = true;
             mockUserGroups.push("playa_au");
             vi.mocked(loadPlayaRecommendationsReq).mockResolvedValueOnce(gameIds && {
                 gameIds,
@@ -302,6 +306,7 @@ describe("store/games/gamesCategory", () => {
         it("falls back when the CMS filters out the first personalized page", async () => {
             mockUserGeo.value = "AU";
             mockGamesCategories.value = [ { id: "top:au" } as IGamesProvider ];
+            mockIsLogged.value = true;
             mockUserGroups.push("playa_au");
             const game = { identifier: "studio/personal" } as IGameItemFilter;
             vi.mocked(loadPlayaRecommendationsReq).mockResolvedValueOnce({
@@ -321,6 +326,7 @@ describe("store/games/gamesCategory", () => {
             const store = useGamesCategory();
             mockUserGeo.value = "AU";
             mockGamesCategories.value = [ { id: "top:au" } as IGamesProvider ];
+            mockIsLogged.value = true;
             mockUserGroups.push("playa_au");
             if (hasCollection) {
                 store.collections["top:au"] = {
