@@ -296,6 +296,7 @@ describe("useCommon store", () => {
         };
         const widgetsConfig: MainWidgetItem[] = [
             { name: "Quest", image: "quest.png", type: Widgets.quest, isNew: true },
+            { name: "Sports Advent", image: "advent.png", type: Widgets.sportsAdvent },
         ];
         const projectInfo: IProjectInfo = {
             apps: {
