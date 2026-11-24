@@ -189,3 +189,16 @@ export async function loadGameBySlugReq(slug: string) {
         throw err;
     }
 }
+
+export async function loadGameLaunchOptionsReq(provider: string, variation: string, gameTableId: string | number) {
+    try {
+        const { data } = await http().get(
+            `/api/games/launch_options/${ encodeURIComponent(provider) }/${ encodeURIComponent(variation) }/${ encodeURIComponent(String(gameTableId)) }`,
+        );
+
+        return data;
+    } catch (err) {
+        log.error("LOAD_GAME_LAUNCH_OPTIONS_ERROR", err);
+        throw err;
+    }
+}
