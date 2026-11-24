@@ -32,7 +32,7 @@ import {
     loadFilteredGames as loadFilteredGamesReq,
     loadGameBySeoTitleReq,
     loadGameBySlugReq,
-    loadGameLaunchOptions as loadGameLaunchOptionsReq,
+    loadGameLaunchOptionsReq,
     loadGamesCategories as loadGamesCategoriesReq,
     loadGamesCategoryReq,
     loadGamesDataByFilter,
