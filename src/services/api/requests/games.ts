@@ -6,7 +6,7 @@ import { log } from "../../../controllers/Logger";
 import type { IGameItemFilter } from "../../../helpers/gameHelpers";
 import type { IGame, IGamesProvider } from "../../../models/game";
 import {
-    AcceptGamesVersion,
+    AcceptGamesVersion, AcceptsGamesVariants,
     IGameCollection,
     IGameFilterResponse,
     IGamesProvidersFilter,
@@ -194,6 +194,9 @@ export async function loadGameLaunchOptionsReq(provider: string, variation: stri
     try {
         const { data } = await http().get(
             `/api/games/launch_options/${ encodeURIComponent(provider) }/${ encodeURIComponent(variation) }/${ encodeURIComponent(String(gameTableId)) }`,
+            {
+                headers: { Accept: AcceptsGamesVariants.fullData },
+            }
         );
 
         return data;
