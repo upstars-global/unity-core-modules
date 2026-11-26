@@ -1,4 +1,5 @@
 import { isExistData } from "../helpers/isExistData";
+import type { MainWidgetItem } from "../models/mainWidget";
 import { useCommon } from "../store/common";
 import { useConfigStore } from "../store/configStore";
 import {
@@ -62,7 +63,8 @@ export async function loadMainWidgetConfig() {
     const response = await loadMainWidgetConfigReq();
 
     if (response?.widgets) {
-        commonStore.setMainWidgetConfig(response.widgets);
+        commonStore.setMainWidgetConfig(response.widgets as MainWidgetItem[]);
+        commonStore.setMainWidgetFullConfig({ ...response, widgets: response.widgets });
     }
 }
 

@@ -17,4 +17,18 @@ export interface MainWidgetItem {
     hidden?: boolean;
 }
 
+export interface IMainWidgetConfigItem {
+    name: string;
+    type: string;
+    image: string;
+    previewImage?: string;
+    isNew?: boolean;
+    hidden?: boolean;
+}
+
+export interface IMainWidgetConfig {
+    preview?: string[];
+    widgets: IMainWidgetConfigItem[];
+}
+
 export default {};
