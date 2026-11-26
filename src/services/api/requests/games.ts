@@ -192,10 +192,11 @@ export async function loadGameBySlugReq(slug: string) {
 
 export async function loadGameLaunchOptionsReq(provider: string, variation: string, gameTableId: string | number) {
     try {
+        const headers = { "accept-client": AcceptsGamesVariants.fullData } as const;
         const { data } = await http().get(
             `/api/games/launch_options/${ encodeURIComponent(provider) }/${ encodeURIComponent(variation) }/${ encodeURIComponent(String(gameTableId)) }`,
             {
-                headers: { Accept: AcceptsGamesVariants.fullData },
+                headers,
             }
         );
 
