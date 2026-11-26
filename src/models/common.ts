@@ -75,7 +75,6 @@ export interface IPlayerFieldsInfo {
             base: {
                 "deposit": EnumFormFields
                 "cashout": EnumFormFields
-
             }
         }>;
     };

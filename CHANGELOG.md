@@ -1,3 +1,72 @@
+## [1.128.0](https://github.com/upstars-global/unity-core-modules/compare/v1.127.0...v1.128.0) (2026-11-26)
+
+### 🚀 Features
+
+* **UN-3429:** add Smartico client action tracking ([#426](https://github.com/upstars-global/unity-core-modules/issues/426))
+ ([0908e61](https://github.com/upstars-global/unity-core-modules/commit/0908e61f456b0b57369904bebe155f9dac6fd0b7))
+
+## [1.127.0](https://github.com/upstars-global/unity-core-modules/compare/v1.126.0...v1.127.0) (2026-11-26)
+
+### 🚀 Features
+
+* UN-3370 playa recommended ([#429](https://github.com/upstars-global/unity-core-modules/issues/429))
+ ([b47a4c9](https://github.com/upstars-global/unity-core-modules/commit/b47a4c991fd99744102776862bbac63914f4aaa8))
+
+
+
+    * feat:UN-3370 playa recommendations
+
+    * feat:UN-3370 playa recommendations
+
+    * feat:UN-3370 playa recommendations
+
+    * feat:UN-3370 playa recommendations
+
+    * feat:UN-3370 playa recommendations
+
+    * feat:UN-3370 playa recommendations
+
+    * feat:UN-3370 playa recommendations
+
+    * feat:UN-3370 playa recommendations
+
+## [1.126.0](https://github.com/upstars-global/unity-core-modules/compare/v1.125.0...v1.126.0) (2026-11-20)
+
+### 🚀 Features
+
+* **UN-3394:** add Smartico Inbox impression and click tracking ([#424](https://github.com/upstars-global/unity-core-modules/issues/424))
+ ([d64968d](https://github.com/upstars-global/unity-core-modules/commit/d64968dfbb8cb2df488ad43c6724fd2603e6b5d8))
+
+## [1.124.1](https://github.com/upstars-global/unity-core-modules/compare/v1.124.0...v1.124.1) (2026-11-13)
+
+### 🔧 Maintenance
+
+* UN-3175 support timed UTC event statuses ([#417](https://github.com/upstars-global/unity-core-modules/issues/417))
+ ([b743184](https://github.com/upstars-global/unity-core-modules/commit/b743184a336b7994e569d7f25a3efad4a93aa342))
+
+
+
+    * feat:UN-3175 (format-date): support timed UTC event statuses
+
+    * feat:UN-3175 (format-date): support timed UTC event statuses
+
+    * feat:UN-3175 (format-date): support timed UTC event statuses
+
+    * feat:UN-3175 (format-date): support timed UTC event statuses
+
+    * feat:UN-3175 (format-date): support timed UTC event statuses
+
+## [1.124.0](https://github.com/upstars-global/unity-core-modules/compare/v1.123.2...v1.124.0) (2026-11-13)
+
+### 🚀 Features
+
+* UN-3420 add filter params for game provider req ([#421](https://github.com/upstars-global/unity-core-modules/issues/421))
+ ([aecc9c3](https://github.com/upstars-global/unity-core-modules/commit/aecc9c3cbd7c6773f9f84ae75b69ea9305aa9348))
+
+
+
+    feat: UN-3420 add filter params for game provider req
+
 ## [1.123.2](https://github.com/upstars-global/unity-core-modules/compare/v1.123.1...v1.123.2) (2026-11-12)
 
 ### 🐛 Bug Fixes
