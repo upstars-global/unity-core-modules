@@ -1,3 +1,35 @@
+## [1.127.0](https://github.com/upstars-global/unity-core-modules/compare/v1.126.0...v1.127.0) (2026-11-26)
+
+### 🚀 Features
+
+* UN-3370 playa recommended ([#429](https://github.com/upstars-global/unity-core-modules/issues/429))
+ ([b47a4c9](https://github.com/upstars-global/unity-core-modules/commit/b47a4c991fd99744102776862bbac63914f4aaa8))
+
+
+
+    * feat:UN-3370 playa recommendations
+
+    * feat:UN-3370 playa recommendations
+
+    * feat:UN-3370 playa recommendations
+
+    * feat:UN-3370 playa recommendations
+
+    * feat:UN-3370 playa recommendations
+
+    * feat:UN-3370 playa recommendations
+
+    * feat:UN-3370 playa recommendations
+
+    * feat:UN-3370 playa recommendations
+
+## [1.126.0](https://github.com/upstars-global/unity-core-modules/compare/v1.125.0...v1.126.0) (2026-11-20)
+
+### 🚀 Features
+
+* **UN-3394:** add Smartico Inbox impression and click tracking ([#424](https://github.com/upstars-global/unity-core-modules/issues/424))
+ ([d64968d](https://github.com/upstars-global/unity-core-modules/commit/d64968dfbb8cb2df488ad43c6724fd2603e6b5d8))
+
 ## [1.124.1](https://github.com/upstars-global/unity-core-modules/compare/v1.124.0...v1.124.1) (2026-11-13)
 
 ### 🔧 Maintenance

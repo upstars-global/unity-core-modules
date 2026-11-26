@@ -22,6 +22,7 @@ function getActionError(result: InboxMarkMessageAction) {
 
 function createSmarticoInboxController() {
     const bodyRequests = new Map<string, Promise<TInboxMessageBody>>();
+    const reportedImpressions = new Set<string>();
     let newMessageHandler: ((message: TInboxMessage, body: TInboxMessageBody) => void) | undefined;
 
     function getApi(): SmarticoGlobal["api"] {
@@ -32,6 +33,27 @@ function createSmarticoInboxController() {
         }
 
         return smartico.api;
+    }
+
+    function reportImpression(messageGuid: string) {
+        if (reportedImpressions.has(messageGuid)) {
+            return;
+        }
+
+        try {
+            getApi().reportImpressionEvent({ engagement_uid: messageGuid, activityType: 31 });
+            reportedImpressions.add(messageGuid);
+        } catch (error) {
+            log.error("SMARTICO_INBOX_IMPRESSION_ERROR", error);
+        }
+    }
+
+    function reportClick(messageGuid: string, action: string) {
+        try {
+            getApi().reportClickEvent({ engagement_uid: messageGuid, activityType: 31, action });
+        } catch (error) {
+            log.error("SMARTICO_INBOX_CLICK_ERROR", error);
+        }
     }
 
     function loadMessageBody(messageGuid: string) {
@@ -294,6 +316,7 @@ function createSmarticoInboxController() {
 
     function reset() {
         bodyRequests.clear();
+        reportedImpressions.clear();
         useSmarticoInboxStore().clearInboxUserData();
     }
 
@@ -311,6 +334,8 @@ function createSmarticoInboxController() {
     }
 
     return {
+        reportImpression,
+        reportClick,
         initialize,
         ensureMessageBodies,
         prepareMessage,
