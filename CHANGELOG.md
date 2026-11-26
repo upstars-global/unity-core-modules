@@ -1,3 +1,10 @@
+## [1.128.0](https://github.com/upstars-global/unity-core-modules/compare/v1.127.0...v1.128.0) (2026-11-26)
+
+### 🚀 Features
+
+* **UN-3429:** add Smartico client action tracking ([#426](https://github.com/upstars-global/unity-core-modules/issues/426))
+ ([0908e61](https://github.com/upstars-global/unity-core-modules/commit/0908e61f456b0b57369904bebe155f9dac6fd0b7))
+
 ## [1.127.0](https://github.com/upstars-global/unity-core-modules/compare/v1.126.0...v1.127.0) (2026-11-26)
 
 ### 🚀 Features
