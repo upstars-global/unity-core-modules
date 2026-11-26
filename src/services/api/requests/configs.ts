@@ -5,7 +5,7 @@ import {IGameSearchMetaTagsConfig, type IStagByReferName, type ISurveyConfig} fr
 import { type IBettingConfig, type IGamesAliasesConfig } from "../../../models/configs";
 import { type IEnabledGames } from "../../../models/game";
 import { type LimitsDepositConfigData } from "../../../models/limitsDepositConfig";
-import { type MainWidgetItem } from "../../../models/mainWidget";
+import { type IMainWidgetConfig } from "../../../models/mainWidget";
 import { type IProvidersList } from "../../../models/providers";
 import { type UserGroup } from "../../../models/user";
 import { type IVipManager } from "../../../models/vipManagers";
@@ -70,7 +70,7 @@ const loadAdditionalDepositGiftsConfigReq = () => loadConfig(
     `${ FE_API_PREFIX }/config/additional-gifts`,
     "LOAD_ADDITIONAL_DEPOSIT_GIFTS_CONFIG_ERROR",
 );
-const loadMainWidgetConfigReq = () => loadConfig<{ widgets?: MainWidgetItem[] }>(
+const loadMainWidgetConfigReq = () => loadConfig<Partial<IMainWidgetConfig>>(
     `${ FE_API_PREFIX }/config/main-widget-config`,
     "LOAD_MAIN_WIDGET_CONFIG_ERROR",
 );

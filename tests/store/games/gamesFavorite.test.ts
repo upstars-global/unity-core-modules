@@ -2,6 +2,7 @@ import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { log } from "../../../src/controllers/Logger";
+import { trackSmarticoAction } from "../../../src/controllers/Smartico";
 import { IGameItem, processGame } from "../../../src/helpers/gameHelpers";
 import { IGame } from "../../../src/models/game";
 import { AcceptsGamesVariants } from "../../../src/services/api/DTO/gamesDTO";
@@ -12,6 +13,8 @@ import {
 } from "../../../src/services/api/requests/games";
 import { addGameToFavorites, deleteGameFromFavorites, loadFavoriteGames } from "../../../src/services/games";
 import { useGamesFavorite } from "../../../src/store/games/gamesFavorite";
+
+vi.mock("../../../src/controllers/Smartico", () => ({ trackSmarticoAction: vi.fn() }));
 
 vi.mock("../../../src/controllers/Logger", () => ({
     log: { error: vi.fn() },
@@ -91,6 +94,7 @@ describe("useGamesFavorite", () => {
         expect(mockFetchAddFavorite).toHaveBeenCalledWith(MOCK_ID);
         expect(mockFetchFavorite).toHaveBeenCalledTimes(2);
         expect(store.favoritesId).toEqual([ MOCK_ID ]);
+        expect(trackSmarticoAction).toHaveBeenCalledWith("GAME_ADDED_TO_FAVORITES", { game_id: MOCK_ID });
     });
 
     it("should handle error when adding game to favorites", async () => {
@@ -100,6 +104,7 @@ describe("useGamesFavorite", () => {
         const store = useGamesFavorite();
         await expect(addGameToFavorites(MOCK_ID)).rejects.toThrow(error);
         expect(mockFetchAddFavorite).toHaveBeenCalledWith(MOCK_ID);
+        expect(trackSmarticoAction).not.toHaveBeenCalled();
     });
 
     it("should delete game from favorites successfully", async () => {
@@ -116,6 +121,7 @@ describe("useGamesFavorite", () => {
         expect(mockFetchDelFavorite).toHaveBeenCalledWith(MOCK_ID);
         expect(store.favoritesId).toEqual([ 102 ]);
         expect(store.gamesFavoriteFullData).toEqual([]);
+        expect(trackSmarticoAction).toHaveBeenCalledWith("GAME_REMOVED_FROM_FAVORITES", { game_id: MOCK_ID });
     });
 
     it("should handle error when deleting game from favorites", async () => {
@@ -125,6 +131,7 @@ describe("useGamesFavorite", () => {
         const store = useGamesFavorite();
         await expect(deleteGameFromFavorites(MOCK_ID)).rejects.toThrow(error);
         expect(mockFetchDelFavorite).toHaveBeenCalledWith(MOCK_ID);
+        expect(trackSmarticoAction).not.toHaveBeenCalled();
     });
 
     it("should clear user data", () => {

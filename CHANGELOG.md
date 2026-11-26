@@ -1,3 +1,48 @@
+## [1.129.0](https://github.com/upstars-global/unity-core-modules/compare/v1.128.0...v1.129.0) (2026-11-26)
+
+### 🚀 Features
+
+* UN-3452 Update MainWidget config
+ ([c84c8e2](https://github.com/upstars-global/unity-core-modules/commit/c84c8e23ce9e12e521fea5ccbf3842f8e152423b))
+
+
+
+    * feat: UN-3452 keep full main widget config in common store
+
+    * feat: UN-3452 update widget config types
+
+## [1.128.0](https://github.com/upstars-global/unity-core-modules/compare/v1.127.0...v1.128.0) (2026-11-26)
+
+### 🚀 Features
+
+* **UN-3429:** add Smartico client action tracking ([#426](https://github.com/upstars-global/unity-core-modules/issues/426))
+ ([0908e61](https://github.com/upstars-global/unity-core-modules/commit/0908e61f456b0b57369904bebe155f9dac6fd0b7))
+
+## [1.127.0](https://github.com/upstars-global/unity-core-modules/compare/v1.126.0...v1.127.0) (2026-11-26)
+
+### 🚀 Features
+
+* UN-3370 playa recommended ([#429](https://github.com/upstars-global/unity-core-modules/issues/429))
+ ([b47a4c9](https://github.com/upstars-global/unity-core-modules/commit/b47a4c991fd99744102776862bbac63914f4aaa8))
+
+
+
+    * feat:UN-3370 playa recommendations
+
+    * feat:UN-3370 playa recommendations
+
+    * feat:UN-3370 playa recommendations
+
+    * feat:UN-3370 playa recommendations
+
+    * feat:UN-3370 playa recommendations
+
+    * feat:UN-3370 playa recommendations
+
+    * feat:UN-3370 playa recommendations
+
+    * feat:UN-3370 playa recommendations
+
 ## [1.126.0](https://github.com/upstars-global/unity-core-modules/compare/v1.125.0...v1.126.0) (2026-11-20)
 
 ### 🚀 Features

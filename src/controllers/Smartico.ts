@@ -1,4 +1,7 @@
+import { onMounted, onScopeDispose, ref, watch } from "vue";
+
 import { isServer } from "../helpers/ssrHelpers";
+import { log } from "./Logger";
 
 const smarticoPopupSuspenders = new Set<string>();
 
@@ -9,6 +12,9 @@ export function getSmartico() {
 export function useSmartico() {
     function setSmarticoUser(userId: string, language: string) {
         if (!isServer) {
+            if (window._smartico_user_id !== userId) {
+                smarticoIdentified.value = false;
+            }
             window._smartico_user_id = userId;
             window._smartico_language = language;
 
@@ -18,6 +24,7 @@ export function useSmartico() {
 
     function clearSmarticoUser() {
         if (!isServer) {
+            smarticoIdentified.value = false;
             window._smartico_user_id = null;
             window._smartico_language = null;
         }
@@ -90,10 +97,53 @@ export function useSmartico() {
     return {
         addSmarticoIdentifyListener,
         executeSmarticoAction,
+        handleSmarticoIdentify,
+        trackSmarticoAction,
         removeSmarticoIdentifyListener,
         setSmarticoPopupsSuspendedBy,
         suspendSmarticoInbox,
         suspendSmarticoPopups,
         updateSmarticoUser,
     };
+}
+
+export interface SmarticoAction {
+    name: string;
+    payload?: Record<string, string | number>;
+}
+
+const smarticoIdentified = ref(false);
+
+export function handleSmarticoIdentify(errorCode: number) {
+    if (!isServer) {
+        smarticoIdentified.value = errorCode === 0 && Boolean(window._smartico_user_id);
+    }
+}
+
+export function trackSmarticoAction(name: string, payload?: SmarticoAction["payload"]) {
+    if (isServer || !smarticoIdentified.value || !window._smartico_user_id) {
+        return;
+    }
+    try {
+        getSmartico()?.action(name, payload);
+    } catch (error) {
+        log.error("SMARTICO_CLIENT_ACTION_ERROR", error);
+    }
+}
+
+export function useSmarticoView(getAction: () => SmarticoAction | undefined, getViewKey: () => string = () => "") {
+    let stop: (() => void) | undefined;
+    onMounted(() => {
+        stop = watch(
+            () => JSON.stringify([ smarticoIdentified.value, getViewKey(), getAction() ]),
+            () => {
+                const action = getAction();
+                if (smarticoIdentified.value && action) {
+                    trackSmarticoAction(action.name, action.payload);
+                }
+            },
+            { immediate: true },
+        );
+    });
+    onScopeDispose(() => stop?.());
 }
