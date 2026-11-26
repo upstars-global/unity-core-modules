@@ -33,6 +33,7 @@ import {
     loadFilteredGames as loadFilteredGamesReq,
     loadGameBySeoTitleReq,
     loadGameBySlugReq,
+    loadGameLaunchOptionsReq,
     loadGamesCategories as loadGamesCategoriesReq,
     loadGamesCategoryReq,
     loadGamesDataByFilter,
@@ -349,6 +350,15 @@ export async function loadGameBySlug(slug: string) {
         }
     } catch (err) {
         log.error("LOAD_GAME_BY_SLUG", err);
+        throw err;
+    }
+}
+
+export async function loadGameLaunchOptions(provider: string, variation: string, gameTableId: string | number) {
+    try {
+        return await loadGameLaunchOptionsReq(provider, variation, gameTableId);
+    } catch (err) {
+        log.error("LOAD_GAME_LAUNCH_OPTIONS", err);
         throw err;
     }
 }

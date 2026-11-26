@@ -6,7 +6,7 @@ import { log } from "../../../controllers/Logger";
 import type { IGameItemFilter } from "../../../helpers/gameHelpers";
 import type { IGame, IGamesProvider } from "../../../models/game";
 import {
-    AcceptGamesVersion,
+    AcceptGamesVersion, AcceptsGamesVariants,
     IGameCollection,
     IGameFilterResponse,
     IGamesProvidersFilter,
@@ -194,6 +194,23 @@ export async function loadGameBySlugReq(slug: string) {
         return data;
     } catch (err) {
         log.error("LOAD_GAME_BY_SLUG_ERROR", err);
+        throw err;
+    }
+}
+
+export async function loadGameLaunchOptionsReq(provider: string, variation: string, gameTableId: string | number) {
+    try {
+        const headers = { "accept-client": AcceptsGamesVariants.fullData } as const;
+        const { data } = await http().get(
+            `/api/games/launch_options/${ encodeURIComponent(provider) }/${ encodeURIComponent(variation) }/${ encodeURIComponent(String(gameTableId)) }`,
+            {
+                headers,
+            }
+        );
+
+        return data;
+    } catch (err) {
+        log.error("LOAD_GAME_LAUNCH_OPTIONS_ERROR", err);
         throw err;
     }
 }
