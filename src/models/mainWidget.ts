@@ -3,7 +3,8 @@ export enum Widgets {
     adventures = "adventures",
     lootBox = "lootBox",
     quest = "quest",
-    activityHub = "activityHub"
+    activityHub = "activityHub",
+    sportsAdvent = "sportsAdvent"
 }
 
 export interface MainWidgetItem {
