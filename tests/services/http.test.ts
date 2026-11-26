@@ -272,6 +272,43 @@ describe("http client", () => {
         });
     });
 
+    it("uses base URL from setServerBaseUrl on server", async () => {
+        const { http, setServerBaseUrl } = await loadHttpModule(true);
+        const fetchMock = vi.fn().mockResolvedValue(new Response("{}", { status: 200 }));
+        vi.stubGlobal("fetch", fetchMock);
+
+        setServerBaseUrl("https://brand.example.com/");
+        await http().get("/api/cms/pages");
+
+        const [ url ] = fetchMock.mock.calls[0];
+        expect(url).toBe("https://brand.example.com/api/cms/pages");
+    });
+
+    it("falls back to localhost:2004 when setServerBaseUrl is called without URL", async () => {
+        const { http, setServerBaseUrl } = await loadHttpModule(true);
+        const fetchMock = vi.fn().mockResolvedValue(new Response("{}", { status: 200 }));
+        vi.stubGlobal("fetch", fetchMock);
+
+        setServerBaseUrl("https://brand.example.com");
+        setServerBaseUrl();
+        await http().get("/api/cms/pages");
+
+        const [ url ] = fetchMock.mock.calls[0];
+        expect(url).toBe("http://localhost:2004/api/cms/pages");
+    });
+
+    it("ignores setServerBaseUrl on client", async () => {
+        const { http, setServerBaseUrl } = await loadHttpModule(false);
+        const fetchMock = vi.fn().mockResolvedValue(new Response("{}", { status: 200 }));
+        vi.stubGlobal("fetch", fetchMock);
+
+        setServerBaseUrl("https://brand.example.com");
+        await http().get("/api/cms/pages");
+
+        const [ url ] = fetchMock.mock.calls[0];
+        expect(url).toBe("/api/cms/pages");
+    });
+
     it("maps AbortError to timeout error on server", async () => {
         const { http } = await loadHttpModule(true);
         const abortError = Object.assign(new Error("aborted"), { name: "AbortError" });

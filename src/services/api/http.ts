@@ -144,7 +144,7 @@ class HttpClient {
             return url.startsWith("/") ? url : `/${ url }`;
         }
 
-        // For server-side (localhost:2004), append the URL to baseURL
+        // For server-side (localhost:2004 or setServerBaseUrl), append the URL to baseURL
         return `${ this.baseURL }${ url.startsWith("/") ? url : `/${ url }` }`;
     }
 
@@ -311,6 +311,18 @@ class HttpClient {
     }
 }
 
+const DEFAULT_SERVER_BASE_URL = "http://localhost:2004";
+let serverBaseUrl = DEFAULT_SERVER_BASE_URL;
+
+/**
+ * Адрес API для запросов на сервере. По умолчанию это сервер бренда (localhost:2004).
+ * Рендер вне сервера бренда (например, в front-cache-service) задаёт свой адрес.
+ * Вызов без адреса возвращает значение по умолчанию.
+ */
+export function setServerBaseUrl(url?: string): void {
+    serverBaseUrl = url ? url.replace(/\/+$/, "") : DEFAULT_SERVER_BASE_URL;
+}
+
 export function http({ headers, locale }: IHttpParams = {}): HttpClient {
     const clientHeaders: Record<string, string> = {
         "Accept": "application/json, text/plain, */*",
@@ -324,7 +336,7 @@ export function http({ headers, locale }: IHttpParams = {}): HttpClient {
     }
 
     const client = new HttpClient({
-        baseURL: isServer ? "http://localhost:2004" : "/",
+        baseURL: isServer ? serverBaseUrl : "/",
         timeout,
         headers: clientHeaders,
     });
