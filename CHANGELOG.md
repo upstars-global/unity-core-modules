@@ -1,3 +1,16 @@
+## [1.129.0](https://github.com/upstars-global/unity-core-modules/compare/v1.128.0...v1.129.0) (2026-11-26)
+
+### 🚀 Features
+
+* UN-3452 Update MainWidget config
+ ([c84c8e2](https://github.com/upstars-global/unity-core-modules/commit/c84c8e23ce9e12e521fea5ccbf3842f8e152423b))
+
+
+
+    * feat: UN-3452 keep full main widget config in common store
+
+    * feat: UN-3452 update widget config types
+
 ## [1.128.0](https://github.com/upstars-global/unity-core-modules/compare/v1.127.0...v1.128.0) (2026-11-26)
 
 ### 🚀 Features
