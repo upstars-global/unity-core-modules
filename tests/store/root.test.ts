@@ -20,9 +20,7 @@ describe("store/root", () => {
         const store = useRootStore();
 
         expect(store.gamePage).toBe(false);
-        expect(store.guest).toBe(false);
         expect(store.isGamePage).toBe(false);
-        expect(store.isGuest).toBe(false);
         expect(store.isMobile).toBeNull();
         expect(store.transitionName).toBeNull();
         expect(store.getPlatform).toBeNull();
@@ -59,15 +57,6 @@ describe("store/root", () => {
         expect(store.isMobile).toBe(false);
     });
 
-    it("should compute isGuest correctly", () => {
-        const store = useRootStore();
-
-        expect(store.isGuest).toBe(false);
-
-        store.guest = true;
-
-        expect(store.isGuest).toBe(true);
-    });
 
     it("should detect iOS platform correctly", () => {
         isIOSUserAgent.mockReturnValue(true);
